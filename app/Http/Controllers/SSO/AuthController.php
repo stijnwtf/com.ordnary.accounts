@@ -208,6 +208,7 @@ public function validateToken(Request $request)
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'is_admin' => $user->is_admin,
             // Add any other user data you want to share with the client application
         ],
     ]);
