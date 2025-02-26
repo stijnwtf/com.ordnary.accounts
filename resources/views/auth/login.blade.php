@@ -30,9 +30,13 @@
                         <i class="fas fa-exclamation-circle text-red-400"></i>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">{{ __('Authenticatie mislukt') }}</h3>
+                        <h3 class="text-sm font-medium text-red-800">Something went wrong while signing in.</h3>
                         <div class="mt-1 text-sm text-red-700">
-                            Controleer je invoer hieronder.
+                            <ul class="list-disc pl-4">
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
