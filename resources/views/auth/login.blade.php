@@ -57,7 +57,6 @@
                     </div>
                     @error('email')
                     <p class="mt-1 text-sm text-red-600 flex items-center">
-                        <i class="fas fa-exclamation-circle text-red-400 mr-1"></i>
                         {{ $message }}
                     </p>
                     @enderror
@@ -75,7 +74,6 @@
                     </div>
                     @error('password')
                     <p class="mt-1 text-sm text-red-600 flex items-center">
-                        <i class="fas fa-exclamation-circle text-red-400 mr-1"></i>
                         {{ $message }}
                     </p>
                     @enderror
