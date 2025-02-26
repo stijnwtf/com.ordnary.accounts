@@ -83,7 +83,7 @@
                 <!-- Forgot Password and Sign Up Links -->
                 <div class="flex justify-between text-sm mt-4">
                     <a href="#" class="text-blue-600 hover:text-blue-700">{{ __('Wachtwoord vergeten?') }}</a>
-                    <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700">{{ __('Maak een nieuw account aan') }}</a>
+                    <a href="" class="text-blue-600 hover:text-blue-700">{{ __('Maak een nieuw account aan') }}</a>
                 </div>
             </form>
         </div>
