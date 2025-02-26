@@ -22,11 +22,19 @@ class AuthController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-        // Validate client_id and redirect_uri parameters
+        // Log the incoming query parameters
         $clientId = $request->query("client_id");
         $redirectUri = $request->query("redirect_uri");
+        Log::debug('showLoginForm: Received query parameters', [
+            'client_id'    => $clientId,
+            'redirect_uri' => $redirectUri,
+        ]);
 
         if (!$clientId || !$redirectUri) {
+            Log::error('showLoginForm: Missing required parameters', [
+                'client_id'    => $clientId,
+                'redirect_uri' => $redirectUri,
+            ]);
             return view("error", [
                 "message" => "Ontbrekende parameters: client_id en redirect_uri zijn vereist.",
             ]);
@@ -35,6 +43,7 @@ class AuthController extends Controller
         // Verify the client exists and the redirect URI is allowed
         $client = Client::where("client_id", $clientId)->first();
         if (!$client) {
+            Log::error('showLoginForm: Invalid client_id', ['client_id' => $clientId]);
             return view("error", [
                 "message" => "Ongeldige client_id.",
             ]);
@@ -43,6 +52,10 @@ class AuthController extends Controller
         // Check if the redirect URI is in the list of allowed URIs for this client
         $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
         if (!in_array($redirectUri, $allowedRedirectUris)) {
+            Log::error('showLoginForm: Redirect URI not allowed', [
+                'redirect_uri'         => $redirectUri,
+                'allowed_redirect_uris' => $allowedRedirectUris,
+            ]);
             return view("error", [
                 "message" => "Ongeldige redirect_uri voor deze client.",
             ]);
@@ -50,6 +63,10 @@ class AuthController extends Controller
 
         // Store client_id and redirect_uri in session for use after login
         session(["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+        Log::debug('showLoginForm: Stored client_id and redirect_uri in session', [
+            'client_id'    => $clientId,
+            'redirect_uri' => $redirectUri,
+        ]);
 
         return view("auth.login");
     }
@@ -68,14 +85,23 @@ class AuthController extends Controller
         ]);
 
         // Get client_id and redirect_uri from the session
-        $clientId    = session("client_id");
+        $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
+        Log::debug('login: Retrieved session parameters', [
+            'client_id'    => $clientId,
+            'redirect_uri' => $redirectUri,
+        ]);
 
         try {
             if (Auth::attempt($request->only("email", "password"))) {
+                Log::info('login: Authentication successful', ['email' => $request->email]);
                 $request->session()->regenerate();
 
                 if (!$clientId || !$redirectUri) {
+                    Log::error('login: Missing session parameters after authentication', [
+                        'client_id'    => $clientId,
+                        'redirect_uri' => $redirectUri,
+                    ]);
                     return redirect()
                         ->route("login")
                         ->withErrors(['error' => 'Sessie verlopen. Probeer opnieuw in te loggen.']);
@@ -83,31 +109,45 @@ class AuthController extends Controller
 
                 // Generate a token for this session
                 $token = $this->generateToken(Auth::user(), $clientId);
+                Log::info('login: Generated token for user', [
+                    'user_id'  => Auth::user()->id,
+                    'token'    => $token,
+                ]);
 
                 // Clear session data
                 session()->forget(["client_id", "redirect_uri"]);
+                Log::debug('login: Cleared session parameters');
 
                 // Redirect to the client with the token
-                return redirect()->away($redirectUri . "?token=" . $token);
+                $targetUrl = $redirectUri . "?token=" . $token;
+                Log::info('login: Redirecting to client URL', ['target_url' => $targetUrl]);
+                return redirect()->away($targetUrl);
             }
 
             // Als de login mislukt: controleer of het e-mailadres bestaat
             $emailExists = User::where('email', $request->email)->exists();
+            Log::debug('login: Authentication failed', [
+                'email_exists' => $emailExists,
+                'email'        => $request->email,
+            ]);
 
             // Bouw de redirect URL met de vereiste queryparameters
             $redirectUrl = route('login') . "?client_id=" . urlencode($clientId) . "&redirect_uri=" . urlencode($redirectUri);
+            Log::debug('login: Redirect URL built', ['redirect_url' => $redirectUrl]);
 
             if (!$emailExists) {
+                Log::warning('login: Email not found', ['email' => $request->email]);
                 return redirect($redirectUrl)->withErrors([
                     'error' => 'E-mailadres niet gevonden. Controleer je e-mailadres.'
                 ]);
             } else {
+                Log::warning('login: Incorrect password for email', ['email' => $request->email]);
                 return redirect($redirectUrl)->withErrors([
                     'error' => 'Wachtwoord is incorrect. Probeer het opnieuw.'
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error('Login error: ', ['exception' => $e]);
+            Log::error('login: Exception occurred during login', ['exception' => $e]);
             return redirect()
                 ->route('login')
                 ->withErrors(['error' => 'Er is een fout opgetreden tijdens het inloggen. Probeer het later opnieuw.']);
@@ -122,11 +162,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        Log::info('logout: User logging out', ['user_id' => Auth::id()]);
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect("/");
     }
 
@@ -144,7 +183,7 @@ class AuthController extends Controller
             "client_secret" => "required|string",
         ]);
 
-        Log::info("Token validation started", [
+        Log::info("validateToken: Token validation started", [
             "token"     => $request->token,
             "client_id" => $request->client_id,
         ]);
@@ -155,7 +194,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$client) {
-            Log::error("Invalid client credentials", [
+            Log::error("validateToken: Invalid client credentials", [
                 "client_id" => $request->client_id,
             ]);
             return response()->json([
@@ -170,7 +209,7 @@ class AuthController extends Controller
             ->first();
 
         if ($userSession && $userSession->expires_at <= now()) {
-            Log::warning("Token has expired", [
+            Log::warning("validateToken: Token has expired", [
                 "token"      => $request->token,
                 "expires_at" => $userSession->expires_at,
             ]);
@@ -181,7 +220,7 @@ class AuthController extends Controller
         }
 
         if (!$userSession) {
-            Log::warning("Invalid or expired token", [
+            Log::warning("validateToken: Invalid or expired token", [
                 "token"     => $request->token,
                 "client_id" => $request->client_id,
             ]);
@@ -192,7 +231,7 @@ class AuthController extends Controller
         }
 
         // Log token expiry check
-        Log::info("Token expiry check", [
+        Log::info("validateToken: Token expiry check", [
             "expires_at"   => $userSession->expires_at,
             "current_time" => now(),
         ]);
@@ -200,7 +239,7 @@ class AuthController extends Controller
         // Get the user data
         $user = User::find($userSession->user_id);
         if (!$user) {
-            Log::error("User not found for token", [
+            Log::error("validateToken: User not found for token", [
                 "token" => $request->token,
             ]);
             return response()->json([
@@ -210,6 +249,9 @@ class AuthController extends Controller
         }
 
         // Return user data
+        Log::info("validateToken: Token validated successfully", [
+            "user_id" => $user->id,
+        ]);
         return response()->json([
             "success" => true,
             "user" => [
@@ -232,6 +274,7 @@ class AuthController extends Controller
     {
         // Generate a unique token
         $token = Str::random(64);
+        Log::debug("generateToken: Generated token", ['token' => $token]);
 
         // Save the token to the database
         UserSession::create([
@@ -239,6 +282,12 @@ class AuthController extends Controller
             "client_id"  => $clientId,
             "token"      => $token,
             "expires_at" => now()->addHours(24), // Token expires after 24 hours
+        ]);
+
+        Log::info("generateToken: Token saved to database", [
+            "user_id"   => $user->id,
+            "client_id" => $clientId,
+            "expires_at"=> now()->addHours(24),
         ]);
 
         return $token;
