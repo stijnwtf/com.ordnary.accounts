@@ -169,16 +169,12 @@ class AuthController extends Controller
             if (!$emailExists) {
                 Log::warning("login: Email not found", ["email" => $request->email]);
                 return redirect($redirectUrl)->withErrors([
-                    "email" => "E-mailadres niet gevonden. Controleer je e-mailadres.",
-                    // Optioneel: behoud algemene melding
-                    "error" => "Inloggen mislukt.",
+                    "email" => "Email address not found.",
                 ]);
             } else {
                 Log::warning("login: Incorrect password for email", ["email" => $request->email]);
                 return redirect($redirectUrl)->withErrors([
-                    "password" => "Wachtwoord is incorrect. Probeer het opnieuw.",
-                    // Optioneel: behoud algemene melding
-                    "error" => "Inloggen mislukt.",
+                    "password" => "Password is incorrect. Please try again.",
                 ]);
             }
         } catch (\Exception $e) {
@@ -187,7 +183,7 @@ class AuthController extends Controller
                 "stack_trace" => $e->getTraceAsString(),
             ]);
             return redirect()->route("login")->withErrors([
-                "error" => "Er is een fout opgetreden tijdens het inloggen. Probeer het later opnieuw.",
+                "error" => "An error occurred while logging in. Please try again later.",
             ]);
         }
     }
