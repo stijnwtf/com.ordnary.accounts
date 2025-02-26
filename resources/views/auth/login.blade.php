@@ -12,10 +12,8 @@
     <!-- Left Login Section -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
-            <div class="mb-8 flex flex-col items-start"> <!-- Stack logo and text vertically -->
-                <!-- Smaller Logo -->
-                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3"> <!-- Add margin bottom to separate logo from text -->
-                <!-- Left-aligned Text -->
+            <div class="mb-8 flex flex-col items-start">
+                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
                     <p class="text-sm text-gray-600 mt-2">Log in met je Numblio-account om eenvoudig toegang te krijgen tot al je Numblio-diensten. Eén account voor alles wat je nodig hebt.</p>
@@ -58,7 +56,10 @@
                                class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     @error('email')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <div class="mt-2 flex items-center p-2 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                        <span>{{ $message }}</span>
+                    </div>
                     @enderror
                 </div>
 
@@ -73,7 +74,10 @@
                                class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     @error('password')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <div class="mt-2 flex items-center p-2 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
+                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                        <span>{{ $message }}</span>
+                    </div>
                     @enderror
                 </div>
 
