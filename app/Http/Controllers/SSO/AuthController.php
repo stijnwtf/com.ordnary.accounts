@@ -38,7 +38,7 @@ class AuthController extends Controller
             ]);
             return view("error", [
                 "message" =>
-                    "Ontbrekende parameters: client_id en redirect_uri zijn vereist.",
+                    "Missing parameters: client_id and redirect_uri are required.",
             ]);
         }
 
@@ -49,7 +49,7 @@ class AuthController extends Controller
                 "client_id" => $clientId,
             ]);
             return view("error", [
-                "message" => "Ongeldige client_id.",
+                "message" => "Invalid client_id.",
             ]);
         }
 
@@ -61,7 +61,7 @@ class AuthController extends Controller
                 "allowed_redirect_uris" => $allowedRedirectUris,
             ]);
             return view("error", [
-                "message" => "Ongeldige redirect_uri voor deze client.",
+                "message" => "Redirect URI not allowed.",
             ]);
         }
 
