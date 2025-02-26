@@ -12,7 +12,7 @@
     <!-- Left Login Section -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
-            <div class="text-center mb-8">
+            <div class="mb-8">
                 <img src="image.png" alt="Numblio Logo" class="h-16 w-auto mx-auto mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio account</h2>
                 <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
@@ -88,13 +88,6 @@
         </div>
     </div>
 
-    <!-- Right Side (Optional) -->
-    <div class="hidden lg:flex w-1/2 bg-blue-50 items-center justify-center p-8">
-        <div class="text-center text-white">
-            <h2 class="text-3xl font-bold mb-4">Welkom bij Numblio</h2>
-            <p class="text-lg">Beheer je hosting en domeinen eenvoudig via ons platform</p>
-        </div>
-    </div>
 </div>
 </body>
 </html>
