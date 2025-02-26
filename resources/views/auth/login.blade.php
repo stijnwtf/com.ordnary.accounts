@@ -12,10 +12,14 @@
     <!-- Left Login Section -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
-            <div class="mb-8">
-                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-16 w-auto mx-auto mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
-                <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
+            <div class="mb-8 flex items-center">
+                <!-- Left-aligned Logo -->
+                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-10 w-auto mr-3">
+                <!-- Left-aligned Text -->
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
+                    <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
+                </div>
             </div>
 
             <!-- Error Message -->
