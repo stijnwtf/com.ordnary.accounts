@@ -13,7 +13,7 @@
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
             <div class="mb-8">
-                <img src="image.png" alt="Numblio Logo" class="h-16 w-auto mx-auto mb-6">
+                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-16 w-auto mx-auto mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
                 <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
             </div>
@@ -80,9 +80,10 @@
                     </button>
                 </div>
 
-                <!-- Forgot Password Link -->
-                <div class="text-sm text-center mt-4">
+                <!-- Forgot Password and Sign Up Links -->
+                <div class="flex justify-between text-sm mt-4">
                     <a href="#" class="text-blue-600 hover:text-blue-700">{{ __('Wachtwoord vergeten?') }}</a>
+                    <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700">{{ __('Maak een nieuw account aan') }}</a>
                 </div>
             </form>
         </div>
