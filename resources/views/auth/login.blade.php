@@ -24,8 +24,16 @@
 
             <!-- Error Message -->
             @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">{{ __('Authenticatie mislukt') }}</h3>
+                        <div class="mt-1 text-sm text-red-700">{{ session('error') }}</div>
+                    </div>
+                </div>
             </div>
             @endif
 

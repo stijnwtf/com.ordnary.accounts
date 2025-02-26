@@ -73,6 +73,17 @@ class AuthController extends Controller
             "session_data" => session()->all(), // Extra: log alle sessiedata
         ]);
 
+        Log::debug("showLoginForm: Stored client_id and redirect_uri in session", [
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri,
+            "session_data" => session()->all(),
+        ]);
+
+        Log::debug("showLoginForm: Sessie vóór view render", [
+            "session_data" => session()->all(),
+            "errors" => session('errors') ? session('errors')->all() : 'Geen errors'
+        ]);
+
         return view("auth.login");
     }
 
