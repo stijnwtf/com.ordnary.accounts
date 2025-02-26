@@ -14,7 +14,7 @@
         <div class="w-full max-w-md">
             <div class="mb-8 flex flex-col items-start"> <!-- Stack logo and text vertically -->
                 <!-- Smaller Logo -->
-                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-10 w-auto mb-3"> <!-- Add margin bottom to separate logo from text -->
+                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3"> <!-- Add margin bottom to separate logo from text -->
                 <!-- Left-aligned Text -->
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
