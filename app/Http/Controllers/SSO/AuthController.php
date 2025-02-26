@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\SSO;
+
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\User;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
+
+
 
 class AuthController extends Controller
 {
@@ -130,6 +134,7 @@ public function validateToken(Request $request)
         'client_id' => $request->client_id,
     ]);
 
+    
     // Verify client credentials
     $client = Client::where('client_id', $request->client_id)
         ->where('client_secret', $request->client_secret)
@@ -147,6 +152,14 @@ public function validateToken(Request $request)
     $userSession = UserSession::where('token', $request->token)
         ->where('client_id', $request->client_id)
         ->first();
+
+        if ($userSession->expires_at <= now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is verlopen.',
+            ], 419);
+        }
+        
 
     if (!$userSession) {
         Log::warning('Invalid or expired token', [

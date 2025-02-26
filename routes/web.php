@@ -19,8 +19,3 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])
         ->name('clients.regenerate-credentials');
 });
-
-// API routes
-Route::prefix('api')->group(function () {
-    Route::post('/validate-token', [AuthController::class, 'validateToken']);
-});
