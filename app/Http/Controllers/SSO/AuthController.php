@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\User;
 use App\Models\UserSession;
+use Cassandra\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,6 +72,7 @@ class AuthController extends Controller
             "password" => "required",
         ]);
 
+        // Attempt to log the user in
         if (Auth::attempt($request->only("email", "password"))) {
             $request->session()->regenerate();
 
@@ -81,10 +83,7 @@ class AuthController extends Controller
             if (!$clientId || !$redirectUri) {
                 return redirect()
                     ->route("login")
-                    ->with(
-                        "error",
-                        "Sessie verlopen. Probeer opnieuw in te loggen."
-                    );
+                    ->withErrors(['error' => 'Sessie verlopen. Probeer opnieuw in te loggen.']);
             }
 
             // Generate a token for this session
@@ -97,9 +96,14 @@ class AuthController extends Controller
             return redirect()->away($redirectUri . "?token=" . $token);
         }
 
-        throw ValidationException::withMessages([
-            "email" => [trans("auth.failed")],
-        ]);
+        // If login fails, check for the reason and provide an appropriate error message
+        $emailExists = User::where('email', $request->email)->exists();
+
+        if (!$emailExists) {
+            return redirect()->back()->withErrors(['error' => 'E-mailadres niet gevonden. Controleer je e-mailadres.']);
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Wachtwoord is incorrect. Probeer het opnieuw.']);
+        }
     }
 
     /**
