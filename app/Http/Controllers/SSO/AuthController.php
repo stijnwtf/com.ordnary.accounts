@@ -100,70 +100,53 @@ class AuthController extends Controller
             "password" => "required",
         ]);
 
-        // Get client_id and redirect_uri from the session
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
         Log::debug("login: Retrieved session parameters", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
-            "session_data" => session()->all(), // Extra: log alle sessiedata
+            "session_data" => session()->all(),
         ]);
 
         try {
-            // Test database connectiviteit
             Log::debug("login: Database connectiviteit testen", ["email" => $request->email]);
             DB::connection()->getPdo();
             Log::debug("login: Database connectie OK");
 
             Log::debug("login: Voor Auth::attempt", ["email" => $request->email]);
             if (Auth::attempt($request->only("email", "password"))) {
-                Log::info("login: Authentication successful", [
-                    "email" => $request->email,
-                ]);
+                Log::info("login: Authentication successful", ["email" => $request->email]);
                 $request->session()->regenerate();
 
                 if (!$clientId || !$redirectUri) {
-                    Log::error(
-                        "login: Missing session parameters after authentication",
-                        [
-                            "client_id" => $clientId,
-                            "redirect_uri" => $redirectUri,
-                        ]
-                    );
-                    return redirect()
-                        ->route("login")
-                        ->withErrors([
-                            "error" =>
-                                "Sessie verlopen. Probeer opnieuw in te loggen.",
-                        ]);
+                    Log::error("login: Missing session parameters after authentication", [
+                        "client_id" => $clientId,
+                        "redirect_uri" => $redirectUri,
+                    ]);
+                    return redirect()->route("login")->withErrors([
+                        "error" => "Sessie verlopen. Probeer opnieuw in te loggen.",
+                    ]);
                 }
 
-                // Generate a token for this session
                 $token = $this->generateToken(Auth::user(), $clientId);
                 Log::info("login: Generated token for user", [
                     "user_id" => Auth::user()->id,
                     "token" => $token,
                 ]);
 
-                // Clear session data
                 session()->forget(["client_id", "redirect_uri"]);
                 Log::debug("login: Cleared session parameters");
 
-                // Redirect to the client with the token
                 $targetUrl = $redirectUri . "?token=" . $token;
-                Log::info("login: Redirecting to client URL", [
-                    "target_url" => $targetUrl,
-                ]);
+                Log::info("login: Redirecting to client URL", ["target_url" => $targetUrl]);
                 return redirect()->away($targetUrl);
             }
 
-            // Als de login mislukt: controleer of het e-mailadres bestaat
             Log::debug("login: Na mislukte Auth::attempt", ["email" => $request->email]);
             Log::debug("login: Voor email check", ["email" => $request->email]);
             $emailExists = User::where("email", $request->email)->exists();
             Log::debug("login: Na email check", ["email_exists" => $emailExists]);
 
-            // Extra check: als sessiedata ontbreekt, fallback
             if (!$clientId || !$redirectUri) {
                 Log::error("login: Sessiedata ontbreekt voor redirect", [
                     "client_id" => $clientId,
@@ -174,16 +157,8 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Bouw de redirect URL met de vereiste queryparameters
-            $redirectUrl =
-                route("login") .
-                "?client_id=" .
-                urlencode($clientId) .
-                "&redirect_uri=" .
-                urlencode($redirectUri);
-            Log::debug("login: Redirect URL built", [
-                "redirect_url" => $redirectUrl,
-            ]);
+            $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+            Log::debug("login: Redirect URL built", ["redirect_url" => $redirectUrl]);
 
             Log::debug("login: Sessie check voor redirect", [
                 "client_id" => $clientId,
@@ -192,19 +167,18 @@ class AuthController extends Controller
             ]);
 
             if (!$emailExists) {
-                Log::warning("login: Email not found", [
-                    "email" => $request->email,
-                ]);
+                Log::warning("login: Email not found", ["email" => $request->email]);
                 return redirect($redirectUrl)->withErrors([
-                    "error" =>
-                        "E-mailadres niet gevonden. Controleer je e-mailadres.",
+                    "email" => "E-mailadres niet gevonden. Controleer je e-mailadres.",
+                    // Optioneel: behoud algemene melding
+                    "error" => "Inloggen mislukt.",
                 ]);
             } else {
-                Log::warning("login: Incorrect password for email", [
-                    "email" => $request->email,
-                ]);
+                Log::warning("login: Incorrect password for email", ["email" => $request->email]);
                 return redirect($redirectUrl)->withErrors([
-                    "error" => "Wachtwoord is incorrect. Probeer het opnieuw.",
+                    "password" => "Wachtwoord is incorrect. Probeer het opnieuw.",
+                    // Optioneel: behoud algemene melding
+                    "error" => "Inloggen mislukt.",
                 ]);
             }
         } catch (\Exception $e) {
@@ -212,15 +186,11 @@ class AuthController extends Controller
                 "exception" => $e->getMessage(),
                 "stack_trace" => $e->getTraceAsString(),
             ]);
-            return redirect()
-                ->route("login")
-                ->withErrors([
-                    "error" =>
-                        "Er is een fout opgetreden tijdens het inloggen. Probeer het later opnieuw.",
-                ]);
+            return redirect()->route("login")->withErrors([
+                "error" => "Er is een fout opgetreden tijdens het inloggen. Probeer het later opnieuw.",
+            ]);
         }
     }
-
     /**
      * Log the user out of the application.
      *
