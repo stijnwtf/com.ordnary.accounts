@@ -53,13 +53,13 @@
                             <i class="fas fa-envelope text-gray-400"></i>
                         </div>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus
-                               class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
                     @error('email')
-                    <div class="mt-2 flex items-center p-2 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
-                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
-                        <span>{{ $message }}</span>
-                    </div>
+                    <p class="mt-1 text-sm text-red-600 flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-400 mr-1"></i>
+                        {{ $message }}
+                    </p>
                     @enderror
                 </div>
 
@@ -71,13 +71,13 @@
                             <i class="fas fa-lock text-gray-400"></i>
                         </div>
                         <input type="password" name="password" id="password" required
-                               class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
                     @error('password')
-                    <div class="mt-2 flex items-center p-2 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
-                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
-                        <span>{{ $message }}</span>
-                    </div>
+                    <p class="mt-1 text-sm text-red-600 flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-400 mr-1"></i>
+                        {{ $message }}
+                    </p>
                     @enderror
                 </div>
 
