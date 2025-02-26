@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-[#f9fafb] min-h-screen">
-<div class="flex min-h-screen">
+<div class="flex items-center justify-center min-h-screen">
     <!-- Left Login Section -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
             <div class="mb-8">
                 <img src="image.png" alt="Numblio Logo" class="h-16 w-auto mx-auto mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio account</h2>
+                <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
                 <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
             </div>
 
@@ -87,7 +87,6 @@
             </form>
         </div>
     </div>
-
 </div>
 </body>
 </html>
