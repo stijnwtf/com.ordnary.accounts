@@ -18,7 +18,7 @@
                 <!-- Left-aligned Text -->
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
-                    <p class="text-sm text-gray-600 mt-2">Beheer je hosting en domeinen</p>
+                    <p class="text-sm text-gray-600 mt-2">Log in met je Numblio-account om eenvoudig toegang te krijgen tot al je Numblio-diensten. Eén account voor alles wat je nodig hebt.</p>
                 </div>
             </div>
 
