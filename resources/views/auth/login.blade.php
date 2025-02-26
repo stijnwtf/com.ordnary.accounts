@@ -100,8 +100,8 @@
             </div>
 
             <div class="mt-6 text-center text-sm">
-                <a href="{{ route('password.request') }}" class="text-secondary hover:text-accent">Wachtwoord vergeten?</a>
-                <p class="mt-2">Nog geen account? <a href="{{ route('register') }}" class="text-secondary hover:text-accent font-medium">Registreer nu</a></p>
+                <a href="" class="text-secondary hover:text-accent">Wachtwoord vergeten?</a>
+                <p class="mt-2">Nog geen account? <a href="" class="text-secondary hover:text-accent font-medium">Registreer nu</a></p>
             </div>
         </form>
     </div>
