@@ -117,7 +117,7 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validateToken(Request $request)
+public function validateToken(Request $request)
 {
     $request->validate([
         'token' => 'required|string',
@@ -146,7 +146,6 @@ class AuthController extends Controller
     // Find the user session with this token
     $userSession = UserSession::where('token', $request->token)
         ->where('client_id', $request->client_id)
-        ->where('expires_at', '>', now())
         ->first();
 
     if (!$userSession) {
@@ -158,6 +157,25 @@ class AuthController extends Controller
             'success' => false,
             'message' => 'Ongeldig of verlopen token.',
         ], 401);
+    }
+
+    // Log token expiration check
+    Log::info('Token expiry check', [
+        'expires_at' => $userSession->expires_at,
+        'current_time' => now(),
+    ]);
+
+    // Check if token has expired
+    if ($userSession->expires_at <= now()) {
+        Log::warning('Token has expired', [
+            'token' => $request->token,
+            'expires_at' => $userSession->expires_at,
+            'current_time' => now(),
+        ]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Token is verlopen.',
+        ], 419);
     }
 
     // Get the user data
@@ -181,7 +199,6 @@ class AuthController extends Controller
         ],
     ]);
 }
-
 
     /**
      * Generate a new token for a user session.
