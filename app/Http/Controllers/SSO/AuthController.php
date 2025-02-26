@@ -118,58 +118,70 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validateToken(Request $request)
-    {
-        $request->validate([
-            'token' => 'required|string',
-            'client_id' => 'required|string',
-            'client_secret' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'token' => 'required|string',
+        'client_id' => 'required|string',
+        'client_secret' => 'required|string',
+    ]);
 
-        // Verify client credentials
-        $client = Client::where('client_id', $request->client_id)
-            ->where('client_secret', $request->client_secret)
-            ->first();
+    Log::info('Token validation started', [
+        'token' => $request->token,
+        'client_id' => $request->client_id,
+    ]);
 
-        if (!$client) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ongeldige client credentials.',
-            ], 401);
-        }
+    // Verify client credentials
+    $client = Client::where('client_id', $request->client_id)
+        ->where('client_secret', $request->client_secret)
+        ->first();
 
-        // Find the user session with this token
-        $userSession = UserSession::where('token', $request->token)
-            ->where('client_id', $request->client_id)
-            ->where('expires_at', '>', now())
-            ->first();
-
-        if (!$userSession) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ongeldig of verlopen token.',
-            ], 401);
-        }
-
-        // Get the user data
-        $user = User::find($userSession->user_id);
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gebruiker niet gevonden.',
-            ], 404);
-        }
-
-        // Return user data
+    if (!$client) {
+        Log::error('Invalid client credentials', ['client_id' => $request->client_id]);
         return response()->json([
-            'success' => true,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                // Add any other user data you want to share with the client application
-            ],
-        ]);
+            'success' => false,
+            'message' => 'Ongeldige client credentials.',
+        ], 401);
     }
+
+    // Find the user session with this token
+    $userSession = UserSession::where('token', $request->token)
+        ->where('client_id', $request->client_id)
+        ->where('expires_at', '>', now())
+        ->first();
+
+    if (!$userSession) {
+        Log::warning('Invalid or expired token', [
+            'token' => $request->token,
+            'client_id' => $request->client_id,
+        ]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Ongeldig of verlopen token.',
+        ], 401);
+    }
+
+    // Get the user data
+    $user = User::find($userSession->user_id);
+    if (!$user) {
+        Log::error('User not found for token', ['token' => $request->token]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Gebruiker niet gevonden.',
+        ], 404);
+    }
+
+    // Return user data
+    return response()->json([
+        'success' => true,
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            // Add any other user data you want to share with the client application
+        ],
+    ]);
+}
+
 
     /**
      * Generate a new token for a user session.
