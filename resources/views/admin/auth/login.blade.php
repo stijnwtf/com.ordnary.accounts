@@ -86,17 +86,21 @@
                     <label for="remember" class="ml-2 text-sm text-gray-700">Keep me logged in</label>
                 </div>
 
-                <!-- Hidden reCAPTCHA input - will be filled programmatically -->
-                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                <!-- reCAPTCHA Checkbox -->
+                <div class="flex justify-center mt-4">
+                    <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
+                </div>
+                @error('g-recaptcha-response')
+                <p class="mt-1 text-sm text-red-600 text-center">
+                    {{ $message }}
+                </p>
+                @enderror
 
-                <!-- Submit Button with reCAPTCHA -->
+                <!-- Submit Button -->
                 <div>
                     <button
                         type="submit"
-                        class="g-recaptcha w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        data-sitekey="{{ $recaptcha_site_key }}"
-                        data-callback="onSubmit"
-                        data-action="login">
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         Sign In
                     </button>
                 </div>
@@ -114,15 +118,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Function to handle the reCAPTCHA response
-    function onSubmit(token) {
-        // Set the reCAPTCHA response to the hidden input
-        document.getElementById('g-recaptcha-response').value = token;
-        // Submit the form
-        document.getElementById('login-form').submit();
-    }
-</script>
 </body>
 </html>

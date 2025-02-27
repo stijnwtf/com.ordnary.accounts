@@ -36,15 +36,21 @@ class ClientController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required',
         ]);
+
+        // Custom validation for reCAPTCHA
+        if (empty($request->input('g-recaptcha-response'))) {
+            return back()->withErrors([
+                'g-recaptcha-response' => 'Please complete the reCAPTCHA verification.',
+            ])->withInput($request->except('password'));
+        }
 
         // Verify reCAPTCHA
         $recaptchaResult = $this->verifyRecaptcha($request->input('g-recaptcha-response'));
 
         if (!$recaptchaResult) {
             return back()->withErrors([
-                'recaptcha' => 'reCAPTCHA validatie mislukt. Probeer het opnieuw.',
+                'g-recaptcha-response' => 'reCAPTCHA validatie mislukt. Probeer het opnieuw.',
             ])->withInput($request->except('password'));
         }
 
@@ -85,6 +91,8 @@ class ClientController extends Controller
         $body = $response->json();
         return $body['success'] ?? false;
     }
+
+    // Rest of the methods remain the same...
 
     /**
      * Log the user out.
