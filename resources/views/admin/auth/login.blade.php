@@ -8,7 +8,7 @@
                 <div class="card-header">SSO Client Beheer - Inloggen</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.login') }}">
+                    <form method="POST" action="{{ route('adminloginprocess') }}">
                         @csrf
 
                         <div class="form-group row mb-3">

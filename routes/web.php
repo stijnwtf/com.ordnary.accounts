@@ -17,7 +17,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
-Route::post('/admin/login', [ClientController::class, 'admin.login']);
+Route::post('/admin/login', [ClientController::class, 'adminloginprocess']);
 
 // Admin routes for managing clients
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
