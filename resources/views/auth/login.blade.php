@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 </head>
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
 <div class="flex items-center justify-center flex-grow">
@@ -50,9 +49,6 @@
                                 @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                                 @endforeach
-                                @error('recaptcha')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </ul>
                         </div>
                     </div>
@@ -103,7 +99,16 @@
                     <input type="checkbox" name="remember" class="h-4 w-4 text-blue-600" id="remember">
                     <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in ') }}</label>
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
+
+                <!-- reCAPTCHA -->
+                <div>
+                    <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
+                    @if($errors->has('g-recaptcha-response'))
+                    <p class="mt-1 text-sm text-red-600 flex items-center">
+                        {{ $errors->first('g-recaptcha-response') }}
+                    </p>
+                    @endif
+                </div>
 
                 <!-- Submit Button -->
                 <div>
@@ -114,8 +119,8 @@
 
                 <!-- Forgot Password and Sign Up Links -->
                 <div class="flex justify-between text-sm mt-4">
-                    <a href="#" class="text-blue-600 hover:text-blue-700">{{ __('Forgot password?') }}</a>
-                    <a href="" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
+                    <a href="{{ route('password.forgot') }}" class="text-blue-600 hover:text-blue-700">{{ __('Forgot password?') }}</a>
+                    <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
                 </div>
             </form>
 

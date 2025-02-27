@@ -71,24 +71,6 @@ class AuthController extends Controller
         // Store client name for warning alert
         session(["client_name" => $client->name]);
 
-
-        Log::debug("showLoginForm: Stored client_id and redirect_uri in session", [
-            "client_id" => $clientId,
-            "redirect_uri" => $redirectUri,
-            "session_data" => session()->all(), // Extra: log alle sessiedata
-        ]);
-
-        Log::debug("showLoginForm: Stored client_id and redirect_uri in session", [
-            "client_id" => $clientId,
-            "redirect_uri" => $redirectUri,
-            "session_data" => session()->all(),
-        ]);
-
-        Log::debug("showLoginForm: Sessie vóór view render", [
-            "session_data" => session()->all(),
-            "errors" => session('errors') ? session('errors')->all() : 'Geen errors'
-        ]);
-
         return view("auth.login", [
             "client_name" => $client->name,
             "recaptcha_site_key" => config('services.recaptcha.site_key')
@@ -106,9 +88,6 @@ class AuthController extends Controller
         $request->validate([
             "email" => "required|email",
             "password" => "required",
-            "g-recaptcha-response" => "required|recaptcha"
-        ], [
-            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.'
         ]);
 
         // Verify reCAPTCHA
@@ -125,7 +104,7 @@ class AuthController extends Controller
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
             return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Please complete the reCAPTCHA verification."
+                "g-recaptcha-response" => "Please complete the reCAPTCHA verification."
             ]);
         }
 
@@ -138,11 +117,6 @@ class AuthController extends Controller
         ]);
 
         try {
-            Log::debug("login: Database connectiviteit testen", ["email" => $request->email]);
-            DB::connection()->getPdo();
-            Log::debug("login: Database connectie OK");
-
-            Log::debug("login: Voor Auth::attempt", ["email" => $request->email]);
             if (Auth::attempt($request->only("email", "password"))) {
                 Log::info("login: Authentication successful", ["email" => $request->email]);
                 $request->session()->regenerate();
@@ -153,7 +127,7 @@ class AuthController extends Controller
                         "redirect_uri" => $redirectUri,
                     ]);
                     return redirect()->route("login")->withErrors([
-                        "error" => "Sessie verlopen. Probeer opnieuw in te loggen.",
+                        "error" => "Session expired. Please try logging in again.",
                     ]);
                 }
 
@@ -171,29 +145,19 @@ class AuthController extends Controller
                 return redirect()->away($targetUrl);
             }
 
-            Log::debug("login: Na mislukte Auth::attempt", ["email" => $request->email]);
-            Log::debug("login: Voor email check", ["email" => $request->email]);
             $emailExists = User::where("email", $request->email)->exists();
-            Log::debug("login: Na email check", ["email_exists" => $emailExists]);
 
             if (!$clientId || !$redirectUri) {
-                Log::error("login: Sessiedata ontbreekt voor redirect", [
+                Log::error("login: Session data missing for redirect", [
                     "client_id" => $clientId,
                     "redirect_uri" => $redirectUri,
                 ]);
                 return redirect()->route("login")->withErrors([
-                    "error" => "Sessiedata ontbreekt. Probeer opnieuw.",
+                    "error" => "Session data missing. Please try again.",
                 ]);
             }
 
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-            Log::debug("login: Redirect URL built", ["redirect_url" => $redirectUrl]);
-
-            Log::debug("login: Sessie check voor redirect", [
-                "client_id" => $clientId,
-                "redirect_uri" => $redirectUri,
-                "redirect_url" => $redirectUrl,
-            ]);
 
             if (!$emailExists) {
                 Log::warning("login: Email not found", ["email" => $request->email]);
@@ -225,6 +189,10 @@ class AuthController extends Controller
      */
     private function verifyRecaptcha($recaptchaResponse)
     {
+        if (empty($recaptchaResponse)) {
+            return ['success' => false, 'error-codes' => ['missing-input-response']];
+        }
+
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => config('services.recaptcha.secret_key'),
             'response' => $recaptchaResponse,
@@ -284,7 +252,7 @@ class AuthController extends Controller
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Ongeldige client credentials.",
+                    "message" => "Invalid client credentials.",
                 ],
                 401
             );
@@ -303,7 +271,7 @@ class AuthController extends Controller
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Token is verlopen.",
+                    "message" => "Token has expired.",
                 ],
                 419
             );
@@ -317,17 +285,11 @@ class AuthController extends Controller
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Ongeldig of verlopen token.",
+                    "message" => "Invalid or expired token.",
                 ],
                 401
             );
         }
-
-        // Log token expiry check
-        Log::info("validateToken: Token expiry check", [
-            "expires_at" => $userSession->expires_at,
-            "current_time" => now(),
-        ]);
 
         // Get the user data
         $user = User::find($userSession->user_id);
@@ -338,7 +300,7 @@ class AuthController extends Controller
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Gebruiker niet gevonden.",
+                    "message" => "User not found.",
                 ],
                 404
             );
