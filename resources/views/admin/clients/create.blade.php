@@ -40,10 +40,15 @@
                         <label for="name" class="block text-sm font-medium text-gray-700">
                             Naam
                         </label>
-                        <div class="mt-1">
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-tag text-gray-400"></i>
+                            </div>
                             <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                                   class="focus:ring-numblio-blue focus:border-numblio-blue block w-full sm:text-sm border-gray-300 rounded-md">
+                                   class="focus:ring-numblio-blue focus:border-numblio-blue block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                   placeholder="Voer een naam in voor de client">
                         </div>
+                        <p class="mt-1 text-xs text-gray-500">Een duidelijke naam die het doel van deze client beschrijft</p>
                         @error('name')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -53,11 +58,26 @@
                         <label for="redirect_uris" class="block text-sm font-medium text-gray-700">
                             Redirect URIs (één per regel)
                         </label>
-                        <div class="mt-1">
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute top-3 left-3 flex items-start pointer-events-none">
+                                <i class="fas fa-link text-gray-400"></i>
+                            </div>
                             <textarea id="redirect_uris" name="redirect_uris" rows="4" required
-                                      class="focus:ring-numblio-blue focus:border-numblio-blue block w-full sm:text-sm border-gray-300 rounded-md">{{ old('redirect_uris') }}</textarea>
+                                      class="focus:ring-numblio-blue focus:border-numblio-blue block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                      placeholder="https://example.com/callback">{{ old('redirect_uris') }}</textarea>
                         </div>
-                        <p class="mt-2 text-sm text-gray-500">Voer elke toegestane redirect URI op een nieuwe regel in. Bijvoorbeeld: https://example.com/callback</p>
+                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1.5 text-gray-400"></i>
+                            <span>Voer elke toegestane redirect URI op een nieuwe regel in. Deze URIs moeten beginnen met https:// (met uitzondering van localhost).</span>
+                        </div>
+                        <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-xs">
+                            <span class="font-medium">Voorbeeld:</span>
+                            <div class="mt-1 font-mono">
+                                https://example.com/callback<br>
+                                https://app.example.com/oauth/callback<br>
+                                http://localhost:3000/callback
+                            </div>
+                        </div>
                         @error('redirect_uris')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
