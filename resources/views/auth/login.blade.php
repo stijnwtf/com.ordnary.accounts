@@ -27,9 +27,9 @@
                         <i class="fas fa-exclamation-triangle text-yellow-400"></i>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-yellow-800">Je logt momenteel in bij {{ $client_name }}.</h3>
+                        <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to {{ $client_name }}.</h3>
                         <div class="mt-1 text-sm text-yellow-700">
-                            Log in om door te gaan en toegang te krijgen tot {{ $client_name }}. Deze inlog wordt beheerd via Single Sign-On (SSO), waarmee je snel en veilig kunt inloggen met je bestaande account.
+                            Log in to proceed and gain access to {{ $client_name }}. This login is managed via Single Sign-On (SSO), allowing you to quickly and securely log in with your existing account.
                         </div>
                     </div>
                 </div>
