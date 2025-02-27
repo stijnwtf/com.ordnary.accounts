@@ -34,13 +34,6 @@
                 </div>
             </div>
 
-            <!-- Back to Home Button -->
-            <div>
-                <a href="/" class="w-full block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Sign in with Numblio
-                </a>
-            </div>
-
             <!-- Footer -->
             <div class="mt-12 text-center text-sm text-gray-500">
                 <p>&copy; 2025 Numblio. All rights reserved.</p>
