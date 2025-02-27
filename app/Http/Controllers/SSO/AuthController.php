@@ -67,6 +67,10 @@ class AuthController extends Controller
 
         // Store client_id and redirect_uri in session for use after login
         session(["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+        // Store client name for warning alert
+        session(["client_name" => $client->name]);
+
+
         Log::debug("showLoginForm: Stored client_id and redirect_uri in session", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
@@ -84,7 +88,9 @@ class AuthController extends Controller
             "errors" => session('errors') ? session('errors')->all() : 'Geen errors'
         ]);
 
-        return view("auth.login");
+        return view("auth.login", [
+            "client_name" => $client->name
+        ]);
     }
 
     /**

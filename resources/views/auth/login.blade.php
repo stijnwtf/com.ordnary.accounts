@@ -20,6 +20,21 @@
                 </div>
             </div>
 
+            <!-- Warning Alert -->
+            <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-yellow-800">Let op!</h3>
+                        <div class="mt-1 text-sm text-yellow-700">
+                            Je logt nu in bij {{ $client_name }}.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Error Message -->
             @if ($errors->any())
             <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
