@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-[#f9fafb] min-h-screen">
-<div class="flex items-center justify-center min-h-screen">
+<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<div class="flex items-center justify-center flex-grow">
     <!-- Left Login Section -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
@@ -23,6 +23,9 @@
             <!-- Warning Alert -->
             <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-yellow-500 text-lg mt-1"></i>
+                    </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to {{ $client_name }}.</h3>
                         <div class="mt-1 text-sm text-yellow-700">
@@ -37,7 +40,7 @@
             <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-400"></i>
+                        <i class="fas fa-exclamation-circle text-red-500 text-lg mt-1"></i>
                     </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-red-800">Something went wrong while signing in.</h3>
@@ -110,6 +113,16 @@
                     <a href="" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
                 </div>
             </form>
+
+            <!-- Simple Text Footer -->
+            <div class="mt-12 text-center text-sm text-gray-500">
+                <p>&copy; 2025 Numblio. All rights reserved.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
