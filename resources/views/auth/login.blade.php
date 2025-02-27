@@ -103,11 +103,6 @@
                 <!-- reCAPTCHA -->
                 <div>
                     <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
-                    @if($errors->has('g-recaptcha-response'))
-                    <p class="mt-1 text-sm text-red-600 flex items-center">
-                        {{ $errors->first('g-recaptcha-response') }}
-                    </p>
-                    @endif
                 </div>
 
                 <!-- Submit Button -->
