@@ -7,6 +7,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class ClientController extends Controller
@@ -19,7 +20,9 @@ class ClientController extends Controller
      */
     public function showLoginForm()
     {
-        return view('admin.auth.login');
+        return view('admin.auth.login', [
+            'recaptcha_site_key' => config('services.recaptcha.site_key')
+        ]);
     }
 
     /**
@@ -33,9 +36,19 @@ class ClientController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
+            'g-recaptcha-response' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // Verify reCAPTCHA
+        $recaptchaResult = $this->verifyRecaptcha($request->input('g-recaptcha-response'));
+
+        if (!$recaptchaResult) {
+            return back()->withErrors([
+                'recaptcha' => 'reCAPTCHA validatie mislukt. Probeer het opnieuw.',
+            ])->withInput($request->except('password'));
+        }
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
 
             // Check if user is admin
@@ -53,6 +66,24 @@ class ClientController extends Controller
         return back()->withErrors([
             'email' => 'De opgegeven inloggegevens zijn onjuist.',
         ]);
+    }
+
+    /**
+     * Verify reCAPTCHA token with Google API.
+     *
+     * @param string $recaptchaResponse
+     * @return bool
+     */
+    private function verifyRecaptcha($recaptchaResponse)
+    {
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $recaptchaResponse,
+            'remoteip' => request()->ip(),
+        ]);
+
+        $body = $response->json();
+        return $body['success'] ?? false;
     }
 
     /**
