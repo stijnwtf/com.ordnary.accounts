@@ -71,8 +71,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row justify-between items-center">
             <div class="flex items-center mb-4 md:mb-0">
-                <img src="/img/dark.png" alt="Numblio Logo" class="h-6 w-auto">
-                <span class="ml-2 text-sm text-gray-500">&copy; {{ date('Y') }} Numblio. Alle rechten voorbehouden.</span>
+                <span class="ml-2 text-sm text-gray-500">&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
             </div>
             <div class="flex space-x-6">
                 <a href="#" class="text-gray-500 hover:text-numblio-blue text-sm transition-colors duration-200">Privacy Policy</a>

@@ -19,7 +19,7 @@ Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.lo
 Route::post('/admin/login', [ClientController::class, 'login'])->name('adminloginprocess');
 
 // Admin routes for managing clients
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('clients', ClientController::class);
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])
         ->name('clients.regenerate-credentials');
