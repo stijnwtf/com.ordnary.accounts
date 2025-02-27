@@ -88,17 +88,33 @@ class AuthController extends Controller
         $request->validate([
             "email" => "required|email",
             "password" => "required",
-            "g-recaptcha-response" => "required" // Make sure this is present
+            // Remove the g-recaptcha-response required validation
         ]);
 
-        // Verify reCAPTCHA
-        $recaptchaResponse = $this->verifyRecaptcha($request->input('g-recaptcha-response'));
+        // Check for recaptcha response manually
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        if (empty($recaptchaResponse)) {
+            Log::warning("login: Missing reCAPTCHA response", [
+                "email" => $request->email
+            ]);
 
-        if (!$recaptchaResponse['success']) {
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Verify reCAPTCHA
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+
+        if (!$recaptchaResult['success']) {
             Log::warning("login: reCAPTCHA verification failed", [
                 "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResponse['error-codes'] ?? 'Unknown error',
-                "score" => $recaptchaResponse['score'] ?? 'N/A'
+                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
+                "score" => $recaptchaResult['score'] ?? 'N/A'
             ]);
 
             $clientId = session("client_id");
@@ -111,10 +127,10 @@ class AuthController extends Controller
         }
 
         // Check score for invisible reCAPTCHA v3 (if score is too low, reject the login)
-        if (isset($recaptchaResponse['score']) && $recaptchaResponse['score'] < 0.5) {
+        if (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5) {
             Log::warning("login: reCAPTCHA score too low", [
                 "email" => $request->email,
-                "score" => $recaptchaResponse['score']
+                "score" => $recaptchaResult['score']
             ]);
 
             $clientId = session("client_id");
