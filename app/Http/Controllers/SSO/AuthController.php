@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -89,7 +90,8 @@ class AuthController extends Controller
         ]);
 
         return view("auth.login", [
-            "client_name" => $client->name
+            "client_name" => $client->name,
+            "recaptcha_site_key" => config('services.recaptcha.site_key')
         ]);
     }
 
@@ -104,7 +106,26 @@ class AuthController extends Controller
         $request->validate([
             "email" => "required|email",
             "password" => "required",
+            "g-recaptcha-response" => "required"
         ]);
+
+        // Verify reCAPTCHA
+        $recaptchaResponse = $this->verifyRecaptcha($request->input('g-recaptcha-response'));
+
+        if (!$recaptchaResponse['success']) {
+            Log::warning("login: reCAPTCHA verification failed", [
+                "email" => $request->email,
+                "recaptcha_errors" => $recaptchaResponse['error-codes'] ?? 'Unknown error'
+            ]);
+
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Please complete the reCAPTCHA verification."
+            ]);
+        }
 
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
@@ -193,6 +214,28 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    /**
+     * Verify reCAPTCHA response with Google's API
+     *
+     * @param string $recaptchaResponse
+     * @return array
+     */
+    private function verifyRecaptcha($recaptchaResponse)
+    {
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $recaptchaResponse,
+            'remoteip' => request()->ip()
+        ]);
+
+        Log::debug("verifyRecaptcha: Verification response", [
+            'response' => $response->json()
+        ]);
+
+        return $response->json();
+    }
+
     /**
      * Log the user out of the application.
      *
@@ -346,7 +389,8 @@ class AuthController extends Controller
 
     public function showForgotForm(Request $request)
     {
-        return view('auth.password.forgot');
+        return view('auth.password.forgot', [
+            "recaptcha_site_key" => config('services.recaptcha.site_key')
+        ]);
     }
-
 }
