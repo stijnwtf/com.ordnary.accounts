@@ -88,6 +88,7 @@ class AuthController extends Controller
         $request->validate([
             "email" => "required|email",
             "password" => "required",
+            "g-recaptcha-response" => "required" // Make sure this is present
         ]);
 
         // Verify reCAPTCHA
@@ -96,7 +97,8 @@ class AuthController extends Controller
         if (!$recaptchaResponse['success']) {
             Log::warning("login: reCAPTCHA verification failed", [
                 "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResponse['error-codes'] ?? 'Unknown error'
+                "recaptcha_errors" => $recaptchaResponse['error-codes'] ?? 'Unknown error',
+                "score" => $recaptchaResponse['score'] ?? 'N/A'
             ]);
 
             $clientId = session("client_id");
@@ -104,7 +106,23 @@ class AuthController extends Controller
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
             return redirect($redirectUrl)->withErrors([
-                "g-recaptcha-response" => "Please complete the reCAPTCHA verification."
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Check score for invisible reCAPTCHA v3 (if score is too low, reject the login)
+        if (isset($recaptchaResponse['score']) && $recaptchaResponse['score'] < 0.5) {
+            Log::warning("login: reCAPTCHA score too low", [
+                "email" => $request->email,
+                "score" => $recaptchaResponse['score']
+            ]);
+
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Security verification failed. Please try again later."
             ]);
         }
 
@@ -183,6 +201,7 @@ class AuthController extends Controller
 
     /**
      * Verify reCAPTCHA response with Google's API
+     * Updated to handle invisible reCAPTCHA v3
      *
      * @param string $recaptchaResponse
      * @return array
