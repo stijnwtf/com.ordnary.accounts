@@ -24,7 +24,7 @@
             <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <i class="fas fa-info-circle text-yellow-500 text-lg mt-1"></i>
+                        <i class="fas fa-info-circle text-yellow-500 text-xl mt-1"></i> <!-- Increased size slightly -->
                     </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to {{ $client_name }}.</h3>
@@ -34,7 +34,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Error Message -->
             @if ($errors->any())
             <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
