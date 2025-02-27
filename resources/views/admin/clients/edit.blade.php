@@ -1,44 +1,80 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="mb-6">
-        <a href="{{ route('clients.index') }}" class="text-blue-600 hover:underline">
-            &larr; Terug naar Clients
-        </a>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="md:flex md:items-center md:justify-between mb-8">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                Client Bewerken
+            </h2>
+            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+                <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-info-circle mr-1.5 text-gray-400"></i>
+                    Bewerk een bestaande client-applicatie voor SSO verbinding
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 flex md:mt-0 md:ml-4">
+            <a href="{{ route('clients.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-numblio-blue transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Terug naar Clients
+            </a>
+        </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold mb-6">Client Bewerken: {{ $client->name }}</h1>
+    <!-- Form Card -->
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                <i class="fas fa-edit mr-2 text-gray-400"></i>{{ $client->name }}
+            </h3>
+        </div>
 
+        <div class="px-4 py-5 sm:p-6">
             <form action="{{ route('clients.update', $client) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <div class="mb-4">
-                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Naam</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $client->name) }}" required
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    @error('name')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">
+                            Naam
+                        </label>
+                        <div class="mt-1">
+                            <input type="text" name="name" id="name" value="{{ old('name', $client->name) }}" required
+                                   class="focus:ring-numblio-blue focus:border-numblio-blue block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        @error('name')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="sm:col-span-6">
+                        <label for="redirect_uris" class="block text-sm font-medium text-gray-700">
+                            Redirect URIs (één per regel)
+                        </label>
+                        <div class="mt-1">
+                            <textarea id="redirect_uris" name="redirect_uris" rows="4" required
+                                      class="focus:ring-numblio-blue focus:border-numblio-blue block w-full sm:text-sm border-gray-300 rounded-md">{{ old('redirect_uris', implode("\n", $client->redirectUrisArray)) }}</textarea>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Voer elke toegestane redirect URI op een nieuwe regel in. Bijvoorbeeld: https://example.com/callback</p>
+                        @error('redirect_uris')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="mb-6">
-                    <label for="redirect_uris" class="block text-gray-700 text-sm font-bold mb-2">Redirect URIs (één per regel)</label>
-                    <textarea name="redirect_uris" id="redirect_uris" rows="4" required
-                              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('redirect_uris', implode("\n", $client->redirectUrisArray)) }}</textarea>
-                    <p class="text-gray-600 text-xs mt-1">Voer elke toegestane redirect URI op een nieuwe regel in. Bijvoorbeeld: https://example.com/callback</p>
-                    @error('redirect_uris')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="flex items-center justify-end">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Wijzigingen Opslaan
-                    </button>
+                <div class="pt-5 border-t border-gray-200 mt-6">
+                    <div class="flex justify-end">
+                        <a href="{{ route('clients.index') }}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-numblio-blue">
+                            Annuleren
+                        </a>
+                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-numblio-blue hover:bg-numblio-lightblue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-numblio-blue">
+                            <i class="fas fa-save mr-2"></i>
+                            Wijzigingen Opslaan
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
