@@ -31,7 +31,7 @@
             <div class="flex items-center">
                 <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto">
                 <div class="ml-3 py-1 pl-3 border-l border-gray-200">
-                    <span class="text-lg font-semibold text-gray-900">Admin Portal</span>
+                    <span class="text-lg font-semibold text-gray-900">com.numblio.sso</span>
                 </div>
             </div>
             <div class="flex items-center">
