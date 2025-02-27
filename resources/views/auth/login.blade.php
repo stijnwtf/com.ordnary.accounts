@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inloggen | Numblio</title>
+    <title>SSO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -59,7 +59,7 @@
 
                 <!-- Email Input -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('E-mailadres') }}</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-gray-400"></i>
@@ -76,7 +76,7 @@
 
                 <!-- Password Input -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Wachtwoord') }}</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-lock text-gray-400"></i>
