@@ -22,12 +22,12 @@
 
             <!-- Warning Alert -->
             <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div class="flex">
+                <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <i class="fas fa-info-circle text-yellow-500 text-xl mt-1"></i> <!-- Increased size slightly -->
+                        <i class="fas fa-info-circle text-yellow-500 text-xl"></i>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to {{ $client_name }}.</h3>
+                        <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to <b>{{ $client_name }}</b>.</h3>
                         <div class="mt-1 text-sm text-yellow-700">
                             Log in to proceed and gain access to {{ $client_name }}. This login is managed via Single Sign-On (SSO), allowing you to quickly and securely log in with your existing account.
                         </div>
