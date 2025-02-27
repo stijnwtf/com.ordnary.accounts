@@ -106,7 +106,9 @@ class AuthController extends Controller
         $request->validate([
             "email" => "required|email",
             "password" => "required",
-            "g-recaptcha-response" => "required"
+            "g-recaptcha-response" => "required|recaptcha"
+        ], [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.'
         ]);
 
         // Verify reCAPTCHA
