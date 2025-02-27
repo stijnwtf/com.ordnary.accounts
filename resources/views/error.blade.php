@@ -3,50 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fout | Numblio</title>
-    <!-- Tailwind CSS via CDN -->
+    <title>{{ $message }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'ms-blue': '#0078d4',
-                        'ms-gray': '#f5f5f5',
-                        'ms-dark': '#505050'
-                    },
-                    fontFamily: {
-                        'segoe': ['Segoe UI', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-white font-segoe text-ms-dark">
-<div class="min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-md w-full">
-        <div class="text-center mb-8">
-            <!-- Microsoft-style icon -->
-            <svg class="mx-auto h-16 w-16 text-ms-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12" y2="16" />
-            </svg>
+<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<div class="flex items-center justify-center flex-grow">
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+        <div class="w-full max-w-md">
+            <div class="mb-8 flex flex-col items-start">
+                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Oops! Something went wrong.</h2>
+                    <p class="text-sm text-gray-600 mt-2">An unexpected error occurred. Please try again later.</p>
+                </div>
+            </div>
 
-            <h1 class="mt-6 text-2xl font-light text-ms-dark">Oops! Er is iets mis gegaan.</h1>
-        </div>
+            <!-- Error Alert -->
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-yellow-800">An unexpected error occurred.</h3>
+                        <div class="mt-1 text-sm text-yellow-700">
+                            {{ $message }}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="text-center">
-            <p class="text-ms-dark text-base">{{ $message }}</p>
-
-            <a href="/" class="mt-8 inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-ms-blue hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ms-blue transition-colors">
-                Terug naar home
-            </a>
-        </div>
-
-        <div class="mt-12 text-center text-sm text-gray-400">
-            <p>Numblio &copy; 2025</p>
+            <!-- Footer -->
+            <div class="mt-12 text-center text-sm text-gray-500">
+                <p>&copy; 2025 Numblio. All rights reserved.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
