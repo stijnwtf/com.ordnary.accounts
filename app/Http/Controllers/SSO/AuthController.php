@@ -343,4 +343,10 @@ class AuthController extends Controller
 
         return $token;
     }
+
+    public function showForgotForm(Request $request)
+    {
+        return view('auth.password.forgot');
+    }
+
 }

@@ -12,7 +12,7 @@
     <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div class="w-full max-w-md">
             <div class="mb-8 flex flex-col items-start">
-                <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
+                <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Welcome to Numblio Single Sign-On.</h2>
                     <p class="text-sm text-gray-600 mt-2">Easily access all your Numblio services with one secure login..</p>

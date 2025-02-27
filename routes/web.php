@@ -10,6 +10,7 @@ Route::get('/', function () {
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('forgot-password');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
