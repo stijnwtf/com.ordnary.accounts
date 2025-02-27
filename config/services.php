@@ -35,8 +35,8 @@ return [
         ],
     ],
     'recaptcha' => [
-        'site_key' => env('6LfequQqAAAAABMcV2XHaBAPjvop2geDre87MQAN'),
-        'secret_key' => env('6LfequQqAAAAALDQ7NOMeoeuBROa1rOiM7zaFVSq'),
+        'site_key' => env('RECAPTCHA_SITE_KEY', '6LfequQqAAAAABMcV2XHaBAPjvop2geDre87MQAN'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY', '6LfequQqAAAAALDQ7NOMeoeuBROa1rOiM7zaFVSq'),
     ],
 
 ];
