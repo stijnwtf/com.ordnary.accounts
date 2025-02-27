@@ -6,8 +6,8 @@
     <title>SSO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Using reCAPTCHA v3 -->
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
 <div class="flex items-center justify-center flex-grow">
@@ -101,15 +101,15 @@
                     <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in ') }}</label>
                 </div>
 
-                <!-- Hidden reCAPTCHA input - will be filled programmatically -->
-                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-
-                <!-- Submit Button -->
+                <!-- Submit Button with invisible reCAPTCHA -->
                 <div>
                     <button
-                        type="button"
-                        id="submit-button"
-                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        type="submit"
+                        class="g-recaptcha w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                        data-callback="onSubmit"
+                        data-action="login"
+                        data-size="invisible">
                         Sign In
                     </button>
                 </div>
@@ -135,19 +135,9 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('submit-button').addEventListener('click', function(e) {
-            e.preventDefault();
-            grecaptcha.ready(function() {
-                grecaptcha.execute('{{ $recaptcha_site_key }}', {action: 'login'}).then(function(token) {
-                    // Set the reCAPTCHA response to the hidden input
-                    document.getElementById('g-recaptcha-response').value = token;
-                    // Submit the form
-                    document.getElementById('login-form').submit();
-                });
-            });
-        });
-    });
+    function onSubmit(token) {
+        document.getElementById("login-form").submit();
+    }
 </script>
 </body>
 </html>
