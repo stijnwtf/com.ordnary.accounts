@@ -15,8 +15,8 @@
             <div class="mb-8 flex flex-col items-start">
                 <img src="https://numblio.live/img/numblio/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Inloggen op je Numblio-account.</h2>
-                    <p class="text-sm text-gray-600 mt-2">Log in met je Numblio-account om eenvoudig toegang te krijgen tot al je Numblio-diensten. Eén account voor alles wat je nodig hebt.</p>
+                    <h2 class="text-2xl font-bold text-gray-900">Log in to your Numblio-account.</h2>
+                    <p class="text-sm text-gray-600 mt-2">Log in with your Numblio account to easily access all your Numblio services. One account for everything you need.</p>
                 </div>
             </div>
 
