@@ -71,7 +71,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-user text-gray-400"></i>
                         </div>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" required autofocus
+                        <input placeholder="John Doe" type="text" name="name" id="name" value="{{ old('name') }}" required autofocus
                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
                     @error('name')
@@ -88,7 +88,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-gray-400"></i>
                         </div>
-                        <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                        <input placeholder="john.doe@example.com" type="email" name="email" id="email" value="{{ old('email') }}" required
                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
                     @error('email')
@@ -105,7 +105,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-lock text-gray-400"></i>
                         </div>
-                        <input type="password" name="password" id="password" required
+                        <input placeholder="••••••••" type="password" name="password" id="password" required
                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
                     <p class="mt-1 text-xs text-gray-500">
@@ -125,7 +125,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-lock text-gray-400"></i>
                         </div>
-                        <input type="password" name="password_confirmation" id="password_confirmation" required
+                        <input placeholder="••••••••" type="password" name="password_confirmation" id="password_confirmation" required
                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
