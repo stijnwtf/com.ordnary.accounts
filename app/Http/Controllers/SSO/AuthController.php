@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\User;
 use App\Models\UserSession;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -386,10 +389,248 @@ class AuthController extends Controller
         return $token;
     }
 
+    // Existing methods remain unchanged...
+
+    /**
+     * Show the forgot password form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
     public function showForgotForm(Request $request)
     {
         return view('auth.password.forgot', [
             "recaptcha_site_key" => config('services.recaptcha.site_key')
         ]);
+    }
+
+    /**
+     * Handle forgot password form submission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'g-recaptcha-response' => 'required'
+        ]);
+
+        // Verify reCAPTCHA
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+
+        if (!$recaptchaResult['success'] ||
+            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)) {
+            Log::warning("forgotPassword: reCAPTCHA verification failed", [
+                "email" => $request->email,
+                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
+                "score" => $recaptchaResult['score'] ?? 'N/A'
+            ]);
+
+            return redirect()->back()->withErrors([
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Check if user exists before sending reset link
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            Log::info("forgotPassword: Password reset requested for non-existent email", [
+                "email" => $request->email
+            ]);
+
+            // Don't reveal that the user doesn't exist for security reasons
+            return redirect()->route('password.sent')->with('status', 'If your email exists in our system, you will receive a password reset link shortly.');
+        }
+
+        // Generate a token
+        $token = Password::createToken($user);
+
+        // Store token in password_resets table
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => now()
+            ]
+        );
+
+        // Get the reset URL
+        $resetUrl = url(route('password.reset', [
+            'token' => $token,
+            'email' => $request->email,
+        ], false));
+
+        Log::info("forgotPassword: Password reset token created", [
+            "email" => $request->email,
+            "reset_url" => $resetUrl
+        ]);
+
+        // Send the reset link email
+        Mail::send('emails.password-reset', ['resetUrl' => $resetUrl], function($message) use ($request) {
+            $message->to($request->email);
+            $message->subject('Reset Your Password');
+        });
+
+        return redirect()->route('password.sent')->with('status', 'If your email exists in our system, you will receive a password reset link shortly.');
+    }
+
+    /**
+     * Show a view that the password reset email has been sent.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showSentForm()
+    {
+        return view('auth.password.sent');
+    }
+
+    /**
+     * Show the reset password form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function showResetForm(Request $request)
+    {
+        $token = $request->route('token');
+        $email = $request->email;
+
+        // Validate token exists
+        $tokenRecord = DB::table('password_resets')
+            ->where('email', $email)
+            ->first();
+
+        if (!$tokenRecord) {
+            Log::warning("showResetForm: No token found for email", [
+                "email" => $email
+            ]);
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Invalid password reset link.']);
+        }
+
+        // Check if token is expired (1 hour validity)
+        if (now()->diffInMinutes($tokenRecord->created_at) > 60) {
+            Log::warning("showResetForm: Token expired", [
+                "email" => $email,
+                "created_at" => $tokenRecord->created_at
+            ]);
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Password reset link has expired. Please request a new one.']);
+        }
+
+        return view('auth.password.reset', [
+            'token' => $token,
+            'email' => $email,
+            "recaptcha_site_key" => config('services.recaptcha.site_key')
+        ]);
+    }
+
+    /**
+     * Handle password reset.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+            'g-recaptcha-response' => 'required'
+        ]);
+
+        // Verify reCAPTCHA
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+
+        if (!$recaptchaResult['success'] ||
+            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)) {
+            Log::warning("resetPassword: reCAPTCHA verification failed", [
+                "email" => $request->email,
+                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
+                "score" => $recaptchaResult['score'] ?? 'N/A'
+            ]);
+
+            return redirect()->back()->withErrors([
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Fetch token record
+        $tokenRecord = DB::table('password_resets')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$tokenRecord) {
+            Log::warning("resetPassword: No token found for email", [
+                "email" => $request->email
+            ]);
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Invalid password reset link.']);
+        }
+
+        // Verify token
+        if (!Hash::check($request->token, $tokenRecord->token)) {
+            Log::warning("resetPassword: Token mismatch", [
+                "email" => $request->email
+            ]);
+            return redirect()->back()
+                ->withErrors(['token' => 'Invalid token.']);
+        }
+
+        // Check if token is expired (1 hour validity)
+        if (now()->diffInMinutes($tokenRecord->created_at) > 60) {
+            Log::warning("resetPassword: Token expired", [
+                "email" => $request->email,
+                "created_at" => $tokenRecord->created_at
+            ]);
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'Password reset link has expired. Please request a new one.']);
+        }
+
+        // Find the user
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            Log::warning("resetPassword: User not found", [
+                "email" => $request->email
+            ]);
+            return redirect()->route('password.forgot')
+                ->withErrors(['email' => 'We cannot find a user with that email address.']);
+        }
+
+        // Reset the password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Delete the token
+        DB::table('password_resets')->where('email', $request->email)->delete();
+
+        // Log the successful password reset
+        Log::info("resetPassword: Password successfully reset", [
+            "user_id" => $user->id,
+            "email" => $user->email
+        ]);
+
+        // Fire the password reset event
+        event(new PasswordReset($user));
+
+        return redirect()->route('password.success');
+    }
+
+    /**
+     * Show a success page after password reset.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showSuccessForm()
+    {
+        return view('auth.password.success');
     }
 }

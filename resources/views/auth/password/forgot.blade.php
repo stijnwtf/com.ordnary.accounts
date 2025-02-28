@@ -1,3 +1,4 @@
+{{-- resources/views/auth/password/forgot.blade.php --}}
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -6,6 +7,7 @@
     <title>Forgot password?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
 <div class="flex items-center justify-center flex-grow">
@@ -17,8 +19,25 @@
                 <p class="text-sm text-gray-600 mt-2">Enter your email address to receive a password reset link.</p>
             </div>
 
+            @if ($errors->any())
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">
+                            @foreach ($errors->all() as $error)
+                            {{ $error }}<br>
+                            @endforeach
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Formulier -->
-            <form method="POST" action="" class="space-y-6">
+            <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
                 @csrf
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -27,17 +46,22 @@
                             <i class="fas fa-envelope text-gray-400"></i>
                         </div>
                         <input placeholder="john.doe@example.com" type="email" name="email" id="email" required
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300">
+                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300" value="{{ old('email') }}">
                     </div>
                 </div>
 
+                <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
+
                 <div>
                     <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Send
+                        Send Reset Link
                     </button>
                 </div>
             </form>
 
+            <div class="mt-6 text-center">
+                <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:text-blue-800">Back to login</a>
+            </div>
 
             <!-- Simple Text Footer -->
             <div class="mt-12 text-center text-sm text-gray-500">
