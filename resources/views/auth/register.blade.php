@@ -17,7 +17,7 @@
             <div class="mb-8 flex flex-col items-start">
                 <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Create your Numblio account</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">Create your Numblio-account.</h2>
                     <p class="text-sm text-gray-600 mt-2">Get access to all Numblio services with a single account. It's free and only takes a minute.</p>
                 </div>
             </div>
