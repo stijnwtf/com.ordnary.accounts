@@ -633,4 +633,188 @@ class AuthController extends Controller
     {
         return view('auth.password.success');
     }
+
+    /**
+     * Show the registration form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function showRegistrationForm(Request $request)
+    {
+        // Get query parameters the same way as login
+        $clientId = $request->query("client_id");
+        $redirectUri = $request->query("redirect_uri");
+        Log::debug("showRegistrationForm: Received query parameters", [
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri,
+        ]);
+
+        if (!$clientId || !$redirectUri) {
+            Log::error("showRegistrationForm: Missing required parameters", [
+                "client_id" => $clientId,
+                "redirect_uri" => $redirectUri,
+            ]);
+            return view("error", [
+                "message" =>
+                    "Missing parameters: client_id and redirect_uri are required.",
+            ]);
+        }
+
+        // Verify the client exists and the redirect URI is allowed
+        $client = Client::where("client_id", $clientId)->first();
+        if (!$client) {
+            Log::error("showRegistrationForm: Invalid client_id", [
+                "client_id" => $clientId,
+            ]);
+            return view("error", [
+                "message" => "Invalid client_id.",
+            ]);
+        }
+
+        // Check if the redirect URI is in the list of allowed URIs for this client
+        $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
+        if (!in_array($redirectUri, $allowedRedirectUris)) {
+            Log::error("showRegistrationForm: Redirect URI not allowed", [
+                "redirect_uri" => $redirectUri,
+                "allowed_redirect_uris" => $allowedRedirectUris,
+            ]);
+            return view("error", [
+                "message" => "Redirect URI not allowed.",
+            ]);
+        }
+
+        // Store client_id and redirect_uri in session for use after registration
+        session(["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+        // Store client name for warning alert
+        session(["client_name" => $client->name]);
+
+        return view("auth.register", [
+            "client_name" => $client->name,
+            "recaptcha_site_key" => config('services.recaptcha.site_key')
+        ]);
+    }
+
+    /**
+     * Handle a registration request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            "name" => ["required", "string", "max:255"],
+            "email" => ["required", "string", "email", "max:255", "unique:users"],
+            "password" => ["required", "confirmed", Rules\Password::defaults()],
+        ]);
+
+        // Check for recaptcha response manually
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        if (empty($recaptchaResponse)) {
+            Log::warning("register: Missing reCAPTCHA response", [
+                "email" => $request->email
+            ]);
+
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Verify reCAPTCHA
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+
+        if (!$recaptchaResult['success']) {
+            Log::warning("register: reCAPTCHA verification failed", [
+                "email" => $request->email,
+                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
+                "score" => $recaptchaResult['score'] ?? 'N/A'
+            ]);
+
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        // Check score for invisible reCAPTCHA v3 (if score is too low, reject the registration)
+        if (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5) {
+            Log::warning("register: reCAPTCHA score too low", [
+                "email" => $request->email,
+                "score" => $recaptchaResult['score']
+            ]);
+
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
+            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+
+            return redirect($redirectUrl)->withErrors([
+                "recaptcha" => "Security verification failed. Please try again later."
+            ]);
+        }
+
+        $clientId = session("client_id");
+        $redirectUri = session("redirect_uri");
+        Log::debug("register: Retrieved session parameters", [
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri,
+        ]);
+
+        try {
+            // Create user
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            Log::info("register: User registered successfully", ["email" => $request->email]);
+
+            // Fire registered event
+            event(new Registered($user));
+
+            // Auto-login after registration
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            if (!$clientId || !$redirectUri) {
+                Log::error("register: Missing session parameters after authentication", [
+                    "client_id" => $clientId,
+                    "redirect_uri" => $redirectUri,
+                ]);
+                return redirect()->route("login")->withErrors([
+                    "error" => "Session expired. Please try logging in again.",
+                ]);
+            }
+
+            $token = $this->generateToken($user, $clientId);
+            Log::info("register: Generated token for user", [
+                "user_id" => $user->id,
+                "token" => $token,
+            ]);
+
+            session()->forget(["client_id", "redirect_uri"]);
+            Log::debug("register: Cleared session parameters");
+
+            $targetUrl = $redirectUri . "?token=" . $token;
+            Log::info("register: Redirecting to client URL", ["target_url" => $targetUrl]);
+            return redirect()->away($targetUrl);
+
+        } catch (\Exception $e) {
+            Log::error("register: Exception occurred during registration", [
+                "exception" => $e->getMessage(),
+                "stack_trace" => $e->getTraceAsString(),
+            ]);
+            return redirect()->route("register")->withErrors([
+                "error" => "An error occurred while registering. Please try again later.",
+            ]);
+        }
+    }
 }

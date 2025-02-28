@@ -12,7 +12,9 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+// Registration Routes
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('password.forgot');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
