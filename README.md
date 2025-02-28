@@ -1,4 +1,4 @@
-# Numblio Single Sign-On (SSO) Handleiding
+# Numblio Single Sign-On (SSO)
 
 ## Overzicht
 Numblio maakt gebruik van een Single Sign-On (SSO) proces om gebruikers eenvoudig en veilig te authenticeren via een centraal systeem. Dit document beschrijft de werking van het SSO-proces bij Numblio en hoe applicaties zoals Leerlokaal.com hiermee omgaan.
