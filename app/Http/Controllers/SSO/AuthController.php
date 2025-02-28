@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password as PasswordBroker;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -448,7 +449,7 @@ class AuthController extends Controller
         }
 
         // Generate a token
-        $token = Password::createToken($user);
+        $token = PasswordBroker::createToken($user);
 
         // Store token in password_resets table
         DB::table('password_resets')->updateOrInsert(
