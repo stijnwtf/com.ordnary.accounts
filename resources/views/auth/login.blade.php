@@ -116,7 +116,7 @@
 
                 <!-- Forgot Password and Sign Up Links -->
                 <div class="flex justify-between text-sm mt-4">
-                    <a href="" class="text-blue-600 hover:text-blue-700">{{ __('Forgot password?') }}</a>
+                    <a href="{{route('password.forgot')}}" class="text-blue-600 hover:text-blue-700">{{ __('Forgot password?') }}</a>
                     <a href="" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
                 </div>
             </form>
