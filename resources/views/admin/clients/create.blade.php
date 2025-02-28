@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header blijft hetzelfde -->
     <div class="md:flex md:items-center md:justify-between mb-6">
         <div class="flex-1 min-w-0">
