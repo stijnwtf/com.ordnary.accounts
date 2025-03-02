@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SSO\AuthController;
 use App\Http\Controllers\SSO\ClientController;
+use App\Http\Controllers\SSO\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,4 +33,7 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('clients', ClientController::class);
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])
         ->name('clients.regenerate-credentials');
+    
+    // Admin routes for managing users
+    Route::resource('users', UserController::class);
 });

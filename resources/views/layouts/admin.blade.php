@@ -39,6 +39,9 @@
                     <a href="{{ route('clients.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-users mr-2"></i>Clients
                     </a>
+                    <a href="{{ route('users.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-user-shield mr-2"></i>Gebruikers
+                    </a>
                     <a href="#" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-cog mr-2"></i>Instellingen
                     </a>
