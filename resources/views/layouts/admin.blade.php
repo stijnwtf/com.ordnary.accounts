@@ -42,6 +42,9 @@
                     <a href="{{ route('users.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-user-shield mr-2"></i>Gebruikers
                     </a>
+                    <a href="{{ route('sessions.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-key mr-2"></i>Sessies
+                    </a>
                     <a href="#" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-cog mr-2"></i>Instellingen
                     </a>
@@ -54,7 +57,7 @@
                         <div>
                             <span class="text-sm font-medium text-gray-700 group-hover:text-numblio-blue transition-colors duration-200">{{ Auth::user()->name }}</span>
                             <a href="{{ route('logout') }}" class="block text-xs text-gray-500 hover:text-numblio-blue transition-colors duration-200">
-                                Uitloggen <i class="fas fa-sign-out-alt ml-1 text-xs"></i>
+                                Uitloggen
                             </a>
                         </div>
                     </div>

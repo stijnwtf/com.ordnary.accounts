@@ -3,6 +3,7 @@
 use App\Http\Controllers\SSO\AuthController;
 use App\Http\Controllers\SSO\ClientController;
 use App\Http\Controllers\SSO\UserController;
+use App\Http\Controllers\SSO\SessionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,4 +37,11 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     
     // Admin routes for managing users
     Route::resource('users', UserController::class);
+    
+    // Admin routes for managing sessions
+    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
+    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
+    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
+    Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
+    Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
 });
