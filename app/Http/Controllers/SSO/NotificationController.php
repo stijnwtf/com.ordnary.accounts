@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class NotificationController extends Controller
 {
@@ -54,7 +55,7 @@ class NotificationController extends Controller
     public function show(Notification $notification)
     {
         // Controleer of de notificatie van de ingelogde gebruiker is
-        $this->authorize('view', $notification);
+        Gate::authorize('view', $notification);
         
         // Markeer de notificatie als gelezen
         $notification->markAsRead();
@@ -68,7 +69,7 @@ class NotificationController extends Controller
     public function markAsRead(Notification $notification)
     {
         // Controleer of de notificatie van de ingelogde gebruiker is
-        $this->authorize('update', $notification);
+        Gate::authorize('update', $notification);
         
         $notification->markAsRead();
         
@@ -81,7 +82,7 @@ class NotificationController extends Controller
     public function markAsUnread(Notification $notification)
     {
         // Controleer of de notificatie van de ingelogde gebruiker is
-        $this->authorize('update', $notification);
+        Gate::authorize('update', $notification);
         
         $notification->markAsUnread();
         
@@ -106,7 +107,7 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         // Controleer of de notificatie van de ingelogde gebruiker is
-        $this->authorize('delete', $notification);
+        Gate::authorize('delete', $notification);
         
         $notification->delete();
         
