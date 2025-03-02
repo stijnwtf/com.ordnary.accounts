@@ -60,13 +60,31 @@
                 </div>
                 <div class="flex items-center space-x-4 border-l border-gray-200 pl-6">
                     <!-- Notifications Dropdown -->
-                    <div class="relative" x-data="{ open: false, notifications: [], unreadCount: 0 }" @click.away="open = false" x-init="
+                    <div class="relative" x-data="{ open: false, notifications: [], unreadCount: 0, lastResponse: null }" @click.away="open = false" x-init="
                         // Voeg console.log toe om te debuggen
                         console.log('Initializing notifications dropdown');
                         
                         // Gebruik een absolute URL
                         const notificationsUrl = '/admin/notifications/unread';
                         console.log('Notifications URL:', notificationsUrl);
+                        
+                        // Handmatige test notificatie
+                        const testNotification = {
+                            id: 999,
+                            user_id: 1,
+                            title: 'Test Notificatie (Handmatig)',
+                            message: 'Dit is een handmatige test notificatie om de weergave te testen.',
+                            type: 'info',
+                            icon: 'fa-bell',
+                            link: '/admin/notifications',
+                            read_at: null,
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        };
+                        
+                        // Voeg de test notificatie toe aan de lijst
+                        notifications = [testNotification];
+                        unreadCount = 1;
                         
                         // Haal ongelezen notificaties op
                         fetch(notificationsUrl, {
@@ -84,11 +102,22 @@
                             })
                             .then(data => {
                                 console.log('Notifications data:', data);
-                                notifications = data.notifications || [];
-                                unreadCount = data.unreadCount || 0;
+                                lastResponse = data;
+                                
+                                // Alleen updaten als er daadwerkelijk notificaties zijn
+                                if (data.notifications && data.notifications.length > 0) {
+                                    notifications = data.notifications;
+                                    unreadCount = data.unreadCount || 0;
+                                }
+                                
+                                // Debug output
+                                console.log('Notifications array:', notifications);
+                                console.log('First notification:', notifications.length > 0 ? notifications[0] : null);
+                                console.log('Unread count:', unreadCount);
                             })
                             .catch(error => {
                                 console.error('Error fetching notifications:', error);
+                                // Laat de test notificatie staan bij een fout
                             });
                         
                         // Refresh notificaties elke 60 seconden
@@ -106,11 +135,17 @@
                                     return response.json();
                                 })
                                 .then(data => {
-                                    notifications = data.notifications || [];
-                                    unreadCount = data.unreadCount || 0;
+                                    lastResponse = data;
+                                    
+                                    // Alleen updaten als er daadwerkelijk notificaties zijn
+                                    if (data.notifications && data.notifications.length > 0) {
+                                        notifications = data.notifications;
+                                        unreadCount = data.unreadCount || 0;
+                                    }
                                 })
                                 .catch(error => {
                                     console.error('Error refreshing notifications:', error);
+                                    // Laat de bestaande notificaties staan bij een fout
                                 });
                         }, 60000);
                     ">
@@ -141,12 +176,19 @@
                                                         return response.json();
                                                     })
                                                     .then(data => {
-                                                        notifications = data.notifications || [];
-                                                        unreadCount = data.unreadCount || 0;
+                                                        lastResponse = data;
+                                                        
+                                                        // Alleen updaten als er daadwerkelijk notificaties zijn
+                                                        if (data.notifications && data.notifications.length > 0) {
+                                                            notifications = data.notifications;
+                                                            unreadCount = data.unreadCount || 0;
+                                                        }
+                                                        
                                                         console.log('Notifications refreshed:', data);
                                                     })
                                                     .catch(error => {
                                                         console.error('Error refreshing notifications:', error);
+                                                        // Laat de bestaande notificaties staan bij een fout
                                                     });
                                             " class="text-xs text-gray-500 hover:text-gray-700">
                                                 <i class="fas fa-sync-alt"></i>
@@ -163,15 +205,40 @@
                                     <p>Notifications count: <span x-text="notifications.length"></span></p>
                                     <p>Unread count: <span x-text="unreadCount"></span></p>
                                     <p>Data loaded: <span x-text="notifications.length > 0 || unreadCount > 0 ? 'Yes' : 'No'"></span></p>
+                                    <p>Response received: <span x-text="lastResponse ? 'Yes' : 'No'"></span></p>
                                     <div class="flex justify-between mt-1">
-                                        <button @click="console.log('Debug info:', { notifications, unreadCount })" class="text-xs text-blue-500 hover:text-blue-700">
+                                        <button @click="console.log('Debug info:', { notifications, unreadCount, lastResponse })" class="text-xs text-blue-500 hover:text-blue-700">
                                             Log debug info to console
                                         </button>
                                         <a href="{{ url('/admin/notifications') }}" class="text-xs text-blue-500 hover:text-blue-700">
                                             Ga naar notificaties
                                         </a>
                                     </div>
-                                    <div class="mt-2">
+                                    <div class="mt-2 grid grid-cols-2 gap-2">
+                                        <button @click="
+                                            // Maak een nieuwe handmatige test notificatie
+                                            const newTestNotification = {
+                                                id: Math.floor(Math.random() * 10000),
+                                                user_id: 1,
+                                                title: 'Nieuwe Test Notificatie',
+                                                message: 'Dit is een nieuwe handmatige test notificatie. Tijd: ' + new Date().toLocaleString(),
+                                                type: 'success',
+                                                icon: 'fa-check-circle',
+                                                link: '/admin/notifications',
+                                                read_at: null,
+                                                created_at: new Date().toISOString(),
+                                                updated_at: new Date().toISOString()
+                                            };
+                                            
+                                            // Voeg de nieuwe notificatie toe aan het begin van de lijst
+                                            notifications = [newTestNotification, ...notifications];
+                                            unreadCount += 1;
+                                            
+                                            console.log('Handmatige notificatie toegevoegd:', newTestNotification);
+                                        " class="w-full text-xs text-blue-600 hover:text-blue-800 flex items-center justify-center">
+                                            <i class="fas fa-plus mr-1"></i> Handmatige notificatie
+                                        </button>
+                                        
                                         <button @click="
                                             fetch('/admin/notifications/api-test', {
                                                 method: 'POST',
@@ -199,15 +266,18 @@
                                                     })
                                                         .then(response => response.json())
                                                         .then(data => {
-                                                            notifications = data.notifications || [];
-                                                            unreadCount = data.unreadCount || 0;
+                                                            lastResponse = data;
+                                                            if (data.notifications && data.notifications.length > 0) {
+                                                                notifications = data.notifications;
+                                                                unreadCount = data.unreadCount || 0;
+                                                            }
                                                         });
                                                 })
                                                 .catch(error => {
                                                     console.error('Error creating test notification:', error);
                                                 });
                                         " class="w-full text-xs text-green-600 hover:text-green-800 flex items-center justify-center">
-                                            <i class="fas fa-paper-plane mr-1"></i> Maak API test notificatie
+                                            <i class="fas fa-paper-plane mr-1"></i> API test notificatie
                                         </button>
                                     </div>
                                 </div>
@@ -218,44 +288,55 @@
                                     </div>
                                 </template>
                                 
-                                <template x-for="notification in notifications" :key="notification.id">
-                                    <a :href="'/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
-                                        <div class="flex items-start">
-                                            <div class="flex-shrink-0 mt-0.5">
-                                                <template x-if="notification.type === 'info'">
-                                                    <div class="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                                                        <i :class="'fas ' + notification.icon"></i>
+                                <!-- Debug: Toon de eerste notificatie als JSON -->
+                                <template x-if="notifications.length > 0">
+                                    <div class="px-4 py-3 text-xs text-gray-500">
+                                        <p class="font-medium">Eerste notificatie (debug):</p>
+                                        <pre class="mt-1 bg-gray-100 p-2 rounded overflow-auto max-h-32" x-text="JSON.stringify(notifications[0], null, 2)"></pre>
+                                    </div>
+                                </template>
+                                
+                                <!-- Notificaties lijst -->
+                                <div class="max-h-64 overflow-y-auto">
+                                    <template x-for="(notification, index) in notifications" :key="index">
+                                        <a :href="'/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                            <div class="flex items-start">
+                                                <div class="flex-shrink-0 mt-0.5">
+                                                    <template x-if="notification.type === 'info'">
+                                                        <div class="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                                            <i :class="'fas ' + notification.icon"></i>
+                                                        </div>
+                                                    </template>
+                                                    <template x-if="notification.type === 'success'">
+                                                        <div class="h-8 w-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                                            <i :class="'fas ' + notification.icon"></i>
+                                                        </div>
+                                                    </template>
+                                                    <template x-if="notification.type === 'warning'">
+                                                        <div class="h-8 w-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
+                                                            <i :class="'fas ' + notification.icon"></i>
+                                                        </div>
+                                                    </template>
+                                                    <template x-if="notification.type === 'error'">
+                                                        <div class="h-8 w-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+                                                            <i :class="'fas ' + notification.icon"></i>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <div class="ml-3 flex-1">
+                                                    <p class="text-sm font-medium text-gray-900" x-text="notification.title"></p>
+                                                    <p class="text-xs text-gray-500 truncate" x-text="notification.message"></p>
+                                                    <div class="flex justify-between mt-1">
+                                                        <p class="text-xs text-gray-400" x-text="new Date(notification.created_at).toLocaleString()"></p>
+                                                        <span x-show="notification.read_at" class="text-xs text-gray-400">
+                                                            <i class="fas fa-check"></i> Gelezen
+                                                        </span>
                                                     </div>
-                                                </template>
-                                                <template x-if="notification.type === 'success'">
-                                                    <div class="h-8 w-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                                        <i :class="'fas ' + notification.icon"></i>
-                                                    </div>
-                                                </template>
-                                                <template x-if="notification.type === 'warning'">
-                                                    <div class="h-8 w-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
-                                                        <i :class="'fas ' + notification.icon"></i>
-                                                    </div>
-                                                </template>
-                                                <template x-if="notification.type === 'error'">
-                                                    <div class="h-8 w-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
-                                                        <i :class="'fas ' + notification.icon"></i>
-                                                    </div>
-                                                </template>
-                                            </div>
-                                            <div class="ml-3 flex-1">
-                                                <p class="text-sm font-medium text-gray-900" x-text="notification.title"></p>
-                                                <p class="text-xs text-gray-500 truncate" x-text="notification.message"></p>
-                                                <div class="flex justify-between mt-1">
-                                                    <p class="text-xs text-gray-400" x-text="new Date(notification.created_at).toLocaleString()"></p>
-                                                    <span x-show="notification.read_at" class="text-xs text-gray-400">
-                                                        <i class="fas fa-check"></i> Gelezen
-                                                    </span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </template>
+                                        </a>
+                                    </template>
+                                </div>
                                 
                                 <div class="border-t border-gray-200 px-4 py-2">
                                     <div class="flex justify-between">

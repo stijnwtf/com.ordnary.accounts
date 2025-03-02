@@ -142,23 +142,23 @@ class NotificationController extends Controller
                 ], 401)->header('Content-Type', 'application/json');
             }
             
-            // Haal de 5 meest recente notificaties op, ongeacht of ze gelezen zijn
+            // Haal ALLE notificaties op voor deze gebruiker, niet alleen de ongelezen
             $notifications = $user->notifications()
                 ->latest()
-                ->take(5)
                 ->get();
                 
             // Haal het aantal ongelezen notificaties op
-            $unreadCount = $user->notifications()->unread()->count();
+            $unreadCount = $user->notifications()->whereNull('read_at')->count();
             
             // Log voor debugging
-            \Log::info('Notifications fetched', [
+            \Log::info('All notifications fetched', [
                 'user_id' => $user->id,
                 'notifications_count' => $notifications->count(),
                 'unread_count' => $unreadCount,
                 'time' => now()->toDateTimeString(),
                 'request_url' => request()->fullUrl(),
                 'request_ip' => request()->ip(),
+                'notifications' => $notifications->toArray(),
             ]);
             
             // Voeg een debug veld toe aan de response
@@ -173,6 +173,7 @@ class NotificationController extends Controller
                     'unread_count' => $unreadCount,
                     'time' => now()->toDateTimeString(),
                     'request_url' => request()->fullUrl(),
+                    'first_notification' => $notifications->first() ? $notifications->first()->toArray() : null,
                 ]
             ])->header('Content-Type', 'application/json');
         } catch (\Exception $e) {
