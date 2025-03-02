@@ -139,7 +139,9 @@ class NotificationController extends Controller
                     'error' => 'User not authenticated',
                     'notifications' => [],
                     'unreadCount' => 0,
-                ], 401)->header('Content-Type', 'application/json');
+                ], 401)->header('Access-Control-Allow-Origin', '*')
+                  ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                  ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
             }
             
             // Haal ALLE notificaties op voor deze gebruiker, niet alleen de ongelezen
@@ -155,46 +157,29 @@ class NotificationController extends Controller
                 'user_id' => $user->id,
                 'notifications_count' => $notifications->count(),
                 'unread_count' => $unreadCount,
-                'time' => now()->toDateTimeString(),
-                'request_url' => request()->fullUrl(),
-                'request_ip' => request()->ip(),
                 'notifications' => $notifications->toArray(),
             ]);
             
-            // Voeg een debug veld toe aan de response
+            // Eenvoudige response zonder extra debug info
             return response()->json([
-                'success' => true,
                 'notifications' => $notifications,
                 'unreadCount' => $unreadCount,
-                'debug' => [
-                    'user_id' => $user->id,
-                    'user_name' => $user->name,
-                    'notifications_count' => $notifications->count(),
-                    'unread_count' => $unreadCount,
-                    'time' => now()->toDateTimeString(),
-                    'request_url' => request()->fullUrl(),
-                    'first_notification' => $notifications->first() ? $notifications->first()->toArray() : null,
-                ]
-            ])->header('Content-Type', 'application/json');
+            ])->header('Access-Control-Allow-Origin', '*')
+              ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+              ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
         } catch (\Exception $e) {
             \Log::error('Error fetching notifications', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'request_url' => request()->fullUrl(),
-                'request_ip' => request()->ip(),
             ]);
             
             return response()->json([
                 'error' => $e->getMessage(),
                 'notifications' => [],
                 'unreadCount' => 0,
-                'debug' => [
-                    'error' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'request_url' => request()->fullUrl(),
-                ]
-            ], 500)->header('Content-Type', 'application/json');
+            ], 500)->header('Access-Control-Allow-Origin', '*')
+                  ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                  ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
         }
     }
     
@@ -308,7 +293,9 @@ class NotificationController extends Controller
             if (!$user) {
                 return response()->json([
                     'error' => 'User not authenticated',
-                ], 401)->header('Content-Type', 'application/json');
+                ], 401)->header('Access-Control-Allow-Origin', '*')
+                  ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                  ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
             }
             
             // Maak een nieuwe notificatie aan
@@ -318,7 +305,7 @@ class NotificationController extends Controller
                 'message' => 'Dit is een test notificatie gemaakt via de API. Tijd: ' . now()->format('d-m-Y H:i:s'),
                 'type' => 'info',
                 'icon' => 'fa-bell',
-                'link' => '/admin/notifications',
+                'link' => route('notifications.index'),
             ]);
             
             // Log voor debugging
@@ -333,7 +320,9 @@ class NotificationController extends Controller
                 'success' => true,
                 'message' => 'Test notificatie is aangemaakt',
                 'notification' => $notification,
-            ])->header('Content-Type', 'application/json');
+            ])->header('Access-Control-Allow-Origin', '*')
+              ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+              ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
         } catch (\Exception $e) {
             \Log::error('Error creating test notification via API', [
                 'error' => $e->getMessage(),
@@ -344,7 +333,9 @@ class NotificationController extends Controller
             
             return response()->json([
                 'error' => $e->getMessage(),
-            ], 500)->header('Content-Type', 'application/json');
+            ], 500)->header('Access-Control-Allow-Origin', '*')
+                  ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                  ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
         }
     }
 } 

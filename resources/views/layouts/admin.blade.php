@@ -60,93 +60,107 @@
                 </div>
                 <div class="flex items-center space-x-4 border-l border-gray-200 pl-6">
                     <!-- Notifications Dropdown -->
-                    <div class="relative" x-data="{ open: false, notifications: [], unreadCount: 0, lastResponse: null }" @click.away="open = false" x-init="
-                        // Voeg console.log toe om te debuggen
-                        console.log('Initializing notifications dropdown');
-                        
-                        // Gebruik een absolute URL
-                        const notificationsUrl = '/admin/notifications/unread';
-                        console.log('Notifications URL:', notificationsUrl);
-                        
-                        // Handmatige test notificatie
-                        const testNotification = {
+                    <div class="relative" x-data="{ 
+                        open: false, 
+                        notifications: [], 
+                        unreadCount: 0, 
+                        lastResponse: null,
+                        testNotification: {
                             id: 999,
                             user_id: 1,
                             title: 'Test Notificatie (Handmatig)',
                             message: 'Dit is een handmatige test notificatie om de weergave te testen.',
                             type: 'info',
                             icon: 'fa-bell',
-                            link: '/admin/notifications',
+                            link: '{{ route('notifications.index') }}',
                             read_at: null,
                             created_at: new Date().toISOString(),
                             updated_at: new Date().toISOString()
-                        };
-                        
-                        // Voeg de test notificatie toe aan de lijst
-                        notifications = [testNotification];
-                        unreadCount = 1;
-                        
-                        // Haal ongelezen notificaties op
-                        fetch(notificationsUrl, {
-                            headers: {
-                                'Accept': 'application/json',
-                                'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        addTestNotification: function() {
+                            var newNotification = {
+                                id: Math.floor(Math.random() * 10000),
+                                user_id: 1,
+                                title: 'Nieuwe Test Notificatie',
+                                message: 'Dit is een nieuwe handmatige test notificatie. Tijd: ' + new Date().toLocaleString(),
+                                type: 'success',
+                                icon: 'fa-check-circle',
+                                link: '{{ route('notifications.index') }}',
+                                read_at: null,
+                                created_at: new Date().toISOString(),
+                                updated_at: new Date().toISOString()
+                            };
+                            this.notifications = [newNotification].concat(this.notifications);
+                            this.unreadCount += 1;
+                            console.log('Handmatige notificatie toegevoegd:', newNotification);
+                        },
+                        showOnlyRealNotifications: function() {
+                            if (this.lastResponse && this.lastResponse.notifications && this.lastResponse.notifications.length > 0) {
+                                this.notifications = this.lastResponse.notifications;
+                                this.unreadCount = this.lastResponse.unreadCount || 0;
+                                console.log('Alleen echte notificaties worden getoond:', this.notifications);
+                            } else {
+                                alert('Geen echte notificaties gevonden in de database.');
                             }
-                        })
-                            .then(response => {
-                                console.log('Response status:', response.status);
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok: ' + response.status);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log('Notifications data:', data);
-                                lastResponse = data;
-                                
-                                // Alleen updaten als er daadwerkelijk notificaties zijn
-                                if (data.notifications && data.notifications.length > 0) {
-                                    notifications = data.notifications;
-                                    unreadCount = data.unreadCount || 0;
-                                }
-                                
-                                // Debug output
-                                console.log('Notifications array:', notifications);
-                                console.log('First notification:', notifications.length > 0 ? notifications[0] : null);
-                                console.log('Unread count:', unreadCount);
-                            })
-                            .catch(error => {
-                                console.error('Error fetching notifications:', error);
-                                // Laat de test notificatie staan bij een fout
-                            });
-                        
-                        // Refresh notificaties elke 60 seconden
-                        setInterval(() => {
-                            fetch(notificationsUrl, {
+                        },
+                        showCombinedNotifications: function() {
+                            if (this.lastResponse && this.lastResponse.notifications) {
+                                this.notifications = [this.testNotification].concat(this.lastResponse.notifications);
+                                this.unreadCount = (this.lastResponse.unreadCount || 0) + 1;
+                                console.log('Gecombineerde notificaties worden getoond:', this.notifications);
+                            } else {
+                                this.notifications = [this.testNotification];
+                                this.unreadCount = 1;
+                            }
+                        },
+                        refreshNotifications: function() {
+                            var self = this;
+                            fetch('{{ route('notifications.unread') }}', {
                                 headers: {
                                     'Accept': 'application/json',
                                     'X-Requested-With': 'XMLHttpRequest'
                                 }
                             })
-                                .then(response => {
+                                .then(function(response) {
+                                    console.log('Response status:', response.status);
                                     if (!response.ok) {
                                         throw new Error('Network response was not ok: ' + response.status);
                                     }
                                     return response.json();
                                 })
-                                .then(data => {
-                                    lastResponse = data;
+                                .then(function(data) {
+                                    console.log('Notifications data:', data);
+                                    self.lastResponse = data;
                                     
-                                    // Alleen updaten als er daadwerkelijk notificaties zijn
+                                    // Combineer de echte notificaties met de testnotificatie
                                     if (data.notifications && data.notifications.length > 0) {
-                                        notifications = data.notifications;
-                                        unreadCount = data.unreadCount || 0;
+                                        self.notifications = [self.testNotification].concat(data.notifications);
+                                        self.unreadCount = data.unreadCount + 1; // +1 voor de testnotificatie
                                     }
+                                    
+                                    console.log('Notifications refreshed:', data);
+                                    console.log('Combined notifications:', self.notifications);
                                 })
-                                .catch(error => {
+                                .catch(function(error) {
                                     console.error('Error refreshing notifications:', error);
-                                    // Laat de bestaande notificaties staan bij een fout
                                 });
+                        }
+                    }" 
+                    @click.away="open = false" 
+                    x-init="
+                        // Voeg console.log toe om te debuggen
+                        console.log('Initializing notifications dropdown');
+                        
+                        // Begin met alleen de test notificatie
+                        notifications = [testNotification];
+                        unreadCount = 1;
+                        
+                        // Haal ongelezen notificaties op
+                        refreshNotifications();
+                        
+                        // Refresh notificaties elke 60 seconden
+                        setInterval(function() {
+                            refreshNotifications();
                         }, 60000);
                     ">
                         <button @click="open = !open" class="relative p-1 text-gray-600 hover:text-numblio-blue focus:outline-none focus:text-numblio-blue transition-colors duration-200">
@@ -163,33 +177,7 @@
                                         <h3 class="text-sm font-medium text-gray-900">Notificaties</h3>
                                         <div class="flex space-x-2">
                                             <button @click="
-                                                fetch(notificationsUrl, {
-                                                    headers: {
-                                                        'Accept': 'application/json',
-                                                        'X-Requested-With': 'XMLHttpRequest'
-                                                    }
-                                                })
-                                                    .then(response => {
-                                                        if (!response.ok) {
-                                                            throw new Error('Network response was not ok: ' + response.status);
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then(data => {
-                                                        lastResponse = data;
-                                                        
-                                                        // Alleen updaten als er daadwerkelijk notificaties zijn
-                                                        if (data.notifications && data.notifications.length > 0) {
-                                                            notifications = data.notifications;
-                                                            unreadCount = data.unreadCount || 0;
-                                                        }
-                                                        
-                                                        console.log('Notifications refreshed:', data);
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error refreshing notifications:', error);
-                                                        // Laat de bestaande notificaties staan bij een fout
-                                                    });
+                                                refreshNotifications();
                                             " class="text-xs text-gray-500 hover:text-gray-700">
                                                 <i class="fas fa-sync-alt"></i>
                                             </button>
@@ -206,6 +194,7 @@
                                     <p>Unread count: <span x-text="unreadCount"></span></p>
                                     <p>Data loaded: <span x-text="notifications.length > 0 || unreadCount > 0 ? 'Yes' : 'No'"></span></p>
                                     <p>Response received: <span x-text="lastResponse ? 'Yes' : 'No'"></span></p>
+                                    <p>DB notifications: <span x-text="lastResponse && lastResponse.notifications ? lastResponse.notifications.length : '0'"></span></p>
                                     <div class="flex justify-between mt-1">
                                         <button @click="console.log('Debug info:', { notifications, unreadCount, lastResponse })" class="text-xs text-blue-500 hover:text-blue-700">
                                             Log debug info to console
@@ -216,31 +205,13 @@
                                     </div>
                                     <div class="mt-2 grid grid-cols-2 gap-2">
                                         <button @click="
-                                            // Maak een nieuwe handmatige test notificatie
-                                            const newTestNotification = {
-                                                id: Math.floor(Math.random() * 10000),
-                                                user_id: 1,
-                                                title: 'Nieuwe Test Notificatie',
-                                                message: 'Dit is een nieuwe handmatige test notificatie. Tijd: ' + new Date().toLocaleString(),
-                                                type: 'success',
-                                                icon: 'fa-check-circle',
-                                                link: '/admin/notifications',
-                                                read_at: null,
-                                                created_at: new Date().toISOString(),
-                                                updated_at: new Date().toISOString()
-                                            };
-                                            
-                                            // Voeg de nieuwe notificatie toe aan het begin van de lijst
-                                            notifications = [newTestNotification, ...notifications];
-                                            unreadCount += 1;
-                                            
-                                            console.log('Handmatige notificatie toegevoegd:', newTestNotification);
+                                            addTestNotification();
                                         " class="w-full text-xs text-blue-600 hover:text-blue-800 flex items-center justify-center">
                                             <i class="fas fa-plus mr-1"></i> Handmatige notificatie
                                         </button>
                                         
                                         <button @click="
-                                            fetch('/admin/notifications/api-test', {
+                                            fetch('{{ route('notifications.api-test') }}', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Accept': 'application/json',
@@ -258,26 +229,28 @@
                                                 .then(data => {
                                                     console.log('Test notification created:', data);
                                                     // Ververs de notificaties
-                                                    fetch(notificationsUrl, {
-                                                        headers: {
-                                                            'Accept': 'application/json',
-                                                            'X-Requested-With': 'XMLHttpRequest'
-                                                        }
-                                                    })
-                                                        .then(response => response.json())
-                                                        .then(data => {
-                                                            lastResponse = data;
-                                                            if (data.notifications && data.notifications.length > 0) {
-                                                                notifications = data.notifications;
-                                                                unreadCount = data.unreadCount || 0;
-                                                            }
-                                                        });
+                                                    refreshNotifications();
                                                 })
                                                 .catch(error => {
                                                     console.error('Error creating test notification:', error);
                                                 });
                                         " class="w-full text-xs text-green-600 hover:text-green-800 flex items-center justify-center">
                                             <i class="fas fa-paper-plane mr-1"></i> API test notificatie
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Toon alleen echte notificaties -->
+                                    <div class="mt-2 grid grid-cols-2 gap-2">
+                                        <button @click="
+                                            showOnlyRealNotifications();
+                                        " class="w-full text-xs text-purple-600 hover:text-purple-800 flex items-center justify-center">
+                                            <i class="fas fa-database mr-1"></i> Alleen echte notificaties
+                                        </button>
+                                        
+                                        <button @click="
+                                            showCombinedNotifications();
+                                        " class="w-full text-xs text-indigo-600 hover:text-indigo-800 flex items-center justify-center">
+                                            <i class="fas fa-layer-group mr-1"></i> Gecombineerde weergave
                                         </button>
                                     </div>
                                 </div>
@@ -299,7 +272,7 @@
                                 <!-- Notificaties lijst -->
                                 <div class="max-h-64 overflow-y-auto">
                                     <template x-for="(notification, index) in notifications" :key="index">
-                                        <a :href="'/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                        <a :href="'{{ url('/admin/notifications') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
                                             <div class="flex items-start">
                                                 <div class="flex-shrink-0 mt-0.5">
                                                     <template x-if="notification.type === 'info'">
