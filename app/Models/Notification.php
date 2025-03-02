@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Notification extends Model
 {
@@ -33,6 +34,17 @@ class Notification extends Model
         'read_at',
         'created_at',
         'updated_at',
+    ];
+
+    /**
+     * De attributen die gecast moeten worden.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'read_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
@@ -150,5 +162,16 @@ class Notification extends Model
             default:
                 return 'fa-info-circle';
         }
+    }
+
+    /**
+     * Get the read_at attribute.
+     *
+     * @param  string|null  $value
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function getReadAtAttribute($value)
+    {
+        return $value ? Carbon::parse($value) : null;
     }
 } 

@@ -6,6 +6,11 @@
     <title>Numblio Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -55,20 +60,34 @@
                 <div class="flex items-center space-x-4 border-l border-gray-200 pl-6">
                     <!-- Notifications Dropdown -->
                     <div class="relative" x-data="{ open: false, notifications: [], unreadCount: 0 }" @click.away="open = false" x-init="
+                        // Voeg console.log toe om te debuggen
+                        console.log('Initializing notifications dropdown');
+                        
+                        // Haal ongelezen notificaties op
                         fetch('{{ route('notifications.unread') }}')
-                            .then(response => response.json())
+                            .then(response => {
+                                console.log('Response status:', response.status);
+                                return response.json();
+                            })
                             .then(data => {
+                                console.log('Notifications data:', data);
                                 notifications = data.notifications;
                                 unreadCount = data.unreadCount;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching notifications:', error);
                             });
-
-                        // Refresh notifications every 60 seconds
+                        
+                        // Refresh notificaties elke 60 seconden
                         setInterval(() => {
                             fetch('{{ route('notifications.unread') }}')
                                 .then(response => response.json())
                                 .then(data => {
                                     notifications = data.notifications;
                                     unreadCount = data.unreadCount;
+                                })
+                                .catch(error => {
+                                    console.error('Error refreshing notifications:', error);
                                 });
                         }, 60000);
                     ">
@@ -78,26 +97,49 @@
                                 <span x-text="unreadCount"></span>
                             </span>
                         </button>
-
+                        
                         <div x-show="open" x-cloak class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="notifications-menu">
                             <div class="py-1" role="none">
                                 <div class="px-4 py-2 border-b border-gray-200">
                                     <div class="flex justify-between items-center">
                                         <h3 class="text-sm font-medium text-gray-900">Notificaties</h3>
-                                        <a href="{{ route('notifications.index') }}" class="text-xs text-numblio-blue hover:text-numblio-lightblue">
-                                            Bekijk alle
-                                        </a>
+                                        <div class="flex space-x-2">
+                                            <button @click="
+                                                fetch('{{ route('notifications.unread') }}')
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        notifications = data.notifications;
+                                                        unreadCount = data.unreadCount;
+                                                        console.log('Notifications refreshed:', data);
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error refreshing notifications:', error);
+                                                    });
+                                            " class="text-xs text-gray-500 hover:text-gray-700">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                            <a href="{{ route('notifications.index') }}" class="text-xs text-numblio-blue hover:text-numblio-lightblue">
+                                                Bekijk alle
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-
+                                
+                                <!-- Debug info -->
+                                <div class="px-4 py-2 border-b border-gray-200 text-xs text-gray-500">
+                                    <p>Notifications count: <span x-text="notifications.length"></span></p>
+                                    <p>Unread count: <span x-text="unreadCount"></span></p>
+                                    <p>Data loaded: <span x-text="notifications.length > 0 || unreadCount > 0 ? 'Yes' : 'No'"></span></p>
+                                </div>
+                                
                                 <template x-if="notifications.length === 0">
                                     <div class="px-4 py-3 text-sm text-gray-500 text-center">
-                                        Geen ongelezen notificaties
+                                        Geen notificaties
                                     </div>
                                 </template>
-
+                                
                                 <template x-for="notification in notifications" :key="notification.id">
-                                    <a :href="'{{ route('notifications.show', '') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                    <a :href="'{{ url('admin/notifications') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="flex-shrink-0 mt-0.5">
                                                 <template x-if="notification.type === 'info'">
@@ -124,12 +166,17 @@
                                             <div class="ml-3 flex-1">
                                                 <p class="text-sm font-medium text-gray-900" x-text="notification.title"></p>
                                                 <p class="text-xs text-gray-500 truncate" x-text="notification.message"></p>
-                                                <p class="text-xs text-gray-400 mt-1" x-text="new Date(notification.created_at).toLocaleString()"></p>
+                                                <div class="flex justify-between mt-1">
+                                                    <p class="text-xs text-gray-400" x-text="new Date(notification.created_at).toLocaleString()"></p>
+                                                    <span x-show="notification.read_at" class="text-xs text-gray-400">
+                                                        <i class="fas fa-check"></i> Gelezen
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </a>
                                 </template>
-
+                                
                                 <div class="border-t border-gray-200 px-4 py-2">
                                     <div class="flex justify-between">
                                         <form action="{{ route('notifications.mark-all-as-read') }}" method="POST">
@@ -185,11 +232,5 @@
         </div>
     </div>
 </footer>
-
-<!-- Alpine.js -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<style>
-    [x-cloak] { display: none !important; }
-</style>
 </body>
 </html>

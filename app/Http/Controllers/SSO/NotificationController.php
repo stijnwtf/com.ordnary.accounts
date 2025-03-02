@@ -133,18 +133,49 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
         
-        $notifications = $user->notifications()
-            ->unread()
-            ->latest()
-            ->take(5)
-            ->get();
-            
-        $unreadCount = $user->notifications()->unread()->count();
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not authenticated',
+                'notifications' => [],
+                'unreadCount' => 0,
+            ], 401);
+        }
         
-        return response()->json([
-            'notifications' => $notifications,
-            'unreadCount' => $unreadCount,
-        ]);
+        try {
+            // Haal de 5 meest recente notificaties op, ongeacht of ze gelezen zijn
+            $notifications = $user->notifications()
+                ->latest()
+                ->take(5)
+                ->get();
+                
+            // Haal het aantal ongelezen notificaties op
+            $unreadCount = $user->notifications()->unread()->count();
+            
+            // Log voor debugging
+            \Log::info('Notifications fetched', [
+                'user_id' => $user->id,
+                'notifications_count' => $notifications->count(),
+                'unread_count' => $unreadCount,
+                'time' => now()->toDateTimeString()
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'notifications' => $notifications,
+                'unreadCount' => $unreadCount,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching notifications', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => $e->getMessage(),
+                'notifications' => [],
+                'unreadCount' => 0,
+            ], 500);
+        }
     }
     
     /**
@@ -154,14 +185,22 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
         
-        Notification::send(
+        // Maak een nieuwe notificatie aan
+        $notification = Notification::send(
             $user,
             'Test Notificatie',
-            'Dit is een test notificatie om het systeem te testen.',
+            'Dit is een test notificatie om het systeem te testen. Verzonden op: ' . now()->format('d-m-Y H:i:s'),
             'info',
             'fa-bell',
             route('notifications.index')
         );
+        
+        // Log voor debugging
+        \Log::info('Test notification sent', [
+            'user_id' => $user->id,
+            'notification_id' => $notification->id,
+            'time' => now()->toDateTimeString()
+        ]);
         
         return redirect()->back()->with('success', 'Test notificatie is verzonden.');
     }

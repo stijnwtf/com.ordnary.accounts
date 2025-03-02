@@ -16,6 +16,13 @@
             </div>
         </div>
         <div class="mt-5 flex md:mt-0 md:ml-4 space-x-3">
+            <form action="{{ route('notifications.test') }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Verstuur test notificatie
+                </button>
+            </form>
             <form action="{{ route('notifications.mark-all-as-read') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-numblio-blue hover:bg-numblio-lightblue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-numblio-blue transition-colors duration-200">
