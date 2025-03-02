@@ -4,6 +4,7 @@ use App\Http\Controllers\SSO\AuthController;
 use App\Http\Controllers\SSO\ClientController;
 use App\Http\Controllers\SSO\UserController;
 use App\Http\Controllers\SSO\SessionController;
+use App\Http\Controllers\SSO\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,9 @@ Route::post('/admin/login', [ClientController::class, 'login'])->name('adminlogi
 
 // Admin routes for managing clients
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
+    // Dashboard route
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
     Route::resource('clients', ClientController::class);
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])
         ->name('clients.regenerate-credentials');
