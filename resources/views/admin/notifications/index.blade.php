@@ -16,6 +16,10 @@
             </div>
         </div>
         <div class="mt-5 flex md:mt-0 md:ml-4 space-x-3">
+            <a href="{{ url('/admin/notifications') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-numblio-blue transition-colors duration-200">
+                <i class="fas fa-sync-alt mr-2"></i>
+                Ververs pagina
+            </a>
             <form action="{{ route('notifications.test') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
@@ -62,6 +66,55 @@
         </div>
     </div>
     @endif
+
+    @if(session('error'))
+    <div class="rounded-md bg-red-50 p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-400"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">
+                    {{ session('error') }}
+                </p>
+            </div>
+            <div class="ml-auto pl-3">
+                <div class="-mx-1.5 -my-1.5">
+                    <button type="button" onclick="this.parentElement.parentElement.parentElement.style.display='none'" class="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600">
+                        <span class="sr-only">Sluiten</span>
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <!-- Debug Info -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                <i class="fas fa-bug mr-2 text-gray-400"></i>
+                Debug Informatie
+            </h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+            <h4 class="text-md font-medium text-gray-900 mb-2">Notificaties in database:</h4>
+            <div class="bg-gray-100 p-4 rounded overflow-auto max-h-60">
+                <pre class="text-xs">{{ json_encode($notifications, JSON_PRETTY_PRINT) }}</pre>
+            </div>
+            
+            <h4 class="text-md font-medium text-gray-900 mt-4 mb-2">Ongelezen notificaties:</h4>
+            <div class="bg-gray-100 p-4 rounded overflow-auto max-h-60">
+                <pre class="text-xs">Aantal: {{ $unreadCount }}</pre>
+            </div>
+            
+            <h4 class="text-md font-medium text-gray-900 mt-4 mb-2">Gebruiker:</h4>
+            <div class="bg-gray-100 p-4 rounded overflow-auto max-h-60">
+                <pre class="text-xs">ID: {{ Auth::id() }}<br>Naam: {{ Auth::user()->name }}<br>Email: {{ Auth::user()->email }}</pre>
+            </div>
+        </div>
+    </div>
 
     <!-- Filter Card -->
     <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">

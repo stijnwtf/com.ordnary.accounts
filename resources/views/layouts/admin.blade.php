@@ -63,8 +63,14 @@
                         // Voeg console.log toe om te debuggen
                         console.log('Initializing notifications dropdown');
                         
+                        // Gebruik relatieve URL in plaats van volledige URL
+                        const baseUrl = window.location.origin;
+                        const notificationsUrl = baseUrl + '/admin/notifications/unread';
+                        console.log('Base URL:', baseUrl);
+                        console.log('Notifications URL:', notificationsUrl);
+                        
                         // Haal ongelezen notificaties op
-                        fetch('{{ route('notifications.unread') }}')
+                        fetch(notificationsUrl)
                             .then(response => {
                                 console.log('Response status:', response.status);
                                 return response.json();
@@ -80,7 +86,7 @@
                         
                         // Refresh notificaties elke 60 seconden
                         setInterval(() => {
-                            fetch('{{ route('notifications.unread') }}')
+                            fetch(notificationsUrl)
                                 .then(response => response.json())
                                 .then(data => {
                                     notifications = data.notifications;
@@ -105,7 +111,7 @@
                                         <h3 class="text-sm font-medium text-gray-900">Notificaties</h3>
                                         <div class="flex space-x-2">
                                             <button @click="
-                                                fetch('{{ route('notifications.unread') }}')
+                                                fetch(notificationsUrl)
                                                     .then(response => response.json())
                                                     .then(data => {
                                                         notifications = data.notifications;
@@ -130,6 +136,14 @@
                                     <p>Notifications count: <span x-text="notifications.length"></span></p>
                                     <p>Unread count: <span x-text="unreadCount"></span></p>
                                     <p>Data loaded: <span x-text="notifications.length > 0 || unreadCount > 0 ? 'Yes' : 'No'"></span></p>
+                                    <div class="flex justify-between mt-1">
+                                        <button @click="console.log('Debug info:', { notifications, unreadCount })" class="text-xs text-blue-500 hover:text-blue-700">
+                                            Log debug info to console
+                                        </button>
+                                        <a href="{{ url('/admin/notifications') }}" class="text-xs text-blue-500 hover:text-blue-700">
+                                            Ga naar notificaties
+                                        </a>
+                                    </div>
                                 </div>
                                 
                                 <template x-if="notifications.length === 0">
@@ -139,7 +153,7 @@
                                 </template>
                                 
                                 <template x-for="notification in notifications" :key="notification.id">
-                                    <a :href="'{{ url('admin/notifications') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                    <a :href="baseUrl + '/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="flex-shrink-0 mt-0.5">
                                                 <template x-if="notification.type === 'info'">
@@ -189,6 +203,16 @@
                                             Beheer notificaties
                                         </a>
                                     </div>
+                                </div>
+                                
+                                <!-- Test Notification Button -->
+                                <div class="border-t border-gray-200 px-4 py-2">
+                                    <form action="{{ route('notifications.test') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="w-full text-xs text-green-600 hover:text-green-800 flex items-center justify-center">
+                                            <i class="fas fa-paper-plane mr-1"></i> Verstuur test notificatie
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

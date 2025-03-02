@@ -156,24 +156,43 @@ class NotificationController extends Controller
                 'user_id' => $user->id,
                 'notifications_count' => $notifications->count(),
                 'unread_count' => $unreadCount,
-                'time' => now()->toDateTimeString()
+                'time' => now()->toDateTimeString(),
+                'request_url' => request()->fullUrl(),
+                'request_ip' => request()->ip(),
             ]);
             
+            // Voeg een debug veld toe aan de response
             return response()->json([
                 'success' => true,
                 'notifications' => $notifications,
                 'unreadCount' => $unreadCount,
+                'debug' => [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'notifications_count' => $notifications->count(),
+                    'unread_count' => $unreadCount,
+                    'time' => now()->toDateTimeString(),
+                    'request_url' => request()->fullUrl(),
+                ]
             ]);
         } catch (\Exception $e) {
             \Log::error('Error fetching notifications', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
+                'request_url' => request()->fullUrl(),
+                'request_ip' => request()->ip(),
             ]);
             
             return response()->json([
                 'error' => $e->getMessage(),
                 'notifications' => [],
                 'unreadCount' => 0,
+                'debug' => [
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'request_url' => request()->fullUrl(),
+                ]
             ], 500);
         }
     }
@@ -185,24 +204,48 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
         
-        // Maak een nieuwe notificatie aan
-        $notification = Notification::send(
-            $user,
-            'Test Notificatie',
-            'Dit is een test notificatie om het systeem te testen. Verzonden op: ' . now()->format('d-m-Y H:i:s'),
-            'info',
-            'fa-bell',
-            route('notifications.index')
-        );
+        if (!$user) {
+            return redirect()->back()->with('error', 'Gebruiker niet ingelogd.');
+        }
         
-        // Log voor debugging
-        \Log::info('Test notification sent', [
-            'user_id' => $user->id,
-            'notification_id' => $notification->id,
-            'time' => now()->toDateTimeString()
-        ]);
-        
-        return redirect()->back()->with('success', 'Test notificatie is verzonden.');
+        try {
+            // Maak een nieuwe notificatie aan
+            $notification = Notification::create([
+                'user_id' => $user->id,
+                'title' => 'Test Notificatie',
+                'message' => 'Dit is een test notificatie om het systeem te testen. Verzonden op: ' . now()->format('d-m-Y H:i:s'),
+                'type' => 'info',
+                'icon' => 'fa-bell',
+                'link' => route('notifications.index'),
+            ]);
+            
+            // Log voor debugging
+            \Log::info('Test notification sent', [
+                'user_id' => $user->id,
+                'notification_id' => $notification->id,
+                'notification' => $notification->toArray(),
+                'time' => now()->toDateTimeString()
+            ]);
+            
+            // Haal alle notificaties op voor deze gebruiker
+            $allNotifications = $user->notifications()->get();
+            \Log::info('All notifications for user', [
+                'user_id' => $user->id,
+                'count' => $allNotifications->count(),
+                'notifications' => $allNotifications->toArray()
+            ]);
+            
+            // Redirect naar de notificaties pagina
+            return redirect()->route('notifications.index')->with('success', 'Test notificatie is verzonden. Notificatie ID: ' . $notification->id);
+        } catch (\Exception $e) {
+            \Log::error('Error sending test notification', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->route('notifications.index')->with('error', 'Fout bij versturen van test notificatie: ' . $e->getMessage());
+        }
     }
     
     /**
