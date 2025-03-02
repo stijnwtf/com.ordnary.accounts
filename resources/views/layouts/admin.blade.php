@@ -45,12 +45,6 @@
                     <a href="{{ route('users.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-user-shield mr-2"></i>Gebruikers
                     </a>
-                    <a href="{{ route('sessions.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
-                        <i class="fas fa-key mr-2"></i>Sessies
-                    </a>
-                    <a href="{{ route('activity-logs.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
-                        <i class="fas fa-history mr-2"></i>Activiteiten
-                    </a>
                     <a href="{{ route('notifications.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-bell mr-2"></i>Notificaties
                     </a>
@@ -67,7 +61,7 @@
                                 notifications = data.notifications;
                                 unreadCount = data.unreadCount;
                             });
-                        
+
                         // Refresh notifications every 60 seconds
                         setInterval(() => {
                             fetch('{{ route('notifications.unread') }}')
@@ -84,7 +78,7 @@
                                 <span x-text="unreadCount"></span>
                             </span>
                         </button>
-                        
+
                         <div x-show="open" x-cloak class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="notifications-menu">
                             <div class="py-1" role="none">
                                 <div class="px-4 py-2 border-b border-gray-200">
@@ -95,13 +89,13 @@
                                         </a>
                                     </div>
                                 </div>
-                                
+
                                 <template x-if="notifications.length === 0">
                                     <div class="px-4 py-3 text-sm text-gray-500 text-center">
                                         Geen ongelezen notificaties
                                     </div>
                                 </template>
-                                
+
                                 <template x-for="notification in notifications" :key="notification.id">
                                     <a :href="'{{ route('notifications.show', '') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
                                         <div class="flex items-start">
@@ -135,7 +129,7 @@
                                         </div>
                                     </a>
                                 </template>
-                                
+
                                 <div class="border-t border-gray-200 px-4 py-2">
                                     <div class="flex justify-between">
                                         <form action="{{ route('notifications.mark-all-as-read') }}" method="POST">
@@ -152,7 +146,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- User Menu -->
                     <div class="relative flex items-center group">
                         <div class="h-8 w-8 rounded-full bg-numblio-blue text-white flex items-center justify-center mr-2">
