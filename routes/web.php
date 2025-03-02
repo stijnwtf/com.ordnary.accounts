@@ -5,6 +5,8 @@ use App\Http\Controllers\SSO\ClientController;
 use App\Http\Controllers\SSO\UserController;
 use App\Http\Controllers\SSO\SessionController;
 use App\Http\Controllers\SSO\DashboardController;
+use App\Http\Controllers\SSO\SettingsController;
+use App\Http\Controllers\SSO\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,4 +50,15 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
     Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
     Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
+    
+    // Admin routes for settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
+    Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
+    Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
+    
+    // Admin routes for activity logs
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
+    Route::delete('/activity-logs/{activityLog}', [ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
+    Route::post('/activity-logs/destroy-all', [ActivityLogController::class, 'destroyAll'])->name('activity-logs.destroy-all');
 });

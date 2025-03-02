@@ -48,7 +48,10 @@
                     <a href="{{ route('sessions.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-key mr-2"></i>Sessies
                     </a>
-                    <a href="#" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
+                    <a href="{{ route('activity-logs.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-history mr-2"></i>Activiteiten
+                    </a>
+                    <a href="{{ route('admin.settings') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-cog mr-2"></i>Instellingen
                     </a>
                 </div>
