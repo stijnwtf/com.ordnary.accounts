@@ -73,5 +73,6 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/notifications/destroy-all', [NotificationController::class, 'destroyAll'])->name('notifications.destroy-all');
     Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
     Route::post('/notifications/test', [NotificationController::class, 'sendTestNotification'])->name('notifications.test');
+    Route::post('/notifications/api-test', [NotificationController::class, 'createTestNotification'])->name('notifications.api-test');
     Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
 });

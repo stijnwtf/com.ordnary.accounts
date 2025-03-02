@@ -131,17 +131,17 @@ class NotificationController extends Controller
      */
     public function getUnreadNotifications()
     {
-        $user = Auth::user();
-        
-        if (!$user) {
-            return response()->json([
-                'error' => 'User not authenticated',
-                'notifications' => [],
-                'unreadCount' => 0,
-            ], 401);
-        }
-        
         try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'error' => 'User not authenticated',
+                    'notifications' => [],
+                    'unreadCount' => 0,
+                ], 401)->header('Content-Type', 'application/json');
+            }
+            
             // Haal de 5 meest recente notificaties op, ongeacht of ze gelezen zijn
             $notifications = $user->notifications()
                 ->latest()
@@ -174,7 +174,7 @@ class NotificationController extends Controller
                     'time' => now()->toDateTimeString(),
                     'request_url' => request()->fullUrl(),
                 ]
-            ]);
+            ])->header('Content-Type', 'application/json');
         } catch (\Exception $e) {
             \Log::error('Error fetching notifications', [
                 'error' => $e->getMessage(),
@@ -193,7 +193,7 @@ class NotificationController extends Controller
                     'line' => $e->getLine(),
                     'request_url' => request()->fullUrl(),
                 ]
-            ], 500);
+            ], 500)->header('Content-Type', 'application/json');
         }
     }
     
@@ -294,5 +294,56 @@ class NotificationController extends Controller
         }
         
         return redirect()->back()->with('success', $message);
+    }
+    
+    /**
+     * Maak een test notificatie aan via een API endpoint.
+     */
+    public function createTestNotification()
+    {
+        try {
+            $user = Auth::user();
+            
+            if (!$user) {
+                return response()->json([
+                    'error' => 'User not authenticated',
+                ], 401)->header('Content-Type', 'application/json');
+            }
+            
+            // Maak een nieuwe notificatie aan
+            $notification = Notification::create([
+                'user_id' => $user->id,
+                'title' => 'API Test Notificatie',
+                'message' => 'Dit is een test notificatie gemaakt via de API. Tijd: ' . now()->format('d-m-Y H:i:s'),
+                'type' => 'info',
+                'icon' => 'fa-bell',
+                'link' => '/admin/notifications',
+            ]);
+            
+            // Log voor debugging
+            \Log::info('API test notification created', [
+                'user_id' => $user->id,
+                'notification_id' => $notification->id,
+                'notification' => $notification->toArray(),
+                'time' => now()->toDateTimeString()
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Test notificatie is aangemaakt',
+                'notification' => $notification,
+            ])->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            \Log::error('Error creating test notification via API', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_url' => request()->fullUrl(),
+                'request_ip' => request()->ip(),
+            ]);
+            
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500)->header('Content-Type', 'application/json');
+        }
     }
 } 

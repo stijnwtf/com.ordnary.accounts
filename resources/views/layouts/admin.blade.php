@@ -63,22 +63,28 @@
                         // Voeg console.log toe om te debuggen
                         console.log('Initializing notifications dropdown');
                         
-                        // Gebruik relatieve URL in plaats van volledige URL
-                        const baseUrl = window.location.origin;
-                        const notificationsUrl = baseUrl + '/admin/notifications/unread';
-                        console.log('Base URL:', baseUrl);
+                        // Gebruik een absolute URL
+                        const notificationsUrl = '/admin/notifications/unread';
                         console.log('Notifications URL:', notificationsUrl);
                         
                         // Haal ongelezen notificaties op
-                        fetch(notificationsUrl)
+                        fetch(notificationsUrl, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
                             .then(response => {
                                 console.log('Response status:', response.status);
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok: ' + response.status);
+                                }
                                 return response.json();
                             })
                             .then(data => {
                                 console.log('Notifications data:', data);
-                                notifications = data.notifications;
-                                unreadCount = data.unreadCount;
+                                notifications = data.notifications || [];
+                                unreadCount = data.unreadCount || 0;
                             })
                             .catch(error => {
                                 console.error('Error fetching notifications:', error);
@@ -86,11 +92,21 @@
                         
                         // Refresh notificaties elke 60 seconden
                         setInterval(() => {
-                            fetch(notificationsUrl)
-                                .then(response => response.json())
+                            fetch(notificationsUrl, {
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok: ' + response.status);
+                                    }
+                                    return response.json();
+                                })
                                 .then(data => {
-                                    notifications = data.notifications;
-                                    unreadCount = data.unreadCount;
+                                    notifications = data.notifications || [];
+                                    unreadCount = data.unreadCount || 0;
                                 })
                                 .catch(error => {
                                     console.error('Error refreshing notifications:', error);
@@ -111,11 +127,21 @@
                                         <h3 class="text-sm font-medium text-gray-900">Notificaties</h3>
                                         <div class="flex space-x-2">
                                             <button @click="
-                                                fetch(notificationsUrl)
-                                                    .then(response => response.json())
+                                                fetch(notificationsUrl, {
+                                                    headers: {
+                                                        'Accept': 'application/json',
+                                                        'X-Requested-With': 'XMLHttpRequest'
+                                                    }
+                                                })
+                                                    .then(response => {
+                                                        if (!response.ok) {
+                                                            throw new Error('Network response was not ok: ' + response.status);
+                                                        }
+                                                        return response.json();
+                                                    })
                                                     .then(data => {
-                                                        notifications = data.notifications;
-                                                        unreadCount = data.unreadCount;
+                                                        notifications = data.notifications || [];
+                                                        unreadCount = data.unreadCount || 0;
                                                         console.log('Notifications refreshed:', data);
                                                     })
                                                     .catch(error => {
@@ -144,6 +170,45 @@
                                             Ga naar notificaties
                                         </a>
                                     </div>
+                                    <div class="mt-2">
+                                        <button @click="
+                                            fetch('/admin/notifications/api-test', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': document.querySelector('meta[name=\'csrf-token\']').getAttribute('content'),
+                                                    'X-Requested-With': 'XMLHttpRequest'
+                                                }
+                                            })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Network response was not ok: ' + response.status);
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log('Test notification created:', data);
+                                                    // Ververs de notificaties
+                                                    fetch(notificationsUrl, {
+                                                        headers: {
+                                                            'Accept': 'application/json',
+                                                            'X-Requested-With': 'XMLHttpRequest'
+                                                        }
+                                                    })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            notifications = data.notifications || [];
+                                                            unreadCount = data.unreadCount || 0;
+                                                        });
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error creating test notification:', error);
+                                                });
+                                        " class="w-full text-xs text-green-600 hover:text-green-800 flex items-center justify-center">
+                                            <i class="fas fa-paper-plane mr-1"></i> Maak API test notificatie
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <template x-if="notifications.length === 0">
@@ -153,7 +218,7 @@
                                 </template>
                                 
                                 <template x-for="notification in notifications" :key="notification.id">
-                                    <a :href="baseUrl + '/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                    <a :href="'/admin/notifications/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="flex-shrink-0 mt-0.5">
                                                 <template x-if="notification.type === 'info'">
