@@ -178,7 +178,12 @@
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         @if($notification->isRead())
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            <i class="fas fa-check text-xs mr-1"></i> Gelezen op {{ $notification->read_at->format('d-m-Y H:i:s') }}
+                            <i class="fas fa-check text-xs mr-1"></i> Gelezen 
+                            @if(is_object($notification->read_at) && method_exists($notification->read_at, 'format'))
+                                op {{ $notification->read_at->format('d-m-Y H:i:s') }}
+                            @else
+                                (datum onbekend)
+                            @endif
                         </span>
                         @else
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
