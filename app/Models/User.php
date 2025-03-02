@@ -47,8 +47,28 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
+    
+    /**
+     * Relatie met gebruikerssessies.
+     */
     public function userSessions()
     {
         return $this->hasMany(UserSession::class);
+    }
+    
+    /**
+     * Relatie met notificaties.
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+    
+    /**
+     * Haal het aantal ongelezen notificaties op.
+     */
+    public function unreadNotificationsCount()
+    {
+        return $this->notifications()->whereNull('read_at')->count();
     }
 }

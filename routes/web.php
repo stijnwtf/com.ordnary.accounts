@@ -7,6 +7,7 @@ use App\Http\Controllers\SSO\SessionController;
 use App\Http\Controllers\SSO\DashboardController;
 use App\Http\Controllers\SSO\SettingsController;
 use App\Http\Controllers\SSO\ActivityLogController;
+use App\Http\Controllers\SSO\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -61,4 +62,16 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
     Route::delete('/activity-logs/{activityLog}', [ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
     Route::post('/activity-logs/destroy-all', [ActivityLogController::class, 'destroyAll'])->name('activity-logs.destroy-all');
+    
+    // Admin routes for notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::post('/notifications/{notification}/mark-as-unread', [NotificationController::class, 'markAsUnread'])->name('notifications.mark-as-unread');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::post('/notifications/destroy-all', [NotificationController::class, 'destroyAll'])->name('notifications.destroy-all');
+    Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
+    Route::post('/notifications/test', [NotificationController::class, 'sendTestNotification'])->name('notifications.test');
+    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
 });

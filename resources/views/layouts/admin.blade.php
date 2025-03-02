@@ -51,11 +51,109 @@
                     <a href="{{ route('activity-logs.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-history mr-2"></i>Activiteiten
                     </a>
+                    <a href="{{ route('notifications.index') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
+                        <i class="fas fa-bell mr-2"></i>Notificaties
+                    </a>
                     <a href="{{ route('admin.settings') }}" class="text-gray-600 hover:text-numblio-blue flex items-center text-sm font-medium transition-colors duration-200">
                         <i class="fas fa-cog mr-2"></i>Instellingen
                     </a>
                 </div>
-                <div class="flex items-center border-l border-gray-200 pl-6">
+                <div class="flex items-center space-x-4 border-l border-gray-200 pl-6">
+                    <!-- Notifications Dropdown -->
+                    <div class="relative" x-data="{ open: false, notifications: [], unreadCount: 0 }" @click.away="open = false" x-init="
+                        fetch('{{ route('notifications.unread') }}')
+                            .then(response => response.json())
+                            .then(data => {
+                                notifications = data.notifications;
+                                unreadCount = data.unreadCount;
+                            });
+                        
+                        // Refresh notifications every 60 seconds
+                        setInterval(() => {
+                            fetch('{{ route('notifications.unread') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    notifications = data.notifications;
+                                    unreadCount = data.unreadCount;
+                                });
+                        }, 60000);
+                    ">
+                        <button @click="open = !open" class="relative p-1 text-gray-600 hover:text-numblio-blue focus:outline-none focus:text-numblio-blue transition-colors duration-200">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span x-show="unreadCount > 0" x-cloak class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                <span x-text="unreadCount"></span>
+                            </span>
+                        </button>
+                        
+                        <div x-show="open" x-cloak class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" role="menu" aria-orientation="vertical" aria-labelledby="notifications-menu">
+                            <div class="py-1" role="none">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="text-sm font-medium text-gray-900">Notificaties</h3>
+                                        <a href="{{ route('notifications.index') }}" class="text-xs text-numblio-blue hover:text-numblio-lightblue">
+                                            Bekijk alle
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <template x-if="notifications.length === 0">
+                                    <div class="px-4 py-3 text-sm text-gray-500 text-center">
+                                        Geen ongelezen notificaties
+                                    </div>
+                                </template>
+                                
+                                <template x-for="notification in notifications" :key="notification.id">
+                                    <a :href="'{{ route('notifications.show', '') }}/' + notification.id" class="block px-4 py-2 hover:bg-gray-50">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0 mt-0.5">
+                                                <template x-if="notification.type === 'info'">
+                                                    <div class="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                                        <i :class="'fas ' + notification.icon"></i>
+                                                    </div>
+                                                </template>
+                                                <template x-if="notification.type === 'success'">
+                                                    <div class="h-8 w-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                                                        <i :class="'fas ' + notification.icon"></i>
+                                                    </div>
+                                                </template>
+                                                <template x-if="notification.type === 'warning'">
+                                                    <div class="h-8 w-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center">
+                                                        <i :class="'fas ' + notification.icon"></i>
+                                                    </div>
+                                                </template>
+                                                <template x-if="notification.type === 'error'">
+                                                    <div class="h-8 w-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+                                                        <i :class="'fas ' + notification.icon"></i>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <div class="ml-3 flex-1">
+                                                <p class="text-sm font-medium text-gray-900" x-text="notification.title"></p>
+                                                <p class="text-xs text-gray-500 truncate" x-text="notification.message"></p>
+                                                <p class="text-xs text-gray-400 mt-1" x-text="new Date(notification.created_at).toLocaleString()"></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </template>
+                                
+                                <div class="border-t border-gray-200 px-4 py-2">
+                                    <div class="flex justify-between">
+                                        <form action="{{ route('notifications.mark-all-as-read') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="text-xs text-numblio-blue hover:text-numblio-lightblue">
+                                                Markeer alles als gelezen
+                                            </button>
+                                        </form>
+                                        <a href="{{ route('notifications.index') }}" class="text-xs text-gray-500 hover:text-gray-700">
+                                            Beheer notificaties
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
                     <div class="relative flex items-center group">
                         <div class="h-8 w-8 rounded-full bg-numblio-blue text-white flex items-center justify-center mr-2">
                             <span class="text-sm font-medium">{{ substr(Auth::user()->name, 0, 1) }}</span>
@@ -63,7 +161,7 @@
                         <div>
                             <span class="text-sm font-medium text-gray-700 group-hover:text-numblio-blue transition-colors duration-200">{{ Auth::user()->name }}</span>
                             <a href="{{ route('logout') }}" class="block text-xs text-gray-500 hover:text-numblio-blue transition-colors duration-200">
-                                Uitloggen
+                                Uitloggen <i class="fas fa-sign-out-alt ml-1 text-xs"></i>
                             </a>
                         </div>
                     </div>
@@ -93,5 +191,11 @@
         </div>
     </div>
 </footer>
+
+<!-- Alpine.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+    [x-cloak] { display: none !important; }
+</style>
 </body>
 </html>
