@@ -255,6 +255,24 @@
                                     </div>
                                 </div>
                                 
+                                <div class="mt-2 grid grid-cols-2 gap-2">
+                                    <button @click="
+                                        var url = '{{ route('notifications.unread') }}';
+                                        console.log('Testing URL:', url);
+                                        window.open(url, '_blank');
+                                    " class="w-full text-xs text-orange-600 hover:text-orange-800 flex items-center justify-center">
+                                        <i class="fas fa-external-link-alt mr-1"></i> Test notificaties URL
+                                    </button>
+                                    
+                                    <button @click="
+                                        var url = '{{ route('notifications.test') }}';
+                                        console.log('Creating test notification via URL:', url);
+                                        window.open(url, '_blank');
+                                    " class="w-full text-xs text-orange-600 hover:text-orange-800 flex items-center justify-center">
+                                        <i class="fas fa-plus-circle mr-1"></i> Maak test notificatie
+                                    </button>
+                                </div>
+                                
                                 <template x-if="notifications.length === 0">
                                     <div class="px-4 py-3 text-sm text-gray-500 text-center">
                                         Geen notificaties
