@@ -37,43 +37,23 @@ Route::post('/admin/login', [ClientController::class, 'login'])->name('adminlogi
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     // Dashboard route
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+
     Route::resource('clients', ClientController::class);
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])
         ->name('clients.regenerate-credentials');
-    
+
     // Admin routes for managing users
     Route::resource('users', UserController::class);
-    
+
     // Admin routes for managing sessions
     Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
     Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
     Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
     Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
     Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
-    
+
     // Admin routes for settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
     Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
-    
-    // Admin routes for activity logs
-    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
-    Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
-    Route::delete('/activity-logs/{activityLog}', [ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
-    Route::post('/activity-logs/destroy-all', [ActivityLogController::class, 'destroyAll'])->name('activity-logs.destroy-all');
-    
-    // Admin routes for notifications
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/{notification}', [NotificationController::class, 'show'])->name('notifications.show');
-    Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
-    Route::post('/notifications/{notification}/mark-as-unread', [NotificationController::class, 'markAsUnread'])->name('notifications.mark-as-unread');
-    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
-    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
-    Route::post('/notifications/destroy-all', [NotificationController::class, 'destroyAll'])->name('notifications.destroy-all');
-    Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications'])->name('notifications.unread');
-    Route::post('/notifications/test', [NotificationController::class, 'sendTestNotification'])->name('notifications.test');
-    Route::get('/notifications/test', [NotificationController::class, 'sendTestNotification'])->name('notifications.test.get');
-    Route::post('/notifications/api-test', [NotificationController::class, 'createTestNotification'])->name('notifications.api-test');
-    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
 });
