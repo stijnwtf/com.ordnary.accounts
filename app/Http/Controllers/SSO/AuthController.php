@@ -370,28 +370,32 @@ class AuthController extends Controller
      */
     private function generateToken(User $user, string $clientId)
     {
-        // Generate a unique token
-        $token = Str::random(64);
-        Log::debug("generateToken: Generated token", ["token" => $token]);
+        // Verwijder oude tokens van deze gebruiker en client
+        UserSession::where('user_id', $user->id)
+            ->where('client_id', $clientId)
+            ->delete();
 
-        // Save the token to the database
+        // Beperk het aantal actieve sessies
+        $activeSessionCount = UserSession::where('user_id', $user->id)->count();
+        if ($activeSessionCount >= 5) {
+            UserSession::where('user_id', $user->id)
+                ->oldest()
+                ->first()
+                ?->delete();
+        }
+
+        // Gebruik een cryptografisch veilige token generator
+        $token = bin2hex(random_bytes(32));
+
         UserSession::create([
             "user_id" => $user->id,
             "client_id" => $clientId,
-            "token" => $token,
-            "expires_at" => now()->addHours(24), // Token expires after 24 hours
-        ]);
-
-        Log::info("generateToken: Token saved to database", [
-            "user_id" => $user->id,
-            "client_id" => $clientId,
-            "expires_at" => now()->addHours(24),
+            "token" => hash('sha256', $token), // Hash de token voor opslag
+            "expires_at" => now()->addHours(24)
         ]);
 
         return $token;
     }
-
-    // Existing methods remain unchanged...
 
     /**
      * Show the forgot password form.
