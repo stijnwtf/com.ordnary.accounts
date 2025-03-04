@@ -16,8 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     // Token validation endpoint
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
-    
-    // New token management endpoints
-    Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
-    Route::post('/revoke-token', [AuthController::class, 'revokeToken']);
 });
