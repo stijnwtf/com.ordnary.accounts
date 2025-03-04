@@ -18,9 +18,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use App\Models\RefreshToken;
 
 class AuthController extends Controller
 {
@@ -279,6 +276,7 @@ class AuthController extends Controller
         ]);
 
         Log::info("validateToken: Token validation started", [
+            "token" => $request->token,
             "client_id" => $request->client_id,
         ]);
 
@@ -300,103 +298,67 @@ class AuthController extends Controller
             );
         }
 
-        try {
-            // Decode and verify the JWT token
-            $decoded = JWT::decode($request->token, new Key(config('app.key'), 'HS256'));
-            
-            // Verify the token is intended for this client
-            if ($decoded->aud !== $request->client_id) {
-                Log::warning("validateToken: Token audience mismatch", [
-                    "expected" => $request->client_id,
-                    "actual" => $decoded->aud,
-                ]);
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "Token not intended for this client.",
-                    ],
-                    401
-                );
-            }
-            
-            // Check if token has been revoked
-            $userSession = UserSession::where("jti", $decoded->jti)
-                ->where("client_id", $request->client_id)
-                ->first();
-                
-            if (!$userSession) {
-                Log::warning("validateToken: Token has been revoked or doesn't exist", [
-                    "client_id" => $request->client_id,
-                ]);
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "Token has been revoked.",
-                    ],
-                    401
-                );
-            }
+        // Find the user session with this token
+        $userSession = UserSession::where("token", $request->token)
+            ->where("client_id", $request->client_id)
+            ->first();
 
-            // Get the user data
-            $user = User::find($decoded->sub);
-            if (!$user) {
-                Log::error("validateToken: User not found for token", [
-                    "user_id" => $decoded->sub,
-                ]);
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "User not found.",
-                    ],
-                    404
-                );
-            }
-
-            // Return user data
-            Log::info("validateToken: Token validated successfully", [
-                "user_id" => $user->id,
-            ]);
-            return response()->json([
-                "success" => true,
-                "user" => $decoded->user_data,
-                "exp" => $decoded->exp,
-            ]);
-            
-        } catch (\Firebase\JWT\ExpiredException $e) {
+        if ($userSession && $userSession->expires_at <= now()) {
             Log::warning("validateToken: Token has expired", [
-                "error" => $e->getMessage(),
+                "token" => $request->token,
+                "expires_at" => $userSession->expires_at,
             ]);
             return response()->json(
                 [
                     "success" => false,
                     "message" => "Token has expired.",
-                    "code" => "token_expired"
                 ],
-                401
+                419
             );
-        } catch (\Firebase\JWT\SignatureInvalidException $e) {
-            Log::warning("validateToken: Invalid token signature", [
-                "error" => $e->getMessage(),
+        }
+
+        if (!$userSession) {
+            Log::warning("validateToken: Invalid or expired token", [
+                "token" => $request->token,
+                "client_id" => $request->client_id,
             ]);
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Invalid token signature.",
-                ],
-                401
-            );
-        } catch (\Exception $e) {
-            Log::error("validateToken: Error validating token", [
-                "error" => $e->getMessage(),
-            ]);
-            return response()->json(
-                [
-                    "success" => false,
-                    "message" => "Invalid token format or other error.",
+                    "message" => "Invalid or expired token.",
                 ],
                 401
             );
         }
+
+        // Get the user data
+        $user = User::find($userSession->user_id);
+        if (!$user) {
+            Log::error("validateToken: User not found for token", [
+                "token" => $request->token,
+            ]);
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "User not found.",
+                ],
+                404
+            );
+        }
+
+        // Return user data
+        Log::info("validateToken: Token validated successfully", [
+            "user_id" => $user->id,
+        ]);
+        return response()->json([
+            "success" => true,
+            "user" => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "is_admin" => $user->is_admin,
+            ],
+        ]);
     }
 
     /**
@@ -408,32 +370,15 @@ class AuthController extends Controller
      */
     private function generateToken(User $user, string $clientId)
     {
-        // Create JWT payload
-        $payload = [
-            'iss' => config('app.url'), // Issuer
-            'sub' => $user->id, // Subject (user ID)
-            'aud' => $clientId, // Audience (client ID)
-            'iat' => time(), // Issued at time
-            'exp' => time() + (60 * 60 * 24), // Expires in 24 hours
-            'jti' => Str::uuid()->toString(), // JWT ID (unique identifier)
-            'user_data' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'is_admin' => $user->is_admin,
-            ]
-        ];
+        // Generate a unique token
+        $token = Str::random(64);
+        Log::debug("generateToken: Generated token", ["token" => $token]);
 
-        // Generate JWT token with a secure signature
-        $token = JWT::encode($payload, config('app.key'), 'HS256');
-        Log::debug("generateToken: Generated JWT token");
-
-        // Save the token to the database for revocation capability
+        // Save the token to the database
         UserSession::create([
             "user_id" => $user->id,
             "client_id" => $clientId,
             "token" => $token,
-            "jti" => $payload['jti'], // Store the JWT ID for potential revocation
             "expires_at" => now()->addHours(24), // Token expires after 24 hours
         ]);
 
@@ -444,183 +389,6 @@ class AuthController extends Controller
         ]);
 
         return $token;
-    }
-
-    /**
-     * Generate a refresh token for extending session lifetime
-     * 
-     * @param User $user
-     * @param string $clientId
-     * @param string $jti Original token's JTI
-     * @return string
-     */
-    private function generateRefreshToken(User $user, string $clientId, string $jti)
-    {
-        // Create refresh token with longer expiry but limited use
-        $refreshToken = Str::random(64);
-        
-        // Store refresh token with reference to original token
-        RefreshToken::create([
-            'user_id' => $user->id,
-            'client_id' => $clientId,
-            'token' => hash('sha256', $refreshToken), // Store hashed version
-            'original_jti' => $jti,
-            'expires_at' => now()->addDays(7), // Refresh tokens valid for 7 days
-            'used' => false
-        ]);
-        
-        return $refreshToken;
-    }
-
-    /**
-     * Refresh an expired token
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refreshToken(Request $request)
-    {
-        $request->validate([
-            "refresh_token" => "required|string",
-            "client_id" => "required|string",
-            "client_secret" => "required|string",
-            "token" => "required|string", // Original expired token
-        ]);
-
-        // Verify client credentials
-        $client = Client::where("client_id", $request->client_id)
-            ->where("client_secret", $request->client_secret)
-            ->first();
-
-        if (!$client) {
-            return response()->json(
-                [
-                    "success" => false,
-                    "message" => "Invalid client credentials.",
-                ],
-                401
-            );
-        }
-
-        try {
-            // Decode the expired token without verifying expiration
-            $decoded = JWT::decode($request->token, new Key(config('app.key'), 'HS256'), ['verify_exp' => false]);
-            
-            // Find the refresh token
-            $refreshToken = RefreshToken::where('token', hash('sha256', $request->refresh_token))
-                ->where('client_id', $request->client_id)
-                ->where('original_jti', $decoded->jti)
-                ->where('used', false)
-                ->where('expires_at', '>', now())
-                ->first();
-                
-            if (!$refreshToken) {
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "Invalid or expired refresh token.",
-                    ],
-                    401
-                );
-            }
-            
-            // Mark refresh token as used
-            $refreshToken->used = true;
-            $refreshToken->save();
-            
-            // Get user
-            $user = User::find($decoded->sub);
-            if (!$user) {
-                return response()->json(
-                    [
-                        "success" => false,
-                        "message" => "User not found.",
-                    ],
-                    404
-                );
-            }
-            
-            // Generate new token
-            $newToken = $this->generateToken($user, $request->client_id);
-            
-            // Generate new refresh token
-            $newRefreshToken = $this->generateRefreshToken($user, $request->client_id, $decoded->jti);
-            
-            return response()->json([
-                "success" => true,
-                "token" => $newToken,
-                "refresh_token" => $newRefreshToken,
-            ]);
-            
-        } catch (\Exception $e) {
-            Log::error("refreshToken: Error refreshing token", [
-                "error" => $e->getMessage(),
-            ]);
-            return response()->json(
-                [
-                    "success" => false,
-                    "message" => "Error refreshing token: " . $e->getMessage(),
-                ],
-                401
-            );
-        }
-    }
-
-    /**
-     * Revoke a token (logout)
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function revokeToken(Request $request)
-    {
-        $request->validate([
-            "token" => "required|string",
-            "client_id" => "required|string",
-            "client_secret" => "required|string",
-        ]);
-
-        // Verify client credentials
-        $client = Client::where("client_id", $request->client_id)
-            ->where("client_secret", $request->client_secret)
-            ->first();
-
-        if (!$client) {
-            return response()->json(
-                [
-                    "success" => false,
-                    "message" => "Invalid client credentials.",
-                ],
-                401
-            );
-        }
-
-        try {
-            // Decode the token
-            $decoded = JWT::decode($request->token, new Key(config('app.key'), 'HS256'));
-            
-            // Delete the token from database
-            UserSession::where("jti", $decoded->jti)
-                ->where("client_id", $request->client_id)
-                ->delete();
-                
-            // Also delete any refresh tokens
-            RefreshToken::where('original_jti', $decoded->jti)
-                ->where('client_id', $request->client_id)
-                ->delete();
-                
-            return response()->json([
-                "success" => true,
-                "message" => "Token revoked successfully.",
-            ]);
-            
-        } catch (\Exception $e) {
-            // Even if token is invalid, we'll return success
-            return response()->json([
-                "success" => true,
-                "message" => "Token revoked successfully.",
-            ]);
-        }
     }
 
     // Existing methods remain unchanged...
