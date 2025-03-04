@@ -298,8 +298,8 @@ class AuthController extends Controller
             );
         }
 
-        // Find the user session with this token
-        $userSession = UserSession::where("token", $request->token)
+        // Zoek de user session met de gehashte token
+        $userSession = UserSession::where("token", hash('sha256', $request->token))
             ->where("client_id", $request->client_id)
             ->first();
 
@@ -360,7 +360,6 @@ class AuthController extends Controller
             ],
         ]);
     }
-
     /**
      * Generate a new token for a user session.
      *
@@ -396,6 +395,7 @@ class AuthController extends Controller
 
         return $token;
     }
+
 
     /**
      * Show the forgot password form.
