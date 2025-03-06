@@ -862,12 +862,18 @@ class AuthController extends Controller
 
             // Send welcome email
             try {
-                Mail::to($user->email)->send(new WelcomeEmail($user));
-                Log::info("register: Welcome email sent", ["email" => $user->email]);
+                // Validate email format before sending
+                if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+                    Mail::to($user->email)->send(new WelcomeEmail($user));
+                    Log::info("register: Welcome email sent", ["email" => $user->email]);
+                } else {
+                    Log::warning("register: Invalid email format, welcome email not sent", ["email" => $user->email]);
+                }
             } catch (\Exception $e) {
                 Log::error("register: Failed to send welcome email", [
                     "email" => $user->email,
-                    "exception" => $e->getMessage()
+                    "exception" => $e->getMessage(),
+                    "trace" => $e->getTraceAsString()
                 ]);
                 // Continue with registration process even if email fails
             }
