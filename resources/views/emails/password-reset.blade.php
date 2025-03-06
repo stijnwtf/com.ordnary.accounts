@@ -1,10 +1,11 @@
 {{-- resources/views/emails/password-reset.blade.php --}}
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wachtwoord Resetten - Numblio</title>
+    <title>Reset Your Password - Numblio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -14,19 +15,26 @@
             margin: 0;
             padding: 0;
         }
+        .email-wrapper {
+            padding: 24px;
+            background-color: #f9fafb;
+        }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 40px 24px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        .content-wrapper {
+            padding: 40px 24px;
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 24px;
         }
         .logo {
             height: 32px;
@@ -95,6 +103,8 @@
         .info-icon {
             margin-right: 8px;
             color: #3b82f6;
+            width: 16px;
+            text-align: center;
         }
         .info-text {
             color: #1e40af;
@@ -125,12 +135,14 @@
             font-size: 14px;
             color: #6b7280;
         }
+        .footer-wrapper {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
         .footer {
-            margin-top: 40px;
+            padding: 24px;
             font-size: 14px;
             color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
             text-align: center;
         }
         .footer-links {
@@ -144,63 +156,68 @@
         .footer-link:hover {
             color: #1f2937;
         }
+        .bottom-spacer {
+            height: 24px;
+            background-color: #f9fafb;
+        }
         @media (max-width: 640px) {
-            .container {
+            .content-wrapper {
                 padding: 24px 16px;
             }
         }
     </style>
 </head>
 <body>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f9fafb" style="padding: 24px;">
-    <tr>
-        <td align="center">
-            <div class="container">
-                <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                    <div class="header-divider"></div>
-                    <span class="header-text">Wachtwoord Herstel</span>
+<div class="email-wrapper">
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="header">
+                <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                <div class="header-divider"></div>
+                <span class="header-text">Password Recovery</span>
+            </div>
+
+            <h2>Reset Your Password</h2>
+            <p class="subtitle">Follow the steps below to reset your Numblio account password and regain access to all your Numblio services.</p>
+
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    Password Reset Request
                 </div>
+                <p class="info-text">You are receiving this email because we received a password reset request for your account. This link will expire in 60 minutes.</p>
+            </div>
 
-                <h2>Herstel uw wachtwoord</h2>
-                <p class="subtitle">Volg onderstaande stappen om uw Numblio-account wachtwoord te resetten en weer toegang te krijgen tot al uw Numblio-diensten.</p>
+            <p>Please click the button below to reset your password:</p>
 
-                <div class="info-box">
-                    <div class="info-title">
-                        <span class="info-icon">ℹ️</span>
-                        Wachtwoord reset aanvraag
-                    </div>
-                    <p class="info-text">U ontvangt deze e-mail omdat we een verzoek hebben ontvangen om het wachtwoord voor uw account te resetten. Deze link is 60 minuten geldig.</p>
-                </div>
+            <a href="{{ $resetUrl }}" class="button">Reset Password</a>
 
-                <p>Klik op de onderstaande knop om uw wachtwoord te resetten:</p>
+            <p class="message">If you did not request a password reset, no further action is required.</p>
 
-                <a href="{{ $resetUrl }}" class="button">Wachtwoord Resetten</a>
+            <p>If you're having trouble with the button above, copy and paste the URL below into your web browser:</p>
 
-                <p class="message">Als u geen wachtwoord reset heeft aangevraagd, hoeft u geen verdere actie te ondernemen.</p>
+            <div class="url-display">
+                {{ $resetUrl }}
+            </div>
 
-                <p>Als u problemen heeft met de bovenstaande knop, kopieer en plak dan de onderstaande URL in uw webbrowser:</p>
+            <div class="help-section">
+                <div class="help-title">Need Help?</div>
+                <p class="help-text">If you have any questions or need assistance with resetting your password, please contact our support team at <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
+            </div>
+        </div>
 
-                <div class="url-display">
-                    {{ $resetUrl }}
-                </div>
-
-                <div class="help-section">
-                    <div class="help-title">Hulp nodig?</div>
-                    <p class="help-text">Als u vragen heeft of hulp nodig heeft bij het resetten van uw wachtwoord, neem dan contact op met onze klantenservice via <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
-                </div>
-
-                <div class="footer">
-                    <p>&copy; {{ date('Y') }} Numblio. Alle rechten voorbehouden.</p>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Privacybeleid</a>
-                        <a href="#" class="footer-link">Gebruiksvoorwaarden</a>
-                        <a href="#" class="footer-link">Contact</a>
-                    </div>
+        <div class="footer-wrapper">
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
                 </div>
             </div>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+    <div class="bottom-spacer"></div>
+</div>
 </body>
 </html>
