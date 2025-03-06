@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mijn Numblio Account</title>
+    <title>My Account</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
@@ -17,8 +17,8 @@
             <div class="mb-8 flex flex-col items-start">
                 <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Mijn Numblio Account</h2>
-                    <p class="text-sm text-gray-600 mt-2">Beheer uw persoonlijke gegevens en wachtwoord voor uw Numblio account.</p>
+                    <h2 class="text-2xl font-bold text-gray-900">My Numblio-account.</h2>
+                    <p class="text-sm text-gray-600 mt-2">You can view your personal account details below, including your profile information, and account settings.</p>
                 </div>
             </div>
 
@@ -47,7 +47,7 @@
                         <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">Er is iets misgegaan.</h3>
+                        <h3 class="text-sm font-medium text-red-800">Something went wrong.</h3>
                         <div class="mt-1 text-sm text-red-700">
                             <ul class="list-disc pl-4">
                                 @foreach ($errors->all() as $error)
@@ -64,10 +64,10 @@
                 <!-- Tabs -->
                 <div class="flex border-b">
                     <button id="profile-tab" class="px-6 py-3 text-blue-600 border-b-2 border-blue-600 font-medium text-sm">
-                        Profiel
+                        Profile
                     </button>
                     <button id="password-tab" class="px-6 py-3 text-gray-500 font-medium text-sm">
-                        Wachtwoord
+                        Password
                     </button>
                 </div>
 
@@ -78,7 +78,7 @@
 
                         <!-- Name Input -->
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Naam</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-user text-gray-400"></i>
@@ -95,7 +95,7 @@
 
                         <!-- Email Input -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mailadres</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-gray-400"></i>
@@ -115,7 +115,7 @@
                             <button
                                 type="submit"
                                 class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Profiel bijwerken
+                                Confirm changes
                             </button>
                         </div>
                     </form>
@@ -128,7 +128,7 @@
 
                         <!-- Current Password Input -->
                         <div>
-                            <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Huidig wachtwoord</label>
+                            <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current password</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
@@ -145,7 +145,7 @@
 
                         <!-- New Password Input -->
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Nieuw wachtwoord</label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New password</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
@@ -162,7 +162,7 @@
 
                         <!-- Confirm Password Input -->
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Bevestig nieuw wachtwoord</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
@@ -177,7 +177,7 @@
                             <button
                                 type="submit"
                                 class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Wachtwoord bijwerken
+                                Confirm changes
                             </button>
                         </div>
                     </form>
@@ -186,7 +186,7 @@
 
             <!-- Logout Button -->
             <div class="mt-6 text-center">
-                <a href="{{ route('logout') }}" class="text-sm text-red-600 hover:text-red-700">Uitloggen</a>
+                <a href="{{ route('logout') }}" class="text-sm text-red-600 hover:text-red-700">Log out</a>
             </div>
 
             <!-- Simple Text Footer -->
@@ -214,11 +214,11 @@
             // Activate profile tab
             profileTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
             profileTab.classList.remove('text-gray-500');
-            
+
             // Deactivate password tab
             passwordTab.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
             passwordTab.classList.add('text-gray-500');
-            
+
             // Show profile content, hide password content
             profileContent.classList.remove('hidden');
             passwordContent.classList.add('hidden');
@@ -228,11 +228,11 @@
             // Activate password tab
             passwordTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
             passwordTab.classList.remove('text-gray-500');
-            
+
             // Deactivate profile tab
             profileTab.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
             profileTab.classList.add('text-gray-500');
-            
+
             // Show password content, hide profile content
             passwordContent.classList.remove('hidden');
             profileContent.classList.add('hidden');
@@ -240,4 +240,4 @@
     });
 </script>
 </body>
-</html> 
+</html>
