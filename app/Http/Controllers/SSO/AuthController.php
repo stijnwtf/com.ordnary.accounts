@@ -705,14 +705,16 @@ class AuthController extends Controller
             "redirect_uri" => $redirectUri,
         ]);
 
+        // Check if this is a direct registration (without client parameters)
         if (!$clientId || !$redirectUri) {
-            Log::error("showRegistrationForm: Missing required parameters", [
-                "client_id" => $clientId,
-                "redirect_uri" => $redirectUri,
-            ]);
-            return view("error", [
-                "message" =>
-                    "Missing parameters: client_id and redirect_uri are required.",
+            Log::info("showRegistrationForm: Direct registration attempt (no client parameters)");
+            // Set a flag in the session to indicate this is a direct registration
+            session(["direct_login" => true]);
+            
+            return view("auth.register", [
+                "client_name" => "Numblio Account",
+                "recaptcha_site_key" => config('services.recaptcha.site_key'),
+                "direct_login" => true
             ]);
         }
 
@@ -771,6 +773,13 @@ class AuthController extends Controller
                 "email" => $request->email
             ]);
 
+            // Check if this is a direct registration
+            if (session("direct_login")) {
+                return redirect()->route("register")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -790,6 +799,13 @@ class AuthController extends Controller
                 "score" => $recaptchaResult['score'] ?? 'N/A'
             ]);
 
+            // Check if this is a direct registration
+            if (session("direct_login")) {
+                return redirect()->route("register")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -806,6 +822,13 @@ class AuthController extends Controller
                 "score" => $recaptchaResult['score']
             ]);
 
+            // Check if this is a direct registration
+            if (session("direct_login")) {
+                return redirect()->route("register")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again later."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -815,9 +838,13 @@ class AuthController extends Controller
             ]);
         }
 
+        // Check if this is a direct registration
+        $directLogin = session("direct_login");
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
+        
         Log::debug("register: Retrieved session parameters", [
+            "direct_login" => $directLogin,
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
         ]);
@@ -838,6 +865,13 @@ class AuthController extends Controller
             // Auto-login after registration
             Auth::login($user);
             $request->session()->regenerate();
+
+            // If this is a direct registration, redirect to the my-account page
+            if ($directLogin) {
+                Log::info("register: Direct registration successful, redirecting to my-account");
+                session()->forget(["direct_login"]);
+                return redirect()->route("my-account");
+            }
 
             if (!$clientId || !$redirectUri) {
                 Log::error("register: Missing session parameters after authentication", [

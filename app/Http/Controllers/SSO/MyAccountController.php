@@ -14,16 +14,6 @@ use Illuminate\Validation\Rules\Password;
 class MyAccountController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Show the user's account page.
      *
      * @return \Illuminate\View\View
