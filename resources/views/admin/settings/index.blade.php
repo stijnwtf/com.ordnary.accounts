@@ -115,7 +115,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-language text-gray-400"></i>
                                 </div>
-                                <select name="locale" id="locale" class="focus:ring-numblio-blue focus:border-numblio-blue block w-full pl-10 sm:text-sm border-gray-300 rounded-md">
+                                <select name="locale" id="locale" class="block w-full pl-11 pr-4 py-3 border-0 ring-1 ring-gray-300 rounded-lg text-gray-900 shadow-sm focus:ring-2 focus:ring-numblio-blue focus:outline-none transition-all duration-200">
                                     <option value="nl" {{ $settings['locale'] == 'nl' ? 'selected' : '' }}>Nederlands</option>
                                     <option value="en" {{ $settings['locale'] == 'en' ? 'selected' : '' }}>Engels</option>
                                     <option value="de" {{ $settings['locale'] == 'de' ? 'selected' : '' }}>Duits</option>
