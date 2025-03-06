@@ -65,3 +65,17 @@ Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
     Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
 });
+
+// Test route for welcome email (only in local environment)
+if (app()->environment('local')) {
+    Route::get('/test-welcome-email', function () {
+        $user = \App\Models\User::first();
+        if (!$user) {
+            return 'No users found. Please create a user first.';
+        }
+        
+        \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\WelcomeEmail($user));
+        
+        return 'Welcome email sent to ' . $user->email;
+    });
+}

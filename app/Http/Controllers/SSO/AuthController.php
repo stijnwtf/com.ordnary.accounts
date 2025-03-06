@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Mail\WelcomeEmail;
 
 class AuthController extends Controller
 {
@@ -858,6 +859,18 @@ class AuthController extends Controller
             ]);
 
             Log::info("register: User registered successfully", ["email" => $request->email]);
+
+            // Send welcome email
+            try {
+                Mail::to($user->email)->send(new WelcomeEmail($user));
+                Log::info("register: Welcome email sent", ["email" => $user->email]);
+            } catch (\Exception $e) {
+                Log::error("register: Failed to send welcome email", [
+                    "email" => $user->email,
+                    "exception" => $e->getMessage()
+                ]);
+                // Continue with registration process even if email fails
+            }
 
             // Fire registered event
             event(new Registered($user));
