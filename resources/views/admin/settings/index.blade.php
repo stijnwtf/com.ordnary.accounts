@@ -73,7 +73,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-clock text-gray-400"></i>
                                 </div>
-                                <input type="number" name="session_lifetime" id="session_lifetime" class="focus:ring-numblio-blue focus:border-numblio-blue block w-full pl-10 sm:text-sm border-gray-300 rounded-md" value="{{ $settings['session_lifetime'] }}">
+                                <input type="number" name="session_lifetime" id="session_lifetime" class="block w-full pl-11 pr-4 py-3 border-0 ring-1 ring-gray-300 rounded-lg text-gray-900 shadow-sm focus:ring-2 focus:ring-numblio-blue focus:outline-none transition-all duration-200" value="{{ $settings['session_lifetime'] }}">
                             </div>
                             <p class="mt-2 text-sm text-gray-500">
                                 Aantal minuten dat een gebruiker ingelogd blijft voordat de sessie verloopt.
@@ -91,7 +91,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-globe text-gray-400"></i>
                                 </div>
-                                <select name="timezone" id="timezone" class="focus:ring-numblio-blue focus:border-numblio-blue block w-full pl-10 sm:text-sm border-gray-300 rounded-md">
+                                <select name="timezone" id="timezone" class="block w-full pl-11 pr-4 py-3 border-0 ring-1 ring-gray-300 rounded-lg text-gray-900 shadow-sm focus:ring-2 focus:ring-numblio-blue focus:outline-none transition-all duration-200">
                                     <option value="UTC" {{ $settings['timezone'] == 'UTC' ? 'selected' : '' }}>UTC</option>
                                     <option value="Europe/Amsterdam" {{ $settings['timezone'] == 'Europe/Amsterdam' ? 'selected' : '' }}>Europe/Amsterdam</option>
                                     <option value="Europe/London" {{ $settings['timezone'] == 'Europe/London' ? 'selected' : '' }}>Europe/London</option>
@@ -245,4 +245,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
