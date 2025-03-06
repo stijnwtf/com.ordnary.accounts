@@ -1,10 +1,11 @@
 {{-- resources/views/emails/welcome.blade.php --}}
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welkom bij Numblio</title>
+    <title>Welcome to Numblio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -14,19 +15,26 @@
             margin: 0;
             padding: 0;
         }
+        .email-wrapper {
+            padding: 24px;
+            background-color: #f9fafb;
+        }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 40px 24px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        .content-wrapper {
+            padding: 40px 24px;
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 24px;
         }
         .logo {
             height: 32px;
@@ -95,6 +103,8 @@
         .success-icon {
             margin-right: 8px;
             color: #22c55e;
+            width: 16px;
+            text-align: center;
         }
         .success-text {
             color: #166534;
@@ -121,6 +131,7 @@
             height: 24px;
             margin-right: 12px;
             color: #2563eb;
+            text-align: center;
         }
         .feature-content {
             flex: 1;
@@ -150,12 +161,14 @@
             font-size: 14px;
             color: #6b7280;
         }
+        .footer-wrapper {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
         .footer {
-            margin-top: 40px;
+            padding: 24px;
             font-size: 14px;
             color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
             text-align: center;
         }
         .footer-links {
@@ -169,79 +182,90 @@
         .footer-link:hover {
             color: #1f2937;
         }
+        .bottom-spacer {
+            height: 24px;
+            background-color: #f9fafb;
+        }
         @media (max-width: 640px) {
-            .container {
+            .content-wrapper {
                 padding: 24px 16px;
             }
         }
     </style>
 </head>
 <body>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f9fafb" style="padding: 24px;">
-    <tr>
-        <td align="center">
-            <div class="container">
-                <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                    <div class="header-divider"></div>
-                    <span class="header-text">Welkomstbericht</span>
+<div class="email-wrapper">
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="header">
+                <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                <div class="header-divider"></div>
+                <span class="header-text">Welcome Message</span>
+            </div>
+
+            <h2>Welcome to Numblio, {{ $user->name }}!</h2>
+            <p class="subtitle">Thank you for creating your Numblio account. You now have access to all Numblio services with a single account.</p>
+
+            <div class="success-box">
+                <div class="success-title">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    Account Successfully Created
                 </div>
+                <p class="success-text">Your account is ready to use. You can now log in to all Numblio services with your email and password.</p>
+            </div>
 
-                <h2>Welkom bij Numblio, {{ $user->name }}!</h2>
-                <p class="subtitle">Bedankt voor het aanmaken van uw Numblio-account. U heeft nu toegang tot alle Numblio-diensten met één account.</p>
+            <p>Click the button below to go to your account:</p>
 
-                <div class="success-box">
-                    <div class="success-title">
-                        <span class="success-icon">✓</span>
-                        Account succesvol aangemaakt
+            <a href="{{ url('/my-account') }}" class="button">Go to My Account</a>
+
+            <div class="features-section">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
                     </div>
-                    <p class="success-text">Uw account is klaar voor gebruik. U kunt nu inloggen bij alle Numblio-diensten met uw e-mailadres en wachtwoord.</p>
-                </div>
-
-                <p>Klik op de onderstaande knop om naar uw account te gaan:</p>
-
-                <a href="{{ url('/my-account') }}" class="button">Naar Mijn Account</a>
-
-                <div class="features-section">
-                    <div class="feature">
-                        <div class="feature-icon">🔐</div>
-                        <div class="feature-content">
-                            <div class="feature-title">Single Sign-On</div>
-                            <p class="feature-description">Log eenvoudig in bij alle Numblio-diensten met één account. Geen meerdere wachtwoorden meer onthouden.</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🔄</div>
-                        <div class="feature-content">
-                            <div class="feature-title">Naadloze integratie</div>
-                            <p class="feature-description">Wissel moeiteloos tussen verschillende Numblio-diensten zonder opnieuw in te loggen.</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon">🛡️</div>
-                        <div class="feature-content">
-                            <div class="feature-title">Veilig en betrouwbaar</div>
-                            <p class="feature-description">Uw gegevens zijn veilig bij ons. We gebruiken de nieuwste beveiligingstechnologieën om uw account te beschermen.</p>
-                        </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Single Sign-On</div>
+                        <p class="feature-description">Easily log in to all Numblio services with one account. No more remembering multiple passwords.</p>
                     </div>
                 </div>
-
-                <div class="help-section">
-                    <div class="help-title">Hulp nodig?</div>
-                    <p class="help-text">Als u vragen heeft of hulp nodig heeft met uw account, neem dan contact op met onze klantenservice via <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Seamless Integration</div>
+                        <p class="feature-description">Switch effortlessly between different Numblio services without logging in again.</p>
+                    </div>
                 </div>
-
-                <div class="footer">
-                    <p>&copy; {{ date('Y') }} Numblio. Alle rechten voorbehouden.</p>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Privacybeleid</a>
-                        <a href="#" class="footer-link">Gebruiksvoorwaarden</a>
-                        <a href="#" class="footer-link">Contact</a>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Secure and Reliable</div>
+                        <p class="feature-description">Your data is safe with us. We use the latest security technologies to protect your account.</p>
                     </div>
                 </div>
             </div>
-        </td>
-    </tr>
-</table>
+
+            <div class="help-section">
+                <div class="help-title">Need Help?</div>
+                <p class="help-text">If you have any questions or need assistance with your account, please contact our support team at <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
+            </div>
+        </div>
+
+        <div class="footer-wrapper">
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-spacer"></div>
+</div>
 </body>
 </html> 

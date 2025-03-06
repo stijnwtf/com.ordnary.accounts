@@ -1,10 +1,11 @@
 {{-- resources/views/emails/security-alert.blade.php --}}
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beveiligingswaarschuwing - Numblio</title>
+    <title>Security Alert - Numblio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -14,19 +15,26 @@
             margin: 0;
             padding: 0;
         }
+        .email-wrapper {
+            padding: 24px;
+            background-color: #f9fafb;
+        }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 40px 24px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        .content-wrapper {
+            padding: 40px 24px;
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 24px;
         }
         .logo {
             height: 32px;
@@ -95,6 +103,8 @@
         .warning-icon {
             margin-right: 8px;
             color: #ef4444;
+            width: 16px;
+            text-align: center;
         }
         .warning-text {
             color: #991b1b;
@@ -151,11 +161,14 @@
             position: relative;
         }
         .action-item:before {
-            content: "•";
+            content: "";
             position: absolute;
             left: 8px;
-            color: #2563eb;
-            font-weight: bold;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #2563eb;
         }
         .action-text {
             font-size: 14px;
@@ -176,12 +189,14 @@
             font-size: 14px;
             color: #6b7280;
         }
+        .footer-wrapper {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
         .footer {
-            margin-top: 40px;
+            padding: 24px;
             font-size: 14px;
             color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
             text-align: center;
         }
         .footer-links {
@@ -195,8 +210,12 @@
         .footer-link:hover {
             color: #1f2937;
         }
+        .bottom-spacer {
+            height: 24px;
+            background-color: #f9fafb;
+        }
         @media (max-width: 640px) {
-            .container {
+            .content-wrapper {
                 padding: 24px 16px;
             }
             .details-row {
@@ -210,80 +229,81 @@
     </style>
 </head>
 <body>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f9fafb" style="padding: 24px;">
-    <tr>
-        <td align="center">
-            <div class="container">
-                <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                    <div class="header-divider"></div>
-                    <span class="header-text">Beveiligingswaarschuwing</span>
+<div class="email-wrapper">
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="header">
+                <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                <div class="header-divider"></div>
+                <span class="header-text">Security Alert</span>
+            </div>
+
+            <h2>Security Alert</h2>
+            <p class="subtitle">We have detected unusual activity on your Numblio account. Please review the details below and take action if necessary.</p>
+
+            <div class="warning-box">
+                <div class="warning-title">
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                    {{ $alertTitle }}
                 </div>
+                <p class="warning-text">{{ $alertMessage }}</p>
+            </div>
 
-                <h2>Beveiligingswaarschuwing</h2>
-                <p class="subtitle">We hebben ongebruikelijke activiteit gedetecteerd op uw Numblio-account. Controleer de details hieronder en neem indien nodig actie.</p>
-
-                <div class="warning-box">
-                    <div class="warning-title">
-                        <span class="warning-icon">⚠️</span>
-                        {{ $alertTitle }}
+            <div class="details-section">
+                <div class="details-header">Activity Details</div>
+                <div class="details-content">
+                    <div class="details-row">
+                        <div class="details-label">Time:</div>
+                        <div class="details-value">{{ $activityTime }}</div>
                     </div>
-                    <p class="warning-text">{{ $alertMessage }}</p>
-                </div>
-
-                <div class="details-section">
-                    <div class="details-header">Activiteitsdetails</div>
-                    <div class="details-content">
-                        <div class="details-row">
-                            <div class="details-label">Tijdstip:</div>
-                            <div class="details-value">{{ $activityTime }}</div>
-                        </div>
-                        <div class="details-row">
-                            <div class="details-label">Locatie:</div>
-                            <div class="details-value">{{ $activityLocation }}</div>
-                        </div>
-                        <div class="details-row">
-                            <div class="details-label">IP-adres:</div>
-                            <div class="details-value">{{ $ipAddress }}</div>
-                        </div>
-                        <div class="details-row">
-                            <div class="details-label">Apparaat:</div>
-                            <div class="details-value">{{ $deviceInfo }}</div>
-                        </div>
+                    <div class="details-row">
+                        <div class="details-label">Location:</div>
+                        <div class="details-value">{{ $activityLocation }}</div>
                     </div>
-                </div>
-
-                <div class="action-section">
-                    <div class="action-title">Aanbevolen acties</div>
-                    <div class="action-item">
-                        <div class="action-text">Als u deze activiteit herkent, hoeft u niets te doen.</div>
+                    <div class="details-row">
+                        <div class="details-label">IP Address:</div>
+                        <div class="details-value">{{ $ipAddress }}</div>
                     </div>
-                    <div class="action-item">
-                        <div class="action-text">Als u deze activiteit niet herkent, raden we u aan om onmiddellijk uw wachtwoord te wijzigen en alle actieve sessies te beëindigen.</div>
-                    </div>
-                    <div class="action-item">
-                        <div class="action-text">Controleer uw accountinstellingen op ongeautoriseerde wijzigingen.</div>
-                    </div>
-                </div>
-
-                <a href="{{ url('/my-account') }}" class="button">Ga naar Mijn Account</a>
-
-                <div class="help-section">
-                    <div class="help-title">Hulp nodig?</div>
-                    <p class="help-text">Als u deze activiteit niet herkent of vragen heeft over de beveiliging van uw account, neem dan onmiddellijk contact op met onze beveiligingsafdeling via <a href="mailto:security@numblio.com" style="color: #2563eb;">security@numblio.com</a>.</p>
-                </div>
-
-                <div class="footer">
-                    <p>&copy; {{ date('Y') }} Numblio. Alle rechten voorbehouden.</p>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Privacybeleid</a>
-                        <a href="#" class="footer-link">Gebruiksvoorwaarden</a>
-                        <a href="#" class="footer-link">Contact</a>
+                    <div class="details-row">
+                        <div class="details-label">Device:</div>
+                        <div class="details-value">{{ $deviceInfo }}</div>
                     </div>
                 </div>
             </div>
-        </td>
-    </tr>
-</table>
+
+            <div class="action-section">
+                <div class="action-title">Recommended Actions</div>
+                <div class="action-item">
+                    <div class="action-text">If you recognize this activity, no action is needed.</div>
+                </div>
+                <div class="action-item">
+                    <div class="action-text">If you don't recognize this activity, we recommend changing your password immediately and terminating all active sessions.</div>
+                </div>
+                <div class="action-item">
+                    <div class="action-text">Check your account settings for any unauthorized changes.</div>
+                </div>
+            </div>
+
+            <a href="{{ url('/my-account') }}" class="button">Go to My Account</a>
+
+            <div class="help-section">
+                <div class="help-title">Need Help?</div>
+                <p class="help-text">If you don't recognize this activity or have questions about your account security, please contact our security team immediately at <a href="mailto:security@numblio.com" style="color: #2563eb;">security@numblio.com</a>.</p>
+            </div>
+        </div>
+
+        <div class="footer-wrapper">
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-spacer"></div>
+</div>
 </body>
 </html> 

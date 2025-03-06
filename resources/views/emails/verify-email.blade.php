@@ -1,10 +1,11 @@
 {{-- resources/views/emails/verify-email.blade.php --}}
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifieer uw e-mailadres - Numblio</title>
+    <title>Verify Your Email Address - Numblio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -14,19 +15,26 @@
             margin: 0;
             padding: 0;
         }
+        .email-wrapper {
+            padding: 24px;
+            background-color: #f9fafb;
+        }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 40px 24px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        .content-wrapper {
+            padding: 40px 24px;
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 24px;
         }
         .logo {
             height: 32px;
@@ -95,6 +103,8 @@
         .info-icon {
             margin-right: 8px;
             color: #3b82f6;
+            width: 16px;
+            text-align: center;
         }
         .info-text {
             color: #1e40af;
@@ -158,12 +168,14 @@
             font-size: 14px;
             color: #6b7280;
         }
+        .footer-wrapper {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
         .footer {
-            margin-top: 40px;
+            padding: 24px;
             font-size: 14px;
             color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
             text-align: center;
         }
         .footer-links {
@@ -177,87 +189,92 @@
         .footer-link:hover {
             color: #1f2937;
         }
+        .bottom-spacer {
+            height: 24px;
+            background-color: #f9fafb;
+        }
         @media (max-width: 640px) {
-            .container {
+            .content-wrapper {
                 padding: 24px 16px;
             }
         }
     </style>
 </head>
 <body>
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f9fafb" style="padding: 24px;">
-    <tr>
-        <td align="center">
-            <div class="container">
-                <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                    <div class="header-divider"></div>
-                    <span class="header-text">E-mailverificatie</span>
+<div class="email-wrapper">
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="header">
+                <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                <div class="header-divider"></div>
+                <span class="header-text">Email Verification</span>
+            </div>
+
+            <h2>Verify Your Email Address</h2>
+            <p class="subtitle">Thank you for registering with Numblio. Please verify your email address to activate your account and gain access to all features.</p>
+
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    Why do I need to verify my email?
                 </div>
+                <p class="info-text">Email verification helps us confirm that you are the owner of this email address and protects your account from unauthorized access.</p>
+            </div>
 
-                <h2>Verifieer uw e-mailadres</h2>
-                <p class="subtitle">Bedankt voor het registreren bij Numblio. Verifieer uw e-mailadres om uw account te activeren en toegang te krijgen tot alle functies.</p>
+            <p>Please click the button below to verify your email address:</p>
 
-                <div class="info-box">
-                    <div class="info-title">
-                        <span class="info-icon">ℹ️</span>
-                        Waarom moet ik mijn e-mail verifiëren?
-                    </div>
-                    <p class="info-text">E-mailverificatie helpt ons om te bevestigen dat u de eigenaar bent van dit e-mailadres en beschermt uw account tegen ongeautoriseerde toegang.</p>
-                </div>
+            <a href="{{ $verificationUrl }}" class="button">Verify Email Address</a>
 
-                <p>Klik op de onderstaande knop om uw e-mailadres te verifiëren:</p>
+            <p class="message">This verification link is valid for 24 hours. If the link has expired, you can log in to your account to request a new verification link.</p>
 
-                <a href="{{ $verificationUrl }}" class="button">E-mailadres verifiëren</a>
+            <p>If you're having trouble with the button above, copy and paste the URL below into your web browser:</p>
 
-                <p class="message">Deze verificatielink is 24 uur geldig. Als de link is verlopen, kunt u inloggen op uw account om een nieuwe verificatielink aan te vragen.</p>
+            <div class="url-display">
+                {{ $verificationUrl }}
+            </div>
 
-                <p>Als u problemen heeft met de bovenstaande knop, kopieer en plak dan de onderstaande URL in uw webbrowser:</p>
-
-                <div class="url-display">
-                    {{ $verificationUrl }}
-                </div>
-
-                <div class="steps-section">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <div class="step-title">Verifieer uw e-mailadres</div>
-                            <p class="step-description">Klik op de verificatielink hierboven om uw e-mailadres te bevestigen.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <div class="step-title">Log in op uw account</div>
-                            <p class="step-description">Na verificatie kunt u inloggen met uw e-mailadres en wachtwoord.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <div class="step-title">Geniet van alle Numblio-diensten</div>
-                            <p class="step-description">Krijg toegang tot alle Numblio-diensten met één account.</p>
-                        </div>
+            <div class="steps-section">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Verify your email address</div>
+                        <p class="step-description">Click the verification link above to confirm your email address.</p>
                     </div>
                 </div>
-
-                <div class="help-section">
-                    <div class="help-title">Hulp nodig?</div>
-                    <p class="help-text">Als u deze e-mail niet heeft aangevraagd of hulp nodig heeft, neem dan contact op met onze klantenservice via <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Log in to your account</div>
+                        <p class="step-description">After verification, you can log in with your email and password.</p>
+                    </div>
                 </div>
-
-                <div class="footer">
-                    <p>&copy; {{ date('Y') }} Numblio. Alle rechten voorbehouden.</p>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Privacybeleid</a>
-                        <a href="#" class="footer-link">Gebruiksvoorwaarden</a>
-                        <a href="#" class="footer-link">Contact</a>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Enjoy all Numblio services</div>
+                        <p class="step-description">Access all Numblio services with a single account.</p>
                     </div>
                 </div>
             </div>
-        </td>
-    </tr>
-</table>
+
+            <div class="help-section">
+                <div class="help-title">Need Help?</div>
+                <p class="help-text">If you did not request this email or need assistance, please contact our support team at <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
+            </div>
+        </div>
+
+        <div class="footer-wrapper">
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-spacer"></div>
+</div>
 </body>
 </html> 
