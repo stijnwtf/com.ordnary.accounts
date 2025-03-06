@@ -37,14 +37,16 @@ class AuthController extends Controller
             "redirect_uri" => $redirectUri,
         ]);
 
+        // Check if this is a direct login (without client parameters)
         if (!$clientId || !$redirectUri) {
-            Log::error("showLoginForm: Missing required parameters", [
-                "client_id" => $clientId,
-                "redirect_uri" => $redirectUri,
-            ]);
-            return view("error", [
-                "message" =>
-                    "Missing parameters: client_id and redirect_uri are required.",
+            Log::info("showLoginForm: Direct login attempt (no client parameters)");
+            // Set a flag in the session to indicate this is a direct login
+            session(["direct_login" => true]);
+            
+            return view("auth.login", [
+                "client_name" => "Numblio Account",
+                "recaptcha_site_key" => config('services.recaptcha.site_key'),
+                "direct_login" => true
             ]);
         }
 
@@ -103,6 +105,13 @@ class AuthController extends Controller
                 "email" => $request->email
             ]);
 
+            // Check if this is a direct login
+            if (session("direct_login")) {
+                return redirect()->route("login")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -122,6 +131,13 @@ class AuthController extends Controller
                 "score" => $recaptchaResult['score'] ?? 'N/A'
             ]);
 
+            // Check if this is a direct login
+            if (session("direct_login")) {
+                return redirect()->route("login")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -138,6 +154,13 @@ class AuthController extends Controller
                 "score" => $recaptchaResult['score']
             ]);
 
+            // Check if this is a direct login
+            if (session("direct_login")) {
+                return redirect()->route("login")->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again later."
+                ]);
+            }
+
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
@@ -147,9 +170,13 @@ class AuthController extends Controller
             ]);
         }
 
+        // Check if this is a direct login
+        $directLogin = session("direct_login");
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
+        
         Log::debug("login: Retrieved session parameters", [
+            "direct_login" => $directLogin,
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
             "session_data" => session()->all(),
@@ -159,6 +186,13 @@ class AuthController extends Controller
             if (Auth::attempt($request->only("email", "password"))) {
                 Log::info("login: Authentication successful", ["email" => $request->email]);
                 $request->session()->regenerate();
+
+                // If this is a direct login, redirect to the my-account page
+                if ($directLogin) {
+                    Log::info("login: Direct login successful, redirecting to my-account");
+                    session()->forget(["direct_login"]);
+                    return redirect()->route("my-account");
+                }
 
                 if (!$clientId || !$redirectUri) {
                     Log::error("login: Missing session parameters after authentication", [
@@ -185,6 +219,21 @@ class AuthController extends Controller
             }
 
             $emailExists = User::where("email", $request->email)->exists();
+
+            // Check if this is a direct login
+            if ($directLogin) {
+                if (!$emailExists) {
+                    Log::warning("login: Email not found (direct login)", ["email" => $request->email]);
+                    return redirect()->route("login")->withErrors([
+                        "email" => "Email address not found.",
+                    ]);
+                } else {
+                    Log::warning("login: Incorrect password for email (direct login)", ["email" => $request->email]);
+                    return redirect()->route("login")->withErrors([
+                        "password" => "Password is incorrect. Please try again.",
+                    ]);
+                }
+            }
 
             if (!$clientId || !$redirectUri) {
                 Log::error("login: Session data missing for redirect", [

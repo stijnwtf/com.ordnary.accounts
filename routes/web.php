@@ -8,6 +8,7 @@ use App\Http\Controllers\SSO\DashboardController;
 use App\Http\Controllers\SSO\SettingsController;
 use App\Http\Controllers\SSO\ActivityLogController;
 use App\Http\Controllers\SSO\NotificationController;
+use App\Http\Controllers\SSO\MyAccountController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,6 +38,13 @@ Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])-
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
 Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
+
+// My Account routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
+    Route::post('/my-account/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
+    Route::post('/my-account/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
+});
 
 // Admin routes for managing clients
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
