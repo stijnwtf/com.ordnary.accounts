@@ -20,17 +20,20 @@
             </div>
 
             @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-                <div class="flex">
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                        <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm text-red-700">
-                            @foreach ($errors->all() as $error)
-                            {{ $error }}<br>
-                            @endforeach
-                        </p>
+                        <h3 class="text-sm font-medium text-red-800">Something went wrong while signing in.</h3>
+                        <div class="mt-1 text-sm text-red-700">
+                            <ul class="list-disc pl-4">
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
