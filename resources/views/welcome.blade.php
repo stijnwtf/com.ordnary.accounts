@@ -8,17 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gradient-to-b from-[#f9fafb] to-white min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="w-full py-4 px-6 bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto">
-            <nav class="hidden md:flex space-x-6">
-                <a href="#" class="text-gray-600 hover:text-gray-900">Documentation</a>
-                <a href="#" class="text-gray-600 hover:text-gray-900">Support</a>
-                <a href="#" class="text-gray-600 hover:text-gray-900">Contact</a>
-            </nav>
-        </div>
-    </header>
 
     <div class="flex-grow container mx-auto px-4 py-12">
         <div class="max-w-6xl mx-auto">
@@ -110,49 +99,5 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-100 py-8">
-        <div class="container mx-auto px-4">
-            <div class="max-w-6xl mx-auto">
-                <div class="grid md:grid-cols-4 gap-8">
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Products</h3>
-                        <ul class="mt-4 space-y-2">
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Numblio CRM</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Numblio Analytics</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Numblio Insights</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Support</h3>
-                        <ul class="mt-4 space-y-2">
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Documentation</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">API Reference</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Status</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Company</h3>
-                        <ul class="mt-4 space-y-2">
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">About</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Blog</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Careers</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Legal</h3>
-                        <ul class="mt-4 space-y-2">
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
-                            <li><a href="#" class="text-gray-600 hover:text-gray-900">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-8 pt-8 border-t border-gray-100">
-                    <p class="text-center text-gray-500">&copy; 2025 Numblio. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
