@@ -11,25 +11,6 @@
     <p class="text-sm text-gray-600">Make sure you have a strong password that you don't use on other websites.</p>
 </div>
 
-<!-- Password Strength Meter -->
-<div class="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-100">
-    <div class="flex items-center">
-        <div class="flex-shrink-0 mr-3">
-            <i class="fas fa-shield-alt text-yellow-500 text-xl"></i>
-        </div>
-        <div>
-            <h4 class="text-sm font-medium text-yellow-800">Password security check</h4>
-            <p class="text-xs text-yellow-700 mt-1">Your password was last changed {{ now()->subMonths(rand(2, 6))->format('d-m-Y') }}</p>
-            <div class="mt-2">
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
-                </div>
-                <p class="text-xs text-yellow-700 mt-1">Your password strength is <span class="font-medium">good</span>.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
     @csrf
 
@@ -118,4 +99,4 @@
         </button>
     </div>
 </form>
-@endsection 
+@endsection

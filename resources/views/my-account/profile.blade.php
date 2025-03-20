@@ -6,10 +6,7 @@
 @section('subheader', 'Update your personal information to personalize your Numblio experience.')
 
 @section('content')
-<div class="mb-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-2">Personal information</h3>
-    <p class="text-sm text-gray-600">Update your personal information to personalize your Numblio experience.</p>
-</div>
+
 <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
     @csrf
 
@@ -114,4 +111,4 @@
         </button>
     </div>
 </form>
-@endsection 
+@endsection
