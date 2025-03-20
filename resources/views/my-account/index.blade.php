@@ -123,14 +123,6 @@
                                     <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                                 </div>
                             </div>
-                            <div class="mt-3 flex">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                    <i class="fas fa-check-circle mr-1"></i> Verified
-                                </span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                    <i class="fas fa-user-shield mr-1"></i> Active
-                                </span>
-                            </div>
                         </div>
 
                         <!-- Navigation Section -->
