@@ -224,7 +224,7 @@
                         </div>
                     </div>
                     @endif
-                    
+
                     <!-- Content Sections -->
                     <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
                         <!-- Tab Content Sections -->
@@ -257,8 +257,8 @@
                             <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
                                 <div class="flex items-center">
                                     <div class="mr-4">
-                                        <img class="h-16 w-16 rounded-full object-cover border-2 border-white shadow" 
-                                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe&size=128" 
+                                        <img class="h-16 w-16 rounded-full object-cover border-2 border-white shadow"
+                                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe&size=128"
                                              alt="{{ $user->name }}">
                                     </div>
                                     <div>
@@ -357,7 +357,7 @@
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <i class="fas fa-globe text-gray-400"></i>
                                         </div>
-                                        <select name="language" id="language" 
+                                        <select name="language" id="language"
                                                 class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
                                             <option value="nl" {{ (old('language', $user->language ?? 'nl') == 'nl') ? 'selected' : '' }}>Nederlands</option>
                                             <option value="en" {{ (old('language', $user->language ?? 'nl') == 'en') ? 'selected' : '' }}>English</option>
@@ -377,11 +377,11 @@
                                         <span class="font-medium">Last update:</span> {{ $user->updated_at->format('d-m-Y') }}
                                     </p>
                                     <p class="text-xs text-gray-500">
-                                        <span class="font-medium">Last login:</span> {{ now()->subDays(rand(0, 5))->format('d-m-Y H:i') }} 
+                                        <span class="font-medium">Last login:</span> {{ now()->subDays(rand(0, 5))->format('d-m-Y H:i') }}
                                         <span class="text-xs text-gray-400">(from {{ request()->ip() }})</span>
                                     </p>
                                     <p class="text-xs text-gray-500">
-                                        <span class="font-medium">Account type:</span> 
+                                        <span class="font-medium">Account type:</span>
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                             <i class="fas fa-star mr-1"></i> Standard
                                         </span>
@@ -692,7 +692,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Notifications Section -->
                         <div id="notifications-content" class="p-6 hidden tab-content">
                             <div class="mb-6">
@@ -713,7 +713,7 @@
                                 </div>
                             </div>
 
-                            <form method="POST" action="{{ route('my-account.notifications') }}" class="space-y-6">
+                            <form method="POST" action="#" class="space-y-6">
                                 @csrf
 
                                 <!-- Email Notifications -->
@@ -723,11 +723,11 @@
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <i class="fas fa-envelope text-gray-400"></i>
                                         </div>
-                                        <select name="email_notifications" id="email_notifications" 
+                                        <select name="email_notifications" id="email_notifications"
                                                 class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email_notifications') ? 'border-red-500' : 'border-gray-300' }}">
-                                            <option value="daily" {{ (old('email_notifications', $user->email_notifications ?? 'daily') == 'daily') ? 'selected' : '' }}>Daily summary</option>
-                                            <option value="weekly" {{ (old('email_notifications', $user->email_notifications ?? 'daily') == 'weekly') ? 'selected' : '' }}>Weekly summary</option>
-                                            <option value="none" {{ (old('email_notifications', $user->email_notifications ?? 'daily') == 'none') ? 'selected' : '' }}>No email notifications</option>
+                                            <option value="daily">Daily summary</option>
+                                            <option value="weekly">Weekly summary</option>
+                                            <option value="none">No email notifications</option>
                                         </select>
                                     </div>
                                     <p class="mt-1 text-xs text-gray-500">Choose the frequency of email notifications.</p>
@@ -740,11 +740,11 @@
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <i class="fas fa-mobile-alt text-gray-400"></i>
                                         </div>
-                                        <select name="push_notifications" id="push_notifications" 
+                                        <select name="push_notifications" id="push_notifications"
                                                 class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('push_notifications') ? 'border-red-500' : 'border-gray-300' }}">
-                                            <option value="all" {{ (old('push_notifications', $user->push_notifications ?? 'all') == 'all') ? 'selected' : '' }}>All notifications</option>
-                                            <option value="important" {{ (old('push_notifications', $user->push_notifications ?? 'all') == 'important') ? 'selected' : '' }}>Important notifications only</option>
-                                            <option value="none" {{ (old('push_notifications', $user->push_notifications ?? 'all') == 'none') ? 'selected' : '' }}>No push notifications</option>
+                                            <option value="all">All notifications</option>
+                                            <option value="important">Important notifications only</option>
+                                            <option value="none">No push notifications</option>
                                         </select>
                                     </div>
                                     <p class="mt-1 text-xs text-gray-500">Choose the types of notifications you want to receive via push notifications.</p>
@@ -913,24 +913,24 @@
             const securityTab = document.getElementById('security-tab');
             const notificationsTab = document.getElementById('notifications-tab');
             const connectedTab = document.getElementById('connected-tab');
-            
+
             const profileContent = document.getElementById('profile-content');
             const passwordContent = document.getElementById('password-content');
             const securityContent = document.getElementById('security-content');
             const notificationsContent = document.getElementById('notifications-content');
             const connectedContent = document.getElementById('connected-content');
-            
+
             const sidebarProfile = document.getElementById('sidebar-profile');
             const sidebarPassword = document.getElementById('sidebar-password');
             const sidebarSecurity = document.getElementById('sidebar-security');
             const sidebarNotifications = document.getElementById('sidebar-notifications');
             const sidebarConnected = document.getElementById('sidebar-connected');
-            
+
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileSidebar = document.getElementById('mobile-sidebar');
             const closeSidebar = document.getElementById('close-sidebar');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav');
-            
+
             // Function to activate a tab
             function activateTab(tab, content, sidebarItem) {
                 // Deactivate all tabs
@@ -938,92 +938,92 @@
                     t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
                     t.classList.add('text-gray-500');
                 });
-                
+
                 // Hide all content
                 [profileContent, passwordContent, securityContent, notificationsContent, connectedContent].forEach(c => {
                     c.classList.add('hidden');
                 });
-                
+
                 // Deactivate all sidebar items
                 document.querySelectorAll('.sidebar-item').forEach(item => {
                     item.classList.remove('active');
                 });
-                
+
                 // Activate the selected tab and show content
                 tab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
                 tab.classList.remove('text-gray-500');
                 content.classList.remove('hidden');
-                
+
                 if (sidebarItem) {
                     sidebarItem.classList.add('active');
                 }
-                
+
                 // Close mobile sidebar if open
                 mobileSidebar.classList.add('hidden');
             }
-            
+
             // Tab click events
             profileTab.addEventListener('click', function() {
                 activateTab(profileTab, profileContent, sidebarProfile);
             });
-            
+
             passwordTab.addEventListener('click', function() {
                 activateTab(passwordTab, passwordContent, sidebarPassword);
             });
-            
+
             securityTab.addEventListener('click', function() {
                 activateTab(securityTab, securityContent, sidebarSecurity);
             });
-            
+
             notificationsTab.addEventListener('click', function() {
                 activateTab(notificationsTab, notificationsContent, sidebarNotifications);
             });
-            
+
             connectedTab.addEventListener('click', function() {
                 activateTab(connectedTab, connectedContent, sidebarConnected);
             });
-            
+
             // Sidebar click events
             sidebarProfile.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(profileTab, profileContent, sidebarProfile);
             });
-            
+
             sidebarPassword.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(passwordTab, passwordContent, sidebarPassword);
             });
-            
+
             sidebarSecurity.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(securityTab, securityContent, sidebarSecurity);
             });
-            
+
             sidebarNotifications.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(notificationsTab, notificationsContent, sidebarNotifications);
             });
-            
+
             sidebarConnected.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(connectedTab, connectedContent, sidebarConnected);
             });
-            
+
             // Mobile menu functionality
             mobileMenuButton.addEventListener('click', function() {
                 mobileSidebar.classList.remove('hidden');
             });
-            
+
             closeSidebar.addEventListener('click', function() {
                 mobileSidebar.classList.add('hidden');
             });
-            
+
             // Mobile navigation links
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const href = this.getAttribute('href').substring(1);
-                    
+
                     switch(href) {
                         case 'profile':
                             activateTab(profileTab, profileContent, sidebarProfile);
@@ -1043,14 +1043,14 @@
                     }
                 });
             });
-            
+
             // Password visibility toggle
             const passwordToggles = document.querySelectorAll('.password-toggle');
             passwordToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     const input = this.closest('.relative').querySelector('input');
                     const icon = this.querySelector('i');
-                    
+
                     if (input.type === 'password') {
                         input.type = 'text';
                         icon.classList.remove('fa-eye');
@@ -1062,7 +1062,7 @@
                     }
                 });
             });
-            
+
             // Lazy load images
             const lazyImages = document.querySelectorAll('img.lazy');
             if ('IntersectionObserver' in window) {
@@ -1076,7 +1076,7 @@
                         }
                     });
                 });
-                
+
                 lazyImages.forEach(image => {
                     imageObserver.observe(image);
                 });
