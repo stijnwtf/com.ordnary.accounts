@@ -53,7 +53,7 @@
                         <div class="flex items-center mb-4">
                             <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mr-3">
                         </div>
-                        <div class="flex items-center space-x-3 mb-4">
+                        <div class="flex items-center space-x-3">
                             <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-100"
                                  src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
                                  alt="{{ $user->name }}">
