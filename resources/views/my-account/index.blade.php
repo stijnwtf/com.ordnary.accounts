@@ -402,11 +402,14 @@
                                     </div>
 
                                     <!-- Submit Button for Profile Form -->
-                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
+                                    <div class="py-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-200">
-                                            <i class="fas fa-save mr-2"></i> Confirm changes
+                                            class="flex items-center px-6 py-3 bg-[#4361ee] text-white text-sm font-medium rounded-lg hover:bg-[#3a56d4] focus:outline-none focus:ring-2 focus:ring-[#4361ee] focus:ring-offset-2 shadow-md transition-colors duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
+                                            </svg>
+                                            Confirm changes
                                         </button>
                                     </div>
                                 </form>
@@ -518,11 +521,14 @@
                                     </div>
 
                                     <!-- Submit Button for Password Form -->
-                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
+                                    <div class="py-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-200">
-                                            <i class="fas fa-key mr-2"></i> Confirm changes
+                                            class="flex items-center px-6 py-3 bg-[#4361ee] text-white text-sm font-medium rounded-lg hover:bg-[#3a56d4] focus:outline-none focus:ring-2 focus:ring-[#4361ee] focus:ring-offset-2 shadow-md transition-colors duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
+                                            </svg>
+                                            Confirm changes
                                         </button>
                                     </div>
                                 </form>
@@ -764,11 +770,14 @@
                                     </div>
 
                                     <!-- Submit Button for Notifications Form -->
-                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
+                                    <div class="py-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-200">
-                                            <i class="fas fa-save mr-2"></i> Confirm changes
+                                            class="flex items-center px-6 py-3 bg-[#4361ee] text-white text-sm font-medium rounded-lg hover:bg-[#3a56d4] focus:outline-none focus:ring-2 focus:ring-[#4361ee] focus:ring-offset-2 shadow-md transition-colors duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
+                                            </svg>
+                                            Confirm changes
                                         </button>
                                     </div>
                                 </form>
@@ -882,8 +891,8 @@
                                 </div>
 
                                 <!-- Add More Connections Button -->
-                                <div class="pt-6 mt-8 border-t border-gray-100 flex justify-center">
-                                    <button class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-200">
+                                <div class="py-8 flex justify-center">
+                                    <button class="flex items-center px-6 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 shadow-md transition-colors duration-200">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
                                 </div>
