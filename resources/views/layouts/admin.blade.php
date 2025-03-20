@@ -80,15 +80,19 @@
 </main>
 
 <!-- Footer -->
-<footer class="mt-8 text-xs text-gray-400">
-    <div class="flex flex-col space-y-1">
-        <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
-        <div class="flex items-center space-x-2 mt-1">
-            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
-            <span class="text-gray-500">•</span>
-            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
-            <span class="text-gray-500">•</span>
-            <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+<footer class="bg-white py-6 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <span class="text-xs text-gray-400">&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+            </div>
+            <div class="flex items-center">
+                <a href="https://numblio.com/documents/privacy" class="text-xs text-gray-400 hover:text-gray-600">Privacy</a>
+                <span class="text-gray-500 mx-2">•</span>
+                <a href="https://numblio.com/documents/terms" class="text-xs text-gray-400 hover:text-gray-600">Terms</a>
+                <span class="text-gray-500 mx-2">•</span>
+                <a href="https://support.numblio.com" class="text-xs text-gray-400 hover:text-gray-600">Help</a>
+            </div>
         </div>
     </div>
 </footer>
