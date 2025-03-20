@@ -275,7 +275,7 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-user text-gray-400"></i>
                                             </div>
-                                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required
+                                            <input type="text" placeholder="John Doe" name="name" id="name" value="{{ old('name', $user->name) }}" required
                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('name')
@@ -293,7 +293,7 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-envelope text-gray-400"></i>
                                             </div>
-                                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
+                                            <input placeholder="john.doe@example.com" type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('email')
@@ -311,7 +311,7 @@
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-phone text-gray-400"></i>
                                             </div>
-                                            <input type="tel" name="phone" id="phone" value="{{ old('phone', $user->phone ?? '') }}"
+                                            <input placeholder="+31 6 12345678" type="tel" name="phone" id="phone" value="{{ old('phone', $user->phone ?? '') }}"
                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('phone') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('phone')
@@ -320,23 +320,6 @@
                                         </p>
                                         @enderror
                                         <p class="mt-1 text-xs text-gray-500">Used for account recovery and important notifications.</p>
-                                    </div>
-
-                                    <div>
-                                        <label for="company" class="block text-sm font-medium text-gray-700 mb-1">Company <span class="text-gray-400">(Optional)</span></label>
-                                        <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-building text-gray-400"></i>
-                                            </div>
-                                            <input type="text" name="company" id="company" value="{{ old('company', $user->company ?? '') }}"
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('company') ? 'border-red-500' : 'border-gray-300' }}">
-                                        </div>
-                                        @error('company')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
-                                        @enderror
-                                        <p class="mt-1 text-xs text-gray-500">Your organization name for business-related services.</p>
                                     </div>
 
                                     <!-- Language Preference -->
