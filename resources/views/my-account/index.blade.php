@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Manage your Numblio account settings">
     <title>My Account | Numblio</title>
-    
+
     <!-- Inline critical CSS to prevent FOUC -->
     <style>
         /* Critical rendering path styles */
@@ -14,7 +14,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: #f9fafb;
         }
-        
+
         /* Loading screen styles */
         #loading-screen {
             position: fixed;
@@ -30,14 +30,14 @@
             z-index: 9999;
             transition: opacity 0.5s ease-out;
         }
-        
+
         #loading-logo {
             width: 60px;
             height: 60px;
             margin-bottom: 20px;
             animation: pulse 1.5s infinite ease-in-out;
         }
-        
+
         #loading-spinner {
             width: 30px;
             height: 30px;
@@ -46,33 +46,33 @@
             border-top-color: #3b82f6;
             animation: spin 1s infinite linear;
         }
-        
+
         .loaded #loading-screen {
             opacity: 0;
             pointer-events: none;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 0.6; transform: scale(0.98); }
             50% { opacity: 1; transform: scale(1); }
             100% { opacity: 0.6; transform: scale(0.98); }
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         /* Prevent content flash */
         .content-container {
             opacity: 0;
             transition: opacity 0.3s ease-in;
         }
-        
+
         .loaded .content-container {
             opacity: 1;
         }
-        
+
         .tab-content {
             min-height: 380px; /* Zorgt voor consistente hoogte tussen tabbladen */
         }
@@ -87,22 +87,21 @@
             background-color: rgba(59, 130, 246, 0.1);
         }
     </style>
-    
+
     <!-- Preload key resources -->
     <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
-    
+
     <!-- Deferred loading for better performance -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com" defer></script>
-    
+
     <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <!-- Loading screen -->
     <div id="loading-screen">
-        <img id="loading-logo" src="/img/dark.png" alt="Numblio">
         <div id="loading-spinner"></div>
     </div>
 
@@ -975,12 +974,12 @@
                 document.body.classList.add('loaded');
             }, 300); // Small delay to ensure smooth transition
         });
-        
+
         // Fallback for slow connections - hide loading screen after max wait time
         setTimeout(function() {
             document.body.classList.add('loaded');
         }, 2000);
-        
+
         // Tab functionality with lazy loading for better performance
         document.addEventListener('DOMContentLoaded', function() {
             // Tab elements
