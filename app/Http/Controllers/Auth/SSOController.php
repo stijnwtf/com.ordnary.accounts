@@ -48,7 +48,7 @@ class SSOController extends Controller
     {
         // Alleen toegankelijk in lokale ontwikkelomgeving
         if (!app()->environment('local') || !config('app.debug')) {
-            Log::warning('Attempt to access local login in non-local environment');
+            Log::warning('DEV:Attempt to access local login in non-local environment');
             return redirect()->route('loginPage');
         }
 
@@ -59,7 +59,7 @@ class SSOController extends Controller
     {
         // Alleen toegankelijk in lokale ontwikkelomgeving
         if (!app()->environment('local') || !config('app.debug')) {
-            Log::warning('Attempt to use local login in non-local environment');
+            Log::warning('DEV:Attempt to use local login in non-local environment');
             return redirect()->route('loginPage');
         }
 
@@ -135,7 +135,7 @@ class SSOController extends Controller
                     Log::info('Token expired, attempting to refresh');
                     return $this->refreshAndLogin($token, $refreshToken);
                 }
-                
+
                 $errorMessage = $data['message'] ?? 'Onbekende fout';
                 Log::error('Token validation failed', [
                     'response_status' => $response->status(),
@@ -318,14 +318,14 @@ class SSOController extends Controller
                     // Update tokens in session
                     Session::put('sso_token', $data['token']);
                     Session::put('sso_refresh_token', $data['refresh_token']);
-                    
+
                     // Validate the new token to get expiry
                     $validationResponse = Http::post($this->ssoServerUrl . '/api/v1/validate-token', [
                         'token' => $data['token'],
                         'client_id' => $this->clientId,
                         'client_secret' => $this->clientSecret,
                     ]);
-                    
+
                     $validationData = $validationResponse->json();
                     if ($validationResponse->successful() && isset($validationData['exp'])) {
                         Session::put('sso_token_expiry', $validationData['exp']);
@@ -376,4 +376,4 @@ class SSOController extends Controller
 
         return redirect()->route('loginPage');
     }
-} 
+}
