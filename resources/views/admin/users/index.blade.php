@@ -138,9 +138,6 @@
             </li>
             @endforelse
         </ul>
-        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6">
-            {{ $users->links() }}
-        </div>
     </div>
 </div>
-@endsection 
+@endsection
