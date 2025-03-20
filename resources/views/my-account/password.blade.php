@@ -2,9 +2,6 @@
 
 @section('title', 'Change Password')
 
-@section('header', 'Change Password')
-@section('subheader', 'Make sure you have a strong password that you don\'t use on other websites.')
-
 @section('content')
 <div class="mb-6">
     <h3 class="text-lg font-medium text-gray-900 mb-2">Change your password</h3>
