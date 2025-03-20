@@ -179,8 +179,6 @@
         <div class="content-wrapper">
             <div class="header">
                 <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                <div class="header-divider"></div>
-                <span class="header-text">Password Recovery</span>
             </div>
 
             <h2>Reset Your Password</h2>

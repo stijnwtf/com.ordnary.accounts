@@ -240,8 +240,6 @@
         <div class="content-wrapper">
             <div class="header">
                 <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                <div class="header-divider"></div>
-                <span class="header-text">Security Alert</span>
             </div>
 
             <h2>Security Alert</h2>
@@ -299,19 +297,7 @@
                 <p class="help-text">If you don't recognize this activity or have questions about your account security, please contact our security team immediately at <a href="mailto:security@numblio.com" style="color: #2563eb;">security@numblio.com</a>.</p>
             </div>
         </div>
-
-        <div class="footer-wrapper">
-            <div class="footer">
-                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Privacy Policy</a>
-                    <a href="#" class="footer-link">Terms of Service</a>
-                    <a href="#" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="bottom-spacer"></div>
 </div>
 </body>
-</html> 
+</html>

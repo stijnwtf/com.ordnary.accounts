@@ -122,16 +122,6 @@
                     <a href="{{ route('register', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
                 </div>
             </form>
-
-            <!-- Simple Text Footer -->
-            <div class="mt-12 text-center text-sm text-gray-500">
-                <p>&copy; 2025 Numblio. All rights reserved.</p>
-                <div class="mt-2 space-x-4">
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Privacy Policy</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Terms of Service</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
