@@ -868,20 +868,18 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="px-6 py-6 border-t border-gray-200 mt-8">
-                        <footer class="text-xs text-gray-400">
-                            <div class="flex flex-col space-y-1">
-                                <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
-                                <div class="flex items-center space-x-2 mt-1">
-                                    <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
-                                    <span class="text-gray-500">•</span>
-                                    <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
-                                    <span class="text-gray-500">•</span>
-                                    <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
-                                </div>
+                    <footer class="text-xs text-gray-400">
+                        <div class="flex flex-col space-y-1">
+                            <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
+                            <div class="flex items-center space-x-2 mt-1">
+                                <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                                <span class="text-gray-500">•</span>
+                                <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                                <span class="text-gray-500">•</span>
+                                <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
                             </div>
-                        </footer>
-                    </div>
+                        </div>
+                    </footer>
                 </div>
             </div>
         </div>
