@@ -22,7 +22,6 @@
                 <div class="mb-8 flex flex-col items-start">
                     <div class="flex items-center mb-3">
                         <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mr-3">
-                        <span class="text-sm text-gray-500 border-l border-gray-300 pl-3">My Account</span>
                     </div>
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900">Welcome back, {{ $user->name }}</h2>
