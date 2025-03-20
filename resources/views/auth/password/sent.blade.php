@@ -27,7 +27,7 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm text-blue-700">
-                            The reset link will expire in 60 minutes. If you don't receive an email, check your spam folder or try again.
+
                         </p>
                     </div>
                 </div>
