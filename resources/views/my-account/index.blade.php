@@ -24,21 +24,6 @@
             border-left: 3px solid #3b82f6;
             background-color: rgba(59, 130, 246, 0.1);
         }
-        .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        /* Lazy load images */
-        img.lazy {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        img.lazy.loaded {
-            opacity: 1;
-        }
     </style>
 </head>
 <body class="bg-[#f9fafb] min-h-screen py-8 px-4 md:py-12">
