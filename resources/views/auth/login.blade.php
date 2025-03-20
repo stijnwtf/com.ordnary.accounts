@@ -129,7 +129,7 @@
 <footer class="fixed bottom-0 left-0 p-3 text-xs text-gray-500">
     <div class="flex flex-col items-center space-y-2">
         <span>&copy; {{ date('Y') }} Numblio. All rights reserved. This website and its content are protected by international copyright laws. Any unauthorized reproduction or distribution of this website or any portion of it may result in severe civil and criminal penalties.</span>
-        <div class="flex items-center space-x-3">
+        <div class="flex space-x-3">
             <a href="#" class="hover:text-gray-700">Privacy</a>
             <span>|</span>
             <a href="#" class="hover:text-gray-700">Terms</a>
