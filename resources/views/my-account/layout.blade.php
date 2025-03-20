@@ -201,9 +201,21 @@
                 <!-- Right Content Card -->
                 <div class="w-full lg:w-3/4">
                     <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+
+                        @php
+                        $messages = [
+                        "Oh hey, $user->name! Profile, security, or something else?",
+                        "Hmm… where were we? Time to tweak settings!",
+                        "Welcome back! Profile, password, or notifications?",
+                        "Numblio HQ ready! What needs an update?",
+                        "Back again? Let’s fix things up!"
+                        ];
+                        $messageOfTheDay = $messages[date('z') % count($messages)];
+                        @endphp
+
                         <!-- Welcome header -->
                         <div class="p-6 border-b border-gray-200">
-                            <h2 class="text-xl font-bold text-gray-900">@yield('header', 'Welcome back, ' . $user->name)</h2>
+                            <h2 class="text-xl font-bold text-gray-900">{{ $messageOfTheDay }}</h2>
                             <p class="text-sm text-gray-600 mt-1">@yield('subheader', 'Manage your personal information and security settings for your Numblio-account.')</p>
                         </div>
 
@@ -403,4 +415,4 @@
     </script>
     @yield('scripts')
 </body>
-</html> 
+</html>
