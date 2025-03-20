@@ -122,21 +122,22 @@
                     <a href="{{ route('register', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}" class="text-blue-600 hover:text-blue-700">{{ __('New here? Create an account') }}</a>
                 </div>
             </form>
+            <!-- Footer -->
+            <footer class="mt-16 text-xs text-gray-400">
+                <div class="flex flex-col space-y-1">
+                    <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+                    <div class="flex items-center space-x-2 mt-1">
+                        <a href="#" class="hover:text-gray-600">Privacy</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="#" class="hover:text-gray-600">Terms</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="#" class="hover:text-gray-600">Help</a>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 </div>
-
-<!-- Footer -->
-<footer class="fixed bottom-0 left-0 p-2 text-xs text-gray-400 max-w-sm">
-    <div class="flex flex-col space-y-1">
-        <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
-        <div class="flex items-center space-x-2">
-            <a href="#" class="hover:text-gray-600">Privacy</a>
-            <span class="text-gray-500">•</span>
-            <a href="#" class="hover:text-gray-600">Terms</a>
-        </div>
-    </div>
-</footer>
 
 <script>
     function onSubmit(token) {
