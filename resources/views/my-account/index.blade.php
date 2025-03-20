@@ -789,8 +789,8 @@
                                 </div>
 
                                 <!-- Add More Connections Button -->
-                                <div class="pb-6 mt-8 flex justify-center">
-                                    <button class="flex items-center px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
+                                <div class="pb-6 flex justify-end mt-6">
+                                    <button class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
                                 </div>
