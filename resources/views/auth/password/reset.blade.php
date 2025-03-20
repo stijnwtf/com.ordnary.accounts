@@ -88,7 +88,7 @@
             </form>
 
             <!-- Footer -->
-            <footer class="mt-16 text-xs text-gray-400">
+            <footer class="mt-8 text-xs text-gray-400">
                 <div class="flex flex-col space-y-1">
                     <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
                     <div class="flex items-center space-x-2 mt-1">
