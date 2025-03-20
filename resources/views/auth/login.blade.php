@@ -125,18 +125,18 @@
         </div>
     </div>
 </div>
+
 <!-- Footer -->
-<footer class="fixed bottom-0 left-0 p-3 text-xs text-gray-500">
-    <div class="flex flex-col items-center space-y-2">
-        <span>&copy; {{ date('Y') }} Numblio. All rights reserved. This website and its content are protected by international copyright laws. Any unauthorized reproduction or distribution of this website or any portion of it may result in severe civil and criminal penalties.</span>
-        <div class="flex space-x-3">
-            <a href="#" class="hover:text-gray-700">Privacy</a>
-            <span>|</span>
-            <a href="#" class="hover:text-gray-700">Terms</a>
+<footer class="fixed bottom-0 left-0 p-2 text-xs text-gray-400 max-w-sm">
+    <div class="flex flex-col space-y-1">
+        <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
+        <div class="flex items-center space-x-2">
+            <a href="#" class="hover:text-gray-600">Privacy</a>
+            <span class="text-gray-500">•</span>
+            <a href="#" class="hover:text-gray-600">Terms</a>
         </div>
     </div>
 </footer>
-
 
 <script>
     function onSubmit(token) {
