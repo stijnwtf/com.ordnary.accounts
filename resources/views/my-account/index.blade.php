@@ -157,7 +157,7 @@
                                 </a>
                                 <a href="#connected" id="sidebar-connected" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-link mr-3 text-gray-500"></i>
-                                    Notifications
+                                    Connections
                                 </a>
                             </div>
 
@@ -786,66 +786,10 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Microsoft -->
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden">
-                                        <div class="p-4">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <img src="https://cdn.cdnlogo.com/logos/m/44/microsoft.svg" alt="Microsoft" class="h-8 w-8 mr-3">
-                                                    <div>
-                                                        <h5 class="text-sm font-medium text-gray-900">Microsoft</h5>
-                                                        <p class="text-xs text-gray-500">Not connected</p>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                        <i class="fas fa-times-circle mr-1"></i> Not connected
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="mt-3 flex items-center justify-between">
-                                                <div class="text-xs text-gray-500">
-                                                    <p>Connect to sign in using your Microsoft account and sync calendars.</p>
-                                                </div>
-                                                <button class="px-3 py-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none border border-blue-200 hover:bg-blue-50">
-                                                    <i class="fas fa-link mr-1"></i> Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Apple -->
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden">
-                                        <div class="p-4">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <img src="https://cdn.cdnlogo.com/logos/a/92/apple.svg" alt="Apple" class="h-8 w-8 mr-3">
-                                                    <div>
-                                                        <h5 class="text-sm font-medium text-gray-900">Apple</h5>
-                                                        <p class="text-xs text-gray-500">Not connected</p>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                        <i class="fas fa-times-circle mr-1"></i> Not connected
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="mt-3 flex items-center justify-between">
-                                                <div class="text-xs text-gray-500">
-                                                    <p>Connect to sign in with your Apple ID and integrate with Apple services.</p>
-                                                </div>
-                                                <button class="px-3 py-1 rounded text-xs font-medium text-blue-600 hover:text-blue-800 focus:outline-none border border-blue-200 hover:bg-blue-50">
-                                                    <i class="fas fa-link mr-1"></i> Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <!-- Add More Connections Button -->
-                                <div class="pb-6 flex justify-center">
+                                <div class="pb-6 mt-4 flex justify-center">
                                     <button class="flex items-center px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
