@@ -80,17 +80,15 @@
 </main>
 
 <!-- Footer -->
-<footer class="bg-white py-6 border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center mb-4 md:mb-0">
-                <span class="ml-2 text-sm text-gray-500">&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
-            </div>
-            <div class="flex space-x-6">
-                <a href="#" class="text-gray-500 hover:text-numblio-blue text-sm transition-colors duration-200">Privacy Policy</a>
-                <a href="#" class="text-gray-500 hover:text-numblio-blue text-sm transition-colors duration-200">Terms of Service</a>
-                <a href="#" class="text-gray-500 hover:text-numblio-blue text-sm transition-colors duration-200">Contact</a>
-            </div>
+<footer class="mt-8 text-xs text-gray-400">
+    <div class="flex flex-col space-y-1">
+        <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+        <div class="flex items-center space-x-2 mt-1">
+            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+            <span class="text-gray-500">•</span>
+            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+            <span class="text-gray-500">•</span>
+            <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
         </div>
     </div>
 </footer>
