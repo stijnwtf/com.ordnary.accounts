@@ -46,6 +46,7 @@ class MyAccountController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'language' => ['required', 'string', 'size:2', 'in:nl,en,de,fr'],
         ]);
 
         $user->name = $request->name;
@@ -55,6 +56,9 @@ class MyAccountController extends Controller
             $user->email = $request->email;
             // Here you could add email verification logic if needed
         }
+        
+        // Update language preference
+        $user->lang = $request->language;
 
         $user->save();
 

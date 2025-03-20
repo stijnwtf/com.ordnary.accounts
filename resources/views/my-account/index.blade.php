@@ -348,10 +348,10 @@
                                             </div>
                                             <select name="language" id="language"
                                                     class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
-                                                <option value="nl" {{ (old('language', $user->language ?? 'nl') == 'nl') ? 'selected' : '' }}>Nederlands</option>
-                                                <option value="en" {{ (old('language', $user->language ?? 'nl') == 'en') ? 'selected' : '' }}>English</option>
-                                                <option value="de" {{ (old('language', $user->language ?? 'nl') == 'de') ? 'selected' : '' }}>Deutsch</option>
-                                                <option value="fr" {{ (old('language', $user->language ?? 'nl') == 'fr') ? 'selected' : '' }}>Français</option>
+                                                <option value="nl" {{ (old('language', $user->lang ?? 'nl') == 'nl') ? 'selected' : '' }}>Nederlands</option>
+                                                <option value="en" {{ (old('language', $user->lang ?? 'nl') == 'en') ? 'selected' : '' }}>English</option>
+                                                <option value="de" {{ (old('language', $user->lang ?? 'nl') == 'de') ? 'selected' : '' }}>Deutsch</option>
+                                                <option value="fr" {{ (old('language', $user->lang ?? 'nl') == 'fr') ? 'selected' : '' }}>Français</option>
                                             </select>
                                         </div>
                                         <p class="mt-1 text-xs text-gray-500">Choose your preferred language for the platform.</p>
