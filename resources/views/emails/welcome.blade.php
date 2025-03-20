@@ -210,12 +210,10 @@
         <div class="content-wrapper">
             <div class="header">
                 <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
-                <div class="header-divider"></div>
-                <span class="header-text">Welcome Message</span>
             </div>
 
-            <h2>Welcome to Numblio, {{ $user->name }}!</h2>
-            <p class="subtitle">Thank you for creating your Numblio account. You now have access to all Numblio services with a single account.</p>
+            <h2>Howdy {{ $user->name }}!</h2>
+            <p class="subtitle">Thank you for creating your Numblio-account. You now have access to all Numblio services with a single account.</p>
 
             <div class="success-box">
                 <div class="success-title">
@@ -228,9 +226,7 @@
             </div>
 
             <p>Click the button below to go to your account:</p>
-
             <a href="{{ url('/my-account') }}" class="button">Go to My Account</a>
-
             <div class="features-section">
                 <div class="feature">
                     <svg class="feature-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="#2563eb">
@@ -267,7 +263,6 @@
             </div>
         </div>
     </div>
-    <div class="bottom-spacer"></div>
 </div>
 </body>
 </html>
