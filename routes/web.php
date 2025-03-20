@@ -40,10 +40,20 @@ Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('ad
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
 
 // My Account routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
-    Route::post('/my-account/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
-    Route::post('/my-account/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
+Route::prefix('account')->middleware(['auth'])->group(function () {
+    // Bestaande route als redirect naar account/profile
+    Route::get('/', [MyAccountController::class, 'index'])->name('my-account');
+    
+    // Nieuwe routes voor aparte pagina's
+    Route::get('/profile', [MyAccountController::class, 'profile'])->name('account.profile');
+    Route::get('/password', [MyAccountController::class, 'password'])->name('account.password');
+    Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
+    Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
+    Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
+    
+    // API routes voor het updaten van gegevens
+    Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
+    Route::post('/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
 });
 
 // Admin routes for managing clients

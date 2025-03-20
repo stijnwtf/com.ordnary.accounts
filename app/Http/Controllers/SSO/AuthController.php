@@ -188,11 +188,11 @@ class AuthController extends Controller
                 Log::info("login: Authentication successful", ["email" => $request->email]);
                 $request->session()->regenerate();
 
-                // If this is a direct login, redirect to the my-account page
+                // If this is a direct login, redirect to the profile page
                 if ($directLogin) {
-                    Log::info("login: Direct login successful, redirecting to my-account");
+                    Log::info("login: Direct login successful, redirecting to profile");
                     session()->forget(["direct_login"]);
-                    return redirect()->route("my-account");
+                    return redirect()->route("account.profile");
                 }
 
                 if (!$clientId || !$redirectUri) {
@@ -885,11 +885,11 @@ class AuthController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            // If this is a direct registration, redirect to the my-account page
+            // If this is a direct registration, redirect to the profile page
             if ($directLogin) {
-                Log::info("register: Direct registration successful, redirecting to my-account");
+                Log::info("register: Direct registration successful, redirecting to profile");
                 session()->forget(["direct_login"]);
-                return redirect()->route("my-account");
+                return redirect()->route("account.profile");
             }
 
             if (!$clientId || !$redirectUri) {

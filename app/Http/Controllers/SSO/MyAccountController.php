@@ -16,14 +16,86 @@ class MyAccountController extends Controller
     /**
      * Show the user's account page.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function index()
     {
+        // Redirect naar de profielpagina
+        return redirect()->route('account.profile');
+    }
+
+    /**
+     * Show the user's profile page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function profile()
+    {
         $user = Auth::user();
-        return view('my-account.index', [
+        return view('my-account.profile', [
             'user' => $user,
-            'recaptcha_site_key' => config('services.recaptcha.site_key')
+            'recaptcha_site_key' => config('services.recaptcha.site_key'),
+            'active_page' => 'profile'
+        ]);
+    }
+
+    /**
+     * Show the password change page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function password()
+    {
+        $user = Auth::user();
+        return view('my-account.password', [
+            'user' => $user,
+            'recaptcha_site_key' => config('services.recaptcha.site_key'),
+            'active_page' => 'password'
+        ]);
+    }
+
+    /**
+     * Show the security settings page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function security()
+    {
+        $user = Auth::user();
+        return view('my-account.security', [
+            'user' => $user,
+            'recaptcha_site_key' => config('services.recaptcha.site_key'),
+            'active_page' => 'security'
+        ]);
+    }
+
+    /**
+     * Show the notifications settings page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function notifications()
+    {
+        $user = Auth::user();
+        return view('my-account.notifications', [
+            'user' => $user,
+            'recaptcha_site_key' => config('services.recaptcha.site_key'),
+            'active_page' => 'notifications'
+        ]);
+    }
+
+    /**
+     * Show the connected services page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function connections()
+    {
+        $user = Auth::user();
+        return view('my-account.connections', [
+            'user' => $user,
+            'recaptcha_site_key' => config('services.recaptcha.site_key'),
+            'active_page' => 'connections'
         ]);
     }
 
@@ -64,7 +136,7 @@ class MyAccountController extends Controller
 
         Log::info('User profile updated', ['user_id' => $user->id]);
         
-        return redirect()->route('my-account')->with('status', 'Profiel succesvol bijgewerkt!');
+        return redirect()->route('account.profile')->with('status', 'Profiel succesvol bijgewerkt!');
     }
 
     /**
@@ -94,6 +166,6 @@ class MyAccountController extends Controller
 
         Log::info('User password updated', ['user_id' => $user->id]);
         
-        return redirect()->route('my-account')->with('status', 'Wachtwoord succesvol bijgewerkt!');
+        return redirect()->route('account.password')->with('status', 'Wachtwoord succesvol bijgewerkt!');
     }
 } 
