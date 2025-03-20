@@ -155,6 +155,10 @@
                                     <i class="fas fa-bell mr-3 text-gray-500"></i>
                                     Notifications
                                 </a>
+                                <a href="#connected" id="sidebar-notifications" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                    <i class="fas fa-link mr-3 text-gray-500"></i>
+                                    Notifications
+                                </a>
                             </div>
 
                             <div class="px-3 py-2 border-t border-gray-200 mt-2">
