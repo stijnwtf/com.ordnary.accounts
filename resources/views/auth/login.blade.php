@@ -126,13 +126,13 @@
     </div>
 </div>
 <!-- Footer -->
-<footer class="fixed bottom-0 left-0 p-4 text-sm text-gray-500">
-    <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4">
-        <span>&copy; {{ date('Y') }} Numblio B.V. All rights reserved. This website and its content are protected by international copyright laws. Any unauthorized reproduction or distribution of this website or any portion of it may result in severe civil and criminal penalties.</span>
-        <div class="flex space-x-4">
-            <a href="#" class="hover:text-gray-700">Privacy Policy</a>
-            <a href="#" class="hover:text-gray-700">Terms of Service</a>
-        </div>
+<footer class="fixed bottom-0 left-0 p-3 text-xs text-gray-500">
+    <div class="flex items-center space-x-3">
+        <span>&copy; {{ date('Y') }} Numblio B.V. All rights reserved.</span>
+        <span>|</span>
+        <a href="#" class="hover:text-gray-700">Privacy</a>
+        <span>|</span>
+        <a href="#" class="hover:text-gray-700">Terms</a>
     </div>
 </footer>
 
