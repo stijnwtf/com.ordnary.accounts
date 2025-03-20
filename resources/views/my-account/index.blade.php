@@ -62,16 +62,8 @@
                                 <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-check-circle mr-1"></i> Verified
-                            </span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                <i class="fas fa-user-shield mr-1"></i> Active
-                            </span>
-                        </div>
                     </div>
-                    
+
                     <!-- Navigation Section -->
                     <div class="py-2">
                         <div class="px-3 py-2">
@@ -94,12 +86,8 @@
                                 <i class="fas fa-bell mr-3 text-gray-500"></i>
                                 Notifications
                             </a>
-                            <a href="#connected" id="sidebar-connected" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                                <i class="fas fa-link mr-3 text-gray-500"></i>
-                                Connected Services
-                            </a>
                         </div>
-                        
+
                         <div class="px-3 py-2 border-t border-gray-200 mt-2">
                             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                 Support
@@ -114,7 +102,7 @@
                             </a>
                         </div>
                     </div>
-                    
+
                     <!-- Logout Button and Account ID -->
                     <div class="px-4 py-4 border-t border-gray-200">
                         <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4">
@@ -126,7 +114,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- Mobile menu button -->
                 <div class="lg:hidden fixed bottom-4 right-4 z-10">
                     <button id="mobile-menu-button" class="rounded-full bg-blue-600 p-3 text-white shadow-lg">
@@ -896,44 +884,44 @@
             const profileTab = document.getElementById('profile-tab');
             const passwordTab = document.getElementById('password-tab');
             const securityTab = document.getElementById('security-tab');
-            
+
             // Content sections
             const profileContent = document.getElementById('profile-content');
             const passwordContent = document.getElementById('password-content');
             const securityContent = document.getElementById('security-content');
             const notificationsContent = document.getElementById('notifications-content');
             const connectedContent = document.getElementById('connected-content');
-            
+
             // Sidebar links
             const sidebarProfile = document.getElementById('sidebar-profile');
             const sidebarPassword = document.getElementById('sidebar-password');
             const sidebarSecurity = document.getElementById('sidebar-security');
             const sidebarNotifications = document.getElementById('sidebar-notifications');
             const sidebarConnected = document.getElementById('sidebar-connected');
-            
+
             // Mobile elements
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileSidebar = document.getElementById('mobile-sidebar');
             const closeSidebar = document.getElementById('close-sidebar');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav');
-            
+
             // Function to activate a tab
             function activateTab(content, sidebarItem) {
                 // Hide all content sections
                 [profileContent, passwordContent, securityContent, notificationsContent, connectedContent].forEach(c => {
                     c.classList.add('hidden');
                 });
-                
+
                 // Show the selected content
                 content.classList.remove('hidden');
-                
+
                 // Update mobile tabs if they exist
                 if (profileTab) {
                     [profileTab, passwordTab, securityTab].forEach(t => {
                         t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
                         t.classList.add('text-gray-500');
                     });
-                    
+
                     if (content === profileContent && profileTab) {
                         profileTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
                         profileTab.classList.remove('text-gray-500');
@@ -945,76 +933,76 @@
                         securityTab.classList.remove('text-gray-500');
                     }
                 }
-                
+
                 // Update sidebar active state
                 document.querySelectorAll('.sidebar-item').forEach(item => {
                     item.classList.remove('active');
                 });
-                
+
                 if (sidebarItem) {
                     sidebarItem.classList.add('active');
                 }
-                
+
                 // Close mobile sidebar if open
                 mobileSidebar.classList.add('hidden');
             }
-            
+
             // Sidebar click events
             sidebarProfile.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(profileContent, sidebarProfile);
             });
-            
+
             sidebarPassword.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(passwordContent, sidebarPassword);
             });
-            
+
             sidebarSecurity.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(securityContent, sidebarSecurity);
             });
-            
+
             sidebarNotifications.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(notificationsContent, sidebarNotifications);
             });
-            
+
             sidebarConnected.addEventListener('click', function(e) {
                 e.preventDefault();
                 activateTab(connectedContent, sidebarConnected);
             });
-            
+
             // Mobile tab events
             if (profileTab) {
                 profileTab.addEventListener('click', function() {
                     activateTab(profileContent, sidebarProfile);
                 });
-                
+
                 passwordTab.addEventListener('click', function() {
                     activateTab(passwordContent, sidebarPassword);
                 });
-                
+
                 securityTab.addEventListener('click', function() {
                     activateTab(securityContent, sidebarSecurity);
                 });
             }
-            
+
             // Mobile menu functionality
             mobileMenuButton.addEventListener('click', function() {
                 mobileSidebar.classList.remove('hidden');
             });
-            
+
             closeSidebar.addEventListener('click', function() {
                 mobileSidebar.classList.add('hidden');
             });
-            
+
             // Mobile navigation links
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const href = this.getAttribute('href').substring(1);
-                    
+
                     switch(href) {
                         case 'profile':
                             activateTab(profileContent, sidebarProfile);
@@ -1034,14 +1022,14 @@
                     }
                 });
             });
-            
+
             // Password visibility toggle
             const passwordToggles = document.querySelectorAll('.password-toggle');
             passwordToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     const input = this.closest('.relative').querySelector('input');
                     const icon = this.querySelector('i');
-                    
+
                     if (input.type === 'password') {
                         input.type = 'text';
                         icon.classList.remove('fa-eye');
@@ -1053,7 +1041,7 @@
                     }
                 });
             });
-            
+
             // Lazy load images
             const lazyImages = document.querySelectorAll('img.lazy');
             if ('IntersectionObserver' in window) {
@@ -1067,7 +1055,7 @@
                         }
                     });
                 });
-                
+
                 lazyImages.forEach(image => {
                     imageObserver.observe(image);
                 });
