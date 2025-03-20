@@ -41,39 +41,41 @@
         }
     </style>
 </head>
-<body class="bg-[#f9fafb] min-h-screen flex flex-col">
-    <!-- Top Navigation Bar -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="/" class="flex-shrink-0 flex items-center">
-                        <img class="h-8 w-auto" src="/img/dark.png" alt="Numblio Logo">
-                    </a>
-                </div>
-                <div class="flex items-center">
-                    <div class="ml-3 relative">
-                        <div class="flex items-center space-x-4">
-                            <div class="text-sm font-medium text-gray-700">{{ $user->name }}</div>
-                            <img class="h-8 w-8 rounded-full object-cover border border-gray-200" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe" alt="{{ $user->name }}">
-                            <a href="{{ route('logout') }}" class="text-sm text-red-600 hover:text-red-700">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
+<body class="bg-[#f9fafb] min-h-screen py-8 px-4 md:py-12">
+    <div class="max-w-7xl mx-auto">
+        <!-- Main container with two cards side by side -->
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+            <!-- Left Sidebar Card -->
+            <div class="w-full lg:w-1/4">
+                <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden sticky top-8">
+                    <!-- Account Summary -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mr-3">
+                        </div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-100"
+                                 src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                                 alt="{{ $user->name }}">
+                            <div>
+                                <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
+                                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i> Verified
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-user-shield mr-1"></i> Active
+                            </span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="flex-grow flex">
-        <!-- Sidebar Navigation -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 border-r border-gray-200 bg-white">
-                <div class="h-0 flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                    <div class="flex-1 px-3 bg-white divide-y space-y-1">
-                        <div class="space-y-1 pt-2">
-                            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider py-2 px-3">
+                    
+                    <!-- Navigation Section -->
+                    <div class="py-2">
+                        <div class="px-3 py-2">
+                            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                 Account Settings
                             </div>
                             <a href="#profile" id="sidebar-profile" class="sidebar-item active text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
@@ -97,99 +99,54 @@
                                 Connected Services
                             </a>
                         </div>
-                        <div class="space-y-1 pt-4">
-                            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider py-2 px-3">
-                                Account Help
+                        
+                        <div class="px-3 py-2 border-t border-gray-200 mt-2">
+                            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                                Support
                             </div>
-                            <a href="https://support.numblio.com" class="text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                            <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                 <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                 Help Center
                             </a>
-                            <a href="/faq" class="text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                            <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                 <i class="fas fa-info-circle mr-3 text-gray-500"></i>
                                 FAQ
                             </a>
                         </div>
                     </div>
-                </div>
-                <div class="flex-shrink-0 flex border-t border-gray-200 p-4">
-                    <div class="flex-shrink-0 w-full group block">
-                        <div class="flex items-center">
-                            <div>
-                                <p class="text-xs text-gray-500">
-                                    <span class="font-medium">Account ID:</span><br>
-                                    <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
-                                </p>
-                            </div>
-                        </div>
+                    
+                    <!-- Logout Button and Account ID -->
+                    <div class="px-4 py-4 border-t border-gray-200">
+                        <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Log out
+                        </a>
+                        <p class="text-xs text-gray-500">
+                            <span class="font-medium">Account ID:</span>
+                            <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
+                        </p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Mobile menu button -->
-        <div class="md:hidden fixed bottom-4 right-4 z-10">
-            <button id="mobile-menu-button" class="rounded-full bg-blue-600 p-3 text-white shadow-lg">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-
-        <!-- Mobile sidebar -->
-        <div id="mobile-sidebar" class="fixed inset-0 flex z-40 hidden">
-            <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
-            <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
-                <div class="absolute top-0 right-0 -mr-12 pt-2">
-                    <button id="close-sidebar" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                        <span class="sr-only">Close sidebar</span>
-                        <i class="fas fa-times text-white text-2xl"></i>
+                
+                <!-- Mobile menu button -->
+                <div class="lg:hidden fixed bottom-4 right-4 z-10">
+                    <button id="mobile-menu-button" class="rounded-full bg-blue-600 p-3 text-white shadow-lg">
+                        <i class="fas fa-bars"></i>
                     </button>
                 </div>
-                <!-- Sidebar content -->
-                <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-                    <div class="flex-shrink-0 flex items-center px-4">
-                        <img class="h-8 w-auto" src="/img/dark.png" alt="Numblio Logo">
-                    </div>
-                    <nav class="mt-5 px-2 space-y-1">
-                        <a href="#profile" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                            <i class="fas fa-user mr-4 text-gray-500"></i>
-                            Profile
-                        </a>
-                        <a href="#password" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                            <i class="fas fa-lock mr-4 text-gray-500"></i>
-                            Password
-                        </a>
-                        <a href="#security" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                            <i class="fas fa-shield-alt mr-4 text-gray-500"></i>
-                            Security
-                        </a>
-                        <a href="#notifications" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                            <i class="fas fa-bell mr-4 text-gray-500"></i>
-                            Notifications
-                        </a>
-                        <a href="#connected" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                            <i class="fas fa-link mr-4 text-gray-500"></i>
-                            Connected Services
-                        </a>
-                    </nav>
-                </div>
             </div>
-        </div>
 
-        <!-- Main content -->
-        <div class="flex-1 flex overflow-hidden">
-            <div class="flex-1 overflow-auto focus:outline-none p-4 md:p-8">
-                <!-- Main Content Section -->
-                <div class="max-w-3xl mx-auto">
-                    <div class="mb-8 flex flex-col items-start">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">Welcome back, {{ $user->name }}</h2>
-                            <p class="text-sm text-gray-600 mt-2">Manage your personal information and security settings for your Numblio-account.</p>
-                        </div>
+            <!-- Right Content Card -->
+            <div class="w-full lg:w-3/4">
+                <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+                    <!-- Welcome header -->
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-900">Welcome back, {{ $user->name }}</h2>
+                        <p class="text-sm text-gray-600 mt-1">Manage your personal information and security settings for your Numblio-account.</p>
                     </div>
 
                     <!-- Success Message -->
                     @if (session('status'))
-                    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
+                    <div class="mx-6 mt-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
                                 <i class="fas fa-check-circle text-green-500 text-xl"></i>
@@ -206,7 +163,7 @@
 
                     <!-- Error Message -->
                     @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
+                    <div class="mx-6 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
                                 <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
@@ -226,28 +183,22 @@
                     @endif
 
                     <!-- Content Sections -->
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
-                        <!-- Tab Content Sections -->
-                        <div class="flex border-b">
-                            <button id="profile-tab" class="px-6 py-4 text-blue-600 border-b-2 border-blue-600 font-medium text-sm flex items-center">
+                    <div class="px-6 pt-6">
+                        <!-- Hidden section tabs for mobile -->
+                        <div class="lg:hidden flex flex-wrap border-b border-gray-200 mb-6">
+                            <button id="profile-tab" class="px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-medium text-sm flex items-center">
                                 <i class="fas fa-user mr-2"></i> Profile
                             </button>
-                            <button id="password-tab" class="px-6 py-4 text-gray-500 font-medium text-sm flex items-center">
+                            <button id="password-tab" class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
                                 <i class="fas fa-lock mr-2"></i> Password
                             </button>
-                            <button id="security-tab" class="px-6 py-4 text-gray-500 font-medium text-sm flex items-center">
+                            <button id="security-tab" class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
                                 <i class="fas fa-shield-alt mr-2"></i> Security
-                            </button>
-                            <button id="notifications-tab" class="hidden md:flex px-6 py-4 text-gray-500 font-medium text-sm items-center">
-                                <i class="fas fa-bell mr-2"></i> Notifications
-                            </button>
-                            <button id="connected-tab" class="hidden md:flex px-6 py-4 text-gray-500 font-medium text-sm items-center">
-                                <i class="fas fa-link mr-2"></i> Connected
                             </button>
                         </div>
 
-                        <!-- Profile Form -->
-                        <div id="profile-content" class="p-6 tab-content">
+                        <!-- Tab Content Sections -->
+                        <div id="profile-content" class="tab-content">
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Personal information</h3>
                                 <p class="text-sm text-gray-600">Update your personal information to personalize your Numblio experience.</p>
@@ -400,7 +351,7 @@
                         </div>
 
                         <!-- Password Form -->
-                        <div id="password-content" class="p-6 hidden tab-content">
+                        <div id="password-content" class="tab-content hidden">
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Change your password</h3>
                                 <p class="text-sm text-gray-600">Make sure you have a strong password that you don't use on other websites.</p>
@@ -516,7 +467,7 @@
                         </div>
 
                         <!-- Security Section -->
-                        <div id="security-content" class="p-6 hidden tab-content">
+                        <div id="security-content" class="tab-content hidden">
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Account security</h3>
                                 <p class="text-sm text-gray-600">Enhance the security of your Numblio account with additional protection measures.</p>
@@ -694,7 +645,7 @@
                         </div>
 
                         <!-- Notifications Section -->
-                        <div id="notifications-content" class="p-6 hidden tab-content">
+                        <div id="notifications-content" class="tab-content hidden">
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Notifications</h3>
                                 <p class="text-sm text-gray-600">Manage your notification preferences and settings.</p>
@@ -762,7 +713,7 @@
                         </div>
 
                         <!-- Connected Services Section -->
-                        <div id="connected-content" class="p-6 hidden tab-content">
+                        <div id="connected-content" class="tab-content hidden">
                             <div class="mb-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Connected services</h3>
                                 <p class="text-sm text-gray-600">Manage the services and applications connected to your Numblio account.</p>
@@ -877,30 +828,63 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="mt-6 flex justify-between">
-                        <a href="{{ route('logout') }}" class="text-sm text-red-600 hover:text-red-700 flex items-center">
-                            <i class="fas fa-sign-out-alt mr-1"></i> Log out
-                        </a>
-                        <a href="/" class="text-sm text-blue-600 hover:text-blue-700 flex items-center">
-                            <i class="fas fa-home mr-1"></i> Back to home
-                        </a>
-                    </div>
-
                     <!-- Footer -->
-                    <footer class="mt-8 text-xs text-gray-400">
-                        <div class="flex flex-col space-y-1">
-                            <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
-                            <div class="flex items-center space-x-2 mt-1">
-                                <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
-                                <span class="text-gray-500">•</span>
-                                <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
-                                <span class="text-gray-500">•</span>
-                                <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                    <div class="px-6 py-6 border-t border-gray-200 mt-8">
+                        <footer class="text-xs text-gray-400">
+                            <div class="flex flex-col space-y-1">
+                                <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                                    <span class="text-gray-500">•</span>
+                                    <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                                    <span class="text-gray-500">•</span>
+                                    <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                                </div>
                             </div>
-                        </div>
-                    </footer>
+                        </footer>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sidebar for small screens -->
+    <div id="mobile-sidebar" class="fixed inset-0 flex z-40 hidden">
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
+        <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+            <div class="absolute top-0 right-0 -mr-12 pt-2">
+                <button id="close-sidebar" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <span class="sr-only">Close sidebar</span>
+                    <i class="fas fa-times text-white text-2xl"></i>
+                </button>
+            </div>
+            <!-- Sidebar content -->
+            <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                <div class="flex-shrink-0 flex items-center px-4">
+                    <img class="h-8 w-auto" src="/img/dark.png" alt="Numblio Logo">
+                </div>
+                <nav class="mt-5 px-2 space-y-1">
+                    <a href="#profile" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                        <i class="fas fa-user mr-4 text-gray-500"></i>
+                        Profile
+                    </a>
+                    <a href="#password" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                        <i class="fas fa-lock mr-4 text-gray-500"></i>
+                        Password
+                    </a>
+                    <a href="#security" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                        <i class="fas fa-shield-alt mr-4 text-gray-500"></i>
+                        Security
+                    </a>
+                    <a href="#notifications" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                        <i class="fas fa-bell mr-4 text-gray-500"></i>
+                        Notifications
+                    </a>
+                    <a href="#connected" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                        <i class="fas fa-link mr-4 text-gray-500"></i>
+                        Connected Services
+                    </a>
+                </nav>
             </div>
         </div>
     </div>
@@ -908,149 +892,156 @@
     <script>
         // Tab functionality with lazy loading for better performance
         document.addEventListener('DOMContentLoaded', function() {
+            // Tab elements
             const profileTab = document.getElementById('profile-tab');
             const passwordTab = document.getElementById('password-tab');
             const securityTab = document.getElementById('security-tab');
-            const notificationsTab = document.getElementById('notifications-tab');
-            const connectedTab = document.getElementById('connected-tab');
-
+            
+            // Content sections
             const profileContent = document.getElementById('profile-content');
             const passwordContent = document.getElementById('password-content');
             const securityContent = document.getElementById('security-content');
             const notificationsContent = document.getElementById('notifications-content');
             const connectedContent = document.getElementById('connected-content');
-
+            
+            // Sidebar links
             const sidebarProfile = document.getElementById('sidebar-profile');
             const sidebarPassword = document.getElementById('sidebar-password');
             const sidebarSecurity = document.getElementById('sidebar-security');
             const sidebarNotifications = document.getElementById('sidebar-notifications');
             const sidebarConnected = document.getElementById('sidebar-connected');
-
+            
+            // Mobile elements
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileSidebar = document.getElementById('mobile-sidebar');
             const closeSidebar = document.getElementById('close-sidebar');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav');
-
+            
             // Function to activate a tab
-            function activateTab(tab, content, sidebarItem) {
-                // Deactivate all tabs
-                [profileTab, passwordTab, securityTab, notificationsTab, connectedTab].forEach(t => {
-                    t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-                    t.classList.add('text-gray-500');
-                });
-
-                // Hide all content
+            function activateTab(content, sidebarItem) {
+                // Hide all content sections
                 [profileContent, passwordContent, securityContent, notificationsContent, connectedContent].forEach(c => {
                     c.classList.add('hidden');
                 });
-
-                // Deactivate all sidebar items
+                
+                // Show the selected content
+                content.classList.remove('hidden');
+                
+                // Update mobile tabs if they exist
+                if (profileTab) {
+                    [profileTab, passwordTab, securityTab].forEach(t => {
+                        t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                        t.classList.add('text-gray-500');
+                    });
+                    
+                    if (content === profileContent && profileTab) {
+                        profileTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                        profileTab.classList.remove('text-gray-500');
+                    } else if (content === passwordContent && passwordTab) {
+                        passwordTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                        passwordTab.classList.remove('text-gray-500');
+                    } else if (content === securityContent && securityTab) {
+                        securityTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                        securityTab.classList.remove('text-gray-500');
+                    }
+                }
+                
+                // Update sidebar active state
                 document.querySelectorAll('.sidebar-item').forEach(item => {
                     item.classList.remove('active');
                 });
-
-                // Activate the selected tab and show content
-                tab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-                tab.classList.remove('text-gray-500');
-                content.classList.remove('hidden');
-
+                
                 if (sidebarItem) {
                     sidebarItem.classList.add('active');
                 }
-
+                
                 // Close mobile sidebar if open
                 mobileSidebar.classList.add('hidden');
             }
-
-            // Tab click events
-            profileTab.addEventListener('click', function() {
-                activateTab(profileTab, profileContent, sidebarProfile);
-            });
-
-            passwordTab.addEventListener('click', function() {
-                activateTab(passwordTab, passwordContent, sidebarPassword);
-            });
-
-            securityTab.addEventListener('click', function() {
-                activateTab(securityTab, securityContent, sidebarSecurity);
-            });
-
-            notificationsTab.addEventListener('click', function() {
-                activateTab(notificationsTab, notificationsContent, sidebarNotifications);
-            });
-
-            connectedTab.addEventListener('click', function() {
-                activateTab(connectedTab, connectedContent, sidebarConnected);
-            });
-
+            
             // Sidebar click events
             sidebarProfile.addEventListener('click', function(e) {
                 e.preventDefault();
-                activateTab(profileTab, profileContent, sidebarProfile);
+                activateTab(profileContent, sidebarProfile);
             });
-
+            
             sidebarPassword.addEventListener('click', function(e) {
                 e.preventDefault();
-                activateTab(passwordTab, passwordContent, sidebarPassword);
+                activateTab(passwordContent, sidebarPassword);
             });
-
+            
             sidebarSecurity.addEventListener('click', function(e) {
                 e.preventDefault();
-                activateTab(securityTab, securityContent, sidebarSecurity);
+                activateTab(securityContent, sidebarSecurity);
             });
-
+            
             sidebarNotifications.addEventListener('click', function(e) {
                 e.preventDefault();
-                activateTab(notificationsTab, notificationsContent, sidebarNotifications);
+                activateTab(notificationsContent, sidebarNotifications);
             });
-
+            
             sidebarConnected.addEventListener('click', function(e) {
                 e.preventDefault();
-                activateTab(connectedTab, connectedContent, sidebarConnected);
+                activateTab(connectedContent, sidebarConnected);
             });
-
+            
+            // Mobile tab events
+            if (profileTab) {
+                profileTab.addEventListener('click', function() {
+                    activateTab(profileContent, sidebarProfile);
+                });
+                
+                passwordTab.addEventListener('click', function() {
+                    activateTab(passwordContent, sidebarPassword);
+                });
+                
+                securityTab.addEventListener('click', function() {
+                    activateTab(securityContent, sidebarSecurity);
+                });
+            }
+            
             // Mobile menu functionality
             mobileMenuButton.addEventListener('click', function() {
                 mobileSidebar.classList.remove('hidden');
             });
-
+            
             closeSidebar.addEventListener('click', function() {
                 mobileSidebar.classList.add('hidden');
             });
-
+            
             // Mobile navigation links
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const href = this.getAttribute('href').substring(1);
-
+                    
                     switch(href) {
                         case 'profile':
-                            activateTab(profileTab, profileContent, sidebarProfile);
+                            activateTab(profileContent, sidebarProfile);
                             break;
                         case 'password':
-                            activateTab(passwordTab, passwordContent, sidebarPassword);
+                            activateTab(passwordContent, sidebarPassword);
                             break;
                         case 'security':
-                            activateTab(securityTab, securityContent, sidebarSecurity);
+                            activateTab(securityContent, sidebarSecurity);
                             break;
                         case 'notifications':
-                            activateTab(notificationsTab, notificationsContent, sidebarNotifications);
+                            activateTab(notificationsContent, sidebarNotifications);
                             break;
                         case 'connected':
-                            activateTab(connectedTab, connectedContent, sidebarConnected);
+                            activateTab(connectedContent, sidebarConnected);
                             break;
                     }
                 });
             });
-
+            
             // Password visibility toggle
             const passwordToggles = document.querySelectorAll('.password-toggle');
             passwordToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     const input = this.closest('.relative').querySelector('input');
                     const icon = this.querySelector('i');
-
+                    
                     if (input.type === 'password') {
                         input.type = 'text';
                         icon.classList.remove('fa-eye');
@@ -1062,7 +1053,7 @@
                     }
                 });
             });
-
+            
             // Lazy load images
             const lazyImages = document.querySelectorAll('img.lazy');
             if ('IntersectionObserver' in window) {
@@ -1076,7 +1067,7 @@
                         }
                     });
                 });
-
+                
                 lazyImages.forEach(image => {
                     imageObserver.observe(image);
                 });
