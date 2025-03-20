@@ -49,10 +49,7 @@
             <div class="w-full lg:w-1/4">
                 <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden sticky top-8">
                     <!-- Account Summary -->
-                    <div class="p-6 border-b border-gray-200">
-                        <div class="flex items-center mb-4">
-                            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mr-3">
-                        </div>
+                    <div class="p-5 border-b border-gray-200">
                         <div class="flex items-center space-x-3">
                             <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-100"
                                  src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
@@ -61,6 +58,14 @@
                                 <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
                                 <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                             </div>
+                        </div>
+                        <div class="mt-3 flex">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
+                                <i class="fas fa-check-circle mr-1"></i> Verified
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-user-shield mr-1"></i> Active
+                            </span>
                         </div>
                     </div>
 
@@ -108,10 +113,16 @@
                         <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4">
                             <i class="fas fa-sign-out-alt mr-2"></i> Log out
                         </a>
-                        <p class="text-xs text-gray-500">
-                            <span class="font-medium">Account ID:</span>
-                            <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
-                        </p>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-gray-500">
+                                <span class="font-medium">Account ID:</span>
+                                <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
+                            </p>
+                            <a href="/" class="flex items-center">
+                                <span class="text-xs font-medium text-gray-500 mr-1">Numblio</span>
+                                <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -848,10 +859,24 @@
             </div>
             <!-- Sidebar content -->
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-                <div class="flex-shrink-0 flex items-center px-4">
-                    <img class="h-8 w-auto" src="/img/dark.png" alt="Numblio Logo">
+                <div class="flex items-center px-4 mb-4">
+                    <div class="flex items-center flex-shrink-0">
+                        <img class="h-5 w-auto" src="/img/dark.png" alt="Numblio">
+                        <span class="ml-2 text-sm font-semibold text-gray-800">My Account</span>
+                    </div>
                 </div>
-                <nav class="mt-5 px-2 space-y-1">
+                <div class="border-t border-b border-gray-200 py-4 px-4 mb-4">
+                    <div class="flex items-center">
+                        <img class="h-10 w-10 rounded-full object-cover border-2 border-blue-100"
+                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                             alt="{{ $user->name }}">
+                        <div class="ml-3">
+                            <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
+                            <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <nav class="px-2 space-y-1">
                     <a href="#profile" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-user mr-4 text-gray-500"></i>
                         Profile
