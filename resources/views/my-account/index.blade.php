@@ -265,30 +265,6 @@
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Personal information</h3>
                                     <p class="text-sm text-gray-600">Update your personal information to personalize your Numblio experience.</p>
                                 </div>
-
-                                <!-- Profile Overview Card -->
-                                <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                                    <div class="flex items-center">
-                                        <div class="mr-4">
-                                            <img class="h-16 w-16 rounded-full object-cover border-2 border-white shadow"
-                                                 src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe&size=128"
-                                                 alt="{{ $user->name }}">
-                                        </div>
-                                        <div>
-                                            <h4 class="text-md font-semibold text-gray-900">{{ $user->name }}</h4>
-                                            <p class="text-sm text-gray-600">{{ $user->email }}</p>
-                                            <div class="mt-2 flex space-x-2">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    <i class="fas fa-check-circle mr-1"></i> Verified
-                                                </span>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    <i class="fas fa-user-shield mr-1"></i> Active
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
                                     @csrf
 
