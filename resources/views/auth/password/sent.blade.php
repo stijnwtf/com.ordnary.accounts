@@ -33,9 +33,6 @@
                 </div>
             </div>
 
-            <div class="mt-6 text-center">
-                <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:text-blue-800">Back to login</a>
-            </div>
             <!-- Footer -->
             <footer class="mt-16 text-xs text-gray-400">
                 <div class="flex flex-col space-y-1">
