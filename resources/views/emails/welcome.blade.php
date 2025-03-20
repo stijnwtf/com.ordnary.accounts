@@ -212,7 +212,7 @@
                 <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
             </div>
 
-            <h2>Howdy {{ $user->name }}!</h2>
+            <h2>Hi, {{ $user->name }}!</h2>
             <p class="subtitle">Thank you for creating your Numblio-account. You now have access to all Numblio services with a single account.</p>
 
             <div class="success-box">
