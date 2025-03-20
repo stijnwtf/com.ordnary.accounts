@@ -186,7 +186,7 @@
     <!-- Recent Activity Section -->
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 mb-8">
         <!-- Recent Users -->
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
             <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
                     <i class="fas fa-user-clock mr-2 text-gray-400"></i>
@@ -196,10 +196,10 @@
             <ul class="divide-y divide-gray-200">
                 @forelse($recentUsers as $user)
                 <li>
-                    <a href="{{ route('users.show', $user) }}" class="block hover:bg-gray-50">
+                    <a href="{{ route('users.show', $user) }}" class="block hover:bg-gray-50 transition duration-150">
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex items-center">
-                                <div class="h-10 w-10 rounded-full bg-numblio-blue text-white flex items-center justify-center mr-4">
+                                <div class="h-10 w-10 rounded-full bg-numblio-blue text-white flex items-center justify-center mr-4 flex-shrink-0">
                                     <span class="text-sm font-medium">{{ substr($user->name, 0, 1) }}</span>
                                 </div>
                                 <div class="min-w-0 flex-1">
@@ -207,15 +207,15 @@
                                         {{ $user->name }}
                                         @if($user->is_admin)
                                         <span class="inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            <i class="fas fa-shield-alt mr-1"></i> Admin
-                                        </span>
+                                        <i class="fas fa-shield-alt mr-1"></i> Admin
+                                    </span>
                                         @endif
                                     </p>
                                     <p class="text-sm text-gray-500">
                                         {{ $user->email }}
                                     </p>
                                 </div>
-                                <div class="ml-2 flex-shrink-0 flex">
+                                <div class="ml-2 flex-shrink-0">
                                     <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         {{ $user->created_at->diffForHumans() }}
                                     </p>
@@ -232,7 +232,7 @@
             </ul>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 border-t border-gray-200">
                 <div class="text-sm">
-                    <a href="{{ route('users.index') }}" class="font-medium text-numblio-blue hover:text-numblio-lightblue">
+                    <a href="{{ route('users.index') }}" class="font-medium text-numblio-blue hover:text-numblio-lightblue transition duration-150">
                         Bekijk alle gebruikers <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -240,28 +240,31 @@
         </div>
 
         <!-- Recent Clients -->
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
             <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
                     <i class="fas fa-building mr-2 text-gray-400"></i>
-                    Recente clients
+                    Recente cliënten
                 </h3>
             </div>
             <ul class="divide-y divide-gray-200">
                 @forelse($recentClients as $client)
                 <li>
-                    <a href="{{ route('clients.show', $client) }}" class="block hover:bg-gray-50">
+                    <a href="{{ route('clients.show', $client) }}" class="block hover:bg-gray-50 transition duration-150">
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-numblio-blue text-white flex items-center justify-center mr-4 flex-shrink-0">
+                                    <span class="text-sm font-medium">{{ substr($client->name, 0, 1) }}</span>
+                                </div>
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-medium text-numblio-blue truncate">
                                         {{ $client->name }}
                                     </p>
                                     <p class="text-sm text-gray-500">
-                                        Client ID: {{ $client->id }}
+                                        Cliënt ID: {{ $client->id }}
                                     </p>
                                 </div>
-                                <div class="ml-2 flex-shrink-0 flex">
+                                <div class="ml-2 flex-shrink-0">
                                     <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         {{ $client->created_at->diffForHumans() }}
                                     </p>
@@ -272,14 +275,14 @@
                 </li>
                 @empty
                 <li class="px-4 py-5 sm:px-6 text-center text-gray-500">
-                    Geen recente clients gevonden
+                    Geen recente cliënten gevonden
                 </li>
                 @endforelse
             </ul>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 border-t border-gray-200">
                 <div class="text-sm">
-                    <a href="{{ route('clients.index') }}" class="font-medium text-numblio-blue hover:text-numblio-lightblue">
-                        Bekijk alle clients <i class="fas fa-arrow-right ml-1"></i>
+                    <a href="{{ route('clients.index') }}" class="font-medium text-numblio-blue hover:text-numblio-lightblue transition duration-150">
+                        Bekijk alle cliënten <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
             </div>
@@ -437,4 +440,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
