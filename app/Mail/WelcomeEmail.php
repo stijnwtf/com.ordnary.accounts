@@ -37,7 +37,7 @@ class WelcomeEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Welcome to Numblio')
+        return $this->subject('Welcome to Numblio | Your Account Details')
                     ->view('emails.welcome');
     }
-} 
+}

@@ -43,7 +43,7 @@ class AuthController extends Controller
             Log::info("showLoginForm: Direct login attempt (no client parameters)");
             // Set a flag in the session to indicate this is a direct login
             session(["direct_login" => true]);
-            
+
             return view("auth.login", [
                 "client_name" => "Numblio Account",
                 "recaptcha_site_key" => config('services.recaptcha.site_key'),
@@ -175,7 +175,7 @@ class AuthController extends Controller
         $directLogin = session("direct_login");
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
-        
+
         Log::debug("login: Retrieved session parameters", [
             "direct_login" => $directLogin,
             "client_id" => $clientId,
@@ -529,7 +529,7 @@ class AuthController extends Controller
         // Send the reset link email
         Mail::send('emails.password-reset', ['resetUrl' => $resetUrl], function($message) use ($request) {
             $message->to($request->email);
-            $message->subject('Reset Your Password');
+            $message->subject('Password Reset Request for Numblio');
         });
 
         return redirect()->route('password.sent')->with('status', 'If your email exists in our system, you will receive a password reset link shortly.');
@@ -711,7 +711,7 @@ class AuthController extends Controller
             Log::info("showRegistrationForm: Direct registration attempt (no client parameters)");
             // Set a flag in the session to indicate this is a direct registration
             session(["direct_login" => true]);
-            
+
             return view("auth.register", [
                 "client_name" => "Numblio Account",
                 "recaptcha_site_key" => config('services.recaptcha.site_key'),
@@ -843,7 +843,7 @@ class AuthController extends Controller
         $directLogin = session("direct_login");
         $clientId = session("client_id");
         $redirectUri = session("redirect_uri");
-        
+
         Log::debug("register: Retrieved session parameters", [
             "direct_login" => $directLogin,
             "client_id" => $clientId,
