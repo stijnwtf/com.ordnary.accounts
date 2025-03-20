@@ -402,7 +402,7 @@
                                     </div>
 
                                     <!-- Submit Button for Profile Form -->
-                                    <div class="mt-8 flex justify-end">
+                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
                                         <button
                                             type="submit"
                                             class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
@@ -518,7 +518,7 @@
                                     </div>
 
                                     <!-- Submit Button for Password Form -->
-                                    <div class="mt-8 flex justify-end">
+                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
                                         <button
                                             type="submit"
                                             class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
@@ -764,7 +764,7 @@
                                     </div>
 
                                     <!-- Submit Button for Notifications Form -->
-                                    <div class="mt-8 flex justify-end">
+                                    <div class="pt-6 mt-8 border-t border-gray-100 flex justify-end">
                                         <button
                                             type="submit"
                                             class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
@@ -882,7 +882,7 @@
                                 </div>
 
                                 <!-- Add More Connections Button -->
-                                <div class="mt-8 flex justify-center">
+                                <div class="pt-6 mt-8 border-t border-gray-100 flex justify-center">
                                     <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
