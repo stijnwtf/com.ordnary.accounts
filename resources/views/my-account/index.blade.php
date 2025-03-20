@@ -119,7 +119,6 @@
                                 <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                             </p>
                             <a href="/" class="flex items-center">
-                                <span class="text-xs font-medium text-gray-500 mr-1">Numblio</span>
                                 <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
                             </a>
                         </div>
