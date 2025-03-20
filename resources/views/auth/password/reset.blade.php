@@ -87,15 +87,19 @@
                 </div>
             </form>
 
-            <!-- Simple Text Footer -->
-            <div class="mt-12 text-center text-sm text-gray-500">
-                <p>&copy; 2025 Numblio. All rights reserved.</p>
-                <div class="mt-2 space-x-4">
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Privacy Policy</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Terms of Service</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
+            <!-- Footer -->
+            <footer class="mt-16 text-xs text-gray-400">
+                <div class="flex flex-col space-y-1">
+                    <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+                    <div class="flex items-center space-x-2 mt-1">
+                        <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                    </div>
                 </div>
-            </div>
+            </footer>
         </div>
     </div>
 </div>

@@ -16,23 +16,8 @@
             <div class="mb-8 flex flex-col items-start">
                 <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Admin Portal <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Beheerder</span></h2>
-                    <p class="text-sm text-gray-600 mt-2">Log in met uw beheerdersaccount om toegang te krijgen tot het SSO Client Management dashboard.</p>
-                </div>
-            </div>
-
-            <!-- Admin Notice Alert -->
-            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-shield-alt text-blue-500 text-xl"></i>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-blue-800">Beveiligde omgeving</h3>
-                        <div class="mt-1 text-sm text-blue-700">
-                            Dit is een beveiligde beheeromgeving. Alle inlogpogingen worden geregistreerd en gemonitord.
-                        </div>
-                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Secured Login</h2>
+                    <p class="text-sm text-gray-600 mt-2">Log in to your account to access the SSO Client Management dashboard.</p>
                 </div>
             </div>
 
@@ -44,7 +29,7 @@
                         <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">Er is iets misgegaan bij het inloggen.</h3>
+                        <h3 class="text-sm font-medium text-red-800">Something went wrong.</h3>
                         <div class="mt-1 text-sm text-red-700">
                             <ul class="list-disc pl-4">
                                 @foreach ($errors->all() as $error)
@@ -102,11 +87,11 @@
                 </div>
 
                 <!-- reCAPTCHA Checkbox -->
-                <div class="flex justify-center mt-4">
+                <div class="flex mt-4">
                     <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
                 </div>
                 @error('g-recaptcha-response')
-                <p class="mt-1 text-sm text-red-600 text-center">
+                <p class="mt-1 text-sm text-red-600">
                     {{ $message }}
                 </p>
                 @enderror
@@ -116,27 +101,25 @@
                     <button
                         type="submit"
                         class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-sign-in-alt mr-2"></i> Inloggen als beheerder
+                        Log in
                     </button>
                 </div>
 
-                <!-- Return to Main Login -->
-                <div class="flex justify-center text-sm mt-4">
-                    <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-700">
-                        <i class="fas fa-arrow-left mr-1"></i> Terug naar reguliere login
-                    </a>
-                </div>
             </form>
 
-            <!-- Simple Text Footer -->
-            <div class="mt-12 text-center text-sm text-gray-500">
-                <p>&copy; 2025 Numblio. All rights reserved.</p>
-                <div class="mt-2 space-x-4">
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Privacy Policy</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Terms of Service</a>
-                    <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
+            <!-- Footer -->
+            <footer class="mt-16 text-xs text-gray-400">
+                <div class="flex flex-col space-y-1">
+                    <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+                    <div class="flex items-center space-x-2 mt-1">
+                        <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                        <span class="text-gray-500">•</span>
+                        <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                    </div>
                 </div>
-            </div>
+            </footer>
         </div>
     </div>
 </div>
