@@ -59,7 +59,7 @@ class ClientController extends Controller
 
             // Check if user is admin
             if (Auth::user()->is_admin) {
-                return redirect()->intended(route('clients.index'));
+                return redirect()->intended(route('admin.dashboard'));
             }
 
             // If not admin, logout and redirect back with error
