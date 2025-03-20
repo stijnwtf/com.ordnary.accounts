@@ -401,11 +401,11 @@
                                         </p>
                                     </div>
 
-                                    <!-- Submit Button -->
-                                    <div>
+                                    <!-- Submit Button for Profile Form -->
+                                    <div class="mt-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center">
+                                            class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
                                             <i class="fas fa-save mr-2"></i> Confirm changes
                                         </button>
                                     </div>
@@ -517,11 +517,11 @@
                                         </ul>
                                     </div>
 
-                                    <!-- Submit Button -->
-                                    <div>
+                                    <!-- Submit Button for Password Form -->
+                                    <div class="mt-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center">
+                                            class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
                                             <i class="fas fa-key mr-2"></i> Confirm changes
                                         </button>
                                     </div>
@@ -763,11 +763,11 @@
                                         <p class="mt-1 text-xs text-gray-500">Choose the types of notifications you want to receive via push notifications.</p>
                                     </div>
 
-                                    <!-- Submit Button -->
-                                    <div>
+                                    <!-- Submit Button for Notifications Form -->
+                                    <div class="mt-8 flex justify-end">
                                         <button
                                             type="submit"
-                                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center">
+                                            class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
                                             <i class="fas fa-save mr-2"></i> Confirm changes
                                         </button>
                                     </div>
@@ -881,9 +881,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Add More Connections -->
-                                <div class="mt-6">
-                                    <button class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center">
+                                <!-- Add More Connections Button -->
+                                <div class="mt-8 flex justify-center">
+                                    <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center shadow-sm">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
                                 </div>
