@@ -213,19 +213,7 @@
                 <p class="help-text">If you have any questions or need assistance with resetting your password, please contact our support team at <a href="mailto:support@numblio.com" style="color: #2563eb;">support@numblio.com</a>.</p>
             </div>
         </div>
-
-        <div class="footer-wrapper">
-            <div class="footer">
-                <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Privacy Policy</a>
-                    <a href="#" class="footer-link">Terms of Service</a>
-                    <a href="#" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="bottom-spacer"></div>
 </div>
 </body>
 </html>
