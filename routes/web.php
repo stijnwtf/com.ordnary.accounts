@@ -34,7 +34,7 @@ Route::middleware('throttle:5,1')->group(function () {
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('password.forgot');
 Route::get('/reset-password-sent', [AuthController::class, 'showSentForm'])->name('password.sent');
-Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::get('/pw/callback/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
 Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
@@ -73,9 +73,9 @@ if (app()->environment('local')) {
         if (!$user) {
             return 'No users found. Please create a user first.';
         }
-        
+
         \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\WelcomeEmail($user));
-        
+
         return 'Welcome email sent to ' . $user->email;
     });
 }
