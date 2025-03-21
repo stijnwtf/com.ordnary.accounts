@@ -55,37 +55,85 @@ class AuthController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-
+        // Check if user is already logged in and redirect accordingly
         if (Auth::check()) {
-            // Get the necessary session parameters
-            $clientId = $request->query("client_id") ?: session("client_id");
-            $redirectUri = $request->query("redirect_uri") ?: session("redirect_uri");
-            $directLogin = session("direct_login") ?? (!$clientId || !$redirectUri);
-
+            // Get the necessary query parameters
+            $clientId = $request->query("client_id");
+            $redirectUri = $request->query("redirect_uri");
+            
+            // Check for malformed URL with second question mark instead of ampersand
+            if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
+                // Extract the real client_id and redirect_uri
+                $parts = explode('?redirect_uri=', $clientId);
+                $clientId = $parts[0];
+                $redirectUri = urldecode($parts[1]);
+                
+                Log::info("showLoginForm: Fixed malformed URL for logged in user", [
+                    "corrected_client_id" => $clientId,
+                    "corrected_redirect_uri" => $redirectUri
+                ]);
+            }
+            
+            // Clean up redirect URI if present
+            if ($redirectUri) {
+                $redirectUri = $this->cleanRedirectUri($redirectUri);
+            }
+            
+            // If either parameter is missing, fall back to session values
+            if (!$clientId) {
+                $clientId = session("client_id");
+            }
+            if (!$redirectUri) {
+                $redirectUri = session("redirect_uri");
+            }
+            
+            $directLogin = session("direct_login") ?? (!$clientId && !$redirectUri);
+            
             Log::info("showLoginForm: User already logged in, redirecting", [
                 "user_id" => Auth::id(),
                 "direct_login" => $directLogin,
                 "client_id" => $clientId,
                 "redirect_uri" => $redirectUri
             ]);
-
+            
             if ($directLogin) {
                 // Direct login to Numblio account
                 return redirect()->route("account.profile");
-            }
+            } 
             else if ($clientId && $redirectUri) {
                 // SSO login with client parameters
+                $client = Client::where("client_id", $clientId)->first();
+                
+                if (!$client) {
+                    Log::error("showLoginForm: Invalid client_id for logged in user", [
+                        "client_id" => $clientId,
+                    ]);
+                    return redirect()->route("account.profile");
+                }
+                
+                // Verify the redirect URI is allowed
+                $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
+                $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showLoginForm");
+                
+                if (!in_array($redirectUri, $normalizedAllowedUris)) {
+                    Log::error("showLoginForm: Redirect URI not allowed for logged in user", [
+                        "redirect_uri" => $redirectUri,
+                        "allowed_redirect_uris" => $allowedRedirectUris
+                    ]);
+                    return redirect()->route("account.profile");
+                }
+                
                 $token = $this->generateToken(Auth::user(), $clientId);
-
+                
                 Log::info("showLoginForm: Generated token for already logged in user", [
                     "user_id" => Auth::id(),
                     "token" => $token,
                 ]);
-
+                
                 $targetUrl = $redirectUri . "?token=" . $token;
                 return redirect()->away($targetUrl);
             }
-
+            
             // Fallback redirect to profile page
             return redirect()->route("account.profile");
         }
