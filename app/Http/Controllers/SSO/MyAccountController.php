@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use PragmaRX\Google2FA\Google2FA;
 
 class MyAccountController extends Controller
 {
@@ -219,5 +220,73 @@ class MyAccountController extends Controller
         $user->save();
 
         return redirect()->route('account.security')->with('success', 'Recovery email removed successfully.');
+    }
+
+    public function setupTwoFactor()
+    {
+        $user = auth()->user();
+        
+        if (!$user->hasTwoFactorSecret()) {
+            $secret = $user->generateTwoFactorSecret();
+            $user->generateRecoveryCodes();
+        } else {
+            $secret = $user->two_factor_secret;
+        }
+
+        $google2fa = new Google2FA();
+        $qrCodeUrl = $google2fa->getQRCodeUrl(
+            config('app.name'),
+            $user->email,
+            $secret
+        );
+
+        return view('my-account.setup-2fa', compact('secret', 'qrCodeUrl'));
+    }
+
+    public function confirmTwoFactor(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|size:6',
+        ]);
+
+        $user = auth()->user();
+        $google2fa = new Google2FA();
+
+        if ($google2fa->verifyKey($user->two_factor_secret, $request->code)) {
+            $user->confirmTwoFactor();
+            $user->enableTwoFactor();
+
+            return redirect()->route('account.security')
+                ->with('success', 'Two-factor authentication has been enabled successfully.');
+        }
+
+        return back()->withErrors(['code' => 'Invalid verification code.']);
+    }
+
+    public function disableTwoFactor(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|size:6',
+        ]);
+
+        $user = auth()->user();
+        $google2fa = new Google2FA();
+
+        if ($google2fa->verifyKey($user->two_factor_secret, $request->code)) {
+            $user->disableTwoFactor();
+
+            return redirect()->route('account.security')
+                ->with('success', 'Two-factor authentication has been disabled successfully.');
+        }
+
+        return back()->withErrors(['code' => 'Invalid verification code.']);
+    }
+
+    public function regenerateRecoveryCodes()
+    {
+        $user = auth()->user();
+        $codes = $user->generateRecoveryCodes();
+
+        return view('my-account.recovery-codes', compact('codes'));
     }
 } 

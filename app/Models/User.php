@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use PragmaRX\Google2FA\Google2FA;
 
 class User extends Authenticatable
 {
@@ -26,6 +28,10 @@ class User extends Authenticatable
         'recovery_email',
         'recovery_email_verified',
         'recovery_email_verified_at',
+        'two_factor_enabled',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
     ];
 
     /**
@@ -50,6 +56,9 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'recovery_email_verified_at' => 'datetime',
+            'two_factor_enabled' => 'boolean',
+            'two_factor_confirmed_at' => 'datetime',
+            'two_factor_recovery_codes' => 'array',
         ];
     }
     
@@ -95,5 +104,66 @@ class User extends Authenticatable
         $this->recovery_email_verified = true;
         $this->recovery_email_verified_at = now();
         $this->save();
+    }
+
+    public function generateTwoFactorSecret()
+    {
+        $google2fa = new Google2FA();
+        $secret = $google2fa->generateSecretKey();
+        
+        $this->two_factor_secret = $secret;
+        $this->save();
+
+        return $secret;
+    }
+
+    public function generateRecoveryCodes()
+    {
+        $codes = collect();
+        for ($i = 0; $i < 8; $i++) {
+            $codes->push(Str::random(10));
+        }
+
+        $this->two_factor_recovery_codes = $codes;
+        $this->save();
+
+        return $codes;
+    }
+
+    public function enableTwoFactor()
+    {
+        $this->two_factor_enabled = true;
+        $this->two_factor_confirmed_at = now();
+        $this->save();
+    }
+
+    public function disableTwoFactor()
+    {
+        $this->two_factor_enabled = false;
+        $this->two_factor_secret = null;
+        $this->two_factor_recovery_codes = null;
+        $this->two_factor_confirmed_at = null;
+        $this->save();
+    }
+
+    public function confirmTwoFactor()
+    {
+        $this->two_factor_confirmed_at = now();
+        $this->save();
+    }
+
+    public function hasTwoFactorEnabled()
+    {
+        return $this->two_factor_enabled && $this->two_factor_confirmed_at !== null;
+    }
+
+    public function hasTwoFactorSecret()
+    {
+        return $this->two_factor_secret !== null;
+    }
+
+    public function hasRecoveryCodes()
+    {
+        return $this->two_factor_recovery_codes !== null;
     }
 }

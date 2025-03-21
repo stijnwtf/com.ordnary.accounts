@@ -23,13 +23,39 @@
         <p class="text-sm text-gray-600 mb-4">Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.</p>
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                    <i class="fas fa-times-circle mr-1"></i> Not enabled
-                </span>
+                @if($user->hasTwoFactorEnabled())
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-check-circle mr-1"></i> Enabled
+                    </span>
+                @else
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <i class="fas fa-times-circle mr-1"></i> Not enabled
+                    </span>
+                @endif
             </div>
-            <button class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
-            </button>
+            <div class="flex space-x-2">
+                @if($user->hasTwoFactorEnabled())
+                    <form action="{{ route('account.security.disable-2fa') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            <i class="fas fa-times-circle mr-1"></i> Disable 2FA
+                        </button>
+                    </form>
+                    <form action="{{ route('account.security.regenerate-recovery-codes') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-sync-alt mr-1"></i> Regenerate Recovery Codes
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('account.security.setup-2fa') }}"
+                        class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
+                    </a>
+                @endif
+            </div>
         </div>
     </div>
 </div>

@@ -57,6 +57,12 @@ Route::prefix('account')->middleware(['auth'])->group(function () {
     Route::post('/security/add-recovery-email', [MyAccountController::class, 'addRecoveryEmail'])->name('account.security.add-recovery-email');
     Route::post('/security/remove-recovery-email', [MyAccountController::class, 'removeRecoveryEmail'])->name('account.security.remove-recovery-email');
     Route::get('/security/verify-recovery-email/{token}', [MyAccountController::class, 'verifyRecoveryEmail'])->name('account.security.verify-recovery-email');
+
+    // 2FA Routes
+    Route::get('/security/2fa/setup', [MyAccountController::class, 'setupTwoFactor'])->name('account.security.setup-2fa');
+    Route::post('/security/2fa/confirm', [MyAccountController::class, 'confirmTwoFactor'])->name('account.security.confirm-2fa');
+    Route::post('/security/2fa/disable', [MyAccountController::class, 'disableTwoFactor'])->name('account.security.disable-2fa');
+    Route::post('/security/2fa/recovery-codes', [MyAccountController::class, 'regenerateRecoveryCodes'])->name('account.security.regenerate-recovery-codes');
 });
 
 // Admin routes for managing clients
