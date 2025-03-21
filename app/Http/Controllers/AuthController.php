@@ -24,6 +24,9 @@ class AuthController extends Controller
 
             // Check if 2FA is enabled
             if ($user->hasTwoFactorEnabled()) {
+                // Clear any existing session data
+                $request->session()->flush();
+                
                 // Store user ID in session for 2FA verification
                 session(['2fa_user_id' => $user->id]);
                 
@@ -93,7 +96,7 @@ class AuthController extends Controller
             // Clear 2FA session data
             session()->forget(['2fa_user_id', 'client_id', 'redirect_uri', 'client_name', 'direct_login']);
             
-            // Log the user in
+            // Log the user in and regenerate session
             Auth::login($user);
             $request->session()->regenerate();
 
