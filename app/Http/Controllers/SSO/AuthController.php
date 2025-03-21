@@ -24,6 +24,30 @@ use App\Models\LoginActivity;
 class AuthController extends Controller
 {
     /**
+     * Clean up and validate redirect URIs
+     * Fixes common typos and ensures valid format
+     *
+     * @param  string  $redirectUri
+     * @return string
+     */
+    private function cleanRedirectUri(string $redirectUri)
+    {
+        // Fix common typos in redirect URIs
+        if (strpos($redirectUri, '/callack') !== false) {
+            $redirectUri = str_replace('/callack', '/callback', $redirectUri);
+            Log::info("cleanRedirectUri: Fixed 'callack' typo in redirect_uri", [
+                "original" => $redirectUri,
+                "fixed" => str_replace('/callack', '/callback', $redirectUri)
+            ]);
+        }
+        
+        // Remove any newlines that might be in the URI
+        $redirectUri = trim(preg_replace('/\s+/', '', $redirectUri));
+        
+        return $redirectUri;
+    }
+
+    /**
      * Show the login form.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -31,17 +55,41 @@ class AuthController extends Controller
      */
     public function showLoginForm(Request $request)
     {
-        // Log the incoming query parameters
+        // Log the incoming query parameters and full URL
         $clientId = $request->query("client_id");
         $redirectUri = $request->query("redirect_uri");
+        $fullUrl = $request->fullUrl();
+        
         Log::debug("showLoginForm: Received query parameters", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
+            "full_url" => $fullUrl
         ]);
+        
+        // Check for malformed URL with second question mark instead of ampersand
+        if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
+            // Extract the real client_id and redirect_uri
+            $parts = explode('?redirect_uri=', $clientId);
+            $clientId = $parts[0];
+            $redirectUri = urldecode($parts[1]);
+            
+            Log::info("showLoginForm: Fixed malformed URL", [
+                "corrected_client_id" => $clientId,
+                "corrected_redirect_uri" => $redirectUri
+            ]);
+        }
+
+        // Clean up redirect URI
+        if ($redirectUri) {
+            $redirectUri = $this->cleanRedirectUri($redirectUri);
+        }
 
         // Check if this is a direct login (without client parameters)
         if (!$clientId || !$redirectUri) {
-            Log::info("showLoginForm: Direct login attempt (no client parameters)");
+            Log::info("showLoginForm: Direct login attempt (no client parameters)", [
+                "client_id" => $clientId,
+                "redirect_uri" => $redirectUri
+            ]);
             // Set a flag in the session to indicate this is a direct login
             session(["direct_login" => true]);
 
@@ -423,6 +471,12 @@ class AuthController extends Controller
      */
     private function generateToken(User $user, string $clientId)
     {
+        // Ensure any malformed client_id is cleaned up
+        if (strpos($clientId, '?') !== false) {
+            $parts = explode('?', $clientId);
+            $clientId = $parts[0];
+        }
+
         // Verwijder oude tokens van deze gebruiker en client
         UserSession::where('user_id', $user->id)
             ->where('client_id', $clientId)
@@ -705,14 +759,38 @@ class AuthController extends Controller
         // Get query parameters the same way as login
         $clientId = $request->query("client_id");
         $redirectUri = $request->query("redirect_uri");
+        $fullUrl = $request->fullUrl();
+        
         Log::debug("showRegistrationForm: Received query parameters", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
+            "full_url" => $fullUrl
         ]);
+        
+        // Check for malformed URL with second question mark instead of ampersand
+        if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
+            // Extract the real client_id and redirect_uri
+            $parts = explode('?redirect_uri=', $clientId);
+            $clientId = $parts[0];
+            $redirectUri = urldecode($parts[1]);
+            
+            Log::info("showRegistrationForm: Fixed malformed URL", [
+                "corrected_client_id" => $clientId,
+                "corrected_redirect_uri" => $redirectUri
+            ]);
+        }
+
+        // Clean up redirect URI
+        if ($redirectUri) {
+            $redirectUri = $this->cleanRedirectUri($redirectUri);
+        }
 
         // Check if this is a direct registration (without client parameters)
         if (!$clientId || !$redirectUri) {
-            Log::info("showRegistrationForm: Direct registration attempt (no client parameters)");
+            Log::info("showRegistrationForm: Direct registration attempt (no client parameters)", [
+                "client_id" => $clientId,
+                "redirect_uri" => $redirectUri
+            ]);
             // Set a flag in the session to indicate this is a direct registration
             session(["direct_login" => true]);
 
