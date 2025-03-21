@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Mail\WelcomeEmail;
 use App\Models\LoginActivity;
-use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
@@ -188,38 +187,10 @@ class AuthController extends Controller
         try {
             if (Auth::attempt($request->only("email", "password"))) {
                 Log::info("login: Authentication successful", ["email" => $request->email]);
-                $user = Auth::user();
-
-                // Check if 2FA is enabled
-                if ($user->hasTwoFactorEnabled()) {
-                    Log::info("login: 2FA enabled for user", ["user_id" => $user->id]);
-                    
-                    // Store user ID in session for 2FA verification
-                    session(['2fa_user_id' => $user->id]);
-                    
-                    // Store client information if present
-                    if (!$directLogin) {
-                        session([
-                            'client_id' => $clientId,
-                            'redirect_uri' => $redirectUri,
-                            'client_name' => session('client_name')
-                        ]);
-                    } else {
-                        session(['direct_login' => true]);
-                    }
-                    
-                    // Log the user out temporarily
-                    Auth::logout();
-                    
-                    // Redirect to 2FA verification page
-                    return redirect()->route('2fa');
-                }
-
-                // If no 2FA, proceed with normal login
                 $request->session()->regenerate();
 
                 // Log the login activity
-                LoginActivity::logLogin($user, $request);
+                LoginActivity::logLogin(Auth::user(), $request);
 
                 // If this is a direct login, redirect to the profile page
                 if ($directLogin) {
@@ -238,9 +209,9 @@ class AuthController extends Controller
                     ]);
                 }
 
-                $token = $this->generateToken($user, $clientId);
+                $token = $this->generateToken(Auth::user(), $clientId);
                 Log::info("login: Generated token for user", [
-                    "user_id" => $user->id,
+                    "user_id" => Auth::user()->id,
                     "token" => $token,
                 ]);
 
@@ -962,211 +933,4 @@ class AuthController extends Controller
         }
     }
 
-    public function directLogin(Request $request)
-    {
-        // ... existing code ...
-        if ($user) {
-            // Log the login activity
-            LoginActivity::logLogin($user, $request);
-            
-            // ... rest of the existing code ...
-        }
-        // ... existing code ...
-    }
-
-    public function directRegister(Request $request)
-    {
-        // ... existing code ...
-        if ($user) {
-            // Log the login activity for new registrations
-            LoginActivity::logLogin($user, $request);
-            
-            // ... rest of the existing code ...
-        }
-        // ... existing code ...
-    }
-
-    /**
-     * Show the 2FA verification form.
-     *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function show2FAForm()
-    {
-        if (!session('2fa_user_id')) {
-            return redirect()->route('login');
-        }
-
-        $user = User::find(session('2fa_user_id'));
-        if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login');
-        }
-
-        return view('auth.2fa', [
-            'client_name' => session('client_name', 'Numblio'),
-            'direct_login' => session('direct_login', false),
-            'client_id' => session('client_id'),
-            'redirect_uri' => session('redirect_uri')
-        ]);
-    }
-
-    /**
-     * Handle 2FA verification.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function verify2FA(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|string|size:6',
-        ]);
-
-        $userId = session('2fa_user_id');
-        if (!$userId) {
-            return redirect()->route('login')->with('error', 'Session expired. Please login again.');
-        }
-
-        $user = User::find($userId);
-        if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login')->with('error', 'Invalid session. Please login again.');
-        }
-
-        $google2fa = new Google2FA();
-        $valid = $google2fa->verifyKey($user->two_factor_secret, $request->code);
-
-        if ($valid) {
-            // Get session data before clearing
-            $directLogin = session('direct_login', false);
-            $clientId = session('client_id');
-            $redirectUri = session('redirect_uri');
-            $clientName = session('client_name');
-
-            // Log the user in
-            Auth::login($user);
-            $request->session()->regenerate();
-
-            // Log the login activity
-            LoginActivity::logLogin($user, $request);
-
-            // Handle redirect based on login type
-            if ($directLogin) {
-                Log::info("verify2FA: Direct login successful after 2FA, redirecting to profile");
-                return redirect()->route("account.profile");
-            } else if ($clientId && $redirectUri) {
-                Log::info("verify2FA: Client login successful after 2FA, generating token", [
-                    "client_id" => $clientId,
-                    "redirect_uri" => $redirectUri
-                ]);
-                
-                // Generate token for SSO redirection
-                $token = $this->generateToken($user, $clientId);
-                
-                $targetUrl = $redirectUri . "?token=" . $token;
-                Log::info("verify2FA: Redirecting to client URL after 2FA", ["target_url" => $targetUrl]);
-                return redirect()->away($targetUrl);
-            }
-
-            // Fallback redirect
-            return redirect()->route("account.profile");
-        }
-
-        return back()->withErrors(['code' => 'Invalid verification code.']);
-    }
-
-    /**
-     * Show the recovery code form.
-     *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function showRecoveryForm()
-    {
-        if (!session('2fa_user_id')) {
-            return redirect()->route('login');
-        }
-
-        $user = User::find(session('2fa_user_id'));
-        if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login');
-        }
-
-        return view('auth.2fa-recovery', [
-            'client_name' => session('client_name', 'Numblio'),
-            'direct_login' => session('direct_login', false),
-            'client_id' => session('client_id'),
-            'redirect_uri' => session('redirect_uri')
-        ]);
-    }
-
-    /**
-     * Handle recovery code verification.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function verifyRecoveryCode(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|string',
-        ]);
-
-        $userId = session('2fa_user_id');
-        if (!$userId) {
-            return redirect()->route('login')->with('error', 'Session expired. Please login again.');
-        }
-
-        $user = User::find($userId);
-        if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login')->with('error', 'Invalid session. Please login again.');
-        }
-
-        $codes = $user->two_factor_recovery_codes;
-        $code = $request->code;
-
-        if (in_array($code, $codes)) {
-            // Remove used recovery code
-            $codes = array_diff($codes, [$code]);
-            $user->two_factor_recovery_codes = array_values($codes);
-            $user->save();
-
-            // Get session data before clearing
-            $directLogin = session('direct_login', false);
-            $clientId = session('client_id');
-            $redirectUri = session('redirect_uri');
-            $clientName = session('client_name');
-            
-            // Clear session data
-            session()->forget(['2fa_user_id']);
-
-            // Log the user in
-            Auth::login($user);
-            $request->session()->regenerate();
-
-            // Log the login activity
-            LoginActivity::logLogin($user, $request);
-
-            // Handle redirect based on login type
-            if ($directLogin) {
-                Log::info("verifyRecoveryCode: Direct login successful after recovery code, redirecting to profile");
-                return redirect()->route("account.profile");
-            } else if ($clientId && $redirectUri) {
-                Log::info("verifyRecoveryCode: Client login successful after recovery code, generating token", [
-                    "client_id" => $clientId,
-                    "redirect_uri" => $redirectUri
-                ]);
-                
-                // Generate token for SSO redirection
-                $token = $this->generateToken($user, $clientId);
-                
-                $targetUrl = $redirectUri . "?token=" . $token;
-                Log::info("verifyRecoveryCode: Redirecting to client URL after recovery code", ["target_url" => $targetUrl]);
-                return redirect()->away($targetUrl);
-            }
-
-            // Fallback redirect
-            return redirect()->route("account.profile");
-        }
-
-        return back()->withErrors(['code' => 'Invalid recovery code.']);
-    }
 }
