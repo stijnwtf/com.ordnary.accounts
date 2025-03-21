@@ -8,7 +8,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-8">
     <!-- Setup Steps -->
-    <div class="space-y-8">
+    <div class="mb-8 space-y-8">
         <!-- Step 1 -->
         <div class="flex items-start space-x-6">
             <div class="flex-shrink-0">
