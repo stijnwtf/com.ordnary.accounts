@@ -11,7 +11,7 @@
     <p class="text-sm text-gray-600">These codes can be used to access your account if you lose your authenticator device. Each code can only be used once.</p>
 </div>
 
-<div class="space-y-6">
+<div class="space-y-6 pb-8">
     <div class="border border-gray-200 rounded-lg overflow-hidden">
         <div class="p-4 bg-gray-50 border-b border-gray-200">
             <h4 class="text-base font-medium text-gray-900 flex items-center">
@@ -52,4 +52,4 @@
         </a>
     </div>
 </div>
-@endsection 
+@endsection
