@@ -189,6 +189,9 @@ class AuthController extends Controller
                 Log::info("login: Authentication successful", ["email" => $request->email]);
                 $request->session()->regenerate();
 
+                // Log the login activity
+                LoginActivity::logLogin(Auth::user(), $request);
+
                 // If this is a direct login, redirect to the profile page
                 if ($directLogin) {
                     Log::info("login: Direct login successful, redirecting to profile");
@@ -885,6 +888,9 @@ class AuthController extends Controller
             // Auto-login after registration
             Auth::login($user);
             $request->session()->regenerate();
+
+            // Log the login activity for new registration
+            LoginActivity::logLogin($user, $request);
 
             // If this is a direct registration, redirect to the profile page
             if ($directLogin) {
