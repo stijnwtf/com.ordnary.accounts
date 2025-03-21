@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Mail\WelcomeEmail;
 use App\Models\LoginActivity;
-use Google2FA;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
