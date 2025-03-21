@@ -40,9 +40,7 @@
                         Open your authenticator app and scan the QR code below:
                     </p>
                     <div class="mt-6 flex justify-center">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 ring-4 ring-gray-50">
-                            {!! QrCode::size(200)->margin(1)->generate($qrCodeUrl) !!}
-                        </div>
+                        {!! QrCode::size(200)->margin(1)->generate($qrCodeUrl) !!}
                     </div>
                     <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                         <p class="text-sm text-gray-600">
@@ -62,7 +60,7 @@
                         <i class="fas fa-key text-2xl"></i>
                     </div>
                 </div>
-                <div class="ml-6">
+                <div class="ml-6 flex-1">
                     <h3 class="text-xl font-semibold text-gray-900">Verify the Setup</h3>
                     <p class="mt-2 text-base text-gray-600">
                         Enter the 6-digit code from your authenticator app to verify the setup:
