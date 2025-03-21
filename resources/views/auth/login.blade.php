@@ -62,6 +62,12 @@
             <!-- Form -->
             <form method="POST" action="{{ route('login') }}" id="login-form" class="space-y-6">
                 @csrf
+                
+                <!-- Add hidden fields for SSO parameters -->
+                @if(session('client_id') && session('redirect_uri'))
+                <input type="hidden" name="client_id" value="{{ session('client_id') }}">
+                <input type="hidden" name="redirect_uri" value="{{ session('redirect_uri') }}">
+                @endif
 
                 <!-- Email Input -->
                 <div>
