@@ -141,18 +141,30 @@
 <div id="add-recovery-email-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Add Recovery Email</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Add Recovery Email</h3>
+                <button type="button" onclick="document.getElementById('add-recovery-email-modal').classList.add('hidden')"
+                    class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <form action="{{ route('account.security.add-recovery-email') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label for="recovery_email" class="block text-sm font-medium text-gray-700">Recovery Email Address</label>
-                    <input type="email" name="recovery_email" id="recovery_email" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                        placeholder="Enter your recovery email">
+                    <label for="recovery_email" class="block text-sm font-medium text-gray-700 mb-1">Recovery Email Address</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email" name="recovery_email" id="recovery_email" required
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            placeholder="name@example.com">
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">We'll send a verification link to this email address.</p>
                 </div>
-                <div class="flex justify-end space-x-3">
+                <div class="flex justify-end space-x-3 pt-4 border-t">
                     <button type="button" onclick="document.getElementById('add-recovery-email-modal').classList.add('hidden')"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                         Cancel
                     </button>
                     <button type="submit"
