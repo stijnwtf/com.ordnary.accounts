@@ -166,16 +166,16 @@ class AuthController extends Controller
     private function handleSuccessfulLogin(Request $request)
     {
         // Handle client redirect if present
-        if ($request->has('client_id') && $request->has('redirect_uri')) {
-            $client = Client::find($request->client_id);
-            if ($client && $client->redirect_uri === $request->redirect_uri) {
+        if (session()->has('client_id') && session()->has('redirect_uri')) {
+            $client = Client::find(session('client_id'));
+            if ($client && $client->redirect_uri === session('redirect_uri')) {
                 $token = $client->generateAccessToken(Auth::user());
-                return redirect()->away($request->redirect_uri . '?token=' . $token);
+                return redirect()->away(session('redirect_uri') . '?token=' . $token);
             }
         }
 
         // For direct login, redirect to the account page
-        if ($request->boolean('direct_login')) {
+        if (session()->has('direct_login')) {
             return redirect()->intended(route('my-account'));
         }
 
