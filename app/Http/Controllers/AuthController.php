@@ -27,6 +27,18 @@ class AuthController extends Controller
                 // Store user ID in session for 2FA verification
                 session(['2fa_user_id' => $user->id]);
                 
+                // If this is a direct login, store that information
+                if ($request->boolean('direct_login')) {
+                    session(['direct_login' => true]);
+                } else {
+                    // For client login, store client information
+                    session([
+                        'client_id' => $request->client_id,
+                        'redirect_uri' => $request->redirect_uri,
+                        'client_name' => $request->client_name
+                    ]);
+                }
+                
                 // Redirect to 2FA verification page
                 return redirect()->route('2fa');
             }
@@ -54,7 +66,9 @@ class AuthController extends Controller
 
         return view('auth.2fa', [
             'client_name' => session('client_name', 'Numblio'),
-            'direct_login' => session('direct_login', false)
+            'direct_login' => session('direct_login', false),
+            'client_id' => session('client_id'),
+            'redirect_uri' => session('redirect_uri')
         ]);
     }
 
@@ -77,7 +91,7 @@ class AuthController extends Controller
 
         if ($google2fa->verifyKey($user->two_factor_secret, $request->code)) {
             // Clear 2FA session data
-            session()->forget('2fa_user_id');
+            session()->forget(['2fa_user_id', 'client_id', 'redirect_uri', 'client_name', 'direct_login']);
             
             // Log the user in
             Auth::login($user);
@@ -104,7 +118,9 @@ class AuthController extends Controller
 
         return view('auth.2fa-recovery', [
             'client_name' => session('client_name', 'Numblio'),
-            'direct_login' => session('direct_login', false)
+            'direct_login' => session('direct_login', false),
+            'client_id' => session('client_id'),
+            'redirect_uri' => session('redirect_uri')
         ]);
     }
 
@@ -133,7 +149,7 @@ class AuthController extends Controller
             $user->save();
 
             // Clear 2FA session data
-            session()->forget('2fa_user_id');
+            session()->forget(['2fa_user_id', 'client_id', 'redirect_uri', 'client_name', 'direct_login']);
             
             // Log the user in
             Auth::login($user);
@@ -156,6 +172,11 @@ class AuthController extends Controller
                 $token = $client->generateAccessToken(Auth::user());
                 return redirect()->away($request->redirect_uri . '?token=' . $token);
             }
+        }
+
+        // For direct login, redirect to the account page
+        if ($request->boolean('direct_login')) {
+            return redirect()->intended(route('my-account'));
         }
 
         // Default redirect to account page

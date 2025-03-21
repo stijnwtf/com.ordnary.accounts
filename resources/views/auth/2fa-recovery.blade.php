@@ -62,6 +62,15 @@
             <!-- Form -->
             <form method="POST" action="{{ route('2fa.recovery.verify') }}" id="recovery-form" class="space-y-6">
                 @csrf
+                @if($client_id)
+                    <input type="hidden" name="client_id" value="{{ $client_id }}">
+                @endif
+                @if($redirect_uri)
+                    <input type="hidden" name="redirect_uri" value="{{ $redirect_uri }}">
+                @endif
+                @if($direct_login)
+                    <input type="hidden" name="direct_login" value="1">
+                @endif
 
                 <!-- Recovery Code Input -->
                 <div>
