@@ -21,7 +21,7 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('throttle:5,1')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/admin/login', [ClientController::class, 'login'])->name('adminloginprocess');
 });
@@ -98,3 +98,9 @@ if (app()->environment('local')) {
         return 'Welcome email sent to ' . $user->email;
     });
 }
+
+// 2FA Routes
+Route::get('/2fa', [AuthController::class, 'show2FAForm'])->name('2fa');
+Route::post('/2fa/verify', [AuthController::class, 'verify2FA'])->name('2fa.verify');
+Route::get('/2fa/recovery', [AuthController::class, 'showRecoveryForm'])->name('2fa.recovery');
+Route::post('/2fa/recovery', [AuthController::class, 'verifyRecoveryCode'])->name('2fa.recovery.verify');
