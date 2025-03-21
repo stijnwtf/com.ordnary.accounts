@@ -43,20 +43,20 @@ Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.lo
 Route::prefix('account')->middleware(['auth'])->group(function () {
     // Bestaande route als redirect naar account/profile
     Route::get('/', [MyAccountController::class, 'index'])->name('my-account');
-    
+
     // Nieuwe routes voor aparte pagina's
     Route::get('/profile', [MyAccountController::class, 'profile'])->name('account.profile');
     Route::get('/password', [MyAccountController::class, 'password'])->name('account.password');
     Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
     Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
     Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
-    
+
     // API routes voor het updaten van gegevens
     Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
     Route::post('/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
-    Route::post('/account/security/add-recovery-email', [MyAccountController::class, 'addRecoveryEmail'])->name('account.security.add-recovery-email');
-    Route::post('/account/security/remove-recovery-email', [MyAccountController::class, 'removeRecoveryEmail'])->name('account.security.remove-recovery-email');
-    Route::get('/account/security/verify-recovery-email/{token}', [MyAccountController::class, 'verifyRecoveryEmail'])->name('account.security.verify-recovery-email');
+    Route::post('/security/add-recovery-email', [MyAccountController::class, 'addRecoveryEmail'])->name('account.security.add-recovery-email');
+    Route::post('/security/remove-recovery-email', [MyAccountController::class, 'removeRecoveryEmail'])->name('account.security.remove-recovery-email');
+    Route::get('/security/verify-recovery-email/{token}', [MyAccountController::class, 'verifyRecoveryEmail'])->name('account.security.verify-recovery-email');
 });
 
 // Admin routes for managing clients
