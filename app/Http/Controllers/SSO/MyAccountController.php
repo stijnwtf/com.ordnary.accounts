@@ -4,15 +4,43 @@ namespace App\Http\Controllers\SSO;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Client;
+use App\Models\LoginActivity;
+use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MyAccountController extends Controller
@@ -223,44 +251,57 @@ class MyAccountController extends Controller
         return redirect()->route('account.security')->with('success', 'Recovery email removed successfully.');
     }
 
-    public function setupTwoFactor()
+    public function setup2FA()
     {
         $user = Auth::user();
-
-        if (!$user->hasTwoFactorSecret()) {
-            $user->generateTwoFactorSecret();
-            $user->generateRecoveryCodes();
-        }
-
         $google2fa = new Google2FA();
+        
+        // Generate a new secret key
+        $secret = $google2fa->generateSecretKey();
+        
+        // Generate QR code URL
         $qrCodeUrl = $google2fa->getQRCodeUrl(
             config('app.name'),
             $user->email,
-            $user->two_factor_secret
+            $secret
         );
-
-        return view('my-account.setup-2fa', [
-            'user' => $user,
-            'qrCodeUrl' => $qrCodeUrl,
-            'active_page' => 'security'
-        ]);
+        
+        // Store the secret temporarily in the session
+        session(['2fa_setup_secret' => $secret]);
+        
+        return view('auth.setup-2fa', compact('qrCodeUrl', 'secret'));
     }
 
-    public function confirmTwoFactor(Request $request)
+    public function confirm2FA(Request $request)
     {
         $request->validate([
             'code' => 'required|string|size:6',
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
+        $secret = session('2fa_setup_secret');
+
+        if (!$secret) {
+            return redirect()->route('account.setup-2fa')
+                ->with('error', 'Setup session expired. Please try again.');
+        }
+
         $google2fa = new Google2FA();
+        $valid = $google2fa->verifyKey($secret, $request->code);
 
-        if ($google2fa->verifyKey($user->two_factor_secret, $request->code)) {
-            $user->confirmTwoFactor();
-            $user->enableTwoFactor();
+        if ($valid) {
+            // Store the secret in the user's record
+            $user->two_factor_secret = $secret;
+            $user->two_factor_enabled = true;
+            $user->save();
 
-            return redirect()->route('account.security')
-                ->with('success', 'Two-factor authentication has been enabled successfully.');
+            // Generate recovery codes
+            $recoveryCodes = $this->generateRecoveryCodes($user);
+
+            // Clear the setup secret from session
+            session()->forget('2fa_setup_secret');
+
+            return view('auth.recovery-codes', compact('recoveryCodes'));
         }
 
         return back()->withErrors(['code' => 'Invalid verification code.']);
