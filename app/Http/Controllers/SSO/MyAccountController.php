@@ -290,6 +290,10 @@ class MyAccountController extends Controller
         $user = auth()->user();
         $codes = $user->generateRecoveryCodes();
 
-        return view('my-account.recovery-codes', compact('codes'));
+        return view('my-account.recovery-codes', [
+            'user' => $user,
+            'codes' => $codes,
+            'active_page' => 'security'
+        ]);
     }
 } 
