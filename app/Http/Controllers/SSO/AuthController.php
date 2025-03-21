@@ -113,10 +113,15 @@ class AuthController extends Controller
 
         // Check if the redirect URI is in the list of allowed URIs for this client
         $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
-        if (!in_array($redirectUri, $allowedRedirectUris)) {
+
+        // Normalize the allowed URIs to handle common typos
+        $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showLoginForm");
+
+        if (!in_array($redirectUri, $normalizedAllowedUris)) {
             Log::error("showLoginForm: Redirect URI not allowed", [
                 "redirect_uri" => $redirectUri,
                 "allowed_redirect_uris" => $allowedRedirectUris,
+                "normalized_allowed_uris" => $normalizedAllowedUris
             ]);
             return view("error", [
                 "message" => "Redirect URI not allowed.",
@@ -127,6 +132,16 @@ class AuthController extends Controller
         session(["client_id" => $clientId, "redirect_uri" => $redirectUri]);
         // Store client name for warning alert
         session(["client_name" => $client->name]);
+        // Explicitly make sure direct_login is false for SSO
+        session(["direct_login" => false]);
+
+        Log::info("showLoginForm: Stored SSO parameters in session", [
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri,
+            "client_name" => $client->name,
+            "session_id" => session()->getId(),
+            "direct_login" => false
+        ]);
 
         return view("auth.login", [
             "client_name" => $client->name,
@@ -220,16 +235,25 @@ class AuthController extends Controller
             ]);
         }
 
-        // Check if this is a direct login
-        $directLogin = session("direct_login");
-        $clientId = session("client_id");
-        $redirectUri = session("redirect_uri");
+        // Get session variables or input values as fallback
+        $directLogin = session("direct_login", false);
+        $clientId = session("client_id", $request->input('client_id'));
+        $redirectUri = session("redirect_uri", $request->input('redirect_uri'));
 
-        Log::debug("login: Retrieved session parameters", [
+        // If values came from input and not session, store them in session for later
+        if (!session("client_id") && $request->input('client_id')) {
+            session(["client_id" => $clientId]);
+        }
+        if (!session("redirect_uri") && $request->input('redirect_uri')) {
+            session(["redirect_uri" => $redirectUri]);
+        }
+
+        Log::debug("login: Retrieved parameters", [
             "direct_login" => $directLogin,
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
             "session_data" => session()->all(),
+            "request_data" => $request->only(['client_id', 'redirect_uri'])
         ]);
 
         try {
@@ -240,35 +264,42 @@ class AuthController extends Controller
                 // Log the login activity
                 LoginActivity::logLogin(Auth::user(), $request);
 
-                // If this is a direct login, redirect to the profile page
+                // Handle redirect based on session parameters
                 if ($directLogin) {
+                    // Direct login to Numblio account
                     Log::info("login: Direct login successful, redirecting to profile");
-                    session()->forget(["direct_login"]);
+                    session()->forget("direct_login");
+                    return redirect()->route("account.profile");
+                } 
+                else if ($clientId && $redirectUri) {
+                    // SSO login with client parameters
+                    Log::info("login: SSO login successful, generating token", [
+                        "client_id" => $clientId,
+                        "redirect_uri" => $redirectUri
+                    ]);
+                    
+                    $token = $this->generateToken(Auth::user(), $clientId);
+                    Log::info("login: Generated token for SSO", [
+                        "user_id" => Auth::user()->id,
+                        "token" => $token,
+                    ]);
+
+                    session()->forget(["client_id", "redirect_uri"]);
+                    Log::debug("login: Cleared session parameters");
+
+                    $targetUrl = $redirectUri . "?token=" . $token;
+                    Log::info("login: Redirecting to client URL", ["target_url" => $targetUrl]);
+                    return redirect()->away($targetUrl);
+                }
+                else {
+                    // Fallback if no valid session parameters (shouldn't happen normally)
+                    Log::warning("login: No valid session parameters for redirect", [
+                        "direct_login" => $directLogin,
+                        "client_id" => $clientId,
+                        "redirect_uri" => $redirectUri
+                    ]);
                     return redirect()->route("account.profile");
                 }
-
-                if (!$clientId || !$redirectUri) {
-                    Log::error("login: Missing session parameters after authentication", [
-                        "client_id" => $clientId,
-                        "redirect_uri" => $redirectUri,
-                    ]);
-                    return redirect()->route("login")->withErrors([
-                        "error" => "Session expired. Please try logging in again.",
-                    ]);
-                }
-
-                $token = $this->generateToken(Auth::user(), $clientId);
-                Log::info("login: Generated token for user", [
-                    "user_id" => Auth::user()->id,
-                    "token" => $token,
-                ]);
-
-                session()->forget(["client_id", "redirect_uri"]);
-                Log::debug("login: Cleared session parameters");
-
-                $targetUrl = $redirectUri . "?token=" . $token;
-                Log::info("login: Redirecting to client URL", ["target_url" => $targetUrl]);
-                return redirect()->away($targetUrl);
             }
 
             $emailExists = User::where("email", $request->email)->exists();
@@ -814,10 +845,15 @@ class AuthController extends Controller
 
         // Check if the redirect URI is in the list of allowed URIs for this client
         $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
-        if (!in_array($redirectUri, $allowedRedirectUris)) {
+
+        // Normalize the allowed URIs to handle common typos
+        $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showRegistrationForm");
+
+        if (!in_array($redirectUri, $normalizedAllowedUris)) {
             Log::error("showRegistrationForm: Redirect URI not allowed", [
                 "redirect_uri" => $redirectUri,
                 "allowed_redirect_uris" => $allowedRedirectUris,
+                "normalized_allowed_uris" => $normalizedAllowedUris
             ]);
             return view("error", [
                 "message" => "Redirect URI not allowed.",
@@ -921,15 +957,25 @@ class AuthController extends Controller
             ]);
         }
 
-        // Check if this is a direct registration
-        $directLogin = session("direct_login");
-        $clientId = session("client_id");
-        $redirectUri = session("redirect_uri");
+        // Get session variables or input values as fallback
+        $directLogin = session("direct_login", false);
+        $clientId = session("client_id", $request->input('client_id'));
+        $redirectUri = session("redirect_uri", $request->input('redirect_uri'));
 
-        Log::debug("register: Retrieved session parameters", [
+        // If values came from input and not session, store them in session for later
+        if (!session("client_id") && $request->input('client_id')) {
+            session(["client_id" => $clientId]);
+        }
+        if (!session("redirect_uri") && $request->input('redirect_uri')) {
+            session(["redirect_uri" => $redirectUri]);
+        }
+
+        Log::debug("register: Retrieved parameters", [
             "direct_login" => $directLogin,
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
+            "session_data" => session()->all(),
+            "request_data" => $request->only(['client_id', 'redirect_uri'])
         ]);
 
         try {
@@ -1009,5 +1055,33 @@ class AuthController extends Controller
                 "error" => "An error occurred while registering. Please try again later.",
             ]);
         }
+    }
+
+    /**
+     * Normalize redirect URIs to handle common typos
+     * 
+     * @param array $allowedRedirectUris
+     * @param string $context
+     * @return array
+     */
+    private function normalizeRedirectUris(array $allowedRedirectUris, string $context = 'general')
+    {
+        $normalizedUris = $allowedRedirectUris;
+        
+        // Process each allowed URI
+        foreach ($allowedRedirectUris as $allowedUri) {
+            // Fix the common 'callack' vs 'callback' typo
+            if (strpos($allowedUri, '/callack') !== false) {
+                $correctedUri = str_replace('/callack', '/callback', $allowedUri);
+                $normalizedUris[] = $correctedUri;
+                
+                Log::info("{$context}: Added normalized version of allowed URI with 'callack' typo fixed", [
+                    "original" => $allowedUri,
+                    "corrected" => $correctedUri
+                ]);
+            }
+        }
+        
+        return $normalizedUris;
     }
 }
