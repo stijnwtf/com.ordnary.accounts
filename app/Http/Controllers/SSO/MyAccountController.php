@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MyAccountController extends Controller
 {
@@ -224,23 +225,25 @@ class MyAccountController extends Controller
 
     public function setupTwoFactor()
     {
-        $user = auth()->user();
-        
+        $user = Auth::user();
+
         if (!$user->hasTwoFactorSecret()) {
-            $secret = $user->generateTwoFactorSecret();
+            $user->generateTwoFactorSecret();
             $user->generateRecoveryCodes();
-        } else {
-            $secret = $user->two_factor_secret;
         }
 
         $google2fa = new Google2FA();
         $qrCodeUrl = $google2fa->getQRCodeUrl(
             config('app.name'),
             $user->email,
-            $secret
+            $user->two_factor_secret
         );
 
-        return view('my-account.setup-2fa', compact('secret', 'qrCodeUrl'));
+        return view('my-account.setup-2fa', [
+            'user' => $user,
+            'qrCodeUrl' => $qrCodeUrl,
+            'active_page' => 'security'
+        ]);
     }
 
     public function confirmTwoFactor(Request $request)
