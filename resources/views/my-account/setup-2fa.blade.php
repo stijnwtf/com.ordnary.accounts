@@ -6,7 +6,7 @@
 @section('subheader', 'Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.')
 
 @section('content')
-<div class="space-y-8">
+<div class="space-y-8 pb-8">
     <!-- Setup Steps -->
     <div class="space-y-10">
         <!-- Step 1 -->
