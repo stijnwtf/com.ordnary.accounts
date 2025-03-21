@@ -20,33 +20,6 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $user = Auth::user();
-
-            // Check if 2FA is enabled
-            if ($user->hasTwoFactorEnabled()) {
-                // Log the user out but keep the session
-                Auth::logout();
-                
-                // Store user ID in session for 2FA verification
-                session(['2fa_user_id' => $user->id]);
-                
-                // If this is a direct login, store that information
-                if ($request->boolean('direct_login')) {
-                    session(['direct_login' => true]);
-                } else {
-                    // For client login, store client information
-                    session([
-                        'client_id' => $request->client_id,
-                        'redirect_uri' => $request->redirect_uri,
-                        'client_name' => $request->client_name
-                    ]);
-                }
-                
-                // Redirect to 2FA verification page
-                return redirect()->route('2fa');
-            }
-
-            // If no 2FA, proceed with normal login
             $request->session()->regenerate();
             return $this->handleSuccessfulLogin($request);
         }
@@ -168,6 +141,32 @@ class AuthController extends Controller
 
     private function handleSuccessfulLogin(Request $request)
     {
+        $user = Auth::user();
+
+        // Check if 2FA is enabled
+        if ($user->hasTwoFactorEnabled()) {
+            // Store user ID in session for 2FA verification
+            session(['2fa_user_id' => $user->id]);
+            
+            // If this is a direct login, store that information
+            if ($request->boolean('direct_login')) {
+                session(['direct_login' => true]);
+            } else {
+                // For client login, store client information
+                session([
+                    'client_id' => $request->client_id,
+                    'redirect_uri' => $request->redirect_uri,
+                    'client_name' => $request->client_name
+                ]);
+            }
+            
+            // Log the user out but keep the session
+            Auth::logout();
+            
+            // Redirect to 2FA verification page
+            return redirect()->route('2fa');
+        }
+
         // Handle client redirect if present
         if (session()->has('client_id') && session()->has('redirect_uri')) {
             $client = Client::find(session('client_id'));
