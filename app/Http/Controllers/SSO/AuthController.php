@@ -40,10 +40,10 @@ class AuthController extends Controller
                 "fixed" => str_replace('/callack', '/callback', $redirectUri)
             ]);
         }
-        
+
         // Remove any newlines that might be in the URI
         $redirectUri = trim(preg_replace('/\s+/', '', $redirectUri));
-        
+
         return $redirectUri;
     }
 
@@ -55,24 +55,59 @@ class AuthController extends Controller
      */
     public function showLoginForm(Request $request)
     {
+
+        if (Auth::check()) {
+            // Get the necessary session parameters
+            $clientId = $request->query("client_id") ?: session("client_id");
+            $redirectUri = $request->query("redirect_uri") ?: session("redirect_uri");
+            $directLogin = session("direct_login") ?? (!$clientId || !$redirectUri);
+
+            Log::info("showLoginForm: User already logged in, redirecting", [
+                "user_id" => Auth::id(),
+                "direct_login" => $directLogin,
+                "client_id" => $clientId,
+                "redirect_uri" => $redirectUri
+            ]);
+
+            if ($directLogin) {
+                // Direct login to Numblio account
+                return redirect()->route("account.profile");
+            }
+            else if ($clientId && $redirectUri) {
+                // SSO login with client parameters
+                $token = $this->generateToken(Auth::user(), $clientId);
+
+                Log::info("showLoginForm: Generated token for already logged in user", [
+                    "user_id" => Auth::id(),
+                    "token" => $token,
+                ]);
+
+                $targetUrl = $redirectUri . "?token=" . $token;
+                return redirect()->away($targetUrl);
+            }
+
+            // Fallback redirect to profile page
+            return redirect()->route("account.profile");
+        }
+
         // Log the incoming query parameters and full URL
         $clientId = $request->query("client_id");
         $redirectUri = $request->query("redirect_uri");
         $fullUrl = $request->fullUrl();
-        
+
         Log::debug("showLoginForm: Received query parameters", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
             "full_url" => $fullUrl
         ]);
-        
+
         // Check for malformed URL with second question mark instead of ampersand
         if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
             // Extract the real client_id and redirect_uri
             $parts = explode('?redirect_uri=', $clientId);
             $clientId = $parts[0];
             $redirectUri = urldecode($parts[1]);
-            
+
             Log::info("showLoginForm: Fixed malformed URL", [
                 "corrected_client_id" => $clientId,
                 "corrected_redirect_uri" => $redirectUri
@@ -270,14 +305,14 @@ class AuthController extends Controller
                     Log::info("login: Direct login successful, redirecting to profile");
                     session()->forget("direct_login");
                     return redirect()->route("account.profile");
-                } 
+                }
                 else if ($clientId && $redirectUri) {
                     // SSO login with client parameters
                     Log::info("login: SSO login successful, generating token", [
                         "client_id" => $clientId,
                         "redirect_uri" => $redirectUri
                     ]);
-                    
+
                     $token = $this->generateToken(Auth::user(), $clientId);
                     Log::info("login: Generated token for SSO", [
                         "user_id" => Auth::user()->id,
@@ -791,20 +826,20 @@ class AuthController extends Controller
         $clientId = $request->query("client_id");
         $redirectUri = $request->query("redirect_uri");
         $fullUrl = $request->fullUrl();
-        
+
         Log::debug("showRegistrationForm: Received query parameters", [
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri,
             "full_url" => $fullUrl
         ]);
-        
+
         // Check for malformed URL with second question mark instead of ampersand
         if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
             // Extract the real client_id and redirect_uri
             $parts = explode('?redirect_uri=', $clientId);
             $clientId = $parts[0];
             $redirectUri = urldecode($parts[1]);
-            
+
             Log::info("showRegistrationForm: Fixed malformed URL", [
                 "corrected_client_id" => $clientId,
                 "corrected_redirect_uri" => $redirectUri
@@ -1059,7 +1094,7 @@ class AuthController extends Controller
 
     /**
      * Normalize redirect URIs to handle common typos
-     * 
+     *
      * @param array $allowedRedirectUris
      * @param string $context
      * @return array
@@ -1067,21 +1102,21 @@ class AuthController extends Controller
     private function normalizeRedirectUris(array $allowedRedirectUris, string $context = 'general')
     {
         $normalizedUris = $allowedRedirectUris;
-        
+
         // Process each allowed URI
         foreach ($allowedRedirectUris as $allowedUri) {
             // Fix the common 'callack' vs 'callback' typo
             if (strpos($allowedUri, '/callack') !== false) {
                 $correctedUri = str_replace('/callack', '/callback', $allowedUri);
                 $normalizedUris[] = $correctedUri;
-                
+
                 Log::info("{$context}: Added normalized version of allowed URI with 'callack' typo fixed", [
                     "original" => $allowedUri,
                     "corrected" => $correctedUri
                 ]);
             }
         }
-        
+
         return $normalizedUris;
     }
 }
