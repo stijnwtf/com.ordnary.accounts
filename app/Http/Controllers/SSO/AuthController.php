@@ -1020,49 +1020,41 @@ class AuthController extends Controller
             'code' => 'required|string|size:6',
         ]);
 
-        if (!session('2fa_user_id')) {
-            return redirect()->route('login');
+        $userId = session('2fa_user_id');
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Session expired. Please login again.');
         }
 
-        $user = User::find(session('2fa_user_id'));
+        $user = User::find($userId);
         if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Invalid session. Please login again.');
         }
 
         $google2fa = new Google2FA();
+        $valid = $google2fa->verifyKey($user->two_factor_secret, $request->code);
 
-        if ($google2fa->verifyKey($user->two_factor_secret, $request->code)) {
+        if ($valid) {
             // Clear 2FA session data
-            session()->forget(['2fa_user_id', 'client_id', 'redirect_uri', 'client_name', 'direct_login']);
-            
-            // Log the user in and regenerate session
+            session()->forget('2fa_user_id');
+            session()->forget('2fa_verified');
+
+            // Log the user in
             Auth::login($user);
-            $request->session()->regenerate();
 
             // Log the login activity
             LoginActivity::logLogin($user, $request);
 
-            // Handle client redirect if present
-            if (session()->has('client_id') && session()->has('redirect_uri')) {
-                $client = Client::find(session('client_id'));
-                if ($client && $client->redirect_uri === session('redirect_uri')) {
-                    $token = $this->generateToken($user, session('client_id'));
-                    return redirect()->away(session('redirect_uri') . '?token=' . $token);
-                }
+            // Handle redirect based on client info or direct login
+            if ($request->has('client_id') && $request->has('redirect_uri')) {
+                return $this->handleClientRedirect($request->client_id, $request->redirect_uri);
+            } elseif ($request->has('direct_login')) {
+                return redirect()->intended('/dashboard');
             }
 
-            // For direct login, redirect to the profile page
-            if (session()->has('direct_login')) {
-                return redirect()->intended(route('account.profile'));
-            }
-
-            // Default redirect to account page
-            return redirect()->intended(route('account.profile'));
+            return redirect()->intended('/dashboard');
         }
 
-        return back()->withErrors([
-            'code' => 'Invalid verification code.',
-        ]);
+        return back()->withErrors(['code' => 'Invalid verification code.']);
     }
 
     /**
