@@ -18,7 +18,7 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-lock text-gray-400"></i>
             </div>
-            <input type="password" name="current_password" id="current_password" required
+            <input placeholder="••••••••" type="password" name="current_password" id="current_password" required
                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -41,7 +41,7 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-lock text-gray-400"></i>
             </div>
-            <input type="password" name="password" id="password" required
+            <input placeholder="••••••••" type="password" name="password" id="password" required
                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -64,7 +64,7 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-lock text-gray-400"></i>
             </div>
-            <input type="password" name="password_confirmation" id="password_confirmation" required
+            <input placeholder="••••••••" type="password" name="password_confirmation" id="password_confirmation" required
                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">

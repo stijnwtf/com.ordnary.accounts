@@ -207,7 +207,7 @@
                         <!-- Welcome header -->
                         <div class="p-6 border-b border-gray-200">
                             <h2 class="text-xl font-bold text-gray-900">Oh hey, {{$user->name}}!</h2>
-                            <p class="text-sm text-gray-600 mt-1">@yield('subheader', 'Manage your personal information and security settings for your Numblio-account.')</p>
+                            <p class="text-sm text-gray-600 mt-1">Ready to make some updates? Adjust your profile, secure your account, and manage notifications with ease.</p>
                         </div>
 
                         <!-- Success Message -->

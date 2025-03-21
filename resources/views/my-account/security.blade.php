@@ -11,46 +11,6 @@
     <p class="text-sm text-gray-600">Enhance the security of your Numblio account with additional protection measures.</p>
 </div>
 
-<!-- Security Overview Card -->
-<div class="mb-6 p-4 bg-green-50 rounded-lg border border-green-100">
-    <h4 class="text-sm font-medium text-green-800 mb-3">Security status</h4>
-    <div class="space-y-4">
-        <div class="flex items-center">
-            <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
-                <i class="fas fa-check text-white text-xs"></i>
-            </div>
-            <div class="flex-1">
-                <p class="text-sm font-medium text-gray-700">Password protection</p>
-                <p class="text-xs text-gray-500">Your account is protected with a strong password</p>
-            </div>
-        </div>
-        <div class="flex items-center">
-            <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3">
-                <i class="fas fa-times text-red-500 text-xs"></i>
-            </div>
-            <div class="flex-1">
-                <p class="text-sm font-medium text-gray-700">Two-factor authentication</p>
-                <p class="text-xs text-gray-500">Add an extra layer of security by enabling 2FA</p>
-            </div>
-            <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
-                Enable
-            </button>
-        </div>
-        <div class="flex items-center">
-            <div class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
-                <i class="fas fa-exclamation text-yellow-600 text-xs"></i>
-            </div>
-            <div class="flex-1">
-                <p class="text-sm font-medium text-gray-700">Recovery email</p>
-                <p class="text-xs text-gray-500">Set up a recovery email for account access</p>
-            </div>
-            <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
-                Setup
-            </button>
-        </div>
-    </div>
-</div>
-
 <!-- Two-Factor Authentication Card -->
 <div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
     <div class="p-4 bg-gray-50 border-b border-gray-200">
@@ -180,4 +140,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
