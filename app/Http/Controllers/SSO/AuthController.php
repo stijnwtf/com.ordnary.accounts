@@ -204,6 +204,8 @@ class AuthController extends Controller
                             'redirect_uri' => $redirectUri,
                             'client_name' => session('client_name')
                         ]);
+                    } else {
+                        session(['direct_login' => true]);
                     }
                     
                     // Log the user out temporarily
@@ -1034,24 +1036,39 @@ class AuthController extends Controller
         $valid = $google2fa->verifyKey($user->two_factor_secret, $request->code);
 
         if ($valid) {
-            // Clear 2FA session data
-            session()->forget('2fa_user_id');
-            session()->forget('2fa_verified');
+            // Get session data before clearing
+            $directLogin = session('direct_login', false);
+            $clientId = session('client_id');
+            $redirectUri = session('redirect_uri');
+            $clientName = session('client_name');
 
             // Log the user in
             Auth::login($user);
+            $request->session()->regenerate();
 
             // Log the login activity
             LoginActivity::logLogin($user, $request);
 
-            // Handle redirect based on client info or direct login
-            if ($request->has('client_id') && $request->has('redirect_uri')) {
-                return $this->handleClientRedirect($request->client_id, $request->redirect_uri);
-            } elseif ($request->has('direct_login')) {
-                return redirect()->intended('/dashboard');
+            // Handle redirect based on login type
+            if ($directLogin) {
+                Log::info("verify2FA: Direct login successful after 2FA, redirecting to profile");
+                return redirect()->route("account.profile");
+            } else if ($clientId && $redirectUri) {
+                Log::info("verify2FA: Client login successful after 2FA, generating token", [
+                    "client_id" => $clientId,
+                    "redirect_uri" => $redirectUri
+                ]);
+                
+                // Generate token for SSO redirection
+                $token = $this->generateToken($user, $clientId);
+                
+                $targetUrl = $redirectUri . "?token=" . $token;
+                Log::info("verify2FA: Redirecting to client URL after 2FA", ["target_url" => $targetUrl]);
+                return redirect()->away($targetUrl);
             }
 
-            return redirect()->intended('/dashboard');
+            // Fallback redirect
+            return redirect()->route("account.profile");
         }
 
         return back()->withErrors(['code' => 'Invalid verification code.']);
@@ -1093,13 +1110,14 @@ class AuthController extends Controller
             'code' => 'required|string',
         ]);
 
-        if (!session('2fa_user_id')) {
-            return redirect()->route('login');
+        $userId = session('2fa_user_id');
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Session expired. Please login again.');
         }
 
-        $user = User::find(session('2fa_user_id'));
+        $user = User::find($userId);
         if (!$user || !$user->hasTwoFactorEnabled()) {
-            return redirect()->route('login');
+            return redirect()->route('login')->with('error', 'Invalid session. Please login again.');
         }
 
         $codes = $user->two_factor_recovery_codes;
@@ -1111,9 +1129,15 @@ class AuthController extends Controller
             $user->two_factor_recovery_codes = array_values($codes);
             $user->save();
 
-            // Clear 2FA session data
-            session()->forget(['2fa_user_id', 'client_id', 'redirect_uri', 'client_name', 'direct_login']);
+            // Get session data before clearing
+            $directLogin = session('direct_login', false);
+            $clientId = session('client_id');
+            $redirectUri = session('redirect_uri');
+            $clientName = session('client_name');
             
+            // Clear session data
+            session()->forget(['2fa_user_id']);
+
             // Log the user in
             Auth::login($user);
             $request->session()->regenerate();
@@ -1121,26 +1145,28 @@ class AuthController extends Controller
             // Log the login activity
             LoginActivity::logLogin($user, $request);
 
-            // Handle client redirect if present
-            if (session()->has('client_id') && session()->has('redirect_uri')) {
-                $client = Client::find(session('client_id'));
-                if ($client && $client->redirect_uri === session('redirect_uri')) {
-                    $token = $this->generateToken($user, session('client_id'));
-                    return redirect()->away(session('redirect_uri') . '?token=' . $token);
-                }
+            // Handle redirect based on login type
+            if ($directLogin) {
+                Log::info("verifyRecoveryCode: Direct login successful after recovery code, redirecting to profile");
+                return redirect()->route("account.profile");
+            } else if ($clientId && $redirectUri) {
+                Log::info("verifyRecoveryCode: Client login successful after recovery code, generating token", [
+                    "client_id" => $clientId,
+                    "redirect_uri" => $redirectUri
+                ]);
+                
+                // Generate token for SSO redirection
+                $token = $this->generateToken($user, $clientId);
+                
+                $targetUrl = $redirectUri . "?token=" . $token;
+                Log::info("verifyRecoveryCode: Redirecting to client URL after recovery code", ["target_url" => $targetUrl]);
+                return redirect()->away($targetUrl);
             }
 
-            // For direct login, redirect to the profile page
-            if (session()->has('direct_login')) {
-                return redirect()->intended(route('account.profile'));
-            }
-
-            // Default redirect to account page
-            return redirect()->intended(route('account.profile'));
+            // Fallback redirect
+            return redirect()->route("account.profile");
         }
 
-        return back()->withErrors([
-            'code' => 'Invalid recovery code.',
-        ]);
+        return back()->withErrors(['code' => 'Invalid recovery code.']);
     }
 }
