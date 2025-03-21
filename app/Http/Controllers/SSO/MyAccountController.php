@@ -34,7 +34,6 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
@@ -154,20 +153,20 @@ class MyAccountController extends Controller
         ]);
 
         $user->name = $request->name;
-        
+
         // Only update email if it has changed
         if ($user->email !== $request->email) {
             $user->email = $request->email;
             // Here you could add email verification logic if needed
         }
-        
+
         // Update language preference
         $user->lang = $request->language;
 
         $user->save();
 
         Log::info('User profile updated', ['user_id' => $user->id]);
-        
+
         return redirect()->route('account.profile')->with('status', 'Profiel succesvol bijgewerkt!');
     }
 
@@ -197,7 +196,7 @@ class MyAccountController extends Controller
         $user->save();
 
         Log::info('User password updated', ['user_id' => $user->id]);
-        
+
         return redirect()->route('account.password')->with('status', 'Wachtwoord succesvol bijgewerkt!');
     }
 
@@ -255,20 +254,20 @@ class MyAccountController extends Controller
     {
         $user = Auth::user();
         $google2fa = new Google2FA();
-        
+
         // Generate a new secret key
         $secret = $google2fa->generateSecretKey();
-        
+
         // Generate QR code URL
         $qrCodeUrl = $google2fa->getQRCodeUrl(
             config('app.name'),
             $user->email,
             $secret
         );
-        
+
         // Store the secret temporarily in the session
         session(['2fa_setup_secret' => $secret]);
-        
+
         return view('auth.setup-2fa', compact('qrCodeUrl', 'secret'));
     }
 
@@ -337,4 +336,4 @@ class MyAccountController extends Controller
             'active_page' => 'security'
         ]);
     }
-} 
+}
