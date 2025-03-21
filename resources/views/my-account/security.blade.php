@@ -88,11 +88,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-3">
-            <button class="text-xs text-blue-600 hover:text-blue-800 flex items-center">
-                <i class="fas fa-list mr-1"></i> View all login activity
-            </button>
-        </div>
     </div>
 </div>
 
@@ -112,18 +107,37 @@
                     <h5 class="text-sm font-medium text-gray-900">Recovery Email</h5>
                     <p class="text-xs text-gray-500">A backup email address for account recovery</p>
                 </div>
-                <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
-                    <i class="fas fa-plus-circle mr-1"></i> Add
-                </button>
-            </div>
-            <div class="flex items-center justify-between">
-                <div>
-                    <h5 class="text-sm font-medium text-gray-900">Recovery Phone</h5>
-                    <p class="text-xs text-gray-500">A phone number for account recovery via SMS</p>
-                </div>
-                <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
-                    <i class="fas fa-plus-circle mr-1"></i> Add
-                </button>
+                @if($user->recovery_email)
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600">{{ $user->recovery_email }}</span>
+                        @if($user->recovery_email_verified)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i> Verified
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                <i class="fas fa-clock mr-1"></i> Pending
+                            </span>
+                        @endif
+                        <form action="{{ route('account.security.remove-recovery-email') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-xs text-red-600 hover:text-red-800">
+                                <i class="fas fa-times"></i> Remove
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <form action="{{ route('account.security.add-recovery-email') }}" method="POST" class="inline">
+                        @csrf
+                        <div class="flex items-center space-x-2">
+                            <input type="email" name="recovery_email" placeholder="Enter recovery email" required
+                                class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <button type="submit" class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                <i class="fas fa-plus-circle mr-1"></i> Add
+                            </button>
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

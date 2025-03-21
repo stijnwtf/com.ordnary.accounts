@@ -54,6 +54,9 @@ Route::prefix('account')->middleware(['auth'])->group(function () {
     // API routes voor het updaten van gegevens
     Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
     Route::post('/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
+    Route::post('/account/security/add-recovery-email', [MyAccountController::class, 'addRecoveryEmail'])->name('account.security.add-recovery-email');
+    Route::post('/account/security/remove-recovery-email', [MyAccountController::class, 'removeRecoveryEmail'])->name('account.security.remove-recovery-email');
+    Route::get('/account/security/verify-recovery-email/{token}', [MyAccountController::class, 'verifyRecoveryEmail'])->name('account.security.verify-recovery-email');
 });
 
 // Admin routes for managing clients

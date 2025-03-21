@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MyAccountController extends Controller
 {
@@ -167,5 +169,55 @@ class MyAccountController extends Controller
         Log::info('User password updated', ['user_id' => $user->id]);
         
         return redirect()->route('account.password')->with('status', 'Wachtwoord succesvol bijgewerkt!');
+    }
+
+    public function addRecoveryEmail(Request $request)
+    {
+        $request->validate([
+            'recovery_email' => 'required|email|unique:users,recovery_email',
+        ]);
+
+        $user = Auth::user();
+        $user->recovery_email = $request->recovery_email;
+        $user->save();
+
+        // Generate verification token
+        $token = Str::random(64);
+        $user->recovery_email_verification_token = $token;
+        $user->save();
+
+        // Send verification email
+        Mail::send('emails.verify-recovery-email', ['token' => $token], function($message) use ($user) {
+            $message->to($user->recovery_email);
+            $message->subject('Verify Recovery Email');
+        });
+
+        return redirect()->route('account.security')->with('success', 'Recovery email added. Please check your email to verify it.');
+    }
+
+    public function verifyRecoveryEmail($token)
+    {
+        $user = User::where('recovery_email_verification_token', $token)->first();
+
+        if (!$user) {
+            return redirect()->route('account.security')->with('error', 'Invalid verification token.');
+        }
+
+        $user->verifyRecoveryEmail();
+        $user->recovery_email_verification_token = null;
+        $user->save();
+
+        return redirect()->route('account.security')->with('success', 'Recovery email verified successfully.');
+    }
+
+    public function removeRecoveryEmail(Request $request)
+    {
+        $user = Auth::user();
+        $user->recovery_email = null;
+        $user->recovery_email_verified = false;
+        $user->recovery_email_verified_at = null;
+        $user->save();
+
+        return redirect()->route('account.security')->with('success', 'Recovery email removed successfully.');
     }
 } 

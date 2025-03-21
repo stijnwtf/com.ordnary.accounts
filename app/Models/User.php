@@ -23,6 +23,9 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'lang',
+        'recovery_email',
+        'recovery_email_verified',
+        'recovery_email_verified_at',
     ];
 
     /**
@@ -46,6 +49,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'recovery_email_verified_at' => 'datetime',
         ];
     }
     
@@ -84,5 +88,12 @@ class User extends Authenticatable
             ->latest()
             ->take($limit)
             ->get();
+    }
+
+    public function verifyRecoveryEmail()
+    {
+        $this->recovery_email_verified = true;
+        $this->recovery_email_verified_at = now();
+        $this->save();
     }
 }
