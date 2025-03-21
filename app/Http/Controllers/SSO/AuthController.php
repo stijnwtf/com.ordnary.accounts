@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Mail\WelcomeEmail;
+use App\Models\LoginActivity;
 
 class AuthController extends Controller
 {
@@ -924,5 +925,29 @@ class AuthController extends Controller
                 "error" => "An error occurred while registering. Please try again later.",
             ]);
         }
+    }
+
+    public function directLogin(Request $request)
+    {
+        // ... existing code ...
+        if ($user) {
+            // Log the login activity
+            LoginActivity::logLogin($user, $request);
+            
+            // ... rest of the existing code ...
+        }
+        // ... existing code ...
+    }
+
+    public function directRegister(Request $request)
+    {
+        // ... existing code ...
+        if ($user) {
+            // Log the login activity for new registrations
+            LoginActivity::logLogin($user, $request);
+            
+            // ... rest of the existing code ...
+        }
+        // ... existing code ...
     }
 }

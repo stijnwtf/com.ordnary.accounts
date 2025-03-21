@@ -55,48 +55,36 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($user->getRecentLoginActivities() as $activity)
                     <tr>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->format('d-m-Y H:i') }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->created_at->format('d-m-Y H:i') }}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
                             <div class="flex items-center">
-                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome on macOS
+                                @if($activity->device_type === 'Mobile')
+                                    <i class="fas fa-mobile-alt mr-1 text-gray-400"></i>
+                                @elseif($activity->device_type === 'Tablet')
+                                    <i class="fas fa-tablet-alt mr-1 text-gray-400"></i>
+                                @else
+                                    <i class="fas fa-laptop mr-1 text-gray-400"></i>
+                                @endif
+                                {{ $activity->browser }} on {{ $activity->platform }}
                             </div>
                         </td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Amsterdam, NL</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->location }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-check-circle mr-1"></i> Current
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $activity->status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                <i class="fas fa-{{ $activity->status === 'success' ? 'check' : 'times' }}-circle mr-1"></i>
+                                {{ ucfirst($activity->status) }}
                             </span>
                         </td>
                     </tr>
+                    @empty
                     <tr>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->subDays(2)->format('d-m-Y H:i') }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
-                            <div class="flex items-center">
-                                <i class="fas fa-mobile-alt mr-1 text-gray-400"></i> Mobile App
-                            </div>
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Amsterdam, NL</td>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                <i class="fas fa-check-circle mr-1"></i> Success
-                            </span>
+                        <td colspan="4" class="px-4 py-2 text-center text-xs text-gray-500">
+                            No login activity found
                         </td>
                     </tr>
-                    <tr>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->subDays(5)->format('d-m-Y H:i') }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
-                            <div class="flex items-center">
-                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome on Windows
-                            </div>
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Rotterdam, NL</td>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                <i class="fas fa-check-circle mr-1"></i> Success
-                            </span>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

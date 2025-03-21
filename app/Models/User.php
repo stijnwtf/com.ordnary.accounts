@@ -72,4 +72,17 @@ class User extends Authenticatable
     {
         return $this->notifications()->whereNull('read_at')->count();
     }
+
+    public function loginActivities()
+    {
+        return $this->hasMany(LoginActivity::class);
+    }
+
+    public function getRecentLoginActivities($limit = 5)
+    {
+        return $this->loginActivities()
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
 }
