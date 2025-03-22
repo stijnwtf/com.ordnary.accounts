@@ -349,7 +349,10 @@ class AuthController extends Controller
                 // Check if 2FA is enabled for this user
                 if ($user->hasTwoFactorEnabled()) {
                     Log::info("login: 2FA is enabled, redirecting to verification", [
-                        "user_id" => $user->id
+                        "user_id" => $user->id,
+                        "client_id" => $clientId,
+                        "redirect_uri" => $redirectUri,
+                        "direct_login" => $directLogin
                     ]);
                     
                     // Log the user out temporarily while we verify 2FA
@@ -698,7 +701,10 @@ class AuthController extends Controller
 
         Log::info("show2FAForm: Showing 2FA form", [
             "user_id" => $userId,
-            "client_name" => $clientName
+            "client_name" => $clientName,
+            "direct_login" => $directLogin,
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri
         ]);
 
         return view('auth.2fa', [
@@ -754,6 +760,13 @@ class AuthController extends Controller
         $directLogin = session('auth.2fa.direct_login', false);
         $clientId = session('auth.2fa.client_id');
         $redirectUri = session('auth.2fa.redirect_uri');
+        
+        Log::info("verify2FA: Code verified successfully", [
+            "user_id" => $userId,
+            "direct_login" => $directLogin,
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri
+        ]);
         
         // Clear 2FA session data
         session()->forget([
@@ -865,7 +878,8 @@ class AuthController extends Controller
         
         if (!in_array($request->recovery_code, $recoveryCodes)) {
             Log::warning("verifyRecoveryCode: Invalid recovery code", [
-                "user_id" => $userId
+                "user_id" => $userId,
+                "provided_code" => $request->recovery_code
             ]);
             return redirect()->route('2fa.recovery')
                 ->withErrors(['recovery_code' => 'Invalid recovery code.']);
@@ -879,15 +893,18 @@ class AuthController extends Controller
         $user->two_factor_recovery_codes = array_values($codes);
         $user->save();
         
-        Log::info("verifyRecoveryCode: Recovery code used", [
-            "user_id" => $userId,
-            "remaining_codes" => count($codes)
-        ]);
-        
         // Get SSO parameters from session
         $directLogin = session('auth.2fa.direct_login', false);
         $clientId = session('auth.2fa.client_id');
         $redirectUri = session('auth.2fa.redirect_uri');
+        
+        Log::info("verifyRecoveryCode: Recovery code used successfully", [
+            "user_id" => $userId,
+            "remaining_codes" => count($codes),
+            "direct_login" => $directLogin,
+            "client_id" => $clientId,
+            "redirect_uri" => $redirectUri
+        ]);
         
         // Clear 2FA session
         session()->forget([

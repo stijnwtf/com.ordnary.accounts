@@ -341,6 +341,7 @@ class MyAccountController extends Controller
             // Store the secret in the user's record
             $user->two_factor_secret = $secret;
             $user->two_factor_enabled = true;
+            $user->two_factor_confirmed_at = now();
             $user->save();
 
             // Generate recovery codes

@@ -154,7 +154,7 @@ class User extends Authenticatable
 
     public function hasTwoFactorEnabled()
     {
-        return $this->two_factor_enabled && $this->two_factor_confirmed_at !== null;
+        return $this->two_factor_enabled && $this->two_factor_secret !== null;
     }
 
     public function hasTwoFactorSecret()
