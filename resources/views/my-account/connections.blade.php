@@ -117,17 +117,38 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         serviceItem.classList.add('opacity-50');
         
+        // Debug: Log what we're sending
+        console.log('Disconnecting service ID:', serviceId);
+        console.log('CSRF token:', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        
         // Make API request to disconnect service
         fetch('/api/user/unlink-service', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
             },
-            body: JSON.stringify({ service_id: serviceId })
+            body: JSON.stringify({ service_id: serviceId }),
+            credentials: 'same-origin' // Include cookies
         })
-        .then(response => response.json())
+        .then(response => {
+            // Debug: Log the raw response
+            console.log('Status:', response.status);
+            console.log('OK:', response.ok);
+            
+            // Handle non-JSON responses
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Server returned non-JSON response');
+            }
+            
+            return response.json();
+        })
         .then(data => {
+            // Debug: Log the parsed data
+            console.log('Response data:', data);
+            
             if (data.success) {
                 // Remove the service item from the DOM
                 serviceItem.remove();

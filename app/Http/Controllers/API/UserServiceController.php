@@ -62,6 +62,13 @@ class UserServiceController extends Controller
      */
     public function unlinkService(Request $request): JsonResponse
     {
+        // Debug: Log all incoming data
+        Log::info('UserServiceController@unlinkService: Received request', [
+            'all_data' => $request->all(),
+            'headers' => $request->headers->all(),
+            'user' => Auth::user() ? Auth::user()->id : 'not authenticated'
+        ]);
+
         $request->validate([
             'service_id' => 'required|string'
         ]);

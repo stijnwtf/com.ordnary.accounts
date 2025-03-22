@@ -20,8 +20,12 @@ Route::prefix('v1')->group(function () {
 });
 
 // User API routes with authentication
-Route::middleware('auth')->prefix('user')->group(function () {
+Route::middleware(['auth'])->prefix('user')->group(function () {
     // Connected services
     Route::get('/services', [UserServiceController::class, 'index']);
+});
+
+// User route with auth and CSRF protection
+Route::middleware(['auth', 'web'])->prefix('user')->group(function () {
     Route::post('/unlink-service', [UserServiceController::class, 'unlinkService']);
 });

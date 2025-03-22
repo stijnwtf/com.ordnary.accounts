@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Manage your Numblio-account settings">
     <title>Account Centrum</title>
     <link rel="icon" href="https://numblio.com/img/icon_black.png" type="image/gif" sizes="20x20">
