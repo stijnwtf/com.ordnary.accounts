@@ -11,19 +11,6 @@
     <p class="text-sm text-gray-600">Manage the services and applications connected to your Numblio account.</p>
 </div>
 
-<!-- Connected Services Overview -->
-<div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-    <div class="flex items-center">
-        <div class="mr-4">
-            <i class="fas fa-link text-blue-500 text-xl"></i>
-        </div>
-        <div>
-            <h4 class="text-md font-semibold text-gray-900">Connected applications</h4>
-            <p class="text-sm text-gray-600">View and manage third-party applications that have access to your Numblio account.</p>
-        </div>
-    </div>
-</div>
-
 <!-- Status Messages -->
 <div id="status-message" class="mb-6 hidden">
     <!-- Will be populated by JavaScript -->
@@ -84,13 +71,6 @@
     </div>
 </template>
 
-<!-- Add More Connections Button -->
-<div class="pb-6 flex justify-end mt-6">
-    <button class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
-        <i class="fas fa-plus-circle mr-2"></i> Connect more services
-    </button>
-</div>
-
 @endsection
 
 @section('scripts')
@@ -98,29 +78,29 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Get all disconnect buttons
     const disconnectButtons = document.querySelectorAll('.disconnect-btn');
-    
+
     // Add click event listener to each button
     disconnectButtons.forEach(button => {
         button.addEventListener('click', function() {
             const serviceItem = this.closest('.service-item');
             const serviceId = serviceItem.dataset.serviceId;
             const serviceName = serviceItem.dataset.serviceName;
-            
+
             if (confirm(`Are you sure you want to disconnect ${serviceName}? This will revoke access to your Numblio account.`)) {
                 disconnectService(serviceId, serviceItem);
             }
         });
     });
-    
+
     // Function to disconnect a service
     function disconnectService(serviceId, serviceItem) {
         // Show loading state
         serviceItem.classList.add('opacity-50');
-        
+
         // Debug: Log what we're sending
         console.log('Disconnecting service ID:', serviceId);
         console.log('CSRF token:', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-        
+
         // Make API request to disconnect service
         fetch('/api/user/unlink-service', {
             method: 'POST',
@@ -136,26 +116,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // Debug: Log the raw response
             console.log('Status:', response.status);
             console.log('OK:', response.ok);
-            
+
             // Handle non-JSON responses
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 throw new Error('Server returned non-JSON response');
             }
-            
+
             return response.json();
         })
         .then(data => {
             // Debug: Log the parsed data
             console.log('Response data:', data);
-            
+
             if (data.success) {
                 // Remove the service item from the DOM
                 serviceItem.remove();
-                
+
                 // Show success message
                 showStatusMessage('success', `Successfully disconnected ${serviceItem.dataset.serviceName}`);
-                
+
                 // Check if there are no more services
                 const remainingServices = document.querySelectorAll('.service-item');
                 if (remainingServices.length === 0) {
@@ -176,19 +156,19 @@ document.addEventListener('DOMContentLoaded', function() {
             serviceItem.classList.remove('opacity-50');
         });
     }
-    
+
     // Function to show status messages
     function showStatusMessage(type, message) {
         const statusMessage = document.getElementById('status-message');
         statusMessage.innerHTML = '';
         statusMessage.classList.remove('hidden', 'bg-green-50', 'bg-red-50');
-        
+
         let backgroundColor = 'bg-green-50';
         let borderColor = 'border-green-200';
         let textColor = 'text-green-800';
         let icon = 'fa-check-circle';
         let iconColor = 'text-green-500';
-        
+
         if (type === 'error') {
             backgroundColor = 'bg-red-50';
             borderColor = 'border-red-200';
@@ -196,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
             icon = 'fa-exclamation-circle';
             iconColor = 'text-red-500';
         }
-        
+
         statusMessage.classList.add(backgroundColor, 'p-4', 'rounded-lg', 'border', borderColor);
-        
+
         const content = `
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -216,10 +196,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         statusMessage.innerHTML = content;
         statusMessage.classList.remove('hidden');
-        
+
         // Auto-hide after 5 seconds
         setTimeout(() => {
             statusMessage.classList.add('hidden');
@@ -227,4 +207,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endsection 
+@endsection
