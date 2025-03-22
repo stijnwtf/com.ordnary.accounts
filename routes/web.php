@@ -19,6 +19,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('logout.process');
 
 Route::middleware('throttle:5,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Mail\WelcomeEmail;
 use App\Models\LoginActivity;
+use App\Models\UserService;
 
 class AuthController extends Controller
 {
@@ -470,11 +471,98 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        Log::info("logout: User logging out", ["user_id" => Auth::id()]);
+        $userId = Auth::id(); // Save the ID before logging out
+        
+        // Get the active services for this user
+        $activeServices = [];
+        if ($userId) {
+            $activeServices = UserService::where('user_id', $userId)
+                ->where('status', 'active')
+                ->with('client:client_id,name,logout_url')
+                ->get();
+                
+            Log::info("logout: Found active services for user", [
+                "user_id" => $userId,
+                "service_count" => $activeServices->count()
+            ]);
+        }
+        
+        // Log the user out from the current application
+        Log::info("logout: User logging out", ["user_id" => $userId]);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
+        // Process Single Logout for connected services
+        $logoutRedirects = [];
+        
+        foreach ($activeServices as $service) {
+            // Only include services with a logout URL
+            if ($service->client && !empty($service->client->logout_url)) {
+                $logoutRedirects[] = $service->client->logout_url;
+                
+                // Back-channel logout notification (server-to-server)
+                try {
+                    $response = Http::post($service->client->webhook_url, [
+                        'event' => 'user_logout',
+                        'user_id' => $userId,
+                        'service_id' => $service->client_id,
+                        'timestamp' => now()->toIso8601String()
+                    ]);
+                    
+                    Log::info("logout: Back-channel logout notification sent", [
+                        "user_id" => $userId,
+                        "service_id" => $service->client_id,
+                        "response_status" => $response->status()
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error("logout: Back-channel logout notification failed", [
+                        "user_id" => $userId,
+                        "service_id" => $service->client_id,
+                        "error" => $e->getMessage()
+                    ]);
+                }
+            }
+        }
+        
+        // Store logout redirects in session to process them one by one
+        if (!empty($logoutRedirects)) {
+            session(['logout_redirects' => $logoutRedirects]);
+            return redirect()->route('logout.process');
+        }
+        
         return redirect("/");
+    }
+    
+    /**
+     * Process logout redirects one by one for front-channel logout.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function processLogout(Request $request)
+    {
+        $logoutRedirects = session('logout_redirects', []);
+        
+        if (empty($logoutRedirects)) {
+            return redirect('/');
+        }
+        
+        // Get the next logout URL and remove it from the session
+        $nextLogoutUrl = array_shift($logoutRedirects);
+        session(['logout_redirects' => $logoutRedirects]);
+        
+        // Add a return URL parameter to come back after logout
+        $returnUrl = route('logout.process');
+        $redirectUrl = $nextLogoutUrl . (strpos($nextLogoutUrl, '?') === false ? '?' : '&') . 'return_to=' . urlencode($returnUrl);
+        
+        Log::info("processLogout: Redirecting to service logout URL", [
+            "logout_url" => $nextLogoutUrl,
+            "redirect_url" => $redirectUrl,
+            "remaining_redirects" => count($logoutRedirects)
+        ]);
+        
+        return redirect()->away($redirectUrl);
     }
 
     /**
@@ -604,6 +692,23 @@ class AuthController extends Controller
                 ->first()
                 ?->delete();
         }
+
+        // Register this service for the user or update last_used timestamp
+        UserService::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'client_id' => $clientId,
+            ],
+            [
+                'last_used' => now(),
+                'status' => 'active',
+            ]
+        );
+        
+        Log::info("generateToken: User service registered or updated", [
+            "user_id" => $user->id,
+            "client_id" => $clientId,
+        ]);
 
         // Gebruik een cryptografisch veilige token generator
         $token = bin2hex(random_bytes(32));
