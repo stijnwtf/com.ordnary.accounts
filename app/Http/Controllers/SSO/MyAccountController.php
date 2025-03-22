@@ -301,7 +301,7 @@ class MyAccountController extends Controller
         // Store the secret temporarily in the session
         session(['2fa_setup_secret' => $secret]);
 
-        return view('my-account.setup-2fa', compact('qrCodeUrl', 'secret'));
+        return view('my-account.setup-2fa', compact('qrCodeUrl', 'secret', 'user'));
     }
 
     public function confirm2FA(Request $request)
