@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Http;
 use App\Mail\WelcomeEmail;
 use App\Models\LoginActivity;
 use App\Models\UserService;
-use Google\Authenticator\Google2FA;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
