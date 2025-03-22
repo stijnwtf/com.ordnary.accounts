@@ -166,4 +166,20 @@ class User extends Authenticatable
     {
         return $this->two_factor_recovery_codes !== null;
     }
+    
+    /**
+     * Get the services connected to this user's account.
+     */
+    public function services()
+    {
+        return $this->hasMany(UserService::class);
+    }
+    
+    /**
+     * Get active services connected to this user's account.
+     */
+    public function activeServices()
+    {
+        return $this->services()->where('status', 'active');
+    }
 }
