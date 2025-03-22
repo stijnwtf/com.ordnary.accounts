@@ -71,6 +71,11 @@
     </div>
 </template>
 
+<!-- Add More Connections Button -->
+<div class="pb-6 flex justify-end mt-6">
+
+</div>
+
 @endsection
 
 @section('scripts')
