@@ -46,7 +46,7 @@
                         If you can't scan the QR code, you can manually enter this code in your authenticator app:
                     </p>
                     <div class="mt-2">
-                        <code class="block px-4 py-2 bg-gray-50 rounded-md text-sm font-mono text-gray-900 border border-gray-200">{{ $user->two_factor_secret }}</code>
+                        <code class="block px-4 py-2 bg-gray-50 rounded-md text-sm font-mono text-gray-900 border border-gray-200">{{ $secret }}</code>
                     </div>
                 </div>
             </div>
