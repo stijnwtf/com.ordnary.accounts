@@ -309,6 +309,17 @@ class MyAccountController extends Controller
         ]);
     }
 
+    /**
+     * Alias for confirm2FA to maintain route compatibility.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function confirmTwoFactor(Request $request)
+    {
+        return $this->confirm2FA($request);
+    }
+
     public function confirm2FA(Request $request)
     {
         $request->validate([
