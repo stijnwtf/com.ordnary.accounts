@@ -64,15 +64,15 @@
 
                 <!-- Recovery Code Input -->
                 <div>
-                    <label for="code" class="block text-sm font-medium text-gray-700 mb-1">Recovery Code</label>
+                    <label for="recovery_code" class="block text-sm font-medium text-gray-700 mb-1">Recovery Code</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-key text-gray-400"></i>
                         </div>
-                        <input placeholder="Enter recovery code" type="text" name="code" id="code" required
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('code') ? 'border-red-500' : 'border-gray-300' }}">
+                        <input placeholder="Enter recovery code" type="text" name="recovery_code" id="recovery_code" required
+                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('recovery_code') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
-                    @error('code')
+                    @error('recovery_code')
                     <p class="mt-1 text-sm text-red-600 flex items-center">
                         {{ $message }}
                     </p>

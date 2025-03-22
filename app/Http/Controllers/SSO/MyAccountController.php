@@ -273,6 +273,16 @@ class MyAccountController extends Controller
         return redirect()->route('account.security')->with('success', 'Recovery email removed successfully.');
     }
 
+    /**
+     * Alias for setup2FA to maintain route compatibility.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function setupTwoFactor()
+    {
+        return $this->setup2FA();
+    }
+
     public function setup2FA()
     {
         $user = Auth::user();
@@ -291,7 +301,7 @@ class MyAccountController extends Controller
         // Store the secret temporarily in the session
         session(['2fa_setup_secret' => $secret]);
 
-        return view('auth.setup-2fa', compact('qrCodeUrl', 'secret'));
+        return view('my-account.setup-2fa', compact('qrCodeUrl', 'secret'));
     }
 
     public function confirm2FA(Request $request)
