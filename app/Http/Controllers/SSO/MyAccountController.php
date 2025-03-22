@@ -273,6 +273,16 @@ class MyAccountController extends Controller
         return redirect()->route('account.security')->with('success', 'Recovery email removed successfully.');
     }
 
+    /**
+     * Alias for setup2FA to maintain route compatibility.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function setupTwoFactor()
+    {
+        return $this->setup2FA();
+    }
+
     public function setup2FA()
     {
         $user = Auth::user();
@@ -291,7 +301,23 @@ class MyAccountController extends Controller
         // Store the secret temporarily in the session
         session(['2fa_setup_secret' => $secret]);
 
-        return view('auth.setup-2fa', compact('qrCodeUrl', 'secret'));
+        return view('my-account.setup-2fa', [
+            'qrCodeUrl' => $qrCodeUrl,
+            'secret' => $secret,
+            'user' => $user,
+            'active_page' => 'security'
+        ]);
+    }
+
+    /**
+     * Alias for confirm2FA to maintain route compatibility.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function confirmTwoFactor(Request $request)
+    {
+        return $this->confirm2FA($request);
     }
 
     public function confirm2FA(Request $request)
@@ -315,6 +341,7 @@ class MyAccountController extends Controller
             // Store the secret in the user's record
             $user->two_factor_secret = $secret;
             $user->two_factor_enabled = true;
+            $user->two_factor_confirmed_at = now();
             $user->save();
 
             // Generate recovery codes
@@ -323,7 +350,11 @@ class MyAccountController extends Controller
             // Clear the setup secret from session
             session()->forget('2fa_setup_secret');
 
-            return view('auth.recovery-codes', compact('recoveryCodes'));
+            return view('my-account.recovery-codes', [
+                'user' => $user,
+                'codes' => $recoveryCodes,
+                'active_page' => 'security'
+            ]);
         }
 
         return back()->withErrors(['code' => 'Invalid verification code.']);
@@ -358,5 +389,26 @@ class MyAccountController extends Controller
             'codes' => $codes,
             'active_page' => 'security'
         ]);
+    }
+
+    /**
+     * Generate recovery codes for a user.
+     *
+     * @param  \App\Models\User  $user
+     * @return array
+     */
+    private function generateRecoveryCodes(User $user)
+    {
+        // Generate 8 random recovery codes
+        $recoveryCodes = [];
+        for ($i = 0; $i < 8; $i++) {
+            $recoveryCodes[] = Str::random(10);
+        }
+
+        // Store the recovery codes in the user record
+        $user->two_factor_recovery_codes = $recoveryCodes;
+        $user->save();
+
+        return $recoveryCodes;
     }
 }

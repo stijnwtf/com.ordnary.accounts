@@ -519,9 +519,9 @@
                                                 <p class="text-sm font-medium text-gray-700">Two-factor authentication</p>
                                                 <p class="text-xs text-gray-500">Add an extra layer of security by enabling 2FA</p>
                                             </div>
-                                            <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                            <a href="{{ route('account.security.setup-2fa') }}" class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
                                                 Enable
-                                            </button>
+                                            </a>
                                         </div>
                                         <div class="flex items-center">
                                             <div class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
@@ -550,13 +550,36 @@
                                         <p class="text-sm text-gray-600 mb-4">Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.</p>
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
+                                                @if($user->hasTwoFactorEnabled())
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <i class="fas fa-check-circle mr-1"></i> Enabled
+                                                </span>
+                                                @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                     <i class="fas fa-times-circle mr-1"></i> Not enabled
                                                 </span>
+                                                @endif
                                             </div>
-                                            <button class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                            @if($user->hasTwoFactorEnabled())
+                                            <div class="flex space-x-2">
+                                                <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.remove('hidden')"
+                                                    class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                    <i class="fas fa-times-circle mr-1"></i> Disable 2FA
+                                                </button>
+                                                <form action="{{ route('account.security.regenerate-recovery-codes') }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                        <i class="fas fa-sync-alt mr-1"></i> Regenerate Recovery Codes
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            @else
+                                            <a href="{{ route('account.security.setup-2fa') }}"
+                                                class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                                 <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
-                                            </button>
+                                            </a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -867,6 +890,44 @@
                         Connected Services
                     </a>
                 </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disable 2FA Modal -->
+    <div id="disable-2fa-modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Disable Two-Factor Authentication</h3>
+                <p class="text-sm text-gray-500 mb-4">Please enter your 2FA verification code to disable two-factor authentication.</p>
+                
+                <form action="{{ route('account.security.disable-2fa') }}" method="POST">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="code" class="block text-sm font-medium text-gray-700">Verification Code</label>
+                        <div class="mt-1">
+                            <input type="text" name="code" id="code" required
+                                class="block w-full px-4 py-2 text-sm border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
+                                placeholder="Enter 6-digit code"
+                                pattern="[0-9]{6}"
+                                maxlength="6">
+                        </div>
+                        @error('code')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.add('hidden')"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Disable 2FA
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
