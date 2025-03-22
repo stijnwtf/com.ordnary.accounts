@@ -349,7 +349,11 @@ class MyAccountController extends Controller
             // Clear the setup secret from session
             session()->forget('2fa_setup_secret');
 
-            return view('auth.recovery-codes', compact('recoveryCodes'));
+            return view('my-account.recovery-codes', [
+                'user' => $user,
+                'codes' => $recoveryCodes,
+                'active_page' => 'security'
+            ]);
         }
 
         return back()->withErrors(['code' => 'Invalid verification code.']);
@@ -384,5 +388,26 @@ class MyAccountController extends Controller
             'codes' => $codes,
             'active_page' => 'security'
         ]);
+    }
+
+    /**
+     * Generate recovery codes for a user.
+     *
+     * @param  \App\Models\User  $user
+     * @return array
+     */
+    private function generateRecoveryCodes(User $user)
+    {
+        // Generate 8 random recovery codes
+        $recoveryCodes = [];
+        for ($i = 0; $i < 8; $i++) {
+            $recoveryCodes[] = Str::random(10);
+        }
+
+        // Store the recovery codes in the user record
+        $user->two_factor_recovery_codes = $recoveryCodes;
+        $user->save();
+
+        return $recoveryCodes;
     }
 }
