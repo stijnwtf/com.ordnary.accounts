@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\LoginActivity;
 use App\Models\Token;
+use App\Models\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -123,8 +124,30 @@ class MyAccountController extends Controller
     public function connections()
     {
         $user = Auth::user();
+        
+        // Fetch the user's connected services
+        $userServices = $user->services()
+            ->where('status', 'active')
+            ->with('client:id,name,client_id')
+            ->get()
+            ->map(function ($service) {
+                return [
+                    'id' => $service->id,
+                    'service_id' => $service->client_id,
+                    'service_name' => $service->client->name,
+                    'first_login' => $service->first_login,
+                    'last_used' => $service->last_used,
+                ];
+            });
+            
+        Log::info('User services fetched', [
+            'user_id' => $user->id, 
+            'services_count' => $userServices->count()
+        ]);
+        
         return view('my-account.connections', [
             'user' => $user,
+            'services' => $userServices,
             'recaptcha_site_key' => config('services.recaptcha.site_key'),
             'active_page' => 'connections'
         ]);
