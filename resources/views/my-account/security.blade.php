@@ -2,218 +2,196 @@
 
 @section('title', 'Security Settings')
 
-@section('header', 'Account Security')
-@section('subheader', 'Enhance the security of your Numblio account with additional protection measures.')
-
 @section('content')
 <div class="mb-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-2">Account security</h3>
-    <p class="text-sm text-gray-600">Enhance the security of your Numblio account with additional protection measures.</p>
+    <h3 class="text-lg font-medium leading-6 text-gray-900">
+        Account Security
+    </h3>
+    <p class="mt-2 text-sm text-gray-600">
+        Enhance the security of your Numblio account with additional protection measures.
+    </p>
 </div>
 
-<!-- Two-Factor Authentication Card -->
-<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-    <div class="p-4 bg-gray-50 border-b border-gray-200">
-        <h4 class="text-base font-medium text-gray-900 flex items-center">
-            <i class="fas fa-shield-alt mr-2 text-blue-500"></i>
-            Two-Factor Authentication (2FA)
-        </h4>
-    </div>
-    <div class="p-4">
-        <p class="text-sm text-gray-600 mb-4">Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.</p>
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                @if($user->hasTwoFactorEnabled())
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <i class="fas fa-check-circle mr-1"></i> Enabled
-                    </span>
-                @else
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        <i class="fas fa-times-circle mr-1"></i> Not enabled
-                    </span>
-                @endif
-            </div>
-            <div class="flex space-x-2">
-                @if($user->hasTwoFactorEnabled())
-                    <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.remove('hidden')"
-                        class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                        <i class="fas fa-times-circle mr-1"></i> Disable 2FA
+<!-- Two-Factor Authentication Section -->
+<div class="pt-4 pb-8 border-b border-gray-200">
+    <h4 class="text-base font-medium text-gray-900 mb-3">
+        Two-Factor Authentication (2FA)
+    </h4>
+    <p class="text-sm text-gray-600 mb-4">
+        Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.
+    </p>
+    <div class="flex items-center justify-between">
+        <div>
+            @if($user->hasTwoFactorEnabled())
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Enabled
+                </span>
+            @else
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    Not enabled
+                </span>
+            @endif
+        </div>
+        <div class="flex space-x-2">
+            @if($user->hasTwoFactorEnabled())
+                <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.remove('hidden')"
+                    class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    Disable 2FA
+                </button>
+                <form action="{{ route('account.security.regenerate-recovery-codes') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit"
+                        class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Regenerate Recovery Codes
                     </button>
-                    <form action="{{ route('account.security.regenerate-recovery-codes') }}" method="POST" class="inline">
+                </form>
+            @else
+                <a href="{{ route('account.security.setup-2fa') }}"
+                    class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Enable 2FA
+                </a>
+            @endif
+        </div>
+    </div>
+</div>
+
+<!-- Login History Section -->
+<div class="py-8 border-b border-gray-200">
+    <h4 class="text-base font-medium text-gray-900 mb-3">
+        Recent Login Activity
+    </h4>
+    <p class="text-sm text-gray-600 mb-4">
+        Monitor your recent login activity to ensure your account hasn't been compromised.
+    </p>
+    <div class="overflow-hidden rounded-md border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @forelse($user->getRecentLoginActivities() as $activity)
+                <tr>
+                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->created_at->format('d-m-Y H:i') }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                        <div class="flex items-center">
+                            {{ $activity->browser }} on {{ $activity->platform }}
+                        </div>
+                    </td>
+                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->location }}</td>
+                    <td class="px-4 py-2 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $activity->status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                            {{ ucfirst($activity->status) }}
+                        </span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="px-4 py-2 text-center text-xs text-gray-500">
+                        No login activity found
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Account Recovery Section -->
+<div class="py-8 border-b border-gray-200">
+    <h4 class="text-base font-medium text-gray-900 mb-3">
+        Account Recovery Options
+    </h4>
+    <p class="text-sm text-gray-600 mb-4">
+        Set up recovery options to help you regain access to your account if you lose your password.
+    </p>
+    <div class="space-y-4">
+        <div class="flex items-center justify-between">
+            <div>
+                <h5 class="text-sm font-medium text-gray-900">Recovery Email</h5>
+                <p class="text-xs text-gray-500">A backup email address for account recovery</p>
+            </div>
+            @if($user->recovery_email)
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-600">{{ $user->recovery_email }}</span>
+                    @if($user->recovery_email_verified)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Verified
+                        </span>
+                    @else
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Pending
+                        </span>
+                    @endif
+                    <form action="{{ route('account.security.remove-recovery-email') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit"
-                            class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <i class="fas fa-sync-alt mr-1"></i> Regenerate Recovery Codes
+                        <button type="submit" class="text-xs text-red-600 hover:text-red-800">
+                            Remove
                         </button>
                     </form>
-                @else
-                    <a href="{{ route('account.security.setup-2fa') }}"
-                        class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
-                    </a>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Login History Card -->
-<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-    <div class="p-4 bg-gray-50 border-b border-gray-200">
-        <h4 class="text-base font-medium text-gray-900 flex items-center">
-            <i class="fas fa-history mr-2 text-blue-500"></i>
-            Recent login activity
-        </h4>
-    </div>
-    <div class="p-4">
-        <p class="text-sm text-gray-600 mb-4">Monitor your recent login activity to ensure your account hasn't been compromised.</p>
-        <div class="overflow-hidden rounded-lg border border-gray-200">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
-                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($user->getRecentLoginActivities() as $activity)
-                    <tr>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->created_at->format('d-m-Y H:i') }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
-                            <div class="flex items-center">
-                                @if($activity->device_type === 'Mobile')
-                                    <i class="fas fa-mobile-alt mr-1 text-gray-400"></i>
-                                @elseif($activity->device_type === 'Tablet')
-                                    <i class="fas fa-tablet-alt mr-1 text-gray-400"></i>
-                                @else
-                                    <i class="fas fa-laptop mr-1 text-gray-400"></i>
-                                @endif
-                                {{ $activity->browser }} on {{ $activity->platform }}
-                            </div>
-                        </td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ $activity->location }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $activity->status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                <i class="fas fa-{{ $activity->status === 'success' ? 'check' : 'times' }}-circle mr-1"></i>
-                                {{ ucfirst($activity->status) }}
-                            </span>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="px-4 py-2 text-center text-xs text-gray-500">
-                            No login activity found
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Account Recovery -->
-<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-    <div class="p-4 bg-gray-50 border-b border-gray-200">
-        <h4 class="text-base font-medium text-gray-900 flex items-center">
-            <i class="fas fa-life-ring mr-2 text-blue-500"></i>
-            Account Recovery Options
-        </h4>
-    </div>
-    <div class="p-4">
-        <p class="text-sm text-gray-600 mb-4">Set up recovery options to help you regain access to your account if you lose your password.</p>
-        <div class="space-y-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h5 class="text-sm font-medium text-gray-900">Recovery Email</h5>
-                    <p class="text-xs text-gray-500">A backup email address for account recovery</p>
                 </div>
-                @if($user->recovery_email)
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-600">{{ $user->recovery_email }}</span>
-                        @if($user->recovery_email_verified)
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-check-circle mr-1"></i> Verified
-                            </span>
-                        @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                <i class="fas fa-clock mr-1"></i> Pending
-                            </span>
-                        @endif
-                        <form action="{{ route('account.security.remove-recovery-email') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="text-xs text-red-600 hover:text-red-800">
-                                <i class="fas fa-times"></i> Remove
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <button type="button" onclick="document.getElementById('add-recovery-email-modal').classList.remove('hidden')"
-                        class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
-                        <i class="fas fa-plus-circle mr-1"></i> Add
-                    </button>
-                @endif
-            </div>
+            @else
+                <button type="button" onclick="document.getElementById('add-recovery-email-modal').classList.remove('hidden')"
+                    class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                    Add
+                </button>
+            @endif
         </div>
     </div>
 </div>
 
-<!-- GDPR Data Portability Card -->
-<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-    <div class="p-4 bg-gray-50 border-b border-gray-200">
-        <h4 class="text-base font-medium text-gray-900 flex items-center">
-            <i class="fas fa-download mr-2 text-blue-500"></i>
-            Data Export (GDPR Data Portability)
-        </h4>
-    </div>
-    <div class="p-4">
-        <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to download your personal data in a machine-readable format.</p>
+<!-- GDPR Data Portability Section -->
+<div class="py-8 border-b border-gray-200">
+    <h4 class="text-base font-medium text-gray-900 mb-3">
+        Data Export (GDPR Data Portability)
+    </h4>
+    <p class="text-sm text-gray-600 mb-4">
+        Under the GDPR (General Data Protection Regulation), you have the right to download your personal data in a machine-readable format.
+    </p>
 
-        <div class="p-4 bg-blue-50 rounded-lg mb-4">
-            <h5 class="text-sm font-medium text-blue-800 mb-2">Your data export will include:</h5>
-            <ul class="text-xs text-blue-700 list-disc pl-4 space-y-1">
-                <li>Personal account information</li>
-                <li>Login activity history</li>
-                <li>Connected services and applications</li>
-                <li>Security settings</li>
-            </ul>
-        </div>
-
-        <a href="{{ route('account.export-data') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            <i class="fas fa-file-download mr-2"></i> Download My Data
-        </a>
-        <p class="text-xs text-gray-500 mt-2">The data will be exported as a JSON file that you can download.</p>
+    <div class="p-4 bg-blue-50 rounded-md mb-4">
+        <h5 class="text-sm font-medium text-blue-800 mb-2">Your data export will include:</h5>
+        <ul class="text-xs text-blue-700 list-disc pl-5 space-y-1">
+            <li>Personal account information</li>
+            <li>Login activity history</li>
+            <li>Connected services and applications</li>
+            <li>Security settings</li>
+        </ul>
     </div>
+
+    <a href="{{ route('account.export-data') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        Download My Data
+    </a>
+    <p class="text-xs text-gray-500 mt-2">The data will be exported as a JSON file that you can download.</p>
 </div>
 
-<!-- GDPR Right to be Forgotten Card -->
-<div class="border border-gray-200 rounded-lg overflow-hidden">
-    <div class="p-4 bg-gray-50 border-b border-gray-200">
-        <h4 class="text-base font-medium text-gray-900 flex items-center">
-            <i class="fas fa-user-slash mr-2 text-red-500"></i>
-            Delete Account (GDPR Right to be Forgotten)
-        </h4>
-    </div>
-    <div class="p-4">
-        <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to request the deletion of your personal data.</p>
+<!-- GDPR Right to be Forgotten Section -->
+<div class="py-8">
+    <h4 class="text-base font-medium text-gray-900 mb-3">
+        Delete Account (GDPR Right to be Forgotten)
+    </h4>
+    <p class="text-sm text-gray-600 mb-4">
+        Under the GDPR (General Data Protection Regulation), you have the right to request the deletion of your personal data.
+    </p>
 
-        <div class="p-4 bg-red-50 rounded-lg mb-4">
-            <h5 class="text-sm font-medium text-red-800 mb-2">Important information about account deletion:</h5>
-            <ul class="text-xs text-red-700 list-disc pl-4 space-y-1">
-                <li>This action <strong>cannot be undone</strong>. All your personal data will be permanently deleted or anonymized.</li>
-                <li>You will lose access to all connected services and applications.</li>
-                <li>Some data may be retained for legal compliance purposes, but will be fully anonymized.</li>
-                <li>Any active subscriptions will be canceled.</li>
-            </ul>
-        </div>
-
-        <a href="{{ route('account.delete') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            <i class="fas fa-trash-alt mr-2"></i> Delete My Account
-        </a>
-        <p class="text-xs text-gray-500 mt-2">You'll need to confirm this action by entering your password.</p>
+    <div class="p-4 bg-red-50 rounded-md mb-4">
+        <h5 class="text-sm font-medium text-red-800 mb-2">Important information about account deletion:</h5>
+        <ul class="text-xs text-red-700 list-disc pl-5 space-y-1">
+            <li>This action <strong>cannot be undone</strong>. All your personal data will be permanently deleted or anonymized.</li>
+            <li>You will lose access to all connected services and applications.</li>
+            <li>Some data may be retained for legal compliance purposes, but will be fully anonymized.</li>
+            <li>Any active subscriptions will be canceled.</li>
+        </ul>
     </div>
+
+    <a href="{{ route('account.delete') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        Delete My Account
+    </a>
+    <p class="text-xs text-gray-500 mt-2">You'll need to confirm this action by entering your password.</p>
 </div>
 
 <!-- Add Recovery Email Modal -->
@@ -231,14 +209,9 @@
                 @csrf
                 <div class="mb-4">
                     <label for="recovery_email" class="block text-sm font-medium text-gray-700 mb-1">Recovery Email Address</label>
-                    <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-gray-400"></i>
-                        </div>
-                        <input type="email" name="recovery_email" id="recovery_email" required
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            placeholder="name@example.com">
-                    </div>
+                    <input type="email" name="recovery_email" id="recovery_email" required
+                        class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="name@example.com">
                     <p class="mt-1 text-xs text-gray-500">We'll send a verification link to this email address.</p>
                 </div>
                 <div class="flex justify-end space-x-3 pt-4 border-t">
