@@ -8,34 +8,6 @@
     <p class="text-sm text-gray-600">Update your personal details and account preferences.</p>
 </div>
 
-<!-- Profile Header -->
-<div class="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg mb-6 border border-blue-100">
-    <div class="flex flex-col sm:flex-row items-center gap-6">
-        <div class="relative">
-            <img class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-md" 
-                 src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=400&d=mp&r=pg"
-                 alt="{{ $user->first_name }} {{ $user->last_name }}">
-            <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                <a href="https://gravatar.com" target="_blank" class="inline-flex items-center px-3 py-1 bg-white text-xs font-medium text-gray-700 rounded-full shadow-sm border border-gray-200 hover:bg-gray-50">
-                    <i class="fas fa-camera mr-1 text-blue-500"></i> Change
-                </a>
-            </div>
-        </div>
-        <div class="text-center sm:text-left">
-            <h4 class="text-lg font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h4>
-            <p class="text-sm text-gray-600">{{ $user->email }}</p>
-            <div class="mt-2 flex flex-wrap justify-center sm:justify-start gap-2">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <i class="fas fa-check-circle mr-1"></i> Verified
-                </span>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                    <i class="fas fa-star mr-1"></i> Standard
-                </span>
-            </div>
-        </div>
-    </div>
-</div>
-
 <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
     @csrf
 
