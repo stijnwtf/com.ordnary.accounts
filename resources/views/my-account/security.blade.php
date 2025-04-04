@@ -160,6 +160,34 @@
     </div>
 </div>
 
+<!-- GDPR Data Portability Card -->
+<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
+    <div class="p-4 bg-gray-50 border-b border-gray-200">
+        <h4 class="text-base font-medium text-gray-900 flex items-center">
+            <i class="fas fa-download mr-2 text-blue-500"></i>
+            Data Export (GDPR Data Portability)
+        </h4>
+    </div>
+    <div class="p-4">
+        <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to download your personal data in a machine-readable format.</p>
+        
+        <div class="p-4 bg-blue-50 rounded-lg mb-4">
+            <h5 class="text-sm font-medium text-blue-800 mb-2">Your data export will include:</h5>
+            <ul class="text-xs text-blue-700 list-disc pl-4 space-y-1">
+                <li>Personal account information</li>
+                <li>Login activity history</li>
+                <li>Connected services and applications</li>
+                <li>Security settings</li>
+            </ul>
+        </div>
+        
+        <a href="{{ route('account.export-data') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <i class="fas fa-file-download mr-2"></i> Download My Data
+        </a>
+        <p class="text-xs text-gray-500 mt-2">The data will be exported as a JSON file that you can download.</p>
+    </div>
+</div>
+
 <!-- Add Recovery Email Modal -->
 <div id="add-recovery-email-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">

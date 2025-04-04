@@ -51,6 +51,9 @@ Route::prefix('account')->middleware(['auth'])->group(function () {
     Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
     Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
     Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
+    
+    // GDPR Data Portability route
+    Route::get('/export-data', [MyAccountController::class, 'exportUserData'])->name('account.export-data');
 
     // API routes voor het updaten van gegevens
     Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');

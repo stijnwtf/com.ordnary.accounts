@@ -411,4 +411,87 @@ class MyAccountController extends Controller
 
         return $recoveryCodes;
     }
+
+    /**
+     * Generate and download a data export for the user (GDPR right to data portability)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportUserData()
+    {
+        $user = Auth::user();
+        
+        Log::info('User data export requested', ['user_id' => $user->id]);
+        
+        // Collect user's personal data
+        $userData = [
+            'personal_info' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->toIso8601String(),
+                'updated_at' => $user->updated_at->toIso8601String(),
+                'language' => $user->lang,
+                'recovery_email' => $user->recovery_email,
+                'has_two_factor' => !empty($user->two_factor_secret),
+            ],
+            'login_activities' => [],
+            'connected_services' => [],
+        ];
+        
+        // Get user's login activities
+        $loginActivities = LoginActivity::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        foreach ($loginActivities as $activity) {
+            $userData['login_activities'][] = [
+                'ip_address' => $activity->ip_address,
+                'user_agent' => $activity->user_agent,
+                'location' => $activity->location,
+                'created_at' => $activity->created_at->toIso8601String(),
+            ];
+        }
+        
+        // Get user's connected services
+        $userServices = $user->services()
+            ->with('client:id,name,client_id')
+            ->get();
+            
+        foreach ($userServices as $service) {
+            $userData['connected_services'][] = [
+                'service_name' => $service->client->name,
+                'service_id' => $service->client->client_id,
+                'first_login' => $service->first_login ? $service->first_login->toIso8601String() : null,
+                'last_used' => $service->last_used ? $service->last_used->toIso8601String() : null,
+                'status' => $service->status,
+            ];
+        }
+        
+        // Add GDPR metadata
+        $userData['gdpr_metadata'] = [
+            'data_controller' => 'Numblio B.V.',
+            'data_controller_contact' => 'privacy@numblio.com',
+            'export_date' => now()->toIso8601String(),
+            'export_requested_by' => $user->email,
+            'data_retention_policy' => 'User data is retained for as long as the account is active. After account deletion, data is kept for 30 days for backup purposes before being permanently deleted.',
+        ];
+        
+        // Generate a JSON file
+        $filename = 'numblio_data_export_' . $user->id . '_' . date('Y-m-d') . '.json';
+        $jsonData = json_encode($userData, JSON_PRETTY_PRINT);
+        
+        Log::info('User data export completed', [
+            'user_id' => $user->id, 
+            'filename' => $filename,
+            'data_size' => strlen($jsonData)
+        ]);
+        
+        return response()->streamDownload(function () use ($jsonData) {
+            echo $jsonData;
+        }, $filename, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
 }
