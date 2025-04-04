@@ -97,17 +97,17 @@
             border-radius: 0.375rem;
             margin-bottom: 0.25rem;
         }
-        
+
         .sidebar-item:hover {
             background-color: rgba(59, 130, 246, 0.05);
         }
-        
+
         .sidebar-item.active {
             background-color: rgba(59, 130, 246, 0.1);
             color: var(--primary);
             font-weight: 500;
         }
-        
+
         .sidebar-item.active i {
             color: var(--primary) !important;
         }
@@ -145,7 +145,6 @@
 <body>
     <!-- Loading screen -->
     <div id="loading-screen">
-        <img src="/img/dark.png" alt="Numblio" id="loading-logo" class="h-10 w-auto">
         <div id="loading-spinner"></div>
     </div>
 
@@ -441,8 +440,8 @@
             // Close sidebar when clicking outside
             document.addEventListener('click', function(event) {
                 if (mobileSidebar && !mobileSidebar.classList.contains('hidden')) {
-                    if (!event.target.closest('#mobile-sidebar') && 
-                        !event.target.closest('#mobile-menu-toggle') && 
+                    if (!event.target.closest('#mobile-sidebar') &&
+                        !event.target.closest('#mobile-menu-toggle') &&
                         !event.target.closest('#mobile-user-menu')) {
                         mobileSidebar.classList.add('hidden');
                     }
