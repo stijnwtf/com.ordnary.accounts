@@ -429,7 +429,9 @@ class MyAccountController extends Controller
         $userData = [
             'personal_info' => [
                 'id' => $user->id,
-                'name' => $user->name,
+                'numblio_upstream_id' => $user->numblio_id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
                 'email' => $user->email,
                 'created_at' => $user->created_at->toIso8601String(),
                 'updated_at' => $user->updated_at->toIso8601String(),
@@ -472,7 +474,7 @@ class MyAccountController extends Controller
 
         // Add GDPR metadata
         $userData['gdpr_metadata'] = [
-            'data_controller' => 'Numblio B.V.',
+            'data_controller' => 'Numblio',
             'data_controller_contact' => 'privacy@numblio.com',
             'export_date' => now()->toIso8601String(),
             'export_requested_by' => $user->email,
@@ -480,7 +482,7 @@ class MyAccountController extends Controller
         ];
 
         // Generate a JSON file
-        $filename = 'numblio_data_export_' . $user->id . '_' . date('Y-m-d') . '.json';
+        $filename = 'numblio_data_export_' . $user->email . '_' . date('Y-m-d') . '.json';
         $jsonData = json_encode($userData, JSON_PRETTY_PRINT);
 
         Log::info('User data export completed', [
