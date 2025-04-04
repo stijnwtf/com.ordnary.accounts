@@ -188,6 +188,34 @@
     </div>
 </div>
 
+<!-- GDPR Right to be Forgotten Card -->
+<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
+    <div class="p-4 bg-gray-50 border-b border-gray-200">
+        <h4 class="text-base font-medium text-gray-900 flex items-center">
+            <i class="fas fa-user-slash mr-2 text-red-500"></i>
+            Delete Account (GDPR Right to be Forgotten)
+        </h4>
+    </div>
+    <div class="p-4">
+        <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to request the deletion of your personal data.</p>
+        
+        <div class="p-4 bg-red-50 rounded-lg mb-4">
+            <h5 class="text-sm font-medium text-red-800 mb-2">Important information about account deletion:</h5>
+            <ul class="text-xs text-red-700 list-disc pl-4 space-y-1">
+                <li>This action <strong>cannot be undone</strong>. All your personal data will be permanently deleted or anonymized.</li>
+                <li>You will lose access to all connected services and applications.</li>
+                <li>Some data may be retained for legal compliance purposes, but will be fully anonymized.</li>
+                <li>Any active subscriptions will be canceled.</li>
+            </ul>
+        </div>
+        
+        <a href="{{ route('account.delete') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            <i class="fas fa-trash-alt mr-2"></i> Delete My Account
+        </a>
+        <p class="text-xs text-gray-500 mt-2">You'll need to confirm this action by entering your password.</p>
+    </div>
+</div>
+
 <!-- Add Recovery Email Modal -->
 <div id="add-recovery-email-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">

@@ -54,6 +54,11 @@ Route::prefix('account')->middleware(['auth'])->group(function () {
     
     // GDPR Data Portability route
     Route::get('/export-data', [MyAccountController::class, 'exportUserData'])->name('account.export-data');
+    
+    // GDPR Right to be Forgotten routes
+    Route::get('/delete-account', [MyAccountController::class, 'showDeleteAccount'])->name('account.delete');
+    Route::post('/delete-account', [MyAccountController::class, 'deleteAccount'])->name('account.delete.process');
+    Route::get('/deletion-confirmed', [MyAccountController::class, 'showDeletionConfirmed'])->name('account.deletion-confirmed');
 
     // API routes voor het updaten van gegevens
     Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');

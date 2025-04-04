@@ -494,4 +494,113 @@ class MyAccountController extends Controller
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
     }
+
+    /**
+     * Show account deletion confirmation page (GDPR right to be forgotten)
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showDeleteAccount()
+    {
+        $user = Auth::user();
+        
+        return view('my-account.delete-account', [
+            'user' => $user,
+            'active_page' => 'security'
+        ]);
+    }
+
+    /**
+     * Process the account deletion request (GDPR right to be forgotten)
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+            'confirmation' => 'required|in:DELETE'
+        ]);
+
+        $user = Auth::user();
+        
+        // Verify the password
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'Het ingevoerde wachtwoord is onjuist.'
+            ]);
+        }
+        
+        // Get user ID for logging
+        $userId = $user->id;
+        $userEmail = $user->email;
+        
+        // Start database transaction
+        DB::beginTransaction();
+        
+        try {
+            // Delete user data from various tables
+            LoginActivity::where('user_id', $userId)->delete();
+            UserService::where('user_id', $userId)->delete();
+            // Delete user sessions
+            DB::table('sessions')->where('user_id', $userId)->delete();
+            
+            // Schedule deletion of personal data
+            // The user record itself will be anonymized immediately, but some data will be scheduled for deletion
+            // to allow for legal compliance (e.g., financial records that must be kept)
+            $user->name = 'Deleted User';
+            $user->email = 'deleted_' . Str::random(10) . '@example.com';
+            $user->password = Hash::make(Str::random(32));
+            $user->is_deleted = true;
+            $user->deleted_at = now();
+            $user->recovery_email = null;
+            $user->recovery_email_verified = false;
+            $user->two_factor_secret = null;
+            $user->two_factor_recovery_codes = null;
+            $user->save();
+            
+            // Log the account deletion
+            Log::info('User account deleted (GDPR right to be forgotten)', [
+                'user_id' => $userId,
+                'email' => $userEmail,
+                'ip_address' => $request->ip()
+            ]);
+            
+            // Commit transaction
+            DB::commit();
+            
+            // Log the user out
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            // Redirect to confirmation page
+            return redirect()->route('account.deletion-confirmed');
+            
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            DB::rollBack();
+            
+            Log::error('Failed to delete user account', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->withErrors([
+                'general' => 'Er is een fout opgetreden bij het verwijderen van uw account. Probeer het later opnieuw of neem contact op met ondersteuning.'
+            ]);
+        }
+    }
+    
+    /**
+     * Show account deletion confirmation page
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showDeletionConfirmed()
+    {
+        return view('account.deletion-confirmed');
+    }
 }
