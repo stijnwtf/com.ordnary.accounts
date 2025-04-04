@@ -12,20 +12,46 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First add the column
+        // Step 1: Add username, first_name, last_name fields
+        Schema::table('users', function (Blueprint $table) {
+            // First add username, first_name, last_name
+            $table->string('username')->unique()->after('name')->nullable();
+            $table->string('first_name')->after('username')->nullable();
+            $table->string('last_name')->after('first_name')->nullable();
+        });
+        
+        // Step 2: Copy data from name to first_name and last_name
+        DB::statement("UPDATE users SET 
+            username = LOWER(CONCAT(name, id)),
+            first_name = SUBSTRING_INDEX(name, ' ', 1),
+            last_name = CASE 
+                WHEN CHAR_LENGTH(name) - CHAR_LENGTH(REPLACE(name, ' ', '')) > 0 
+                THEN SUBSTRING(name, LOCATE(' ', name) + 1)
+                ELSE ''
+            END"
+        );
+        
+        // Step 3: Make fields non-nullable
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('username')->nullable(false)->change();
+            $table->string('first_name')->nullable(false)->change();
+            $table->string('last_name')->nullable(false)->change();
+        });
+        
+        // Step 4: Add the numblio_id field
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('numblio_id')->after('id')->nullable();
         });
         
-        // Then update it with UUIDs
+        // Step 5: Update with UUIDs
         DB::statement('UPDATE users SET numblio_id = UUID()');
         
-        // Then make it required and unique
+        // Step 6: Make numblio_id required and unique
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('numblio_id')->nullable(false)->unique()->change();
         });
         
-        // Finally drop the name column
+        // Step 7: Drop the name column
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('name');
         });
@@ -36,24 +62,22 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Add back the name column first
+        // Step 1: Add back the name column
         Schema::table('users', function (Blueprint $table) {
             $table->string('name')->after('id')->nullable();
         });
         
-        // Populate it with data from first_name and last_name
-        if (Schema::hasColumn('users', 'first_name') && Schema::hasColumn('users', 'last_name')) {
-            DB::statement("UPDATE users SET name = CONCAT(first_name, ' ', last_name)");
-        }
+        // Step 2: Populate name from first_name and last_name
+        DB::statement("UPDATE users SET name = CONCAT(first_name, ' ', last_name)");
         
-        // Make it required
+        // Step 3: Make name required
         Schema::table('users', function (Blueprint $table) {
             $table->string('name')->nullable(false)->change();
         });
         
-        // Drop the numblio_id column
+        // Step 4: Drop the fields we added
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('numblio_id');
+            $table->dropColumn(['numblio_id', 'username', 'first_name', 'last_name']);
         });
     }
 };

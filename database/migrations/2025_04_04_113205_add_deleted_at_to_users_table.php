@@ -12,9 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('username')->unique()->after('id');
-            $table->string('first_name')->after('username');
-            $table->string('last_name')->after('first_name');
             $table->timestamp('deleted_at')->nullable();
         });
     }
@@ -25,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['username', 'first_name', 'last_name', 'deleted_at']);
+            $table->dropColumn('deleted_at');
         });
     }
 };
