@@ -116,9 +116,9 @@
                             <div class="flex items-center space-x-3">
                                 <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-100"
                                      src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
-                                     alt="{{ $user->name }}">
+                                     alt="{{ $user->first_name }} {{ $user->last_name }}">
                                 <div>
-                                    <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
+                                    <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
                                     <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
 
                         <!-- Welcome header -->
                         <div class="p-6 border-b border-gray-200">
-                            <h2 class="text-xl font-bold text-gray-900">Oh hey, {{$user->name}}!</h2>
+                            <h2 class="text-xl font-bold text-gray-900">Oh hey, {{$user->first_name}}!</h2>
                             <p class="text-sm text-gray-600 mt-1">Ready to make some updates? Adjust your profile, secure your account, and manage notifications with ease.</p>
                         </div>
 
