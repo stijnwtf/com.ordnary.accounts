@@ -13,130 +13,128 @@
     </p>
 </div>
 
-<div class="bg-white rounded-lg border border-gray-100 shadow-sm">
-    <form method="POST" action="{{ route('my-account.password') }}" class="divide-y divide-gray-200">
-        @csrf
-        
-        <!-- Current Password Section -->
-        <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h4 class="text-sm font-medium text-gray-900">Current Password</h4>
-            </div>
-            
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-lock text-gray-400"></i>
-                </div>
-                <input placeholder="Enter your current password" type="password" name="current_password" id="current_password" required
-                       class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-            @error('current_password')
-            <p class="mt-1.5 text-sm text-red-600 flex items-center">
-                <i class="fas fa-exclamation-circle mr-1.5"></i>
-                {{ $message }}
-            </p>
-            @enderror
-            <p class="mt-1.5 text-xs text-gray-500">We need your current password to verify your identity.</p>
+<form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
+    @csrf
+    
+    <!-- Current Password Section -->
+    <div class="pb-6 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-medium text-gray-900">Current Password</h4>
         </div>
         
-        <!-- New Password Section -->
-        <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h4 class="text-sm font-medium text-gray-900">New Password</h4>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400"></i>
             </div>
-            
-            <div class="space-y-4">
-                <!-- New Password Input -->
-                <div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-lock-open text-gray-400"></i>
-                        </div>
-                        <input placeholder="Create a new password" type="password" name="password" id="password" required
-                               class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}"
-                               oninput="checkPasswordStrength()">
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    @error('password')
-                    <p class="mt-1.5 text-sm text-red-600 flex items-center">
-                        <i class="fas fa-exclamation-circle mr-1.5"></i>
-                        {{ $message }}
-                    </p>
-                    @enderror
-                    
-                    <!-- Password Strength Meter -->
-                    <div class="mt-2">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-500">Password strength:</span>
-                            <span id="password-strength-text" class="text-xs font-medium">Too weak</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                            <div id="password-strength-meter" class="bg-red-500 h-1.5 rounded-full" style="width: 10%"></div>
-                        </div>
-                    </div>
-                    
-                    <p class="mt-1.5 text-xs text-gray-500">Use at least 8 characters with a mix of letters, numbers and symbols.</p>
-                </div>
-                
-                <!-- Confirm Password Input -->
-                <div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-shield-alt text-gray-400"></i>
-                        </div>
-                        <input placeholder="Confirm your new password" type="password" name="password_confirmation" id="password_confirmation" required
-                               class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <p class="mt-1.5 text-xs text-gray-500">Enter the same password again to confirm.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Password Security Tips -->
-        <div class="p-6">
-            <div class="bg-blue-50 rounded-lg p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-info-circle text-blue-600"></i>
-                    </div>
-                    <div class="ml-3">
-                        <h4 class="text-sm font-medium text-blue-800">Password security tips</h4>
-                        <ul class="mt-2 text-xs text-blue-700 list-disc space-y-1 pl-5">
-                            <li>Use at least 8 characters</li>
-                            <li>Combine uppercase and lowercase letters</li>
-                            <li>Include numbers and special characters</li>
-                            <li>Avoid personal information (name, birthday)</li>
-                            <li>Don't reuse passwords from other sites</li>
-                            <li>Consider using a password manager</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Submit Button -->
-            <div class="mt-6 flex justify-end">
-                <button type="submit"
-                    class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                    <i class="fas fa-check mr-2"></i> Update Password
+            <input placeholder="Enter your current password" type="password" name="current_password" id="current_password" required
+                   class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <i class="fas fa-eye"></i>
                 </button>
             </div>
         </div>
-    </form>
-</div>
+        @error('current_password')
+        <p class="mt-1.5 text-sm text-red-600 flex items-center">
+            <i class="fas fa-exclamation-circle mr-1.5"></i>
+            {{ $message }}
+        </p>
+        @enderror
+        <p class="mt-1.5 text-xs text-gray-500">We need your current password to verify your identity.</p>
+    </div>
+    
+    <!-- New Password Section -->
+    <div class="py-6 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-medium text-gray-900">New Password</h4>
+        </div>
+        
+        <div class="space-y-4">
+            <!-- New Password Input -->
+            <div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-lock-open text-gray-400"></i>
+                    </div>
+                    <input placeholder="Create a new password" type="password" name="password" id="password" required
+                           class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}"
+                           oninput="checkPasswordStrength()">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                @error('password')
+                <p class="mt-1.5 text-sm text-red-600 flex items-center">
+                    <i class="fas fa-exclamation-circle mr-1.5"></i>
+                    {{ $message }}
+                </p>
+                @enderror
+                
+                <!-- Password Strength Meter -->
+                <div class="mt-2">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs text-gray-500">Password strength:</span>
+                        <span id="password-strength-text" class="text-xs font-medium">Too weak</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div id="password-strength-meter" class="bg-red-500 h-1.5 rounded-full" style="width: 10%"></div>
+                    </div>
+                </div>
+                
+                <p class="mt-1.5 text-xs text-gray-500">Use at least 8 characters with a mix of letters, numbers and symbols.</p>
+            </div>
+            
+            <!-- Confirm Password Input -->
+            <div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-shield-alt text-gray-400"></i>
+                    </div>
+                    <input placeholder="Confirm your new password" type="password" name="password_confirmation" id="password_confirmation" required
+                           class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="mt-1.5 text-xs text-gray-500">Enter the same password again to confirm.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Security Tips -->
+    <div class="pt-6">
+        <div class="bg-blue-50 rounded-lg p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-600"></i>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-medium text-blue-800">Password security tips</h4>
+                    <ul class="mt-2 text-xs text-blue-700 list-disc space-y-1 pl-5">
+                        <li>Use at least 8 characters</li>
+                        <li>Combine uppercase and lowercase letters</li>
+                        <li>Include numbers and special characters</li>
+                        <li>Avoid personal information (name, birthday)</li>
+                        <li>Don't reuse passwords from other sites</li>
+                        <li>Consider using a password manager</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="mt-6 flex justify-end">
+            <button type="submit"
+                class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                <i class="fas fa-check mr-2"></i> Update Password
+            </button>
+        </div>
+    </div>
+</form>
 @endsection
 
 @section('scripts')
