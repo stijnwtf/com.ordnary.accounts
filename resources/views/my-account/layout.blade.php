@@ -164,7 +164,7 @@
                     <div class="relative">
                         <button id="mobile-user-menu" class="flex items-center">
                             <img class="h-8 w-8 rounded-full object-cover border-2 border-blue-100"
-                                src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name) }}&color=3b82f6&background=dbeafe"
+                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
                                 alt="{{ $user->first_name }} {{ $user->last_name }}">
                         </button>
                     </div>
@@ -183,7 +183,7 @@
                             <div class="flex items-center space-x-3">
                                 <div class="relative">
                                     <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                        src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                                        src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
                                         alt="{{ $user->first_name }} {{ $user->last_name }}">
                                     <div class="absolute bottom-0 right-0 h-4 w-4 bg-green-400 rounded-full border-2 border-white"></div>
                                 </div>
@@ -350,7 +350,7 @@
                 <div class="border-t border-b border-gray-200 py-4 px-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50">
                     <div class="flex items-center">
                         <img class="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
-                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                             src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
                              alt="{{ $user->name }}">
                         <div class="ml-3">
                             <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
