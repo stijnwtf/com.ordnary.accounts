@@ -5,7 +5,6 @@
 @section('content')
 <div class="mb-6">
     <h3 class="text-lg font-medium leading-6 text-gray-900 flex items-center">
-        <i class="fas fa-key text-blue-500 mr-2"></i>
         Password Settings
     </h3>
     <p class="mt-2 text-sm text-gray-600">
@@ -44,7 +43,7 @@
     </div>
 
     <!-- New Password Section -->
-    <div class="py-6 border-b border-gray-200">
+    <div class="py-3 border-b border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-sm font-medium text-gray-900">New Password</h4>
         </div>
