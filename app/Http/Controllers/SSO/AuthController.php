@@ -1392,9 +1392,8 @@ class AuthController extends Controller
         ]);
 
         try {
-            // Create user
             $user = User::create([
-                'name' => $request->first_name . ' ' . $request->last_name,
+                'numblio_id' => 'idnblo_' . Str::uuid(),
                 'username' => $request->username,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
