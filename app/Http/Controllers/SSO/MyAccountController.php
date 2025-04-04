@@ -124,7 +124,7 @@ class MyAccountController extends Controller
     public function connections()
     {
         $user = Auth::user();
-        
+
         // Fetch the user's connected services
         $userServices = $user->services()
             ->where('status', 'active')
@@ -139,12 +139,12 @@ class MyAccountController extends Controller
                     'last_used' => $service->last_used,
                 ];
             });
-            
+
         Log::info('User services fetched', [
-            'user_id' => $user->id, 
+            'user_id' => $user->id,
             'services_count' => $userServices->count()
         ]);
-        
+
         return view('my-account.connections', [
             'user' => $user,
             'services' => $userServices,
@@ -164,7 +164,8 @@ class MyAccountController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -175,7 +176,8 @@ class MyAccountController extends Controller
             'language' => ['required', 'string', 'size:2', 'in:nl,en,de,fr'],
         ]);
 
-        $user->name = $request->name;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
 
         // Only update email if it has changed
         if ($user->email !== $request->email) {
@@ -420,9 +422,9 @@ class MyAccountController extends Controller
     public function exportUserData()
     {
         $user = Auth::user();
-        
+
         Log::info('User data export requested', ['user_id' => $user->id]);
-        
+
         // Collect user's personal data
         $userData = [
             'personal_info' => [
@@ -438,12 +440,12 @@ class MyAccountController extends Controller
             'login_activities' => [],
             'connected_services' => [],
         ];
-        
+
         // Get user's login activities
         $loginActivities = LoginActivity::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         foreach ($loginActivities as $activity) {
             $userData['login_activities'][] = [
                 'ip_address' => $activity->ip_address,
@@ -452,12 +454,12 @@ class MyAccountController extends Controller
                 'created_at' => $activity->created_at->toIso8601String(),
             ];
         }
-        
+
         // Get user's connected services
         $userServices = $user->services()
             ->with('client:id,name,client_id')
             ->get();
-            
+
         foreach ($userServices as $service) {
             $userData['connected_services'][] = [
                 'service_name' => $service->client->name,
@@ -467,7 +469,7 @@ class MyAccountController extends Controller
                 'status' => $service->status,
             ];
         }
-        
+
         // Add GDPR metadata
         $userData['gdpr_metadata'] = [
             'data_controller' => 'Numblio B.V.',
@@ -476,17 +478,17 @@ class MyAccountController extends Controller
             'export_requested_by' => $user->email,
             'data_retention_policy' => 'User data is retained for as long as the account is active. After account deletion, data is kept for 30 days for backup purposes before being permanently deleted.',
         ];
-        
+
         // Generate a JSON file
         $filename = 'numblio_data_export_' . $user->id . '_' . date('Y-m-d') . '.json';
         $jsonData = json_encode($userData, JSON_PRETTY_PRINT);
-        
+
         Log::info('User data export completed', [
-            'user_id' => $user->id, 
+            'user_id' => $user->id,
             'filename' => $filename,
             'data_size' => strlen($jsonData)
         ]);
-        
+
         return response()->streamDownload(function () use ($jsonData) {
             echo $jsonData;
         }, $filename, [
@@ -503,7 +505,7 @@ class MyAccountController extends Controller
     public function showDeleteAccount()
     {
         $user = Auth::user();
-        
+
         return view('my-account.delete-account', [
             'user' => $user,
             'active_page' => 'security'
@@ -524,28 +526,28 @@ class MyAccountController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         // Verify the password
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors([
                 'password' => 'Het ingevoerde wachtwoord is onjuist.'
             ]);
         }
-        
+
         // Get user ID for logging
         $userId = $user->id;
         $userEmail = $user->email;
-        
+
         // Start database transaction
         DB::beginTransaction();
-        
+
         try {
             // Delete user data from various tables
             LoginActivity::where('user_id', $userId)->delete();
             UserService::where('user_id', $userId)->delete();
             // Delete user sessions
             DB::table('sessions')->where('user_id', $userId)->delete();
-            
+
             // Schedule deletion of personal data
             // The user record itself will be anonymized immediately, but some data will be scheduled for deletion
             // to allow for legal compliance (e.g., financial records that must be kept)
@@ -559,41 +561,41 @@ class MyAccountController extends Controller
             $user->two_factor_secret = null;
             $user->two_factor_recovery_codes = null;
             $user->save();
-            
+
             // Log the account deletion
             Log::info('User account deleted (GDPR right to be forgotten)', [
                 'user_id' => $userId,
                 'email' => $userEmail,
                 'ip_address' => $request->ip()
             ]);
-            
+
             // Commit transaction
             DB::commit();
-            
+
             // Log the user out
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            
+
             // Redirect to confirmation page
             return redirect()->route('account.deletion-confirmed');
-            
+
         } catch (\Exception $e) {
             // Rollback transaction on error
             DB::rollBack();
-            
+
             Log::error('Failed to delete user account', [
                 'user_id' => $userId,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return back()->withErrors([
                 'general' => 'Er is een fout opgetreden bij het verwijderen van uw account. Probeer het later opnieuw of neem contact op met ondersteuning.'
             ]);
         }
     }
-    
+
     /**
      * Show account deletion confirmation page
      *

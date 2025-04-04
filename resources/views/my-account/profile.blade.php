@@ -12,20 +12,37 @@
 
     <!-- Name Input -->
     <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-link text-gray-400"></i>
+                <i class="fas fa-user text-gray-400"></i>
             </div>
-            <input disabled type="text" placeholder="idnblo_12345678" name="name" id="name" value="{{ $user->numblio_id }}" required
-                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
+            <input type="text" placeholder="John Doe" name="first_name" id="first_name" value="{{ old('first_name', $user->first_name) }}" required
+                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('first_name') ? 'border-red-500' : 'border-gray-300' }}">
         </div>
-        @error('name')
+        @error('first_name')
         <p class="mt-1 text-sm text-red-600 flex items-center">
             {{ $message }}
         </p>
         @enderror
-        <p class="mt-1 text-xs text-gray-500">Your full name as displayed in Numblio-services.</p>
+        <p class="mt-1 text-xs text-gray-500">Your first name as displayed in Numblio-services.</p>
+    </div>
+
+    <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-user text-gray-400"></i>
+            </div>
+            <input type="text" placeholder="Doe" name="last_name" id="last_name" value="{{ old('first_name', $user->last_name) }}" required
+                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('last_name') ? 'border-red-500' : 'border-gray-300' }}">
+        </div>
+        @error('last_name')
+        <p class="mt-1 text-sm text-red-600 flex items-center">
+            {{ $message }}
+        </p>
+        @enderror
+        <p class="mt-1 text-xs text-gray-500">Your last name as displayed in Numblio-services.</p>
     </div>
 
     <!-- Email Input -->
