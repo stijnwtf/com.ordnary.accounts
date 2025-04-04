@@ -88,7 +88,7 @@
     </div>
 
     <!-- Submit Button for Password Form -->
-    <div class="pb-6 flex justify-end">
+    <div class="flex justify-end">
         <button
             type="submit"
             class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
