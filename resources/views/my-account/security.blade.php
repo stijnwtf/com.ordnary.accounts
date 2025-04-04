@@ -170,7 +170,7 @@
     </div>
     <div class="p-4">
         <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to download your personal data in a machine-readable format.</p>
-        
+
         <div class="p-4 bg-blue-50 rounded-lg mb-4">
             <h5 class="text-sm font-medium text-blue-800 mb-2">Your data export will include:</h5>
             <ul class="text-xs text-blue-700 list-disc pl-4 space-y-1">
@@ -180,7 +180,7 @@
                 <li>Security settings</li>
             </ul>
         </div>
-        
+
         <a href="{{ route('account.export-data') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             <i class="fas fa-file-download mr-2"></i> Download My Data
         </a>
@@ -189,7 +189,7 @@
 </div>
 
 <!-- GDPR Right to be Forgotten Card -->
-<div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
+<div class="border border-gray-200 rounded-lg overflow-hidden">
     <div class="p-4 bg-gray-50 border-b border-gray-200">
         <h4 class="text-base font-medium text-gray-900 flex items-center">
             <i class="fas fa-user-slash mr-2 text-red-500"></i>
@@ -198,7 +198,7 @@
     </div>
     <div class="p-4">
         <p class="text-sm text-gray-600 mb-4">Under the GDPR (General Data Protection Regulation), you have the right to request the deletion of your personal data.</p>
-        
+
         <div class="p-4 bg-red-50 rounded-lg mb-4">
             <h5 class="text-sm font-medium text-red-800 mb-2">Important information about account deletion:</h5>
             <ul class="text-xs text-red-700 list-disc pl-4 space-y-1">
@@ -208,7 +208,7 @@
                 <li>Any active subscriptions will be canceled.</li>
             </ul>
         </div>
-        
+
         <a href="{{ route('account.delete') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
             <i class="fas fa-trash-alt mr-2"></i> Delete My Account
         </a>
@@ -262,7 +262,7 @@
         <div class="mt-3">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Disable Two-Factor Authentication</h3>
             <p class="text-sm text-gray-500 mb-4">Please enter your 2FA verification code to disable two-factor authentication.</p>
-            
+
             <form action="{{ route('account.security.disable-2fa') }}" method="POST">
                 @csrf
                 <div class="mb-4">
@@ -278,7 +278,7 @@
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-                
+
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.add('hidden')"
                         class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
