@@ -274,12 +274,12 @@
 
                                     <!-- Name Input -->
                                     <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Numblio ID</label>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <i class="fas fa-user text-gray-400"></i>
+                                                <i class="fas fa-link text-gray-400"></i>
                                             </div>
-                                            <input type="text" placeholder="John Doe" name="name" id="name" value="{{ old('name', $user->name) }}" required
+                                            <input type="text" placeholder="idnblo_12345678" name="name" id="name" value="{{ $user->numblio_id }}" required
                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('name')
@@ -900,7 +900,7 @@
             <div class="mt-3">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Disable Two-Factor Authentication</h3>
                 <p class="text-sm text-gray-500 mb-4">Please enter your 2FA verification code to disable two-factor authentication.</p>
-                
+
                 <form action="{{ route('account.security.disable-2fa') }}" method="POST">
                     @csrf
                     <div class="mb-4">
@@ -916,7 +916,7 @@
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div class="flex justify-end space-x-3">
                         <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.add('hidden')"
                             class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
