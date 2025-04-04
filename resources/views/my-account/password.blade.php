@@ -16,7 +16,7 @@
     @csrf
 
     <!-- Current Password Section -->
-    <div class="pb-6">
+    <div class="pb-6 border-b border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-sm font-medium text-gray-900">Current Password</h4>
         </div>
@@ -43,7 +43,7 @@
     </div>
 
     <!-- New Password Section -->
-    <div class="py-3 border-b border-gray-200">
+    <div class="py-6 border-b border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-sm font-medium text-gray-900">New Password</h4>
         </div>
