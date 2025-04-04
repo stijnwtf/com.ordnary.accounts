@@ -175,88 +175,103 @@
         <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8">
             <!-- Main container with two cards side by side -->
             <div class="flex flex-col lg:flex-row gap-6 items-start">
-                <!-- Left Sidebar Card -->
+                <!-- Left Sidebar Section -->
                 <div class="w-full lg:w-1/4 lg:block hidden">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-8">
-                        <!-- Account Summary -->
-                        <div class="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                            <div class="flex items-center space-x-3">
-                                <div class="relative">
-                                    <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                        src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
-                                    <div class="absolute bottom-0 right-0 h-4 w-4 bg-green-400 rounded-full border-2 border-white"></div>
-                                </div>
-                                <div>
-                                    <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
-                                    <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
-                                    <div class="mt-1 flex">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                            <i class="fas fa-check-circle mr-1"></i> Verified
-                                        </span>
+                    <div class="space-y-4">
+                        <!-- Sidebar Card -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-8">
+                            <!-- Account Summary -->
+                            <div class="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                                <div class="flex items-center space-x-3">
+                                    <div class="relative">
+                                        <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
+                                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                                            alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                        <div class="absolute bottom-0 right-0 h-4 w-4 bg-green-400 rounded-full border-2 border-white"></div>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                        <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                                        <div class="mt-1 flex">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
+                                                <i class="fas fa-check-circle mr-1"></i> Verified
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Navigation Section -->
-                        <div class="p-3">
-                            <div class="mb-4">
-                                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                    Account Settings
+                            <!-- Navigation Section -->
+                            <div class="p-3">
+                                <div class="mb-4">
+                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                                        Account Settings
+                                    </div>
+                                    <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-user mr-3 text-gray-500"></i>
+                                        Profile Information
+                                    </a>
+                                    <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-lock mr-3 text-gray-500"></i>
+                                        Password
+                                    </a>
+                                    <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
+                                        Security
+                                    </a>
+                                    <a href="{{ route('account.notifications') }}" class="sidebar-item {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-bell mr-3 text-gray-500"></i>
+                                        Notifications
+                                    </a>
+                                    <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-link mr-3 text-gray-500"></i>
+                                        Connections
+                                    </a>
                                 </div>
-                                <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-user mr-3 text-gray-500"></i>
-                                    Profile Information
-                                </a>
-                                <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-lock mr-3 text-gray-500"></i>
-                                    Password
-                                </a>
-                                <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
-                                    Security
-                                </a>
-                                <a href="{{ route('account.notifications') }}" class="sidebar-item {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-bell mr-3 text-gray-500"></i>
-                                    Notifications
-                                </a>
-                                <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-link mr-3 text-gray-500"></i>
-                                    Connections
-                                </a>
-                            </div>
 
-                            <div class="mt-3 border-t border-gray-200 pt-3">
-                                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                    Support
+                                <div class="mt-3 border-t border-gray-200 pt-3">
+                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                                        Support
+                                    </div>
+                                    <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-question-circle mr-3 text-gray-500"></i>
+                                        Help Center
+                                    </a>
+                                    <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-info-circle mr-3 text-gray-500"></i>
+                                        FAQ
+                                    </a>
                                 </div>
-                                <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-question-circle mr-3 text-gray-500"></i>
-                                    Help Center
-                                </a>
-                                <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                    <i class="fas fa-info-circle mr-3 text-gray-500"></i>
-                                    FAQ
-                                </a>
                             </div>
-                        </div>
 
-                        <!-- Logout Button and Account ID -->
-                        <div class="px-4 py-4 border-t border-gray-200 bg-gray-50">
-                            <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
-                                <i class="fas fa-sign-out-alt mr-2"></i> Log out
-                            </a>
-                            <div class="flex items-center justify-between">
-                                <p class="text-xs text-gray-500">
-                                    <span class="font-medium">Account ID:</span>
-                                    <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
-                                </p>
-                                <a href="/" class="flex items-center">
-                                    <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
+                            <!-- Logout Button and Account ID -->
+                            <div class="px-4 py-4 border-t border-gray-200 bg-gray-50">
+                                <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Log out
                                 </a>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-xs text-gray-500">
+                                        <span class="font-medium">Account ID:</span>
+                                        <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
+                                    </p>
+                                    <a href="/" class="flex items-center">
+                                        <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                        
+                        <!-- Footer (moved from content section) -->
+                        <footer class="text-xs text-gray-400 px-2">
+                            <div class="flex flex-col space-y-1">
+                                <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
+                                <div class="flex items-center space-x-3 mt-1">
+                                    <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                                    <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                                    <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                                </div>
+                            </div>
+                        </footer>
                     </div>
                 </div>
 
