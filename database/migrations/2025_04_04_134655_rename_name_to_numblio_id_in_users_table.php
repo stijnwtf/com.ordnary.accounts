@@ -15,14 +15,14 @@ return new class extends Migration
         // Step 1: Add username, first_name, last_name fields
         Schema::table('users', function (Blueprint $table) {
             // First add username, first_name, last_name
-            $table->string('username')->unique()->after('name')->nullable();
+            $table->string('username', 255)->unique()->after('name')->nullable();
             $table->string('first_name')->after('username')->nullable();
             $table->string('last_name')->after('first_name')->nullable();
         });
         
         // Step 2: Copy data from name to first_name and last_name
         DB::statement("UPDATE users SET 
-            username = LOWER(CONCAT(name, id)),
+            username = SUBSTRING(LOWER(CONCAT(name, id)), 1, 255),
             first_name = SUBSTRING_INDEX(name, ' ', 1),
             last_name = CASE 
                 WHEN CHAR_LENGTH(name) - CHAR_LENGTH(REPLACE(name, ' ', '')) > 0 
@@ -30,6 +30,9 @@ return new class extends Migration
                 ELSE ''
             END"
         );
+        
+        // Ensure all users have a valid username before making it non-nullable
+        DB::statement("UPDATE users SET username = CONCAT('user', id) WHERE username IS NULL OR username = ''");
         
         // Step 3: Make fields non-nullable
         Schema::table('users', function (Blueprint $table) {
