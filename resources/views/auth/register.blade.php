@@ -22,6 +22,27 @@
                 </div>
             </div>
 
+            <!-- Progress Steps -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                            1
+                        </div>
+                        <div class="ml-2 text-sm font-medium text-blue-600">Account</div>
+                    </div>
+                    <div class="flex-1 h-1 mx-4 bg-gray-200">
+                        <div id="progress-bar" class="h-1 bg-blue-600" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center">
+                            2
+                        </div>
+                        <div class="ml-2 text-sm font-medium text-gray-600">Personal</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Warning Alert -->
             @if(!isset($direct_login) && isset($client_name))
             <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -70,110 +91,144 @@
                 <input type="hidden" name="redirect_uri" value="{{ session('redirect_uri') }}">
                 @endif
 
-                <!-- Name Input -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Full Name') }}</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-gray-400"></i>
+                <!-- Step 1: Account Information -->
+                <div id="step1" class="space-y-6">
+                    <!-- Email Input -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input placeholder="john.doe@example.com" type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
                         </div>
-                        <input placeholder="John Doe" type="text" name="name" id="name" value="{{ old('name') }}" required autofocus
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
+                        @error('email')
+                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                            {{ $message }}
+                        </p>
+                        @enderror
                     </div>
-                    @error('name')
-                    <p class="mt-1 text-sm text-red-600 flex items-center">
-                        {{ $message }}
-                    </p>
-                    @enderror
-                </div>
 
-                <!-- Email Input -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                    <!-- Password Input -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input placeholder="••••••••" type="password" name="password" id="password" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
                         </div>
-                        <input placeholder="john.doe@example.com" type="email" name="email" id="email" value="{{ old('email') }}" required
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
+                        <p class="mt-1 text-xs text-gray-500">
+                            Password must be at least 8 characters and contain letters and numbers.
+                        </p>
+                        @error('password')
+                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                            {{ $message }}
+                        </p>
+                        @enderror
                     </div>
-                    @error('email')
-                    <p class="mt-1 text-sm text-red-600 flex items-center">
-                        {{ $message }}
-                    </p>
-                    @enderror
-                </div>
 
-                <!-- Password Input -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-lock text-gray-400"></i>
-                        </div>
-                        <input placeholder="••••••••" type="password" name="password" id="password" required
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500">
-                        Password must be at least 8 characters and contain letters and numbers.
-                    </p>
-                    @error('password')
-                    <p class="mt-1 text-sm text-red-600 flex items-center">
-                        {{ $message }}
-                    </p>
-                    @enderror
-                </div>
-
-                <!-- Confirm Password Input -->
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm Password') }}</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-lock text-gray-400"></i>
-                        </div>
-                        <input placeholder="••••••••" type="password" name="password_confirmation" id="password_confirmation" required
-                               class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-
-                <!-- GDPR Consent and Terms -->
-                <div class="space-y-3 pt-2 pb-1">
-
-                    <div class="flex items-start">
-                        <div class="flex items-center h-5">
-                            <input id="gdpr_consent" name="gdpr_consent" type="checkbox" required class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        </div>
-                        <div class="ml-3 text-sm">
-                            <label for="gdpr_consent" class="text-gray-700">
-                                I consent to the processing of my personal data in accordance with the <span class="font-medium">GDPR</span>. I understand that Numblio will collect, store, and process my data as described in the <a href="https://numblio.com/documents/privacy" class="text-blue-600 hover:underline">Privacy Policy</a>, and that I have the right to access, modify, export, or request deletion of my personal data at any time.
-                            </label>
+                    <!-- Confirm Password Input -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm Password') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input placeholder="••••••••" type="password" name="password_confirmation" id="password_confirmation" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
 
-                    <p class="text-xs text-gray-500 pl-7">
-                        Your data will only be used for the purposes clearly stated in our Privacy Policy, including account creation, service provision, security, and communication. You can withdraw your consent at any time through your account settings.
-                    </p>
-                </div>
-
-                <!-- Submit Button with invisible reCAPTCHA -->
-                <div>
-                    <button
-                        type="submit"
-                        class="g-recaptcha w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        data-sitekey="{{ config('services.recaptcha.site_key') }}"
-                        data-callback="onSubmit"
-                        data-action="register"
-                        data-size="invisible">
-                        Create Account
+                    <button type="button" onclick="nextStep()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Next Step
                     </button>
                 </div>
 
-                <!-- Log In Link -->
-                <div class="text-center text-sm mt-4">
-                    <p class="text-gray-600">
-                        Already have an account?
-                        <a href="{{ route('login', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}" class="text-blue-600 hover:text-blue-700 font-medium">Sign in</a>
-                    </p>
+                <!-- Step 2: Personal Information -->
+                <div id="step2" class="space-y-6 hidden">
+                    <!-- Username Input -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Username') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input placeholder="johndoe" type="text" name="username" id="username" value="{{ old('username') }}" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('username') ? 'border-red-500' : 'border-gray-300' }}">
+                        </div>
+                        @error('username')
+                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <!-- First Name Input -->
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input placeholder="John" type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('first_name') ? 'border-red-500' : 'border-gray-300' }}">
+                        </div>
+                        @error('first_name')
+                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <!-- Last Name Input -->
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Last Name') }}</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input placeholder="Doe" type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required
+                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('last_name') ? 'border-red-500' : 'border-gray-300' }}">
+                        </div>
+                        @error('last_name')
+                        <p class="mt-1 text-sm text-red-600 flex items-center">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <!-- GDPR Consent -->
+                    <div class="space-y-3 pt-2 pb-1">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="gdpr_consent" name="gdpr_consent" type="checkbox" required class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="gdpr_consent" class="text-gray-700">
+                                    I consent to the processing of my personal data in accordance with the <span class="font-medium">GDPR</span>. I understand that Numblio will collect, store, and process my data as described in the <a href="https://numblio.com/documents/privacy" class="text-blue-600 hover:underline">Privacy Policy</a>, and that I have the right to access, modify, export, or request deletion of my personal data at any time.
+                                </label>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 pl-7">
+                            Your data will only be used for the purposes clearly stated in our Privacy Policy, including account creation, service provision, security, and communication. You can withdraw your consent at any time through your account settings.
+                        </p>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                            Previous
+                        </button>
+                        <button type="submit" class="g-recaptcha flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                                data-callback="onSubmit"
+                                data-action="register"
+                                data-size="invisible">
+                            Create Account
+                        </button>
+                    </div>
                 </div>
             </form>
             <!-- Footer -->
@@ -196,6 +251,26 @@
 <script>
     function onSubmit(token) {
         document.getElementById("register-form").submit();
+    }
+
+    function nextStep() {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('progress-bar').style.width = '100%';
+        document.querySelectorAll('.w-8.h-8')[1].classList.remove('bg-gray-200', 'text-gray-600');
+        document.querySelectorAll('.w-8.h-8')[1].classList.add('bg-blue-600', 'text-white');
+        document.querySelectorAll('.text-gray-600')[1].classList.remove('text-gray-600');
+        document.querySelectorAll('.text-gray-600')[1].classList.add('text-blue-600');
+    }
+
+    function prevStep() {
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step1').classList.remove('hidden');
+        document.getElementById('progress-bar').style.width = '0%';
+        document.querySelectorAll('.w-8.h-8')[1].classList.add('bg-gray-200', 'text-gray-600');
+        document.querySelectorAll('.w-8.h-8')[1].classList.remove('bg-blue-600', 'text-white');
+        document.querySelectorAll('.text-blue-600')[1].classList.remove('text-blue-600');
+        document.querySelectorAll('.text-blue-600')[1].classList.add('text-gray-600');
     }
 </script>
 </body>
