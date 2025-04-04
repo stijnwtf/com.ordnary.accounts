@@ -30,7 +30,7 @@
                         <h3 class="font-medium text-gray-900">Enhanced Security</h3>
                         <p class="text-sm text-gray-500 mt-2">State-of-the-art protection for your account</p>
                     </div>
-                    
+
                     <div class="text-center p-4">
                         <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
                             <i class="fas fa-sync"></i>
@@ -38,7 +38,7 @@
                         <h3 class="font-medium text-gray-900">Seamless Access</h3>
                         <p class="text-sm text-gray-500 mt-2">One login for all Numblio services</p>
                     </div>
-                    
+
                     <div class="text-center p-4">
                         <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
                             <i class="fas fa-user-shield"></i>
@@ -47,7 +47,7 @@
                         <p class="text-sm text-gray-500 mt-2">Manage your permissions in one place</p>
                     </div>
                 </div>
-                
+
                 <!-- Action buttons -->
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
                     <a href="/login" class="flex-1 bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-150 flex items-center justify-center">
@@ -58,7 +58,7 @@
                     </a>
                 </div>
             </div>
-            
+
             <!-- Info banner -->
             <div class="bg-blue-50 p-4 border-t border-blue-100">
                 <div class="flex items-center">
@@ -73,11 +73,21 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Footer -->
-        <div class="mt-8 text-center text-gray-500 text-sm">
-            <p>&copy; 2023 Numblio. All rights reserved.</p>
-        </div>
+        <footer class="mt-8 text-xs text-gray-400">
+            <div class="flex flex-col space-y-1">
+                <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services are protected by copyright and intellectual property laws.</span>
+                <div class="flex items-center space-x-2 mt-1">
+                    <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                    <span class="text-gray-500">•</span>
+                    <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                    <span class="text-gray-500">•</span>
+                    <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                </div>
+            </div>
+        </footer>
+
     </div>
 </body>
 </html>
