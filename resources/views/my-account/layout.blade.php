@@ -312,18 +312,6 @@
                             @yield('content')
                         </div>
                     </div>
-
-                    <!-- Footer -->
-                    <footer class="mt-6 text-xs text-gray-400 px-2">
-                        <div class="flex flex-col space-y-1">
-                            <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
-                            <div class="flex items-center space-x-3 mt-1">
-                                <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
-                                <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
-                                <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
-                            </div>
-                        </div>
-                    </footer>
                 </div>
             </div>
         </div>
