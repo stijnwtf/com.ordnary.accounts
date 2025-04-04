@@ -22,12 +22,8 @@ return new class extends Migration
             // Make the column unique and non-nullable after populating it
             $table->uuid('numblio_id')->nullable(false)->unique()->change();
             
-            // Drop the old 'name' column if username, first_name and last_name exist
-            if (Schema::hasColumn('users', 'username') && 
-                Schema::hasColumn('users', 'first_name') && 
-                Schema::hasColumn('users', 'last_name')) {
-                $table->dropColumn('name');
-            }
+            // Drop the old 'name' column
+            $table->dropColumn('name');
         });
     }
 

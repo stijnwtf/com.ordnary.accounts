@@ -94,7 +94,14 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => [
                 'required',
                 'string',
@@ -107,7 +114,9 @@ class UserController extends Controller
         ]);
 
         $userData = [
-            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
             'email' => $validated['email'],
             'is_admin' => $request->has('is_admin'),
         ];
