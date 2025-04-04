@@ -164,7 +164,7 @@
                     <div class="relative">
                         <button id="mobile-user-menu" class="flex items-center">
                             <img class="h-8 w-8 rounded-full object-cover border-2 border-blue-100"
-                                src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                                src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name) }}&color=3b82f6&background=dbeafe"
                                 alt="{{ $user->first_name }} {{ $user->last_name }}">
                         </button>
                     </div>
