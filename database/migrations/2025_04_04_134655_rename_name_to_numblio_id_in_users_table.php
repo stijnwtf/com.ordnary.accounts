@@ -62,22 +62,43 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Step 1: Add back the name column
+        // Step 1: Add back the name column if it doesn't exist
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name')->after('id')->nullable();
+            if (!Schema::hasColumn('users', 'name')) {
+                $table->string('name')->after('id')->nullable();
+            }
         });
-        
-        // Step 2: Populate name from first_name and last_name
-        DB::statement("UPDATE users SET name = CONCAT(first_name, ' ', last_name)");
-        
-        // Step 3: Make name required
+
+        // Step 2: Populate name from first_name and last_name, if they exist
+        if (Schema::hasColumn('users', 'first_name') && Schema::hasColumn('users', 'last_name')) {
+            DB::statement("UPDATE users SET name = CONCAT(first_name, ' ', last_name)");
+
+            // Step 3: Make name required only if we could populate it and it exists
+            Schema::table('users', function (Blueprint $table) {
+                 if (Schema::hasColumn('users', 'name')) {
+                    $table->string('name')->nullable(false)->change();
+                 }
+            });
+        } else {
+             // Ensure name is nullable if population wasn't possible and it exists
+              Schema::table('users', function (Blueprint $table) {
+                 if (Schema::hasColumn('users', 'name')) {
+                     $table->string('name')->nullable()->change();
+                 }
+             });
+        }
+
+        // Step 4: Drop the fields we added (if they exist)
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name')->nullable(false)->change();
-        });
-        
-        // Step 4: Drop the fields we added
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['numblio_id', 'username', 'first_name', 'last_name']);
+            $columnsToDrop = [];
+            if (Schema::hasColumn('users', 'numblio_id')) $columnsToDrop[] = 'numblio_id';
+            if (Schema::hasColumn('users', 'username')) $columnsToDrop[] = 'username';
+            if (Schema::hasColumn('users', 'first_name')) $columnsToDrop[] = 'first_name';
+            if (Schema::hasColumn('users', 'last_name')) $columnsToDrop[] = 'last_name';
+
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
     }
 };
