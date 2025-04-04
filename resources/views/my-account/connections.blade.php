@@ -72,7 +72,7 @@
 </template>
 
 <!-- Add More Connections Button -->
-<div class="pb-6 flex justify-end">
+<div class="flex justify-end">
 
 </div>
 
