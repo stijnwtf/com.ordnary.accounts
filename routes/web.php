@@ -12,7 +12,7 @@ use App\Http\Controllers\SSO\MyAccountController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Auth routes
@@ -51,10 +51,10 @@ Route::prefix('account')->middleware(['auth'])->group(function () {
     Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
     Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
     Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
-    
+
     // GDPR Data Portability route
     Route::get('/export-data', [MyAccountController::class, 'exportUserData'])->name('account.export-data');
-    
+
     // GDPR Right to be Forgotten routes
     Route::get('/delete-account', [MyAccountController::class, 'showDeleteAccount'])->name('account.delete');
     Route::post('/delete-account', [MyAccountController::class, 'deleteAccount'])->name('account.delete.process');
