@@ -219,12 +219,8 @@
                                         <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
                                         Security
                                     </a>
-                                    <a href="{{ route('account.notifications') }}" class="sidebar-item {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-bell mr-3 text-gray-500"></i>
-                                        Notifications
-                                    </a>
                                     <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-link mr-3 text-gray-500"></i>
+                                        <i class="fas fa-globe mr-3 text-gray-500"></i>
                                         Connections
                                     </a>
                                 </div>
@@ -260,7 +256,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Footer (moved from content section) -->
                         <footer class="text-xs text-gray-400 px-2">
                             <div class="flex flex-col space-y-1">
