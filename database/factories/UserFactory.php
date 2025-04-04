@@ -27,7 +27,7 @@ class UserFactory extends Factory
         $lastName = fake()->lastName();
         
         return [
-            'name' => $firstName . ' ' . $lastName,
+            'numblio_id' => (string) Str::uuid(),
             'username' => strtolower($firstName . $lastName . rand(1, 999)),
             'first_name' => $firstName,
             'last_name' => $lastName,

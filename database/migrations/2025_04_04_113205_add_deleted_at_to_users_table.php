@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('username')->unique()->after('name');
+            $table->string('username')->unique()->after('id');
             $table->string('first_name')->after('username');
             $table->string('last_name')->after('first_name');
             $table->timestamp('deleted_at')->nullable();

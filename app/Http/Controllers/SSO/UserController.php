@@ -40,14 +40,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'is_admin' => 'boolean',
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'numblio_id' => (string) \Illuminate\Support\Str::uuid(),
+            'username' => $validated['username'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'is_admin' => $request->has('is_admin'),
