@@ -7,97 +7,77 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gradient-to-b from-[#f9fafb] to-white min-h-screen flex flex-col">
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
+    <div class="container max-w-4xl mx-auto px-6 py-12">
+        <!-- Logo & Header -->
+        <div class="text-center mb-10">
+            <div class="flex justify-center mb-6">
+                <i class="fas fa-lock text-blue-600 text-5xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-3">Welcome to Numblio Single Sign-On</h1>
+            <p class="text-gray-600 max-w-xl mx-auto">Access all your Numblio services securely with a single account</p>
+        </div>
 
-    <div class="flex-grow container mx-auto px-4 py-12">
-        <div class="max-w-6xl mx-auto">
-            <!-- Main Content -->
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <!-- Left Column -->
-                <div class="space-y-8">
-                    <div>
-                        <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Numblio Single Sign-On</h1>
-                        <p class="text-xl text-gray-600">Your secure gateway to all Numblio services with one login.</p>
-                    </div>
-
-                    <!-- Primary Alert -->
-                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-500 text-xl"></i>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-blue-800">Enhanced Security Update</h3>
-                                <div class="mt-2 text-sm text-blue-700">
-                                    We've upgraded our SSO service with advanced security features including JWT tokens and multi-factor authentication support for enhanced protection of your account.
-                                </div>
-                            </div>
+        <!-- Main Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-8">
+                <!-- Features section -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
+                        <h3 class="font-medium text-gray-900">Enhanced Security</h3>
+                        <p class="text-sm text-gray-500 mt-2">State-of-the-art protection for your account</p>
                     </div>
-
-                    <!-- Feature List -->
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-semibold text-gray-900">Key Features</h2>
-                        <div class="grid gap-4">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-shield-alt text-green-500 text-xl"></i>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Enhanced Security</h3>
-                                    <p class="text-gray-600">State-of-the-art encryption and security protocols to protect your data.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-sync text-blue-500 text-xl"></i>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Seamless Integration</h3>
-                                    <p class="text-gray-600">Access all Numblio services with a single authentication.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-user-shield text-purple-500 text-xl"></i>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-medium text-gray-900">User Control</h3>
-                                    <p class="text-gray-600">Manage your permissions and access levels across all services.</p>
-                                </div>
-                            </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                            <i class="fas fa-sync"></i>
                         </div>
+                        <h3 class="font-medium text-gray-900">Seamless Access</h3>
+                        <p class="text-sm text-gray-500 mt-2">One login for all Numblio services</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900">User Control</h3>
+                        <p class="text-sm text-gray-500 mt-2">Manage your permissions in one place</p>
                     </div>
                 </div>
-
-                <!-- Right Column -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                    <div class="space-y-6">
-                        <h2 class="text-2xl font-semibold text-gray-900">Getting Started</h2>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-4 text-gray-700">
-                                <span class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">1</span>
-                                <span>Create your Numblio account or sign in if you already have one</span>
-                            </div>
-                            <div class="flex items-center space-x-4 text-gray-700">
-                                <span class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">2</span>
-                                <span>Access any Numblio service with your single account</span>
-                            </div>
-                            <div class="flex items-center space-x-4 text-gray-700">
-                                <span class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">3</span>
-                                <span>Manage your account settings and permissions in one place</span>
-                            </div>
-                        </div>
-                        <div class="pt-4">
-                            <a href="/login" class="block w-full bg-blue-600 text-white text-center py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-150">
-                                Get Started
-                            </a>
-                        </div>
+                
+                <!-- Action buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+                    <a href="/login" class="flex-1 bg-blue-600 text-white text-center py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-150 flex items-center justify-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+                    </a>
+                    <a href="/register" class="flex-1 bg-white border border-gray-300 text-gray-700 text-center py-3 px-6 rounded-lg hover:bg-gray-50 transition duration-150 flex items-center justify-center">
+                        <i class="fas fa-user-plus mr-2"></i> Create Account
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Info banner -->
+            <div class="bg-blue-50 p-4 border-t border-blue-100">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 text-blue-500">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            We've upgraded our SSO with two-factor authentication for enhanced security.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Footer -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2023 Numblio. All rights reserved.</p>
+        </div>
     </div>
-
 </body>
 </html>
