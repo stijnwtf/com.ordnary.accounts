@@ -287,7 +287,7 @@
                                             {{ $message }}
                                         </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">Your full name as displayed in Numblio-services.</p>
+                                        <p class="mt-1 text-xs text-gray-500">{{$user->numblio_id}}.</p>
                                     </div>
 
                                     <!-- Email Input -->
