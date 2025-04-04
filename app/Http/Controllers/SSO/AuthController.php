@@ -62,25 +62,25 @@ class AuthController extends Controller
             // Get the necessary query parameters
             $clientId = $request->query("client_id");
             $redirectUri = $request->query("redirect_uri");
-            
+
             // Check for malformed URL with second question mark instead of ampersand
             if ($clientId && strpos($clientId, '?redirect_uri=') !== false) {
                 // Extract the real client_id and redirect_uri
                 $parts = explode('?redirect_uri=', $clientId);
                 $clientId = $parts[0];
                 $redirectUri = urldecode($parts[1]);
-                
+
                 Log::info("showLoginForm: Fixed malformed URL for logged in user", [
                     "corrected_client_id" => $clientId,
                     "corrected_redirect_uri" => $redirectUri
                 ]);
             }
-            
+
             // Clean up redirect URI if present
             if ($redirectUri) {
                 $redirectUri = $this->cleanRedirectUri($redirectUri);
             }
-            
+
             // If either parameter is missing, fall back to session values
             if (!$clientId) {
                 $clientId = session("client_id");
@@ -88,35 +88,35 @@ class AuthController extends Controller
             if (!$redirectUri) {
                 $redirectUri = session("redirect_uri");
             }
-            
+
             $directLogin = session("direct_login") ?? (!$clientId && !$redirectUri);
-            
+
             Log::info("showLoginForm: User already logged in, redirecting", [
                 "user_id" => Auth::id(),
                 "direct_login" => $directLogin,
                 "client_id" => $clientId,
                 "redirect_uri" => $redirectUri
             ]);
-            
+
             if ($directLogin) {
                 // Direct login to Numblio account
                 return redirect()->route("account.profile");
-            } 
+            }
             else if ($clientId && $redirectUri) {
                 // SSO login with client parameters
                 $client = Client::where("client_id", $clientId)->first();
-                
+
                 if (!$client) {
                     Log::error("showLoginForm: Invalid client_id for logged in user", [
                         "client_id" => $clientId,
                     ]);
                     return redirect()->route("account.profile");
                 }
-                
+
                 // Verify the redirect URI is allowed
                 $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
                 $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showLoginForm");
-                
+
                 if (!in_array($redirectUri, $normalizedAllowedUris)) {
                     Log::error("showLoginForm: Redirect URI not allowed for logged in user", [
                         "redirect_uri" => $redirectUri,
@@ -124,18 +124,18 @@ class AuthController extends Controller
                     ]);
                     return redirect()->route("account.profile");
                 }
-                
+
                 $token = $this->generateToken(Auth::user(), $clientId);
-                
+
                 Log::info("showLoginForm: Generated token for already logged in user", [
                     "user_id" => Auth::id(),
                     "token" => $token,
                 ]);
-                
+
                 $targetUrl = $redirectUri . "?token=" . $token;
                 return redirect()->away($targetUrl);
             }
-            
+
             // Fallback redirect to profile page
             return redirect()->route("account.profile");
         }
@@ -345,7 +345,7 @@ class AuthController extends Controller
             if (Auth::attempt($request->only("email", "password"))) {
                 $user = Auth::user();
                 Log::info("login: Authentication successful", ["email" => $request->email]);
-                
+
                 // Check if 2FA is enabled for this user
                 if ($user->hasTwoFactorEnabled()) {
                     Log::info("login: 2FA is enabled, redirecting to verification", [
@@ -354,10 +354,10 @@ class AuthController extends Controller
                         "redirect_uri" => $redirectUri,
                         "direct_login" => $directLogin
                     ]);
-                    
+
                     // Log the user out temporarily while we verify 2FA
                     Auth::logout();
-                    
+
                     // Store user ID and SSO parameters in session for 2FA verification
                     session([
                         'auth.2fa.user_id' => $user->id,
@@ -365,10 +365,10 @@ class AuthController extends Controller
                         'auth.2fa.client_id' => $clientId,
                         'auth.2fa.redirect_uri' => $redirectUri
                     ]);
-                    
+
                     return redirect()->route('2fa');
                 }
-                
+
                 $request->session()->regenerate();
 
                 // Log the login activity
@@ -464,7 +464,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $userId = Auth::id(); // Save the ID before logging out
-        
+
         // Get the active services for this user
         $activeServices = [];
         if ($userId) {
@@ -472,27 +472,27 @@ class AuthController extends Controller
                 ->where('status', 'active')
                 ->with('client:client_id,name,logout_url')
                 ->get();
-                
+
             Log::info("logout: Found active services for user", [
                 "user_id" => $userId,
                 "service_count" => $activeServices->count()
             ]);
         }
-        
+
         // Log the user out from the current application
         Log::info("logout: User logging out", ["user_id" => $userId]);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         // Process Single Logout for connected services
         $logoutRedirects = [];
-        
+
         foreach ($activeServices as $service) {
             // Only include services with a logout URL
             if ($service->client && !empty($service->client->logout_url)) {
                 $logoutRedirects[] = $service->client->logout_url;
-                
+
                 // Back-channel logout notification (server-to-server)
                 try {
                     $response = Http::post($service->client->webhook_url, [
@@ -501,7 +501,7 @@ class AuthController extends Controller
                         'service_id' => $service->client_id,
                         'timestamp' => now()->toIso8601String()
                     ]);
-                    
+
                     Log::info("logout: Back-channel logout notification sent", [
                         "user_id" => $userId,
                         "service_id" => $service->client_id,
@@ -516,16 +516,16 @@ class AuthController extends Controller
                 }
             }
         }
-        
+
         // Store logout redirects in session to process them one by one
         if (!empty($logoutRedirects)) {
             session(['logout_redirects' => $logoutRedirects]);
             return redirect()->route('logout.process');
         }
-        
+
         return redirect("/");
     }
-    
+
     /**
      * Process logout redirects one by one for front-channel logout.
      *
@@ -535,25 +535,25 @@ class AuthController extends Controller
     public function processLogout(Request $request)
     {
         $logoutRedirects = session('logout_redirects', []);
-        
+
         if (empty($logoutRedirects)) {
             return redirect('/');
         }
-        
+
         // Get the next logout URL and remove it from the session
         $nextLogoutUrl = array_shift($logoutRedirects);
         session(['logout_redirects' => $logoutRedirects]);
-        
+
         // Add a return URL parameter to come back after logout
         $returnUrl = route('logout.process');
         $redirectUrl = $nextLogoutUrl . (strpos($nextLogoutUrl, '?') === false ? '?' : '&') . 'return_to=' . urlencode($returnUrl);
-        
+
         Log::info("processLogout: Redirecting to service logout URL", [
             "logout_url" => $nextLogoutUrl,
             "redirect_url" => $redirectUrl,
             "remaining_redirects" => count($logoutRedirects)
         ]);
-        
+
         return redirect()->away($redirectUrl);
     }
 
@@ -656,7 +656,7 @@ class AuthController extends Controller
             ],
         ]);
     }
-    
+
     /**
      * Show 2FA form after login.
      *
@@ -669,10 +669,10 @@ class AuthController extends Controller
             Log::warning("show2FAForm: No user ID in session");
             return redirect()->route('login');
         }
-        
+
         $userId = session('auth.2fa.user_id');
         $user = User::find($userId);
-        
+
         if (!$user) {
             Log::warning("show2FAForm: User not found", [
                 "user_id" => $userId
@@ -691,7 +691,7 @@ class AuthController extends Controller
         $clientId = session('auth.2fa.client_id');
         $directLogin = session('auth.2fa.direct_login', false);
         $redirectUri = session('auth.2fa.redirect_uri');
-        
+
         if ($clientId) {
             $client = Client::where("client_id", $clientId)->first();
             if ($client) {
@@ -716,7 +716,7 @@ class AuthController extends Controller
             'recaptcha_site_key' => config('services.recaptcha.site_key')
         ]);
     }
-    
+
     /**
      * Verify 2FA code after login.
      *
@@ -728,26 +728,26 @@ class AuthController extends Controller
         $request->validate([
             'code' => 'required|string|size:6',
         ]);
-        
+
         if (!session()->has('auth.2fa.user_id')) {
             Log::warning("verify2FA: No user ID in session");
             return redirect()->route('login');
         }
-        
+
         $userId = session('auth.2fa.user_id');
         $user = User::find($userId);
-        
+
         if (!$user) {
             Log::warning("verify2FA: User not found", [
                 "user_id" => $userId
             ]);
             return redirect()->route('login');
         }
-        
+
         // Verify the 2FA code
         $google2fa = new Google2FA();
         $valid = $google2fa->verifyKey($user->two_factor_secret, $request->code);
-        
+
         if (!$valid) {
             Log::warning("verify2FA: Invalid code", [
                 "user_id" => $userId
@@ -755,19 +755,19 @@ class AuthController extends Controller
             return redirect()->route('2fa')
                 ->withErrors(['code' => 'The verification code is invalid.']);
         }
-        
+
         // Get SSO parameters from session
         $directLogin = session('auth.2fa.direct_login', false);
         $clientId = session('auth.2fa.client_id');
         $redirectUri = session('auth.2fa.redirect_uri');
-        
+
         Log::info("verify2FA: Code verified successfully", [
             "user_id" => $userId,
             "direct_login" => $directLogin,
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri
         ]);
-        
+
         // Clear 2FA session data
         session()->forget([
             'auth.2fa.user_id',
@@ -775,18 +775,18 @@ class AuthController extends Controller
             'auth.2fa.client_id',
             'auth.2fa.redirect_uri'
         ]);
-        
+
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
-        
+
         // Log the login activity
         LoginActivity::logLogin($user, $request);
-        
+
         // Handle redirect based on session parameters
         return $this->handleLoginRedirect($user, $directLogin, $clientId, $redirectUri);
     }
-    
+
     /**
      * Show recovery code form.
      *
@@ -799,35 +799,35 @@ class AuthController extends Controller
             Log::warning("showRecoveryForm: No user ID in session");
             return redirect()->route('login');
         }
-        
+
         $userId = session('auth.2fa.user_id');
         $user = User::find($userId);
-        
+
         if (!$user) {
             Log::warning("showRecoveryForm: User not found", [
                 "user_id" => $userId
             ]);
             return redirect()->route('login');
         }
-        
+
         // Get client name for display purposes
         $clientName = "Numblio Account";
         $clientId = session('auth.2fa.client_id');
         $directLogin = session('auth.2fa.direct_login', false);
         $redirectUri = session('auth.2fa.redirect_uri');
-        
+
         if ($clientId) {
             $client = Client::where("client_id", $clientId)->first();
             if ($client) {
                 $clientName = $client->name;
             }
         }
-        
+
         Log::info("showRecoveryForm: Showing recovery form", [
             "user_id" => $userId,
             "client_name" => $clientName
         ]);
-        
+
         return view('auth.2fa-recovery', [
             'client_name' => $clientName,
             'email' => $user->email,
@@ -837,7 +837,7 @@ class AuthController extends Controller
             'recaptcha_site_key' => config('services.recaptcha.site_key')
         ]);
     }
-    
+
     /**
      * Verify recovery code.
      *
@@ -849,25 +849,25 @@ class AuthController extends Controller
         $request->validate([
             'recovery_code' => 'required|string',
         ]);
-        
+
         if (!session()->has('auth.2fa.user_id')) {
             Log::warning("verifyRecoveryCode: No user ID in session");
             return redirect()->route('login');
         }
-        
+
         $userId = session('auth.2fa.user_id');
         $user = User::find($userId);
-        
+
         if (!$user) {
             Log::warning("verifyRecoveryCode: User not found", [
                 "user_id" => $userId
             ]);
             return redirect()->route('login');
         }
-        
+
         // Verify the recovery code
         $recoveryCodes = $user->two_factor_recovery_codes;
-        
+
         if (!is_array($recoveryCodes)) {
             Log::warning("verifyRecoveryCode: Invalid recovery codes format", [
                 "user_id" => $userId
@@ -875,7 +875,7 @@ class AuthController extends Controller
             return redirect()->route('2fa.recovery')
                 ->withErrors(['recovery_code' => 'Invalid recovery code format.']);
         }
-        
+
         if (!in_array($request->recovery_code, $recoveryCodes)) {
             Log::warning("verifyRecoveryCode: Invalid recovery code", [
                 "user_id" => $userId,
@@ -884,20 +884,20 @@ class AuthController extends Controller
             return redirect()->route('2fa.recovery')
                 ->withErrors(['recovery_code' => 'Invalid recovery code.']);
         }
-        
+
         // Remove the used recovery code
         $codes = array_filter($recoveryCodes, function ($code) use ($request) {
             return $code != $request->recovery_code;
         });
-        
+
         $user->two_factor_recovery_codes = array_values($codes);
         $user->save();
-        
+
         // Get SSO parameters from session
         $directLogin = session('auth.2fa.direct_login', false);
         $clientId = session('auth.2fa.client_id');
         $redirectUri = session('auth.2fa.redirect_uri');
-        
+
         Log::info("verifyRecoveryCode: Recovery code used successfully", [
             "user_id" => $userId,
             "remaining_codes" => count($codes),
@@ -905,7 +905,7 @@ class AuthController extends Controller
             "client_id" => $clientId,
             "redirect_uri" => $redirectUri
         ]);
-        
+
         // Clear 2FA session
         session()->forget([
             'auth.2fa.user_id',
@@ -913,21 +913,21 @@ class AuthController extends Controller
             'auth.2fa.client_id',
             'auth.2fa.redirect_uri'
         ]);
-        
+
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
-        
+
         // Log the login activity
         LoginActivity::logLogin($user, $request);
-        
+
         // Set a flash message for next page
         session()->flash('status', 'Recovery code was used successfully. Please regenerate your recovery codes to maintain security.');
-        
+
         // Handle redirect based on session parameters
         return $this->handleLoginRedirect($user, $directLogin, $clientId, $redirectUri);
     }
-    
+
     /**
      * Handle the login redirect based on session parameters.
      * This is used by both regular login and after 2FA verification.
@@ -1021,7 +1021,7 @@ class AuthController extends Controller
                 'status' => 'active',
             ]
         );
-        
+
         Log::info("generateToken: User service registered or updated", [
             "user_id" => $user->id,
             "client_id" => $clientId,
@@ -1387,7 +1387,6 @@ class AuthController extends Controller
             "name" => ["required", "string", "max:255"],
             "email" => ["required", "string", "email", "max:255", "unique:users"],
             "password" => ["required", "confirmed", Password::defaults()],
-            "terms" => ["required", "accepted"],
             "gdpr_consent" => ["required", "accepted"],
         ]);
 

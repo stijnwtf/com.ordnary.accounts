@@ -63,7 +63,7 @@
             <!-- Form -->
             <form method="POST" action="{{ route('register') }}" id="register-form" class="space-y-6">
                 @csrf
-                
+
                 <!-- Add hidden fields for SSO parameters -->
                 @if(session('client_id') && session('redirect_uri'))
                 <input type="hidden" name="client_id" value="{{ session('client_id') }}">
@@ -138,15 +138,7 @@
 
                 <!-- GDPR Consent and Terms -->
                 <div class="space-y-3 pt-2 pb-1">
-                    <div class="flex items-start">
-                        <div class="flex items-center h-5">
-                            <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        </div>
-                        <div class="ml-3 text-sm">
-                            <label for="terms" class="text-gray-700">I agree to the <a href="https://numblio.com/documents/terms" class="text-blue-600 hover:underline">Terms of Service</a> and <a href="https://numblio.com/documents/privacy" class="text-blue-600 hover:underline">Privacy Policy</a></label>
-                        </div>
-                    </div>
-                    
+
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
                             <input id="gdpr_consent" name="gdpr_consent" type="checkbox" required class="h-4 w-4 text-blue-600 border-gray-300 rounded">
@@ -157,7 +149,7 @@
                             </label>
                         </div>
                     </div>
-                    
+
                     <p class="text-xs text-gray-500 pl-7">
                         Your data will only be used for the purposes clearly stated in our Privacy Policy, including account creation, service provision, security, and communication. You can withdraw your consent at any time through your account settings.
                     </p>
