@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <!-- GDPR Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 transform transition-transform duration-300">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <p class="text-sm text-gray-600"><strong>Privacy en cookies:</strong> Deze website gebruikt cookies om uw ervaring te verbeteren en voor essentiële functionaliteit. We verzamelen en verwerken gegevens in overeenstemming met de AVG (GDPR).</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <button id="cookie-preferences" class="text-xs px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">Voorkeuren aanpassen</button>
+                    <button id="accept-necessary" class="text-xs px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">Alleen noodzakelijk</button>
+                    <button id="accept-all-cookies" class="text-xs px-4 py-2 bg-blue-600 border border-blue-600 rounded-md text-white hover:bg-blue-700">Alles accepteren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container max-w-5xl mx-auto px-6 py-16">
         <!-- Enterprise Header -->
         <div class="mb-14">
@@ -21,6 +37,25 @@
             </div>
             <h1 class="text-4xl font-bold tracking-tight mb-3">Numblio Authentication</h1>
             <p class="text-xl text-gray-600 max-w-3xl">Enterprise-grade identity management built for today's application ecosystems</p>
+        </div>
+
+        <!-- GDPR Notice Bar -->
+        <div class="mb-8 bg-blue-50 border border-blue-100 rounded-lg p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1 md:flex md:justify-between">
+                    <p class="text-sm text-blue-700">
+                        Wij voldoen aan de AVG (GDPR) en beschermen uw persoonlijke gegevens. Wij verzamelen alleen gegevens die noodzakelijk zijn voor de dienstverlening.
+                    </p>
+                    <p class="mt-3 text-sm md:mt-0 md:ml-6">
+                        <a href="/privacy" class="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600">Lees meer <span aria-hidden="true">&rarr;</span></a>
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Technical Overview Card -->
@@ -62,6 +97,17 @@
                                 <div>
                                     <h3 class="font-medium">OAuth 2.0 Protocol Support</h3>
                                     <p class="text-gray-600 text-sm mt-1">Standardized authorization flows for third-party applications</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="mr-4 mt-1">
+                                    <svg class="w-5 h-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Privacy by Design</h3>
+                                    <p class="text-gray-600 text-sm mt-1">GDPR-compliant architecture with data minimization principles</p>
                                 </div>
                             </li>
                         </ul>
@@ -111,7 +157,43 @@
                                     <i class="fas fa-lock text-blue-500 mr-2"></i>
                                     <span>GDPR & Privacy Shield Framework</span>
                                 </div>
+                                <div class="flex items-center text-sm mt-2">
+                                    <i class="fas fa-server text-blue-500 mr-2"></i>
+                                    <span>EU-based Data Centers</span>
+                                </div>
+                                <div class="flex items-center text-sm mt-2">
+                                    <i class="fas fa-file-contract text-blue-500 mr-2"></i>
+                                    <span>Data Processing Agreements</span>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GDPR Features Section -->
+                <div class="mt-10 pt-6 border-t border-gray-100">
+                    <h3 class="text-lg font-semibold mb-4">Privacy & Compliance Features</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-user-shield text-blue-500 mr-2"></i>
+                                <h4 class="font-medium text-gray-900">Data Subject Rights</h4>
+                            </div>
+                            <p class="text-xs text-gray-600">Access, rectification, erasure, portability, and restriction of your personal data</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
+                                <h4 class="font-medium text-gray-900">Data Retention</h4>
+                            </div>
+                            <p class="text-xs text-gray-600">Configurable data retention periods and automated data deletion</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-download text-blue-500 mr-2"></i>
+                                <h4 class="font-medium text-gray-900">Data Portability</h4>
+                            </div>
+                            <p class="text-xs text-gray-600">Export your data in machine-readable format at any time</p>
                         </div>
                     </div>
                 </div>
@@ -154,18 +236,109 @@
             </div>
         </div>
 
+        <!-- Data Protection Links Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10">
+            <h3 class="text-lg font-semibold mb-4">Data Protection & Privacy</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="/privacy" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex-shrink-0 mr-3">
+                        <i class="fas fa-file-alt text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Privacy Policy</h4>
+                        <p class="text-sm text-gray-600">Uitgebreide informatie over hoe wij uw gegevens verzamelen en verwerken</p>
+                    </div>
+                </a>
+                <a href="/gdpr" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex-shrink-0 mr-3">
+                        <i class="fas fa-gavel text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">GDPR Compliance</h4>
+                        <p class="text-sm text-gray-600">Informatie over uw rechten onder de Algemene Verordening Gegevensbescherming</p>
+                    </div>
+                </a>
+                <a href="/data-processing" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex-shrink-0 mr-3">
+                        <i class="fas fa-file-contract text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Data Processing Agreements</h4>
+                        <p class="text-sm text-gray-600">Informatie over onze overeenkomsten met derde partijen en subverwerkers</p>
+                    </div>
+                </a>
+                <a href="/contact-dpo" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex-shrink-0 mr-3">
+                        <i class="fas fa-user-tie text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Contact DPO</h4>
+                        <p class="text-sm text-gray-600">Neem contact op met onze Data Protection Officer voor privacy-gerelateerde vragen</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer class="text-xs text-gray-500">
             <div class="flex flex-col space-y-2">
-                <div class="flex items-center space-x-4">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
                     <span>&copy; {{ date('Y') }} Numblio Technologies, Inc.</span>
-                    <a href="https://numblio.com/documents/privacy" class="hover:text-gray-700">Privacy Policy</a>
-                    <a href="https://numblio.com/documents/terms" class="hover:text-gray-700">Terms of Service</a>
-                    <a href="https://support.numblio.com" class="hover:text-gray-700">Support</a>
+                    <a href="/privacy" class="hover:text-gray-700">Privacy Policy</a>
+                    <a href="/terms" class="hover:text-gray-700">Terms of Service</a>
+                    <a href="/cookies" class="hover:text-gray-700">Cookie Policy</a>
+                    <a href="/gdpr" class="hover:text-gray-700">GDPR Compliance</a>
+                    <a href="/data-subject-rights" class="hover:text-gray-700">Your Data Rights</a>
+                    <a href="/support" class="hover:text-gray-700">Support</a>
                 </div>
                 <span>Numblio Identity Platform is protected by international copyright and intellectual property laws.</span>
+                <span>Data processing occurs in EU-based data centers in compliance with GDPR regulations. Data Verwerker: Numblio B.V. - KvK 12345678.</span>
             </div>
         </footer>
     </div>
+
+    <!-- GDPR-related JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cookie consent functionality
+            const consentBanner = document.getElementById('cookie-consent-banner');
+            const acceptAllBtn = document.getElementById('accept-all-cookies');
+            const acceptNecessaryBtn = document.getElementById('accept-necessary');
+            const preferencesBtn = document.getElementById('cookie-preferences');
+            
+            // Check if consent was previously given
+            if (!localStorage.getItem('cookie-consent')) {
+                consentBanner.classList.remove('translate-y-full');
+            } else {
+                consentBanner.classList.add('hidden');
+            }
+            
+            // Accept all cookies
+            acceptAllBtn.addEventListener('click', function() {
+                localStorage.setItem('cookie-consent', 'all');
+                localStorage.setItem('cookie-consent-timestamp', new Date().toISOString());
+                consentBanner.classList.add('translate-y-full');
+                setTimeout(() => {
+                    consentBanner.classList.add('hidden');
+                }, 300);
+            });
+            
+            // Accept only necessary cookies
+            acceptNecessaryBtn.addEventListener('click', function() {
+                localStorage.setItem('cookie-consent', 'necessary');
+                localStorage.setItem('cookie-consent-timestamp', new Date().toISOString());
+                consentBanner.classList.add('translate-y-full');
+                setTimeout(() => {
+                    consentBanner.classList.add('hidden');
+                }, 300);
+            });
+            
+            // Open cookie preferences modal
+            preferencesBtn.addEventListener('click', function() {
+                // Here you would typically open a modal with detailed cookie settings
+                alert('Cookie voorkeuren worden binnenkort geïmplementeerd.');
+            });
+        });
+    </script>
 </body>
 </html>
