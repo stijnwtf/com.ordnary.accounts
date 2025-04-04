@@ -21,6 +21,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'is_admin',
@@ -32,6 +35,7 @@ class User extends Authenticatable
         'two_factor_secret',
         'two_factor_recovery_codes',
         'two_factor_confirmed_at',
+        'deleted_at',
     ];
 
     /**
@@ -59,6 +63,7 @@ class User extends Authenticatable
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
             'two_factor_recovery_codes' => 'array',
+            'deleted_at' => 'datetime',
         ];
     }
     

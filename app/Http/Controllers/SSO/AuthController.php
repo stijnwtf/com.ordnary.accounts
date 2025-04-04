@@ -1384,109 +1384,20 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            "name" => ["required", "string", "max:255"],
-            "email" => ["required", "string", "email", "max:255", "unique:users"],
-            "password" => ["required", "confirmed", Password::defaults()],
-            "gdpr_consent" => ["required", "accepted"],
-        ]);
-
-        // Check for recaptcha response manually
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        if (empty($recaptchaResponse)) {
-            Log::warning("register: Missing reCAPTCHA response", [
-                "email" => $request->email
-            ]);
-
-            // Check if this is a direct registration
-            if (session("direct_login")) {
-                return redirect()->route("register")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again."
-                ]);
-            }
-
-            $clientId = session("client_id");
-            $redirectUri = session("redirect_uri");
-            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-
-            return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
-            ]);
-        }
-
-        // Verify reCAPTCHA
-        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
-
-        if (!$recaptchaResult['success']) {
-            Log::warning("register: reCAPTCHA verification failed", [
-                "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
-                "score" => $recaptchaResult['score'] ?? 'N/A'
-            ]);
-
-            // Check if this is a direct registration
-            if (session("direct_login")) {
-                return redirect()->route("register")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again."
-                ]);
-            }
-
-            $clientId = session("client_id");
-            $redirectUri = session("redirect_uri");
-            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-
-            return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
-            ]);
-        }
-
-        // Check score for invisible reCAPTCHA v3 (if score is too low, reject the registration)
-        if (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5) {
-            Log::warning("register: reCAPTCHA score too low", [
-                "email" => $request->email,
-                "score" => $recaptchaResult['score']
-            ]);
-
-            // Check if this is a direct registration
-            if (session("direct_login")) {
-                return redirect()->route("register")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again later."
-                ]);
-            }
-
-            $clientId = session("client_id");
-            $redirectUri = session("redirect_uri");
-            $redirectUrl = route("register", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-
-            return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again later."
-            ]);
-        }
-
-        // Get session variables or input values as fallback
-        $directLogin = session("direct_login", false);
-        $clientId = session("client_id", $request->input('client_id'));
-        $redirectUri = session("redirect_uri", $request->input('redirect_uri'));
-
-        // If values came from input and not session, store them in session for later
-        if (!session("client_id") && $request->input('client_id')) {
-            session(["client_id" => $clientId]);
-        }
-        if (!session("redirect_uri") && $request->input('redirect_uri')) {
-            session(["redirect_uri" => $redirectUri]);
-        }
-
-        Log::debug("register: Retrieved parameters", [
-            "direct_login" => $directLogin,
-            "client_id" => $clientId,
-            "redirect_uri" => $redirectUri,
-            "session_data" => session()->all(),
-            "request_data" => $request->only(['client_id', 'redirect_uri'])
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         try {
             // Create user
             $user = User::create([
-                'name' => $request->name,
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'username' => $request->username,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
@@ -1522,22 +1433,24 @@ class AuthController extends Controller
             LoginActivity::logLogin($user, $request);
 
             // If this is a direct registration, redirect to the profile page
-            if ($directLogin) {
+            if (session("direct_login")) {
                 Log::info("register: Direct registration successful, redirecting to profile");
                 session()->forget(["direct_login"]);
                 return redirect()->route("account.profile");
             }
 
-            if (!$clientId || !$redirectUri) {
+            if (!session("client_id") || !session("redirect_uri")) {
                 Log::error("register: Missing session parameters after authentication", [
-                    "client_id" => $clientId,
-                    "redirect_uri" => $redirectUri,
+                    "client_id" => session("client_id"),
+                    "redirect_uri" => session("redirect_uri"),
                 ]);
                 return redirect()->route("login")->withErrors([
                     "error" => "Session expired. Please try logging in again.",
                 ]);
             }
 
+            $clientId = session("client_id");
+            $redirectUri = session("redirect_uri");
             $token = $this->generateToken($user, $clientId);
             Log::info("register: Generated token for user", [
                 "user_id" => $user->id,
