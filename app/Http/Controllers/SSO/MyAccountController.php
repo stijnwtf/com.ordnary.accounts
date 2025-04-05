@@ -154,6 +154,67 @@ class MyAccountController extends Controller
     }
 
     /**
+     * Show the user subscriptions page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function subscriptions()
+    {
+        $user = Auth::user();
+        
+        // Example data structure for subscriptions
+        // In a real implementation, you would fetch this from your subscription database/service
+        $subscriptions = [
+            [
+                'id' => 'sub_123456',
+                'product_name' => 'MockScene Pro',
+                'status' => 'active',
+                'started_at' => now()->subMonths(2),
+                'expires_at' => now()->addMonths(10),
+                'next_billing' => now()->addMonth(),
+                'plan' => 'Yearly',
+                'price' => '€99.00',
+                'features' => ['Unlimited projects', 'Advanced components', 'API access'],
+                'usage' => [
+                    'projects' => ['used' => 12, 'total' => 'Unlimited'],
+                    'storage' => ['used' => '1.2 GB', 'total' => '10 GB', 'percentage' => 12],
+                    'api_calls' => ['used' => 850, 'total' => 10000, 'percentage' => 8.5]
+                ]
+            ],
+            // Example of another product
+            [
+                'id' => 'sub_789012',
+                'product_name' => 'Numblio Forms',
+                'status' => 'active',
+                'started_at' => now()->subWeeks(3),
+                'expires_at' => null, // null means it renews automatically
+                'next_billing' => now()->addDays(7),
+                'plan' => 'Monthly',
+                'price' => '€9.99',
+                'features' => ['50 form submissions', 'Basic templates', 'Email notifications'],
+                'usage' => [
+                    'submissions' => ['used' => 23, 'total' => 50, 'percentage' => 46],
+                    'forms' => ['used' => 3, 'total' => 5, 'percentage' => 60]
+                ]
+            ]
+        ];
+
+        // In production, you would do something like this:
+        // $subscriptions = SubscriptionService::getUserSubscriptions($user->id);
+        
+        Log::info('User subscriptions fetched', [
+            'user_id' => $user->id,
+            'subscriptions_count' => count($subscriptions)
+        ]);
+
+        return view('my-account.subscriptions', [
+            'user' => $user,
+            'subscriptions' => $subscriptions,
+            'active_page' => 'subscriptions'
+        ]);
+    }
+
+    /**
      * Update the user's profile information.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -223,6 +223,10 @@
                                         <i class="fas fa-globe mr-3 text-gray-500"></i>
                                         Connections
                                     </a>
+                                    <a href="{{ route('account.subscriptions') }}" class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                        <i class="fas fa-credit-card mr-3 text-gray-500"></i>
+                                        Subscriptions
+                                    </a>
                                 </div>
 
                                 <div class="mt-3 border-t border-gray-200 pt-3">

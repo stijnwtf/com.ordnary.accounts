@@ -51,6 +51,7 @@ Route::prefix('app')->middleware(['auth'])->group(function () {
     Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
     Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
     Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
+    Route::get('/subscriptions', [MyAccountController::class, 'subscriptions'])->name('account.subscriptions');
 
     // GDPR Data Portability route
     Route::get('/export-data', [MyAccountController::class, 'exportUserData'])->name('account.export-data');
