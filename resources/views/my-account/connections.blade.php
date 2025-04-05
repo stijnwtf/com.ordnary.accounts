@@ -2,13 +2,14 @@
 
 @section('title', 'Connected Services')
 
-@section('header', 'Connected Services')
-@section('subheader', 'Manage the services and applications connected to your Numblio account.')
-
 @section('content')
 <div class="mb-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-2">Connected services</h3>
-    <p class="text-sm text-gray-600">Manage the services and applications connected to your Numblio account.</p>
+    <h3 class="text-lg font-medium leading-6 text-gray-900">
+        Connected Services
+    </h3>
+    <p class="mt-2 text-sm text-gray-600">
+        Manage the services and applications connected to your Numblio account.
+    </p>
 </div>
 
 <!-- Status Messages -->
@@ -20,60 +21,43 @@
 <div class="space-y-4" id="services-container">
     @if(count($services ?? []) > 0)
         @foreach($services as $service)
-        <div class="border border-gray-200 rounded-lg overflow-hidden service-item" data-service-id="{{ $service['service_id'] }}" data-service-name="{{ $service['service_name'] }}">
-            <div class="p-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-plug text-gray-500"></i>
-                        </div>
-                        <div>
-                            <h5 class="text-sm font-medium text-gray-900">{{ $service['service_name'] }}</h5>
-                            <p class="text-xs text-gray-500">Connected on {{ \Carbon\Carbon::parse($service['first_login'])->format('d-m-Y') }}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <i class="fas fa-check-circle mr-1"></i> Connected
-                        </span>
-                    </div>
+        <div class="border-b border-gray-200 py-4 service-item" data-service-id="{{ $service['service_id'] }}" data-service-name="{{ $service['service_name'] }}">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h5 class="text-sm font-medium text-gray-900">{{ $service['service_name'] }}</h5>
+                    <p class="text-xs text-gray-500 mt-1">Connected on {{ \Carbon\Carbon::parse($service['first_login'])->format('d-m-Y') }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Last used on {{ \Carbon\Carbon::parse($service['last_used'])->format('d-m-Y H:i') }}</p>
                 </div>
-                <div class="mt-3 flex items-center justify-between">
-                    <div class="text-xs text-gray-500">
-                        <p>Last used on {{ \Carbon\Carbon::parse($service['last_used'])->format('d-m-Y H:i') }}</p>
-                    </div>
+                <div class="flex flex-col items-end space-y-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Connected
+                    </span>
                     <button class="disconnect-btn px-3 py-1 rounded text-xs font-medium text-red-600 hover:text-red-800 focus:outline-none border border-red-200 hover:bg-red-50">
-                        <i class="fas fa-unlink mr-1"></i> Disconnect
+                        Disconnect
                     </button>
                 </div>
             </div>
         </div>
         @endforeach
     @else
-        <div class="text-center py-8 border border-gray-200 rounded-lg">
-            <div class="flex flex-col items-center justify-center">
-                <i class="fas fa-plug text-gray-400 text-4xl mb-3"></i>
-                <h5 class="text-md font-medium text-gray-900 mb-1">No connected services</h5>
-                <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
-            </div>
+        <div class="py-10 text-center border-b border-gray-200">
+            <p class="text-sm font-medium text-gray-900 mb-1">No connected services</p>
+            <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
         </div>
     @endif
 </div>
 
 <!-- No Services Template (hidden, will be shown when all services are disconnected) -->
 <template id="no-services-template">
-    <div class="text-center py-8 border border-gray-200 rounded-lg">
-        <div class="flex flex-col items-center justify-center">
-            <i class="fas fa-plug text-gray-400 text-4xl mb-3"></i>
-            <h5 class="text-md font-medium text-gray-900 mb-1">No connected services</h5>
-            <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
-        </div>
+    <div class="py-10 text-center border-b border-gray-200">
+        <p class="text-sm font-medium text-gray-900 mb-1">No connected services</p>
+        <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
     </div>
 </template>
 
 <!-- Add More Connections Button -->
-<div class="flex justify-end">
-
+<div class="flex justify-end mt-6">
+    <!-- Button placeholder for future functionality -->
 </div>
 
 @endsection
@@ -182,20 +166,18 @@ document.addEventListener('DOMContentLoaded', function() {
             iconColor = 'text-red-500';
         }
 
-        statusMessage.classList.add(backgroundColor, 'p-4', 'rounded-lg', 'border', borderColor);
+        statusMessage.classList.add(backgroundColor, 'p-4', 'rounded-md', 'border', borderColor);
 
         const content = `
             <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <i class="fas ${icon} ${iconColor} text-xl"></i>
-                </div>
                 <div class="ml-3">
                     <p class="text-sm font-medium ${textColor}">${message}</p>
                 </div>
                 <div class="ml-auto pl-3">
                     <div class="-mx-1.5 -my-1.5">
                         <button onclick="this.parentElement.parentElement.parentElement.parentElement.classList.add('hidden')" class="inline-flex rounded-md p-1.5 ${textColor} hover:bg-${type === 'error' ? 'red' : 'green'}-100 focus:outline-none">
-                            <i class="fas fa-times"></i>
+                            <span class="sr-only">Dismiss</span>
+                            ×
                         </button>
                     </div>
                 </div>
