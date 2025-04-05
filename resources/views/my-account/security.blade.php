@@ -3,48 +3,52 @@
 @section('title', 'Security Settings')
 
 @section('content')
-<div class="mb-6">
-    <h3 class="text-lg font-medium leading-6 text-gray-900">
-        Account Security
-    </h3>
-    <p class="mt-2 text-sm text-gray-600">
-        Manage your security settings, activity, and data preferences.
-    </p>
-</div>
+<div x-data="{ activeTab: 'authentication' }" x-init="() => { activeTab = localStorage.getItem('securityTab') || 'authentication' }">
+    <div class="mb-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">
+            Account Security
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+            Manage your security settings, activity, and data preferences.
+        </p>
+    </div>
 
-<!-- Tabs Navigation -->
-<div class="mb-6 border-b border-gray-200">
-    <div class="flex -mb-px" x-data="{ activeTab: localStorage.getItem('securityActiveTab') || 'authentication' }">
-        <button @click="activeTab = 'authentication'; localStorage.setItem('securityActiveTab', 'authentication')" 
+    <!-- Tabs Navigation -->
+    <div class="mb-6 border-b border-gray-200">
+        <div class="flex -mb-px">
+            <button 
+                @click="activeTab = 'authentication'; localStorage.setItem('securityTab', 'authentication')" 
                 :class="activeTab === 'authentication' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                 class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
-            <i class="fas fa-shield-alt mr-2"></i> Authentication
-        </button>
-        
-        <button @click="activeTab = 'activity'; localStorage.setItem('securityActiveTab', 'activity')"
+                <i class="fas fa-shield-alt mr-2"></i> Authentication
+            </button>
+            
+            <button 
+                @click="activeTab = 'activity'; localStorage.setItem('securityTab', 'activity')"
                 :class="activeTab === 'activity' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                 class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
-            <i class="fas fa-history mr-2"></i> Account Activity
-        </button>
-        
-        <button @click="activeTab = 'recovery'; localStorage.setItem('securityActiveTab', 'recovery')"
+                <i class="fas fa-history mr-2"></i> Account Activity
+            </button>
+            
+            <button 
+                @click="activeTab = 'recovery'; localStorage.setItem('securityTab', 'recovery')"
                 :class="activeTab === 'recovery' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                 class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
-            <i class="fas fa-life-ring mr-2"></i> Recovery Options
-        </button>
-        
-        <button @click="activeTab = 'privacy'; localStorage.setItem('securityActiveTab', 'privacy')"
+                <i class="fas fa-life-ring mr-2"></i> Recovery Options
+            </button>
+            
+            <button 
+                @click="activeTab = 'privacy'; localStorage.setItem('securityTab', 'privacy')"
                 :class="activeTab === 'privacy' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                 class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
-            <i class="fas fa-user-shield mr-2"></i> Privacy & Data
-        </button>
+                <i class="fas fa-user-shield mr-2"></i> Privacy & Data
+            </button>
+        </div>
     </div>
-</div>
 
-<!-- Tab Content -->
-<div x-data="{ activeTab: localStorage.getItem('securityActiveTab') || 'authentication' }">
+    <!-- Tab Content -->
     <!-- Authentication Tab Content -->
-    <div x-show="activeTab === 'authentication'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+    <div x-show="activeTab === 'authentication'" x-cloak>
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
             <div class="flex items-center justify-between mb-4">
                 <h4 class="text-base font-medium text-gray-900 flex items-center">
@@ -94,7 +98,7 @@
     </div>
     
     <!-- Activity Tab Content -->
-    <div x-show="activeTab === 'activity'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+    <div x-show="activeTab === 'activity'" x-cloak>
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
             <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                 <i class="fas fa-history text-blue-500 mr-2"></i>
@@ -156,7 +160,7 @@
     </div>
     
     <!-- Recovery Tab Content -->
-    <div x-show="activeTab === 'recovery'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+    <div x-show="activeTab === 'recovery'" x-cloak>
         <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
             <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                 <i class="fas fa-life-ring text-blue-500 mr-2"></i>
@@ -207,7 +211,7 @@
     </div>
     
     <!-- Privacy & Data Tab Content -->
-    <div x-show="activeTab === 'privacy'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+    <div x-show="activeTab === 'privacy'" x-cloak>
         <div class="space-y-6">
             <!-- GDPR Data Export -->
             <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
@@ -353,5 +357,65 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+<style>
+    [x-cloak] { display: none !important; }
+</style>
+<script>
+    // Fallback JavaScript for tab switching if Alpine.js fails to load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if Alpine is not loaded after 500ms
+        setTimeout(function() {
+            if (typeof Alpine === 'undefined') {
+                console.log('Alpine.js not loaded, using fallback');
+                
+                // Get all tab buttons and content sections
+                const tabButtons = document.querySelectorAll('[data-tab]');
+                const tabContents = document.querySelectorAll('[data-tab-content]');
+                
+                // Get saved tab from localStorage or default to authentication
+                const savedTab = localStorage.getItem('securityTab') || 'authentication';
+                
+                // Function to activate a tab
+                function activateTab(tabId) {
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // Show the selected tab content
+                    const activeContent = document.querySelector(`[data-tab-content="${tabId}"]`);
+                    if (activeContent) {
+                        activeContent.style.display = 'block';
+                    }
+                    
+                    // Update tab button styles
+                    tabButtons.forEach(button => {
+                        if (button.getAttribute('data-tab') === tabId) {
+                            button.classList.add('border-blue-500', 'text-blue-600');
+                            button.classList.remove('border-transparent', 'text-gray-500');
+                        } else {
+                            button.classList.remove('border-blue-500', 'text-blue-600');
+                            button.classList.add('border-transparent', 'text-gray-500');
+                        }
+                    });
+                    
+                    // Save to localStorage
+                    localStorage.setItem('securityTab', tabId);
+                }
+                
+                // Add click event listeners to tab buttons
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-tab');
+                        activateTab(tabId);
+                    });
+                });
+                
+                // Activate the saved tab on page load
+                activateTab(savedTab);
+            }
+        }, 500);
+    });
+</script>
 @endsection
