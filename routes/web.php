@@ -41,7 +41,7 @@ Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('ad
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
 
 // My Account routes
-Route::prefix('account')->middleware(['auth'])->group(function () {
+Route::prefix('app')->middleware(['auth'])->group(function () {
     // Bestaande route als redirect naar account/profile
     Route::get('/', [MyAccountController::class, 'index'])->name('my-account');
 
