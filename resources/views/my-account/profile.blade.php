@@ -1,6 +1,6 @@
 @extends('my-account.layout')
 
-@section('title', @lang('profile.title', [], 'profile'))
+@section('title', lang('profile.title', [], 'profile'))
 
 @section('content')
 <div class="mb-6">
