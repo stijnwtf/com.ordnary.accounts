@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use App\Helpers\LanguageHelper;
 use Illuminate\Translation\Translator;
+use Illuminate\Support\Facades\Log;
 
 class LanguageServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,14 @@ class LanguageServiceProvider extends ServiceProvider
         
         // Add a blade directive for language strings
         Blade::directive('lang', function ($expression) {
+            // Log expression to debug
+            Log::debug('Lang expression: ' . $expression);
+            
+            // Add return statement that explicitly includes file parameter for profile keys
+            if (strpos($expression, 'profile.') === 0) {
+                return "<?php echo lang('{$expression}', [], 'profile'); ?>";
+            }
+            
             return "<?php echo lang($expression); ?>";
         });
         
@@ -51,6 +60,20 @@ class LanguageServiceProvider extends ServiceProvider
                 
                 // Override the get method to handle direct JSON keys properly
                 public function get($key, array $replace = [], $locale = null, $fallback = true) {
+                    // Log translation attempt for debugging
+                    Log::debug('Translation attempt', [
+                        'key' => $key,
+                        'replace' => $replace,
+                        'locale' => $locale,
+                    ]);
+                    
+                    // Check if this is a profile key with dot notation
+                    if (strpos($key, 'profile.') === 0) {
+                        $result = lang($key, $replace, 'profile');
+                        Log::debug('Profile translation result', ['key' => $key, 'result' => $result]);
+                        return $result;
+                    }
+                    
                     // Check if this is a flat key (no dots) and not a file-based translation
                     if (strpos($key, '.') === false && strpos($key, '::') === false) {
                         $args = func_get_args();
