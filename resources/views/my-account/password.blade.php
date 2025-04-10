@@ -95,9 +95,12 @@
                 <div class="ml-1">
                     <h4 class="text-sm font-medium text-blue-800">{{ __('password.security_tips.title') }}</h4>
                     <ul class="mt-2 text-xs text-blue-700 list-disc space-y-1 pl-5">
-                        @foreach(__('password.security_tips.tips') as $tip)
-                            <li>{{ $tip }}</li>
-                        @endforeach
+                        <li>{{ __('password.security_tips.tips.0') }}</li>
+                        <li>{{ __('password.security_tips.tips.1') }}</li>
+                        <li>{{ __('password.security_tips.tips.2') }}</li>
+                        <li>{{ __('password.security_tips.tips.3') }}</li>
+                        <li>{{ __('password.security_tips.tips.4') }}</li>
+                        <li>{{ __('password.security_tips.tips.5') }}</li>
                     </ul>
                 </div>
             </div>
