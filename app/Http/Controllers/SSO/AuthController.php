@@ -22,6 +22,7 @@ use App\Mail\WelcomeEmail;
 use App\Models\LoginActivity;
 use App\Models\UserService;
 use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AuthController extends Controller
 {
@@ -344,6 +345,19 @@ class AuthController extends Controller
         try {
             if (Auth::attempt($request->only("email", "password"))) {
                 $user = Auth::user();
+
+                // Check if email is verified
+                if (!$user->hasVerifiedEmail()) {
+                    Auth::logout();
+                    
+                    return redirect()->route('login')
+                        ->withInput($request->only('email', 'remember'))
+                        ->withErrors([
+                            'email' => 'You need to verify your email address before logging in. 
+                                        <a href="' . route('verification.notice') . '" class="text-blue-500 hover:underline">Verify email</a>'
+                        ]);
+                }
+
                 Log::info("login: Authentication successful", ["email" => $request->email]);
 
                 // Check if 2FA is enabled for this user
@@ -1423,45 +1437,13 @@ class AuthController extends Controller
 
             // Fire registered event
             event(new Registered($user));
+            
+            // Send verification email
+            $user->sendEmailVerificationNotification();
 
-            // Auto-login after registration
-            Auth::login($user);
-            $request->session()->regenerate();
-
-            // Log the login activity for new registration
-            LoginActivity::logLogin($user, $request);
-
-            // If this is a direct registration, redirect to the profile page
-            if (session("direct_login")) {
-                Log::info("register: Direct registration successful, redirecting to profile");
-                session()->forget(["direct_login"]);
-                return redirect()->route("account.profile");
-            }
-
-            if (!session("client_id") || !session("redirect_uri")) {
-                Log::error("register: Missing session parameters after authentication", [
-                    "client_id" => session("client_id"),
-                    "redirect_uri" => session("redirect_uri"),
-                ]);
-                return redirect()->route("login")->withErrors([
-                    "error" => "Session expired. Please try logging in again.",
-                ]);
-            }
-
-            $clientId = session("client_id");
-            $redirectUri = session("redirect_uri");
-            $token = $this->generateToken($user, $clientId);
-            Log::info("register: Generated token for user", [
-                "user_id" => $user->id,
-                "token" => $token,
-            ]);
-
-            session()->forget(["client_id", "redirect_uri"]);
-            Log::debug("register: Cleared session parameters");
-
-            $targetUrl = $redirectUri . "?token=" . $token;
-            Log::info("register: Redirecting to client URL", ["target_url" => $targetUrl]);
-            return redirect()->away($targetUrl);
+            // Instead of auto-login, redirect to verification notice
+            Auth::login($user); // We login the user temporarily so they can see the verification notice
+            return redirect()->route('verification.notice');
 
         } catch (\Exception $e) {
             Log::error("register: Exception occurred during registration", [
@@ -1500,5 +1482,61 @@ class AuthController extends Controller
         }
 
         return $normalizedUris;
+    }
+
+    /**
+     * Show the email verification notice.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showVerificationNotice()
+    {
+        return view('auth.verify-email');
+    }
+
+    /**
+     * Verify the user's email address.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyEmail(Request $request)
+    {
+        $user = User::find($request->route('id'));
+
+        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            throw new AuthorizationException;
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('success', 'Your email address is already verified.');
+        }
+
+        $user->markEmailAsVerified();
+
+        event(new \Illuminate\Auth\Events\Verified($user));
+
+        Log::info("verifyEmail: User verified email successfully", ["email" => $user->email]);
+
+        return redirect()->route('login')->with('success', 'Your email address has been verified. You can now log in.');
+    }
+
+    /**
+     * Resend the email verification notification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resendVerificationEmail(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('login');
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        Log::info("resendVerificationEmail: Verification email resent", ["email" => $request->user()->email]);
+
+        return back()->with('resent', true);
     }
 }

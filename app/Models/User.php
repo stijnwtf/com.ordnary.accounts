@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -186,5 +189,33 @@ class User extends Authenticatable
     public function activeServices()
     {
         return $this->services()->where('status', 'active');
+    }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $this->getKey(),
+                'hash' => sha1($this->getEmailForVerification()),
+            ]
+        );
+        
+        try {
+            Mail::to($this->email)->send(new \App\Mail\VerifyEmail($this, $verificationUrl));
+            Log::info("sendEmailVerificationNotification: Verification email sent", ["email" => $this->email]);
+        } catch (\Exception $e) {
+            Log::error("sendEmailVerificationNotification: Failed to send verification email", [
+                "email" => $this->email,
+                "exception" => $e->getMessage(),
+                "trace" => $e->getTraceAsString()
+            ]);
+        }
     }
 }

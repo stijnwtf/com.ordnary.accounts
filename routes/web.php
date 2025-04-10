@@ -41,8 +41,16 @@ Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('
 Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
 Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
 
+// Email Verification Routes
+Route::middleware('throttle:6,1')->group(function () {
+    Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->middleware('auth')->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+    Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail'])
+                ->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+});
+
 // My Account routes
-Route::prefix('app')->middleware(['auth'])->group(function () {
+Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
     // Bestaande route als redirect naar account/profile
     Route::get('/', [MyAccountController::class, 'index'])->name('my-account');
 
