@@ -244,7 +244,7 @@ class MyAccountController extends Controller
         app()->setLocale($request->language);
         session(['language' => $request->language]);
         
-        return redirect()->back()->with('success', \App\Helpers\LanguageHelper::get('notifications.success', [], 'profile'));
+        return redirect()->back()->with('success', lang('notifications.success', [], 'profile'));
     }
 
     /**

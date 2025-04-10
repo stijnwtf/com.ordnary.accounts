@@ -59,7 +59,7 @@ class LanguageHelper
     /**
      * Get a language string
      *
-     * @param string $key Key using dot notation
+     * @param string $key Key using dot notation or direct key
      * @param array $replace Values to replace in string
      * @param string $file Language file to use
      * @return string
@@ -67,10 +67,17 @@ class LanguageHelper
     public static function get($key, $replace = [], $file = 'auth')
     {
         $langData = self::loadLanguageFile($file);
-        $value = Arr::get($langData, $key, $key);
+        
+        // Handle direct keys (without dot notation)
+        if (strpos($key, '.') === false && isset($langData[$key])) {
+            $value = $langData[$key];
+        } else {
+            // Handle dot notation
+            $value = Arr::get($langData, $key, $key);
+        }
         
         // If value not found, use the key as fallback
-        if ($value === $key && strpos($key, '.') !== false) {
+        if ($value === $key) {
             return $key;
         }
         
@@ -102,7 +109,7 @@ class LanguageHelper
         session(['language' => $language]);
         
         if (Auth::check()) {
-            Auth::user()->update(['language' => $language]);
+            Auth::user()->update(['lang' => $language]);
         }
         
         app()->setLocale($language);
