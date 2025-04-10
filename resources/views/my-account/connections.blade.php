@@ -1,14 +1,14 @@
 @extends('my-account.layout')
 
-@section('title', 'Connected Services')
+@section('title', lang('title', [], 'connections'))
 
-@section('header', 'Connected Services')
-@section('subheader', 'Manage the services and applications connected to your Numblio account.')
+@section('header', lang('header', [], 'connections'))
+@section('subheader', lang('subheader', [], 'connections'))
 
 @section('content')
 <div class="mb-6">
-    <h3 class="text-lg font-medium text-gray-900 mb-2">Connected services</h3>
-    <p class="text-sm text-gray-600">Manage the services and applications connected to your Numblio account.</p>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('connected_services', [], 'connections') }}</h3>
+    <p class="text-sm text-gray-600">{{ lang('manage_services', [], 'connections') }}</p>
 </div>
 
 <!-- Status Messages -->
@@ -29,21 +29,21 @@
                         </div>
                         <div>
                             <h5 class="text-sm font-medium text-gray-900">{{ $service['service_name'] }}</h5>
-                            <p class="text-xs text-gray-500">Connected on {{ \Carbon\Carbon::parse($service['first_login'])->format('d-m-Y') }}</p>
+                            <p class="text-xs text-gray-500">{{ lang('status.connected_on', [], 'connections') }} {{ \Carbon\Carbon::parse($service['first_login'])->format('d-m-Y') }}</p>
                         </div>
                     </div>
                     <div>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <i class="fas fa-check-circle mr-1"></i> Connected
+                            <i class="fas fa-check-circle mr-1"></i> {{ lang('status.connected', [], 'connections') }}
                         </span>
                     </div>
                 </div>
                 <div class="mt-3 flex items-center justify-between">
                     <div class="text-xs text-gray-500">
-                        <p>Last used on {{ \Carbon\Carbon::parse($service['last_used'])->format('d-m-Y H:i') }}</p>
+                        <p>{{ lang('status.last_used', [], 'connections') }} {{ \Carbon\Carbon::parse($service['last_used'])->format('d-m-Y H:i') }}</p>
                     </div>
                     <button class="disconnect-btn px-3 py-1 rounded text-xs font-medium text-red-600 hover:text-red-800 focus:outline-none border border-red-200 hover:bg-red-50">
-                        <i class="fas fa-unlink mr-1"></i> Disconnect
+                        <i class="fas fa-unlink mr-1"></i> {{ lang('status.disconnect', [], 'connections') }}
                     </button>
                 </div>
             </div>
@@ -53,8 +53,8 @@
         <div class="text-center py-8 border border-gray-200 rounded-lg">
             <div class="flex flex-col items-center justify-center">
                 <i class="fas fa-plug text-gray-400 text-4xl mb-3"></i>
-                <h5 class="text-md font-medium text-gray-900 mb-1">No connected services</h5>
-                <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
+                <h5 class="text-md font-medium text-gray-900 mb-1">{{ lang('no_services.title', [], 'connections') }}</h5>
+                <p class="text-sm text-gray-500">{{ lang('no_services.description', [], 'connections') }}</p>
             </div>
         </div>
     @endif
@@ -65,8 +65,8 @@
     <div class="text-center py-8 border border-gray-200 rounded-lg">
         <div class="flex flex-col items-center justify-center">
             <i class="fas fa-plug text-gray-400 text-4xl mb-3"></i>
-            <h5 class="text-md font-medium text-gray-900 mb-1">No connected services</h5>
-            <p class="text-sm text-gray-500">You haven't connected any services to your account yet.</p>
+            <h5 class="text-md font-medium text-gray-900 mb-1">{{ lang('no_services.title', [], 'connections') }}</h5>
+            <p class="text-sm text-gray-500">{{ lang('no_services.description', [], 'connections') }}</p>
         </div>
     </div>
 </template>
@@ -91,7 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const serviceId = serviceItem.dataset.serviceId;
             const serviceName = serviceItem.dataset.serviceName;
 
-            if (confirm(`Are you sure you want to disconnect ${serviceName}? This will revoke access to your Numblio account.`)) {
+            // Get confirm message from translations and replace placeholder
+            let confirmMessage = '{{ lang('status.disconnect_confirm', [], 'connections') }}';
+            confirmMessage = confirmMessage.replace('{service}', serviceName);
+
+            if (confirm(confirmMessage)) {
                 disconnectService(serviceId, serviceItem);
             }
         });
@@ -138,8 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Remove the service item from the DOM
                 serviceItem.remove();
 
+                // Get success message from translations and replace placeholder
+                let successMessage = '{{ lang('status.success_disconnect', [], 'connections') }}';
+                successMessage = successMessage.replace('{service}', serviceItem.dataset.serviceName);
+                
                 // Show success message
-                showStatusMessage('success', `Successfully disconnected ${serviceItem.dataset.serviceName}`);
+                showStatusMessage('success', successMessage);
 
                 // Check if there are no more services
                 const remainingServices = document.querySelectorAll('.service-item');
@@ -150,14 +158,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     servicesContainer.innerHTML = noServicesTemplate.innerHTML;
                 }
             } else {
-                // Show error message
-                showStatusMessage('error', data.message || 'Failed to disconnect service. Please try again.');
+                // Show error message from translations
+                showStatusMessage('error', data.message || '{{ lang('status.error_disconnect', [], 'connections') }}');
                 serviceItem.classList.remove('opacity-50');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showStatusMessage('error', 'An unexpected error occurred. Please try again.');
+            showStatusMessage('error', '{{ lang('status.unexpected_error', [], 'connections') }}');
             serviceItem.classList.remove('opacity-50');
         });
     }
