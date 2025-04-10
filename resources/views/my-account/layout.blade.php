@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="{{ Lang::getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="Manage your Numblio-account settings">
-    <title>Numblio · Account Center</title>
+    <meta name="description" content="{{ lang('meta.description', [], 'layout') }}">
+    <title>Numblio · {{ lang('title', [], 'layout') }}</title>
     <link rel="icon" href="https://numblio.com/img/icon_black.png" type="image/gif" sizes="20x20">
 
     <!-- Inline critical CSS to prevent FOUC -->
@@ -194,7 +194,7 @@
                                         <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                                         <div class="mt-1 flex">
                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                                <i class="fas fa-check-circle mr-1"></i> Verified
+                                                <i class="fas fa-check-circle mr-1"></i> {{ lang('status.verified', [], 'layout') }}
                                             </span>
                                         </div>
                                     </div>
@@ -205,41 +205,41 @@
                             <div class="p-3">
                                 <div class="mb-4">
                                     <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                        Account Settings
+                                        {{ lang('sidebar.account_settings', [], 'layout') }}
                                     </div>
                                     <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-user mr-3 text-gray-500"></i>
-                                        Profile Information
+                                        {{ lang('sidebar.profile', [], 'layout') }}
                                     </a>
                                     <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-lock mr-3 text-gray-500"></i>
-                                        Password
+                                        {{ lang('sidebar.password', [], 'layout') }}
                                     </a>
                                     <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
-                                        Security
+                                        {{ lang('sidebar.security', [], 'layout') }}
                                     </a>
                                     <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-globe mr-3 text-gray-500"></i>
-                                        Connections
+                                        {{ lang('sidebar.connections', [], 'layout') }}
                                     </a>
                                     <a href="{{ route('account.subscriptions') }}" class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-credit-card mr-3 text-gray-500"></i>
-                                        Subscriptions
+                                        {{ lang('sidebar.subscriptions', [], 'layout') }}
                                     </a>
                                 </div>
 
                                 <div class="mt-3 border-t border-gray-200 pt-3">
                                     <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                        Support
+                                        {{ lang('sidebar.support', [], 'layout') }}
                                     </div>
                                     <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-question-circle mr-3 text-gray-500"></i>
-                                        Help Center
+                                        {{ lang('sidebar.help_center', [], 'layout') }}
                                     </a>
                                     <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-info-circle mr-3 text-gray-500"></i>
-                                        FAQ
+                                        {{ lang('sidebar.faq', [], 'layout') }}
                                     </a>
                                 </div>
                             </div>
@@ -247,11 +247,11 @@
                             <!-- Logout Button and Account ID -->
                             <div class="px-4 py-4 border-t border-gray-200 bg-gray-50">
                                 <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
-                                    <i class="fas fa-sign-out-alt mr-2"></i> Log out
+                                    <i class="fas fa-sign-out-alt mr-2"></i> {{ lang('sidebar.logout', [], 'layout') }}
                                 </a>
                                 <div class="flex items-center justify-between">
                                     <p class="text-xs text-gray-500">
-                                        <span class="font-medium">Account ID:</span>
+                                        <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
                                         <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                                     </p>
                                     <a href="/" class="flex items-center">
@@ -264,11 +264,11 @@
                             <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
                                 <div class="text-xs text-gray-400">
                                     <div class="flex flex-col space-y-1">
-                                        <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
+                                        <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
                                         <div class="flex items-center space-x-3 mt-1">
-                                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
-                                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
-                                            <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
+                                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
+                                            <a href="https://support.numblio.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -282,8 +282,8 @@
                     <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
                         <!-- Welcome header -->
                         <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-white to-blue-50">
-                            <h2 class="text-xl font-bold text-gray-900">Hi, {{$user->first_name}}!</h2>
-                            <p class="text-sm text-gray-600 mt-1">Welcome to your personal account settings. Manage your profile, security, and preferences here.</p>
+                            <h2 class="text-xl font-bold text-gray-900">{{ lang('welcome.greeting', ['name' => $user->first_name], 'layout') }}</h2>
+                            <p class="text-sm text-gray-600 mt-1">{{ lang('welcome.message', [], 'layout') }}</p>
                         </div>
 
                         <!-- Success Message -->
@@ -294,7 +294,7 @@
                                     <i class="fas fa-check-circle text-green-500 text-xl"></i>
                                 </div>
                                 <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-green-800">Success!</h3>
+                                    <h3 class="text-sm font-medium text-green-800">{{ lang('alerts.success', [], 'layout') }}</h3>
                                     <div class="mt-1 text-sm text-green-700">
                                         {{ session('status') }}
                                     </div>
@@ -311,7 +311,7 @@
                                     <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
                                 </div>
                                 <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-red-800">Something went wrong.</h3>
+                                    <h3 class="text-sm font-medium text-red-800">{{ lang('alerts.error', [], 'layout') }}</h3>
                                     <div class="mt-1 text-sm text-red-700">
                                         <ul class="list-disc pl-4">
                                             @foreach ($errors->all() as $error)
@@ -340,7 +340,7 @@
         <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div class="absolute top-0 right-0 -mr-12 pt-2">
                 <button id="close-sidebar" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span class="sr-only">Close sidebar</span>
+                    <span class="sr-only">{{ lang('mobile.close_sidebar', [], 'layout') }}</span>
                     <i class="fas fa-times text-white text-2xl"></i>
                 </button>
             </div>
@@ -349,7 +349,7 @@
                 <div class="flex items-center px-4 mb-4">
                     <div class="flex items-center flex-shrink-0">
                         <img class="h-6 w-auto" src="/img/dark.png" alt="Numblio">
-                        <span class="ml-2 text-sm font-semibold text-gray-800">Account Center</span>
+                        <span class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
                 <div class="border-t border-b border-gray-200 py-4 px-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -366,37 +366,37 @@
                 <nav class="px-2 space-y-1">
                     <a href="{{ route('account.profile') }}" class="mobile-nav {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-user mr-4 text-gray-500"></i>
-                        Profile
+                        {{ lang('mobile.profile', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.password') }}" class="mobile-nav {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-lock mr-4 text-gray-500"></i>
-                        Password
+                        {{ lang('mobile.password', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.security') }}" class="mobile-nav {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-shield-alt mr-4 text-gray-500"></i>
-                        Security
+                        {{ lang('mobile.security', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.notifications') }}" class="mobile-nav {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-bell mr-4 text-gray-500"></i>
-                        Notifications
+                        {{ lang('mobile.notifications', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.connections') }}" class="mobile-nav {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-link mr-4 text-gray-500"></i>
-                        Connected Services
+                        {{ lang('mobile.connections', [], 'layout') }}
                     </a>
                     <div class="border-t border-gray-200 my-2 pt-2"></div>
                     <a href="https://support.numblio.com" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-question-circle mr-4 text-gray-500"></i>
-                        Help Center
+                        {{ lang('mobile.help_center', [], 'layout') }}
                     </a>
                     <a href="/faq" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-info-circle mr-4 text-gray-500"></i>
-                        FAQ
+                        {{ lang('mobile.faq', [], 'layout') }}
                     </a>
                     <div class="border-t border-gray-200 my-2 pt-2"></div>
                     <a href="{{ route('logout') }}" class="mobile-nav text-red-600 hover:bg-red-50 hover:text-red-700 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-sign-out-alt mr-4 text-red-500"></i>
-                        Log out
+                        {{ lang('mobile.logout', [], 'layout') }}
                     </a>
                 </nav>
             </div>
