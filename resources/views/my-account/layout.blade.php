@@ -259,17 +259,17 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Footer (placed below sidebar) -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-4">
-                            <div class="text-xs text-gray-400">
-                                <div class="flex flex-col space-y-2">
-                                    <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
-                                    <div class="flex items-center space-x-3">
-                                        <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
-                                        <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
-                                        <a href="https://support.numblio.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
+                            
+                            <!-- Footer (placed inside sidebar so it scrolls with it) -->
+                            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                                <div class="text-xs text-gray-400">
+                                    <div class="flex flex-col space-y-2">
+                                        <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
+                                        <div class="flex items-center space-x-3">
+                                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
+                                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
+                                            <a href="https://support.numblio.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
