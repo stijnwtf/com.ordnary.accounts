@@ -1,0 +1,31 @@
+{
+  "title": "Profielinformatie",
+  "subtitle": "Werk je persoonlijke gegevens en accountvoorkeuren bij.",
+  "personal_info": "Persoonlijke informatie",
+  "fields": {
+    "first_name": "Voornaam",
+    "first_name_helper": "Je voornaam zoals weergegeven in Numblio diensten.",
+    "last_name": "Achternaam",
+    "last_name_helper": "Je achternaam zoals weergegeven in Numblio diensten.",
+    "email": "E-mailadres",
+    "email_helper": "Dit e-mailadres wordt gebruikt voor inloggen, communicatie en Gravatar.",
+    "phone": "Telefoonnummer",
+    "phone_optional": "(Optioneel)",
+    "phone_helper": "Wordt gebruikt voor accountherstel en belangrijke meldingen.",
+    "language": "Taalvoorkeur",
+    "language_helper": "Kies je voorkeurstaal voor het platform. Wijzigingen worden automatisch opgeslagen."
+  },
+  "account_info": "Accountinformatie",
+  "account_details": {
+    "created": "Aangemaakt:",
+    "last_update": "Laatste update:",
+    "last_login": "Laatste login:",
+    "ip_address": "IP-adres:"
+  },
+  "buttons": {
+    "save": "Wijzigingen opslaan"
+  },
+  "notifications": {
+    "success": "Profielinformatie succesvol bijgewerkt."
+  }
+} 

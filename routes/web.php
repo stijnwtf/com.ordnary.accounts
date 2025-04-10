@@ -9,6 +9,7 @@ use App\Http\Controllers\SSO\SettingsController;
 use App\Http\Controllers\SSO\ActivityLogController;
 use App\Http\Controllers\SSO\NotificationController;
 use App\Http\Controllers\SSO\MyAccountController;
+use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -114,3 +115,6 @@ Route::get('/2fa', [AuthController::class, 'show2FAForm'])->name('2fa');
 Route::post('/2fa/verify', [AuthController::class, 'verify2FA'])->name('2fa.verify');
 Route::get('/2fa/recovery', [AuthController::class, 'showRecoveryForm'])->name('2fa.recovery');
 Route::post('/2fa/recovery', [AuthController::class, 'verifyRecoveryCode'])->name('2fa.recovery.verify');
+
+// Language switch route
+Route::get('/language/{language}', [LanguageController::class, 'switchLanguage'])->name('language.switch');

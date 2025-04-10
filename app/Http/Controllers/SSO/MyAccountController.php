@@ -217,43 +217,34 @@ class MyAccountController extends Controller
     /**
      * Update the user's profile information.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
-
         $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'language' => ['required', 'string', 'size:2', 'in:nl,en,de,fr'],
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . auth()->id(),
+            'phone' => 'nullable|string|max:20',
+            'language' => 'required|string|size:2|in:' . implode(',', config('app.available_locales', ['en', 'nl'])),
         ]);
-
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-
-        // Only update email if it has changed
-        if ($user->email !== $request->email) {
-            $user->email = $request->email;
-            // Here you could add email verification logic if needed
-        }
-
-        // Update language preference
-        $user->lang = $request->language;
-
-        $user->save();
-
-        Log::info('User profile updated', ['user_id' => $user->id]);
-
-        return redirect()->route('account.profile')->with('status', 'Profiel succesvol bijgewerkt!');
+        
+        $user = auth()->user();
+        
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'lang' => $request->language,
+        ]);
+        
+        // Set the application language
+        app()->setLocale($request->language);
+        session(['language' => $request->language]);
+        
+        return redirect()->back()->with('success', lang('notifications.success', [], 'profile'));
     }
 
     /**

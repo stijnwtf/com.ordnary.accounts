@@ -1,0 +1,48 @@
+{
+  "title": "Account Center",
+  "meta": {
+    "description": "Beheer je Numblio-account instellingen"
+  },
+  "status": {
+    "verified": "Geverifieerd"
+  },
+  "sidebar": {
+    "account_settings": "Account instellingen",
+    "profile": "Profielinformatie",
+    "password": "Wachtwoord",
+    "security": "Beveiliging",
+    "connections": "Verbindingen",
+    "subscriptions": "Abonnementen",
+    "support": "Ondersteuning",
+    "help_center": "Help Center",
+    "faq": "Veelgestelde vragen",
+    "logout": "Uitloggen",
+    "account_id": "Account ID"
+  },
+  "welcome": {
+    "greeting": "Hallo, {name}!",
+    "message": "Welkom bij je persoonlijke accountinstellingen. Beheer hier je profiel, beveiliging en voorkeuren."
+  },
+  "alerts": {
+    "success": "Gelukt!",
+    "error": "Er is iets misgegaan."
+  },
+  "mobile": {
+    "close_sidebar": "Zijbalk sluiten",
+    "account_center": "Account Center",
+    "profile": "Profiel",
+    "password": "Wachtwoord",
+    "security": "Beveiliging",
+    "notifications": "Meldingen",
+    "connections": "Verbonden diensten",
+    "help_center": "Help Center",
+    "faq": "Veelgestelde vragen",
+    "logout": "Uitloggen"
+  },
+  "footer": {
+    "rights": "Alle rechten voorbehouden.",
+    "privacy": "Privacy",
+    "terms": "Voorwaarden",
+    "help": "Help"
+  }
+} 

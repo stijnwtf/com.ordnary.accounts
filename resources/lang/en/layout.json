@@ -1,0 +1,48 @@
+{
+  "title": "Account Center",
+  "meta": {
+    "description": "Manage your Numblio account settings"
+  },
+  "status": {
+    "verified": "Verified"
+  },
+  "sidebar": {
+    "account_settings": "Account Settings",
+    "profile": "Profile Information",
+    "password": "Password",
+    "security": "Security",
+    "connections": "Connections",
+    "subscriptions": "Subscriptions",
+    "support": "Support",
+    "help_center": "Help Center",
+    "faq": "FAQ",
+    "logout": "Log out",
+    "account_id": "Account ID"
+  },
+  "welcome": {
+    "greeting": "Hi, {name}!",
+    "message": "Welcome to your personal account settings. Manage your profile, security, and preferences here."
+  },
+  "alerts": {
+    "success": "Success!",
+    "error": "Something went wrong."
+  },
+  "mobile": {
+    "close_sidebar": "Close sidebar",
+    "account_center": "Account Center",
+    "profile": "Profile",
+    "password": "Password",
+    "security": "Security",
+    "notifications": "Notifications",
+    "connections": "Connected Services",
+    "help_center": "Help Center",
+    "faq": "FAQ",
+    "logout": "Log out"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "help": "Help"
+  }
+} 
