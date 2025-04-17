@@ -39,13 +39,13 @@ Route::get('/reset-password-sent', [AuthController::class, 'showSentForm'])->nam
 Route::get('/pw/callback/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
 
-// Redirect admin login to Filament
+// Redirect admin login to admin dashboard directly
 Route::get('/admin/login', function() {
-    return redirect()->route('filament.admin.auth.login');
+    return redirect('/admin');
 })->name('admin.loginForm');
 
 Route::get('/admin/logout', function() {
-    return redirect()->route('filament.admin.auth.logout');
+    return redirect('/admin/logout');
 })->name('admin.logout');
 
 // Email Verification Routes
@@ -94,7 +94,7 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
 // Redirect admin panel routes to Filament
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function() {
-        return redirect()->route('filament.admin.pages.dashboard');
+        return redirect()->route('filament.admin.resources.users.index');
     })->name('admin.dashboard');
 });
 

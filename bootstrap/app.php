@@ -18,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'redirect.if.admin' => \App\Http\Middleware\RedirectIfAdmin::class,
         ]);
+        
+        $middleware->web(append: [
+            \App\Http\Middleware\RedirectIfAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
