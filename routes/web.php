@@ -39,15 +39,6 @@ Route::get('/reset-password-sent', [AuthController::class, 'showSentForm'])->nam
 Route::get('/pw/callback/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
 
-// Redirect admin login to admin dashboard directly
-Route::get('/admin/login', function() {
-    return redirect('/admin');
-})->name('admin.loginForm');
-
-Route::get('/admin/logout', function() {
-    return redirect('/admin/logout');
-})->name('admin.logout');
-
 // Email Verification Routes
 Route::middleware('throttle:6,1')->group(function () {
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->middleware('auth')->name('verification.notice');
@@ -90,27 +81,6 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/security/2fa/disable', [MyAccountController::class, 'disableTwoFactor'])->name('account.security.disable-2fa');
     Route::post('/security/2fa/recovery-codes', [MyAccountController::class, 'regenerateRecoveryCodes'])->name('account.security.regenerate-recovery-codes');
 });
-
-// Redirect admin panel routes to Filament
-Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', function() {
-        return redirect()->route('filament.admin.resources.users.index');
-    })->name('admin.dashboard');
-});
-
-// Test route for welcome email (only in local environment)
-if (app()->environment('local')) {
-    Route::get('/test-welcome-email', function () {
-        $user = \App\Models\User::first();
-        if (!$user) {
-            return 'No users found. Please create a user first.';
-        }
-
-        \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\WelcomeEmail($user));
-
-        return 'Welcome email sent to ' . $user->email;
-    });
-}
 
 // 2FA Routes
 Route::get('/2fa', [AuthController::class, 'show2FAForm'])->name('2fa');
