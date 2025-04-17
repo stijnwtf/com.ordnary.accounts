@@ -71,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             'deleted_at' => 'datetime',
         ];
     }
-    
+
     /**
      * Relatie met gebruikerssessies.
      */
@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(UserSession::class);
     }
-    
+
     /**
      * Relatie met notificaties.
      */
@@ -87,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(Notification::class);
     }
-    
+
     /**
      * Haal het aantal ongelezen notificaties op.
      */
@@ -120,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         $google2fa = new Google2FA();
         $secret = $google2fa->generateSecretKey();
-        
+
         $this->two_factor_secret = $secret;
         $this->save();
 
@@ -176,7 +176,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->two_factor_recovery_codes !== null;
     }
-    
+
     /**
      * Get the services connected to this user's account.
      */
@@ -184,7 +184,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->hasMany(UserService::class);
     }
-    
+
     /**
      * Get active services connected to this user's account.
      */
@@ -208,7 +208,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
                 'hash' => sha1($this->getEmailForVerification()),
             ]
         );
-        
+
         try {
             Mail::to($this->email)->send(new \App\Mail\VerifyEmail($this, $verificationUrl));
             Log::info("sendEmailVerificationNotification: Verification email sent", ["email" => $this->email]);
@@ -228,7 +228,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return $this->is_admin;
     }
-    
+
     /**
      * Get the user's name for display.
      */
@@ -237,11 +237,17 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         if (!empty($this->username)) {
             return $this->username;
         }
-        
+
         if (!empty($this->first_name) || !empty($this->last_name)) {
             return trim($this->first_name . ' ' . $this->last_name);
         }
-        
+
         return $this->email ?? 'User';
     }
+
+    public function getUserName(): string
+    {
+        return auth()->user()?->name ?? 'Guest';
+    }
+
 }
