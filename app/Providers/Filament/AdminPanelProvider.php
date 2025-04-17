@@ -45,13 +45,12 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
                 'danger' => Color::Red,
             ])
+            ->sidebarFullyCollapsibleOnDesktop()
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('SSO Management')
-                    ->collapsed(),
+                    ->label('SSO Management'),
                 NavigationGroup::make()
-                    ->label('System')
-                    ->collapsed(),
+                    ->label('System'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -78,15 +77,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authGuard('web')
             ->profile()
-            ->userMenuItems([
-                'profile' => \Filament\Navigation\MenuItem::make()
-                    ->label('Profile')
-                    ->url(fn (): string => route('account.profile'))
-                    ->icon('heroicon-o-user'),
-            ])
-            ->databaseNotifications()
             ->defaultAvatarProvider(
                 \Filament\AvatarProviders\UiAvatarsProvider::class
-            );
+            )
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->userMenuItems([
+                'logout' => \Filament\Navigation\MenuItem::make()
+                    ->label('Afmelden')
+                    ->url(fn(): string => route('logout'))
+                    ->icon('heroicon-o-arrow-left-on-rectangle'),
+            ]);
     }
 }
