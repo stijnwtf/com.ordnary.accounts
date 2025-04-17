@@ -11,8 +11,10 @@ use PragmaRX\Google2FA\Google2FA;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -217,5 +219,21 @@ class User extends Authenticatable implements MustVerifyEmail
                 "trace" => $e->getTraceAsString()
             ]);
         }
+    }
+
+    /**
+     * Determine if the user can access the Filament admin panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_admin;
+    }
+    
+    /**
+     * Get the user's name for display.
+     */
+    public function getFilamentName(): string
+    {
+        return $this->username ?: ($this->first_name . ' ' . $this->last_name);
     }
 }

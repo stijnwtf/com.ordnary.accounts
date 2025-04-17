@@ -84,6 +84,9 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => route('account.profile'))
                     ->icon('heroicon-o-user'),
             ])
-            ->databaseNotifications();
+            ->databaseNotifications()
+            ->defaultAvatarProvider(
+                \Filament\AvatarProviders\UiAvatarsProvider::class
+            );
     }
 }
