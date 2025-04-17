@@ -38,8 +38,15 @@ Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name(
 Route::get('/reset-password-sent', [AuthController::class, 'showSentForm'])->name('password.sent');
 Route::get('/pw/callback/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
-Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
-Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
+
+// Redirect admin login to Filament
+Route::get('/admin/login', function() {
+    return redirect()->route('filament.admin.auth.login');
+})->name('admin.loginForm');
+
+Route::get('/admin/logout', function() {
+    return redirect()->route('filament.admin.auth.logout');
+})->name('admin.logout');
 
 // Email Verification Routes
 Route::middleware('throttle:6,1')->group(function () {
@@ -84,24 +91,11 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/security/2fa/recovery-codes', [MyAccountController::class, 'regenerateRecoveryCodes'])->name('account.security.regenerate-recovery-codes');
 });
 
-// Admin routes for managing clients
+// Redirect admin panel routes to Filament
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
-    // Dashboard route
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('clients', ClientController::class);
-    Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])->name('clients.regenerate-credentials');
-    // Admin routes for managing users
-    Route::resource('users', UserController::class);
-    // Admin routes for managing sessions
-    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
-    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
-    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
-    Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
-    Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
-    // Admin routes for settings
-    Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
-    Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
-    Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
+    Route::get('/', function() {
+        return redirect()->route('filament.admin.pages.dashboard');
+    })->name('admin.dashboard');
 });
 
 // Test route for welcome email (only in local environment)

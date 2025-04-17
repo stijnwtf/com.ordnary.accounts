@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'adminAuth' => \App\Http\Middleware\AdminAuthenticate::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'redirect.if.admin' => \App\Http\Middleware\RedirectIfAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
