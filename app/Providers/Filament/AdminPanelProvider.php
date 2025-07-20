@@ -62,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
                     ->canAccess(fn() => auth()->user()->id === 1)
                     ->setSort(3)
                     ->setIcon('heroicon-o-cog')
-                    ->setNavigationGroup('Settings')
+                    ->setNavigationGroup('System')
                     ->setTitle('General Settings')
                     ->setNavigationLabel('General Settings'),
                 ])
