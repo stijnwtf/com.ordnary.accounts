@@ -88,18 +88,18 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     // Redirect dashboard to Filament admin
     Route::get('/', function() {
-        return redirect('/admin');
+        return redirect('/beheer');
     })->name('admin.dashboard');
     
     // Redirect legacy resource routes to Filament admin
     Route::get('/clients', function() {
-        return redirect('/admin/clients');
+        return redirect('/beheer/clients');
     });
     Route::get('/users', function() {
-        return redirect('/admin/users');
+        return redirect('/beheer/users');
     });
     Route::get('/sessions', function() {
-        return redirect('/admin/user-sessions');
+        return redirect('/beheer/user-sessions');
     });
     
     // Keep API-like routes that might be used by external systems
