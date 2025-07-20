@@ -17,7 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use CWSPS154\UsersRolesPermissions\AppSettingsPlugin;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -55,10 +55,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugin(
-                \TomatoPHP\FilamentSeo\FilamentSeoPlugin::make()
-            )      
-              
+            ->plugins([
+                FilamentGeneralSettingsPlugin::make()
+            ])
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\AdminMiddleware::class,

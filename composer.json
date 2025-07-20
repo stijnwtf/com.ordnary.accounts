@@ -10,6 +10,7 @@
         "cwsps154/app-settings": "^1.0",
         "filament/filament": "^3.3",
         "firebase/php-jwt": "^6.11",
+        "joaopaulolndev/filament-general-settings": "^1.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "marcelweidum/filament-expiration-notice": "^1.0",
