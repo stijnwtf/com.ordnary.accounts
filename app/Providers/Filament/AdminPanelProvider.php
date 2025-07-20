@@ -24,8 +24,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('beheer')
+            ->path('beheer')
             ->login()
             ->brandName('Numblio SSO Admin')
             ->colors([
