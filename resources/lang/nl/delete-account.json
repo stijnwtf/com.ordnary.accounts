@@ -1,0 +1,26 @@
+{
+  "title": "Account verwijderen",
+  "header": "Je account verwijderen",
+  "subheader": "Deze actie kan niet ongedaan worden gemaakt. Lees de onderstaande informatie zorgvuldig door.",
+  
+  "warning.title": "Waarschuwing: Accountverwijdering",
+  "warning.description": "Je staat op het punt om de verwijdering van je Numblio-account en alle bijbehorende persoonlijke gegevens aan te vragen. Deze actie is <strong>permanent en kan niet ongedaan worden gemaakt</strong>.",
+  
+  "what_will_be_deleted.title": "Wat wordt verwijderd",
+  "what_will_be_deleted.items.personal_info": "Je persoonlijke informatie (naam, e-mail, enz.)",
+  "what_will_be_deleted.items.login_history": "Je inloggeschiedenis en activiteitenlogs",
+  "what_will_be_deleted.items.connected_services": "Je verbonden diensten en applicaties",
+  "what_will_be_deleted.items.security_settings": "Je beveiligingsinstellingen en voorkeuren",
+  
+  "important_note.title": "Belangrijke opmerking",
+  "important_note.description": "Sommige informatie kan worden bewaard voor wettelijke nalevingsdoeleinden zoals vereist door toepasselijke wetten en regelgeving. Deze gegevens worden echter volledig geanonimiseerd en zijn niet meer naar jou herleidbaar.",
+  
+  "form.password.label": "Voer je wachtwoord in om door te gaan",
+  "form.confirmation.label": "Typ DELETE om accountverwijdering te bevestigen",
+  "form.confirmation.placeholder": "DELETE",
+  
+  "buttons.cancel": "Annuleren",
+  "buttons.delete": "Mijn account permanent verwijderen",
+  
+  "errors.title": "Er waren fouten met je inzending:"
+}

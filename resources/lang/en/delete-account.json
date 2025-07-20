@@ -1,0 +1,26 @@
+{
+  "title": "Delete Account",
+  "header": "Delete Your Account",
+  "subheader": "This action cannot be undone. Please read the information below carefully.",
+  
+  "warning.title": "Warning: Account Deletion",
+  "warning.description": "You are about to request the deletion of your Numblio account and all associated personal data. This action is <strong>permanent and cannot be undone</strong>.",
+  
+  "what_will_be_deleted.title": "What Will Be Deleted",
+  "what_will_be_deleted.items.personal_info": "Your personal information (name, email, etc.)",
+  "what_will_be_deleted.items.login_history": "Your login history and activity logs",
+  "what_will_be_deleted.items.connected_services": "Your connected services and applications", 
+  "what_will_be_deleted.items.security_settings": "Your security settings and preferences",
+  
+  "important_note.title": "Important Note",
+  "important_note.description": "Some information may be retained for legal compliance purposes as required by applicable laws and regulations. However, this data will be fully anonymized and not traceable back to you.",
+  
+  "form.password.label": "Enter your password to continue",
+  "form.confirmation.label": "Type DELETE to confirm account deletion",
+  "form.confirmation.placeholder": "DELETE",
+  
+  "buttons.cancel": "Cancel",
+  "buttons.delete": "Permanently Delete My Account",
+  
+  "errors.title": "There were errors with your submission:"
+}
