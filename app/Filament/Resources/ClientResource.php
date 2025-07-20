@@ -80,10 +80,6 @@ class ClientResource extends Resource
                     ->label('Naam')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('client_id')
-                    ->label('Client ID')
-                    ->searchable()
-                    ->copyable(),
                 Tables\Columns\TextColumn::make('redirect_uris')
                     ->label('Redirect URIs')
                     ->limit(50)
