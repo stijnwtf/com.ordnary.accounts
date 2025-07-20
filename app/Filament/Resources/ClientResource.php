@@ -106,11 +106,6 @@ class ClientResource extends Resource
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('gray'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Aangemaakt')
-                    ->dateTime('d-m-Y H:i')
-                    ->sortable()
-                    ->toggleable(),
             ])
             ->filters([
                 //
