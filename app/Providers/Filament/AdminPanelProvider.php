@@ -57,7 +57,13 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                FilamentEnvEditorPlugin::make(),
+                FilamentEnvEditorPlugin::make()
+                    ->navigationGroup('System')
+                    ->navigationLabel('.env Editor')
+                    ->navigationIcon('heroicon-o-cog-8-tooth')
+                    ->navigationSort(1)
+                    ->slug('env-editor'),
+
                 FilamentGeneralSettingsPlugin::make()
                     ->canAccess(fn() => auth()->user()->id === 1)
                     ->setSort(3)
@@ -65,7 +71,7 @@ class AdminPanelProvider extends PanelProvider
                     ->setNavigationGroup('System')
                     ->setTitle('General Settings')
                     ->setNavigationLabel('General Settings'),
-                ])
+            ])
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\AdminMiddleware::class,
