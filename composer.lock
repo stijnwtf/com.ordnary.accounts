@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "552a25b37c813615b54a6dca9cda8af6",
+    "content-hash": "0815f9b537acdb92f965e3bcec468c68",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -404,6 +404,68 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "cwsps154/app-settings",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CWSPS154/app-settings.git",
+                "reference": "bbb61db3d5748bb98fc8a516b0dee61db0a8c6b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CWSPS154/app-settings/zipball/bbb61db3d5748bb98fc8a516b0dee61db0a8c6b7",
+                "reference": "bbb61db3d5748bb98fc8a516b0dee61db0a8c6b7",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0",
+                "ysfkaya/filament-phone-input": "^3.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CWSPS154\\AppSettings\\AppSettingsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ],
+                "psr-4": {
+                    "CWSPS154\\AppSettings\\": "src/",
+                    "CWSPS154\\AppSettings\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CWSPS154",
+                    "email": "codewithsps154@gmail.com"
+                }
+            ],
+            "description": "Package for saving app settings",
+            "keywords": [
+                "cwsps154",
+                "filament",
+                "filament-app-settings",
+                "filament-packages",
+                "filament-plugins",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/CWSPS154/app-settings/issues",
+                "source": "https://github.com/CWSPS154/app-settings/tree/v1.0.0"
+            },
+            "time": "2025-03-31T11:16:30+00:00"
         },
         {
             "name": "danharrin/date-format-converter",
@@ -1654,6 +1716,84 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php-lite",
+            "version": "9.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
+                "reference": "205492b2d54e3cc808110f1ba6e7c53a1b839196"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/205492b2d54e3cc808110f1ba6e7c53a1b839196",
+                "reference": "205492b2d54e3cc808110f1ba6e7c53a1b839196",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/polyfill-mbstring": "^1.17"
+            },
+            "conflict": {
+                "giggsey/libphonenumber-for-php": "*"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "friendsofphp/php-cs-fixer": "^3.71",
+                "infection/infection": "^0.28.0",
+                "nette/php-generator": "^4.1",
+                "php-coveralls/php-coveralls": "^2.7",
+                "phpstan/extension-installer": "^1.4.3",
+                "phpstan/phpstan": "^2.1.7",
+                "phpstan/phpstan-deprecation-rules": "^2.0.1",
+                "phpstan/phpstan-phpunit": "^2.0.4",
+                "phpstan/phpstan-strict-rules": "^2.0.3",
+                "phpunit/phpunit": "^10.5.45",
+                "symfony/console": "^6.4",
+                "symfony/filesystem": "^6.4",
+                "symfony/process": "^6.4"
+            },
+            "suggest": {
+                "giggsey/libphonenumber-for-php": "Use libphonenumber-for-php for geocoding, carriers, timezones and matching"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "libphonenumber\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "https://giggsey.com/"
+                }
+            ],
+            "description": "A lite version of giggsey/libphonenumber-for-php, which is a PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php-lite",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
+                "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
+            },
+            "time": "2025-07-18T06:46:03+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -3311,6 +3451,83 @@
             "time": "2025-07-17T05:12:15+00:00"
         },
         {
+            "name": "marcelweidum/filament-expiration-notice",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarcelWeidum/filament-expiration-notice.git",
+                "reference": "efb3266945bc9e719e0c372430871db15be8d03d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarcelWeidum/filament-expiration-notice/zipball/efb3266945bc9e719e0c372430871db15be8d03d",
+                "reference": "efb3266945bc9e719e0c372430871db15be8d03d",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0|^4.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22",
+                "nunomaduro/collision": "^7.9",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "ExpirationNoticePlugin": "MarcelWeidum\\ExpirationNoticePlugin\\Facades\\ExpirationNoticePlugin"
+                    },
+                    "providers": [
+                        "MarcelWeidum\\ExpirationNoticePlugin\\ExpirationNoticeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MarcelWeidum\\ExpirationNoticePlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MarcelWeidum",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Customize the livewire expiration notice",
+            "homepage": "https://github.com/marcelweidum/filament-expiration-notice",
+            "keywords": [
+                "MarcelWeidum",
+                "filament-expiration-notice",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/marcelweidum/filament-expiration-notice/issues",
+                "source": "https://github.com/marcelweidum/filament-expiration-notice"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/MarcelWeidum",
+                    "type": "buy_me_a_coffee"
+                }
+            ],
+            "time": "2025-07-12T11:16:05+00:00"
+        },
+        {
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -4165,6 +4382,78 @@
                 "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.3"
             },
             "time": "2024-09-05T11:56:40+00:00"
+        },
+        {
+            "name": "propaganistas/laravel-phone",
+            "version": "6.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Propaganistas/Laravel-Phone.git",
+                "reference": "ae8239becf2c11c8a8a754b8ac95a10ebb3ebb91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/ae8239becf2c11c8a8a754b8ac95a10ebb3ebb91",
+                "reference": "ae8239becf2c11c8a8a754b8ac95a10ebb3ebb91",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "giggsey/libphonenumber-for-php-lite": "^9.0",
+                "illuminate/contracts": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "illuminate/validation": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.21",
+                "orchestra/testbench": "*",
+                "phpunit/phpunit": "^11.5.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Propaganistas\\LaravelPhone\\PhoneServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Propaganistas\\LaravelPhone\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Propaganistas",
+                    "email": "Propaganistas@users.noreply.github.com"
+                }
+            ],
+            "description": "Adds phone number functionality to Laravel based on Google's libphonenumber API.",
+            "keywords": [
+                "laravel",
+                "libphonenumber",
+                "phone",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/Propaganistas/Laravel-Phone/issues",
+                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/6.0.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Propaganistas",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-07-05T09:03:01+00:00"
         },
         {
             "name": "psr/cache",
@@ -7823,6 +8112,70 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "ysfkaya/filament-phone-input",
+            "version": "v3.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ysfkaya/filament-phone-input.git",
+                "reference": "797b8826b0defc646969cb4146b5a31b84652c3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ysfkaya/filament-phone-input/zipball/797b8826b0defc646969cb4146b5a31b84652c3c",
+                "reference": "797b8826b0defc646969cb4146b5a31b84652c3c",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1",
+                "propaganistas/laravel-phone": "^5.0|^6.0",
+                "spatie/laravel-package-tools": "^1.92"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9|^8.1",
+                "nunomaduro/larastan": "^2.0|^3.0",
+                "orchestra/testbench-dusk": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.0",
+                "pestphp/pest-plugin-arch": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0",
+                "pestphp/pest-plugin-livewire": "^2.1|^3.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0|^2.0",
+                "phpstan/phpstan-phpunit": "^1.0|^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ysfkaya\\FilamentPhoneInput\\FilamentPhoneInputServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ysfkaya\\FilamentPhoneInput\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A phone input component for Laravel Filament",
+            "homepage": "https://github.com/ysfkaya/filament-phone-input",
+            "keywords": [
+                "filament",
+                "intl-tel-input",
+                "laravel",
+                "phone-input"
+            ],
+            "support": {
+                "issues": "https://github.com/ysfkaya/filament-phone-input/issues",
+                "source": "https://github.com/ysfkaya/filament-phone-input/tree/v3.2.2"
+            },
+            "time": "2025-06-29T11:33:18+00:00"
         }
     ],
     "packages-dev": [
