@@ -59,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentEnvEditorPlugin::make()
                     ->navigationGroup('System')
-                    ->navigationLabel('.env Editor')
+                    ->navigationLabel('Environment Editor')
                     ->navigationIcon('heroicon-o-cog-8-tooth')
                     ->navigationSort(1)
                     ->slug('env-editor'),
