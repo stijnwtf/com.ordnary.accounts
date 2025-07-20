@@ -11,7 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Mansoor\FilamentVersionable\Page\ListVersions;
 
 class TodoResource extends Resource
 {
@@ -216,11 +215,6 @@ class TodoResource extends Resource
                     ->label('Bekijken'),
                 Tables\Actions\EditAction::make()
                     ->label('Bewerken'),
-                Tables\Actions\Action::make('versions')
-                    ->label('Versies bekijken')
-                    ->icon('heroicon-o-clock')
-                    ->color('info')
-                    ->url(fn ($record) => TodoResource::getUrl('versions', ['record' => $record])),
                 Tables\Actions\DeleteAction::make()
                     ->label('Verwijderen')
                     ->requiresConfirmation(),
@@ -268,7 +262,6 @@ class TodoResource extends Resource
             'index' => Pages\ListTodos::route('/'),
             'create' => Pages\CreateTodo::route('/create'),
             'edit' => Pages\EditTodo::route('/{record}/edit'),
-            'versions' => ListVersions::route('/{record}/versions'),
         ];
     }
 }
