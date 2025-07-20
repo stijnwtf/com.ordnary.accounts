@@ -57,7 +57,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugin(
                 \TomatoPHP\FilamentSeo\FilamentSeoPlugin::make()
-            )        
+            )      
+              
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\AdminMiddleware::class,
