@@ -129,6 +129,9 @@ class UserSessionResource extends Resource
                         ->requiresConfirmation(),
                 ]),
             ])
+            ->emptyStateHeading('Geen actieve sessies')
+            ->emptyStateDescription('Er zijn momenteel geen gebruikerssessies actief in het systeem. Sessies worden automatisch aangemaakt wanneer gebruikers inloggen via OAuth clients. Hier kunt u alle actieve en verlopen sessies beheren.')
+            ->emptyStateIcon('heroicon-o-device-phone-mobile')
             ->defaultSort('expires_at', 'desc');
     }
 

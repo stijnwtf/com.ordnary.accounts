@@ -122,6 +122,14 @@ class ClientResource extends Resource
                         ->label('Verwijderen'),
                 ]),
             ])
+            ->emptyStateHeading('Geen clients gevonden')
+            ->emptyStateDescription('Er zijn nog geen OAuth clients geregistreerd in het systeem. Clients zijn applicaties die toegang hebben tot de SSO dienst en gebruikers kunnen authenticeren.')
+            ->emptyStateIcon('heroicon-o-building-office')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make()
+                    ->label('Eerste client aanmaken')
+                    ->icon('heroicon-o-plus'),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 
