@@ -36,13 +36,21 @@ class ClientResource extends Resource
                             ->label('Client ID')
                             ->required()
                             ->unique(ignoreRecord: true)
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->default(fn () => 'client_' . \Illuminate\Support\Str::random(32))
+                            ->disabled(fn (string $context): bool => $context === 'create')
+                            ->dehydrated()
+                            ->helperText('Wordt automatisch gegenereerd bij het aanmaken'),
                         Forms\Components\TextInput::make('client_secret')
                             ->label('Client Secret')
                             ->required()
                             ->password()
                             ->revealable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->default(fn () => \Illuminate\Support\Str::random(64))
+                            ->disabled(fn (string $context): bool => $context === 'create')
+                            ->dehydrated()
+                            ->helperText('Wordt automatisch gegenereerd bij het aanmaken'),
                     ])->columns(2),
                     
                 Forms\Components\Section::make('URL Configuratie')
@@ -112,6 +120,26 @@ class ClientResource extends Resource
                     ->label('Bekijken'),
                 Tables\Actions\EditAction::make()
                     ->label('Bewerken'),
+                Tables\Actions\Action::make('regenerate_credentials')
+                    ->label('Credentials Regenereren')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Credentials Regenereren')
+                    ->modalDescription('Weet je zeker dat je nieuwe client ID en secret wilt genereren? De huidige credentials werken daarna niet meer.')
+                    ->modalSubmitActionLabel('Ja, regenereren')
+                    ->action(function ($record) {
+                        $record->update([
+                            'client_id' => 'client_' . \Illuminate\Support\Str::random(32),
+                            'client_secret' => \Illuminate\Support\Str::random(64),
+                        ]);
+                        
+                        \Filament\Notifications\Notification::make()
+                            ->title('Credentials geregenereerd')
+                            ->body('Nieuwe client ID en secret zijn gegenereerd.')
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\DeleteAction::make()
                     ->label('Verwijderen')
                     ->requiresConfirmation(),

@@ -167,6 +167,14 @@ class UserResource extends Resource
                         ->label('Verwijderen'),
                 ]),
             ])
+            ->emptyStateHeading('Geen gebruikers gevonden')
+            ->emptyStateDescription('Er zijn nog geen gebruikers geregistreerd in het SSO systeem. Gebruikers kunnen zich registreren via de frontend of door beheerders worden aangemaakt.')
+            ->emptyStateIcon('heroicon-o-users')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make()
+                    ->label('Nieuwe gebruiker aanmaken')
+                    ->icon('heroicon-o-plus'),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 
