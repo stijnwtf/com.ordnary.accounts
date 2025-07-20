@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('beheer')
             ->login()
             ->brandName('numblio.sso')
-            ->brandLogo(asset('img/dark.png'))
+            ->brandLogo(asset('img/white.png'))
             ->colors([
                 'primary' => Color::Blue,
             ])
