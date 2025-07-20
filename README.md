@@ -9,11 +9,11 @@ Numblio maakt gebruik van een Single Sign-On (SSO) proces om gebruikers eenvoudi
 De gebruiker bezoekt de website van een Numblio-product, zoals [Leerlokaal.com](https://leerlokaal.com), en klikt op de inlogknop.
 
 ### 2. Redirect naar Numblio Auth Service
-Na het klikken op de inlogknop wordt de gebruiker doorgestuurd naar de Numblio Auth Service ([auth.numblio.com](https://auth.numblio.com)). De URL bevat specifieke queryparameters, zoals:
+Na het klikken op de inlogknop wordt de gebruiker doorgestuurd naar de Numblio Auth Service ([accounts.numblio.com](https://accounts.numblio.com)). De URL bevat specifieke queryparameters, zoals:
 
 **Voorbeeld URL:**
 ```
-https://auth.numblio.com/login?client_id=blabla&redirect_uri=https://leerlokaal.com/auth
+https://accounts.numblio.com/login?client_id=blabla&redirect_uri=https://leerlokaal.com/auth
 ```
 
 ### 3. Inloggen via de Numblio Auth Service
