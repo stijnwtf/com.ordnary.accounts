@@ -1,106 +1,118 @@
 @extends('my-account.layout')
 
-@section('title', 'Set Up Two-Factor Authentication')
+@section('title', lang('title', [], 'setup-2fa'))
 
-@section('header', 'Set Up Two-Factor Authentication')
-@section('subheader', 'Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.')
+@section('header', lang('header', [], 'setup-2fa'))
+@section('subheader', lang('subheader', [], 'setup-2fa'))
 
 @section('content')
-<div class="space-y-8 pb-8">
-    <!-- Setup Steps -->
-    <div class="space-y-10">
-        <!-- Step 1 -->
-        <div class="flex items-start">
-            <div class="flex-shrink-0">
-                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-50 text-gray-600 border border-gray-200">
-                    <i class="fas fa-mobile-alt text-lg"></i>
-                </div>
-            </div>
-            <div class="ml-6">
-                <h3 class="text-base font-medium text-gray-900">Install an Authenticator App</h3>
-                <p class="mt-1 text-sm text-gray-500">
-                    Install an authenticator app like Google Authenticator, Authy, or Microsoft Authenticator on your mobile device.
-                </p>
-            </div>
+<!-- Step 1: Install App -->
+<div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+        <div class="flex items-center justify-center h-8 w-8 rounded-md bg-blue-100 text-blue-600 mr-3">
+            <i class="fas fa-mobile-alt"></i>
         </div>
+        {{ lang('steps.install_app.title', [], 'setup-2fa') }}
+    </h2>
+    <p class="text-sm text-gray-600 ml-11">
+        {{ lang('steps.install_app.description', [], 'setup-2fa') }}
+    </p>
+</div>
 
-        <!-- Step 2 -->
-        <div class="flex items-start">
-            <div class="flex-shrink-0">
-                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-50 text-gray-600 border border-gray-200">
-                    <i class="fas fa-qrcode text-lg"></i>
-                </div>
-            </div>
-            <div class="ml-6 flex-1">
-                <h3 class="text-base font-medium text-gray-900">Scan the QR Code</h3>
-                <p class="mt-1 text-sm text-gray-500">
-                    Open your authenticator app and scan the QR code below:
-                </p>
-                <div class="mt-6 flex justify-center">
-                    <div class="p-6 bg-white rounded-md border border-gray-200">
-                        {!! QrCode::size(200)->margin(1)->generate($qrCodeUrl) !!}
-                    </div>
-                </div>
-                <div class="mt-6">
-                    <p class="text-sm text-gray-500">
-                        If you can't scan the QR code, you can manually enter this code in your authenticator app:
-                    </p>
-                    <div class="mt-2">
-                        <code class="block px-4 py-2 bg-gray-50 rounded-md text-sm font-mono text-gray-900 border border-gray-200">{{ $secret }}</code>
-                    </div>
-                </div>
-            </div>
+<!-- Step 2: Scan QR Code -->
+<div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+        <div class="flex items-center justify-center h-8 w-8 rounded-md bg-blue-100 text-blue-600 mr-3">
+            <i class="fas fa-qrcode"></i>
         </div>
-
-        <!-- Step 3 -->
-        <div class="flex items-start">
-            <div class="flex-shrink-0">
-                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-50 text-gray-600 border border-gray-200">
-                    <i class="fas fa-key text-lg"></i>
-                </div>
-            </div>
-            <div class="ml-6 flex-1">
-                <h3 class="text-base font-medium text-gray-900">Verify the Setup</h3>
-                <p class="mt-1 text-sm text-gray-500">
-                    Enter the 6-digit code from your authenticator app to verify the setup:
-                </p>
-                <form action="{{ route('account.security.confirm-2fa') }}" method="POST" class="mt-6">
-                    @csrf
-                    <div class="max-w-xs">
-                        <label for="code" class="block text-sm font-medium text-gray-700">Verification Code</label>
-                        <div class="mt-1">
-                            <input type="text" name="code" id="code" required
-                                class="block w-full px-4 py-2 text-sm border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
-                                placeholder="Enter 6-digit code"
-                                pattern="[0-9]{6}"
-                                maxlength="6">
-                        </div>
-                        @error('code')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mt-6">
-                        <button type="submit"
-                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-900">
-                            Verify and Enable 2FA
-                        </button>
-                    </div>
-                </form>
-            </div>
+        {{ lang('steps.scan_qr.title', [], 'setup-2fa') }}
+    </h2>
+    <p class="text-sm text-gray-600 mb-6 ml-11">
+        {{ lang('steps.scan_qr.description', [], 'setup-2fa') }}
+    </p>
+    
+    <div class="flex justify-center mb-6">
+        <div class="p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+            {!! QrCode::size(200)->margin(1)->generate($qrCodeUrl) !!}
         </div>
     </div>
+    
+    <div class="ml-11">
+        <p class="text-sm text-gray-600 mb-3">
+            {{ lang('steps.scan_qr.manual_entry', [], 'setup-2fa') }}
+        </p>
+        <div class="bg-gray-50 border border-gray-200 rounded-md p-4 max-w-md">
+            <code class="text-sm font-mono text-gray-900 break-all">{{ $secret }}</code>
+        </div>
+    </div>
+</div>
 
-    <!-- Warning Alert -->
-    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
+<!-- Step 3: Verify Setup -->
+<div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+        <div class="flex items-center justify-center h-8 w-8 rounded-md bg-blue-100 text-blue-600 mr-3">
+            <i class="fas fa-key"></i>
+        </div>
+        {{ lang('steps.verify.title', [], 'setup-2fa') }}
+    </h2>
+    <p class="text-sm text-gray-600 mb-6 ml-11">
+        {{ lang('steps.verify.description', [], 'setup-2fa') }}
+    </p>
+</div>
+
+<!-- Verification Form -->
+<form action="{{ route('account.security.confirm-2fa') }}" method="POST" class="space-y-6">
+    @csrf
+    
+    <div>
+        <label for="code" class="block text-sm font-medium text-gray-700">
+            {{ lang('form.code_label', [], 'setup-2fa') }}
+        </label>
+        <div class="mt-1 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-shield-alt text-gray-400"></i>
             </div>
-            <div class="ml-3">
-                <p class="text-sm text-gray-500">
-                    Make sure to save your recovery codes in a secure place. You'll need them if you lose access to your authenticator app.
+            <input 
+                type="text" 
+                name="code" 
+                id="code" 
+                required
+                class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none {{ $errors->has('code') ? 'border-red-500' : 'border-gray-300' }}"
+                placeholder="{{ lang('form.code_placeholder', [], 'setup-2fa') }}"
+                pattern="[0-9]{6}"
+                maxlength="6"
+                autocomplete="one-time-code">
+        </div>
+        @error('code')
+            <p class="mt-1 text-sm text-red-600 flex items-center">
+                <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+            </p>
+        @enderror
+    </div>
+    
+    <div class="flex items-center justify-end">
+        <button 
+            type="submit"
+            class="inline-flex items-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-150">
+            <i class="fas fa-check mr-2"></i>
+            {{ lang('form.verify_button', [], 'setup-2fa') }}
+        </button>
+    </div>
+</form>
+
+<!-- Warning Section -->
+<div class="rounded-md bg-yellow-50 p-4 mt-8">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3">
+            <h3 class="text-sm font-medium text-yellow-800">{{ lang('warning.title', [], 'setup-2fa') }}</h3>
+            <div class="mt-2 text-sm text-yellow-700">
+                <p>
+                    {{ lang('warning.description', [], 'setup-2fa') }}
                 </p>
             </div>
         </div>

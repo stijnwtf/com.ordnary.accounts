@@ -1,0 +1,32 @@
+{
+  "title": "Set Up Two-Factor Authentication",
+  "header": "Set Up Two-Factor Authentication",
+  "subheader": "Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.",
+  
+  "steps": {
+    "install_app": {
+      "title": "Install an Authenticator App",
+      "description": "Install an authenticator app like Google Authenticator, Authy, or Microsoft Authenticator on your mobile device."
+    },
+    "scan_qr": {
+      "title": "Scan the QR Code",
+      "description": "Open your authenticator app and scan the QR code below:",
+      "manual_entry": "If you can't scan the QR code, you can manually enter this code in your authenticator app:"
+    },
+    "verify": {
+      "title": "Verify the Setup",
+      "description": "Enter the 6-digit code from your authenticator app to verify the setup:"
+    }
+  },
+  
+  "form": {
+    "code_label": "Verification Code",
+    "code_placeholder": "Enter 6-digit code",
+    "verify_button": "Verify and Enable 2FA"
+  },
+  
+  "warning": {
+    "title": "Important",
+    "description": "Make sure to save your recovery codes in a secure place. You'll need them if you lose access to your authenticator app."
+  }
+}

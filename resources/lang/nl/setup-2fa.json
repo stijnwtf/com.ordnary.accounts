@@ -1,0 +1,32 @@
+{
+  "title": "Tweefactorauthenticatie instellen",
+  "header": "Tweefactorauthenticatie instellen",
+  "subheader": "Voeg een extra beveiligingslaag toe aan je account door zowel je wachtwoord als een verificatiecode van je mobiele telefoon te vereisen om in te loggen.",
+  
+  "steps": {
+    "install_app": {
+      "title": "Installeer een Authenticator App",
+      "description": "Installeer een authenticator app zoals Google Authenticator, Authy of Microsoft Authenticator op je mobiele apparaat."
+    },
+    "scan_qr": {
+      "title": "Scan de QR-code",
+      "description": "Open je authenticator app en scan de onderstaande QR-code:",
+      "manual_entry": "Als je de QR-code niet kunt scannen, kun je deze code handmatig invoeren in je authenticator app:"
+    },
+    "verify": {
+      "title": "Verificatie van de instelling",
+      "description": "Voer de 6-cijferige code van je authenticator app in om de instelling te verifiëren:"
+    }
+  },
+  
+  "form": {
+    "code_label": "Verificatiecode",
+    "code_placeholder": "Voer 6-cijferige code in",
+    "verify_button": "Verifieer en schakel 2FA in"
+  },
+  
+  "warning": {
+    "title": "Belangrijk",
+    "description": "Zorg ervoor dat je je herstelcodes op een veilige plaats bewaart. Je hebt ze nodig als je de toegang tot je authenticator app verliest."
+  }
+}
