@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
+use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -56,6 +57,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
+                FilamentEnvEditorPlugin::make(),
                 FilamentGeneralSettingsPlugin::make()
                     ->canAccess(fn() => auth()->user()->id === 1)
                     ->setSort(3)
