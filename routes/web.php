@@ -84,21 +84,30 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/security/2fa/recovery-codes', [MyAccountController::class, 'regenerateRecoveryCodes'])->name('account.security.regenerate-recovery-codes');
 });
 
-// Admin routes for managing clients
+// Legacy admin routes - redirect to new Filament admin panel
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
-    // Dashboard route
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('clients', ClientController::class);
+    // Redirect dashboard to Filament admin
+    Route::get('/', function() {
+        return redirect('/admin');
+    })->name('admin.dashboard');
+    
+    // Redirect legacy resource routes to Filament admin
+    Route::get('/clients', function() {
+        return redirect('/admin/clients');
+    });
+    Route::get('/users', function() {
+        return redirect('/admin/users');
+    });
+    Route::get('/sessions', function() {
+        return redirect('/admin/user-sessions');
+    });
+    
+    // Keep API-like routes that might be used by external systems
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])->name('clients.regenerate-credentials');
-    // Admin routes for managing users
-    Route::resource('users', UserController::class);
-    // Admin routes for managing sessions
-    Route::get('/sessions', [SessionController::class, 'index'])->name('sessions.index');
-    Route::get('/sessions/{session}', [SessionController::class, 'show'])->name('sessions.show');
-    Route::delete('/sessions/{session}', [SessionController::class, 'destroy'])->name('sessions.destroy');
     Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
     Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
-    // Admin routes for settings
+    
+    // Keep settings routes if they have special functionality
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
     Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('admin.settings.clear-cache');
