@@ -38,9 +38,9 @@ class ClientResource extends Resource
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
                             ->default(fn () => 'client_' . \Illuminate\Support\Str::random(32))
-                            ->disabled(fn (string $context): bool => $context === 'create')
+                            ->disabled()
                             ->dehydrated()
-                            ->helperText('Wordt automatisch gegenereerd bij het aanmaken'),
+                            ->helperText('Wordt automatisch gegenereerd en kan niet worden gewijzigd'),
                         Forms\Components\TextInput::make('client_secret')
                             ->label('Client Secret')
                             ->required()
@@ -48,9 +48,9 @@ class ClientResource extends Resource
                             ->revealable()
                             ->maxLength(255)
                             ->default(fn () => \Illuminate\Support\Str::random(64))
-                            ->disabled(fn (string $context): bool => $context === 'create')
+                            ->disabled()
                             ->dehydrated()
-                            ->helperText('Wordt automatisch gegenereerd bij het aanmaken'),
+                            ->helperText('Wordt automatisch gegenereerd en kan niet worden gewijzigd'),
                     ])->columns(2),
                     
                 Forms\Components\Section::make('URL Configuratie')
@@ -120,13 +120,32 @@ class ClientResource extends Resource
                     ->label('Bekijken'),
                 Tables\Actions\EditAction::make()
                     ->label('Bewerken'),
+                Tables\Actions\Action::make('rotate_secret')
+                    ->label('Secret Roteren')
+                    ->icon('heroicon-o-key')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalHeading('Client Secret Roteren')
+                    ->modalDescription('Weet je zeker dat je een nieuwe client secret wilt genereren? De huidige secret werkt daarna niet meer.')
+                    ->modalSubmitActionLabel('Ja, roteren')
+                    ->action(function ($record) {
+                        $record->update([
+                            'client_secret' => \Illuminate\Support\Str::random(64),
+                        ]);
+                        
+                        \Filament\Notifications\Notification::make()
+                            ->title('Client secret geroteerd')
+                            ->body('Een nieuwe client secret is gegenereerd.')
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\Action::make('regenerate_credentials')
-                    ->label('Credentials Regenereren')
+                    ->label('Alle Credentials Regenereren')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->modalHeading('Credentials Regenereren')
-                    ->modalDescription('Weet je zeker dat je nieuwe client ID en secret wilt genereren? De huidige credentials werken daarna niet meer.')
+                    ->modalHeading('Alle Credentials Regenereren')
+                    ->modalDescription('Weet je zeker dat je nieuwe client ID en secret wilt genereren? Alle huidige credentials werken daarna niet meer.')
                     ->modalSubmitActionLabel('Ja, regenereren')
                     ->action(function ($record) {
                         $record->update([
@@ -135,7 +154,7 @@ class ClientResource extends Resource
                         ]);
                         
                         \Filament\Notifications\Notification::make()
-                            ->title('Credentials geregenereerd')
+                            ->title('Alle credentials geregenereerd')
                             ->body('Nieuwe client ID en secret zijn gegenereerd.')
                             ->success()
                             ->send();
