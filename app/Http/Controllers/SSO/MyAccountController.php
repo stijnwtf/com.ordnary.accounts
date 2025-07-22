@@ -553,9 +553,6 @@ class MyAccountController extends Controller
                 // Active Sessions
                 'active_sessions' => [],
 
-                // Notifications
-                'notifications' => [],
-
                 // Activity Logs
                 'system_activity_logs' => [],
 
@@ -642,29 +639,6 @@ class MyAccountController extends Controller
                         'token_prefix' => substr($session->access_token ?? '', 0, 10) . '...',
                         'jti' => $session->jti,
                     ]
-                ];
-            }
-
-            // Collect notifications
-            $notifications = $user->notifications()
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            $notificationStats = [
-                'total_notifications' => $notifications->count(),
-                'read_notifications' => $notifications->whereNotNull('read_at')->count(),
-                'unread_notifications' => $notifications->whereNull('read_at')->count(),
-            ];
-
-            foreach ($notifications as $notification) {
-                $exportData['notifications'][] = [
-                    'id' => $notification->id,
-                    'title' => $notification->title,
-                    'message' => $notification->message,
-                    'type' => $notification->type,
-                    'created_at' => $notification->created_at->toIso8601String(),
-                    'read_at' => $notification->read_at?->toIso8601String(),
-                    'is_read' => !is_null($notification->read_at),
                 ];
             }
 
