@@ -642,28 +642,6 @@ class MyAccountController extends Controller
                 ];
             }
 
-            // Collect activity logs
-            $activityLogs = ActivityLog::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->limit(1000) // Limit to last 1000 activities
-                ->get();
-
-            foreach ($activityLogs as $log) {
-                $exportData['system_activity_logs'][] = [
-                    'timestamp' => $log->created_at->toIso8601String(),
-                    'action' => $log->action,
-                    'description' => $log->description,
-                    'affected_resource' => [
-                        'type' => $log->model_type,
-                        'id' => $log->model_id,
-                    ],
-                    'technical_details' => [
-                        'ip_address' => $log->ip_address,
-                        'user_agent' => $log->user_agent,
-                    ]
-                ];
-            }
-
             // Generate comprehensive usage statistics
             $exportData['usage_statistics'] = [
                 'account_age_days' => $user->created_at->diffInDays(now()),
