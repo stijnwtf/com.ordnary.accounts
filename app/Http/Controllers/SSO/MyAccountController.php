@@ -669,14 +669,6 @@ class MyAccountController extends Controller
                 'processing_time' => 'Generated in real-time',
             ];
 
-            // Log successful export
-            ActivityLog::log(
-                'data_export', 
-                'User requested comprehensive data export', 
-                $user, 
-                $user
-            );
-
             // Generate filename with timestamp
             $timestamp = now()->format('Y-m-d_H-i-s');
             $filename = "numblio_comprehensive_export_{$user->username}_{$timestamp}.json";
