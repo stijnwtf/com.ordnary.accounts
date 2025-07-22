@@ -646,12 +646,6 @@ class MyAccountController extends Controller
             $exportData['usage_statistics'] = [
                 'account_age_days' => $user->created_at->diffInDays(now()),
                 'login_statistics' => $loginStats,
-                'notification_statistics' => $notificationStats,
-                'service_statistics' => [
-                    'total_connected_services' => $userServices->count(),
-                    'active_services' => $userServices->where('status', 'active')->count(),
-                    'revoked_services' => $userServices->where('status', 'revoked')->count(),
-                ],
                 'session_statistics' => [
                     'total_sessions_created' => $user->userSessions()->count(),
                     'currently_active_sessions' => $activeSessions->count(),
