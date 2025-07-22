@@ -280,11 +280,6 @@
                 <!-- Right Content Card -->
                 <div class="w-full lg:w-3/4">
                     <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
-                        <!-- Welcome header -->
-                        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-white to-blue-50">
-                            <h2 class="text-xl font-bold text-gray-900">{{ lang('welcome.greeting', ['name' => $user->first_name], 'layout') }}</h2>
-                            <p class="text-sm text-gray-600 mt-1">{{ lang('welcome.message', [], 'layout') }}</p>
-                        </div>
 
                         <!-- Success Message -->
                         @if (session('status'))
