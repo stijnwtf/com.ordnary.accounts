@@ -213,113 +213,33 @@
     <!-- Privacy & Data Tab Content -->
     <div x-show="activeTab === 'privacy'" x-cloak>
         <div class="space-y-6">
-            <!-- Comprehensive GDPR Data Export -->
+            <!-- GDPR Data Export -->
             <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
                 <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                     <i class="fas fa-download text-blue-500 mr-2"></i>
-                    Uitgebreide Gegevensexport
+                    {{ lang('privacy.export.title', [], 'security') }}
                 </h4>
                 
                 <p class="text-sm text-gray-600 mb-5">
-                    Download een volledige export van al uw gegevens in ons systeem. Deze export bevat alle informatie die we over u hebben opgeslagen en is volledig GDPR-compliant.
+                    {{ lang('privacy.export.description', [], 'security') }}
                 </p>
                 
-                <div class="grid md:grid-cols-2 gap-4 mb-5">
-                    <!-- Data Categories -->
-                    <div class="p-4 bg-blue-50 rounded-md border border-blue-100">
-                        <h5 class="text-sm font-medium text-blue-800 mb-3 flex items-center">
-                            <i class="fas fa-database mr-2"></i>
-                            Gegevens Categorieën
-                        </h5>
-                        <ul class="text-xs text-blue-700 space-y-1">
-                            <li class="flex items-center"><i class="fas fa-user mr-2"></i>Persoonlijke informatie</li>
-                            <li class="flex items-center"><i class="fas fa-shield-alt mr-2"></i>Beveiligingsinstellingen</li>
-                            <li class="flex items-center"><i class="fas fa-history mr-2"></i>Inloggeschiedenis</li>
-                            <li class="flex items-center"><i class="fas fa-plug mr-2"></i>Gekoppelde services</li>
-                            <li class="flex items-center"><i class="fas fa-key mr-2"></i>Actieve sessies</li>
-                            <li class="flex items-center"><i class="fas fa-bell mr-2"></i>Notificaties</li>
-                            <li class="flex items-center"><i class="fas fa-clipboard-list mr-2"></i>Activiteitenlogs</li>
-                            <li class="flex items-center"><i class="fas fa-chart-bar mr-2"></i>Gebruiksstatistieken</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Export Features -->
-                    <div class="p-4 bg-green-50 rounded-md border border-green-100">
-                        <h5 class="text-sm font-medium text-green-800 mb-3 flex items-center">
-                            <i class="fas fa-star mr-2"></i>
-                            Export Kenmerken
-                        </h5>
-                        <ul class="text-xs text-green-700 space-y-1">
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>GDPR 2024 compliant formaat</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Gestructureerde JSON data</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Volledige metadata</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Tijdstempel informatie</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Beveiligingsdetails</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Gebruiksanalyses</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Contactinformatie DPO</li>
-                            <li class="flex items-center"><i class="fas fa-check mr-2"></i>Retentiebeleid details</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Legal Information -->
-                <div class="p-4 bg-gray-50 rounded-md mb-5 border border-gray-200">
-                    <h5 class="text-sm font-medium text-gray-800 mb-2 flex items-center">
-                        <i class="fas fa-balance-scale mr-2"></i>
-                        Juridische Informatie
-                    </h5>
-                    <div class="text-xs text-gray-600 space-y-1">
-                        <p><strong>Juridische basis:</strong> AVG Artikel 20 - Recht op gegevensoverdraagbaarheid</p>
-                        <p><strong>Verwerkingsverantwoordelijke:</strong> Numblio B.V.</p>
-                        <p><strong>Privacy contactpersoon:</strong> privacy@numblio.com</p>
-                        <p><strong>Functionaris Gegevensbescherming:</strong> dpo@numblio.com</p>
-                    </div>
-                </div>
-
-                <!-- Export Statistics Preview -->
-                <div class="bg-indigo-50 rounded-md p-4 mb-5 border border-indigo-100">
-                    <h5 class="text-sm font-medium text-indigo-800 mb-3 flex items-center">
-                        <i class="fas fa-chart-pie mr-2"></i>
-                        Uw Data Overzicht
-                    </h5>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-indigo-700">{{ Auth::user()->loginActivities()->count() }}</div>
-                            <div class="text-indigo-600">Logins</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-indigo-700">{{ Auth::user()->services()->count() }}</div>
-                            <div class="text-indigo-600">Services</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-indigo-700">{{ Auth::user()->userSessions()->count() }}</div>
-                            <div class="text-indigo-600">Sessies</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold text-indigo-700">{{ Auth::user()->notifications()->count() }}</div>
-                            <div class="text-indigo-600">Notificaties</div>
-                        </div>
-                    </div>
+                <div class="p-4 bg-blue-50 rounded-md mb-5 border border-blue-100">
+                    <h5 class="text-sm font-medium text-blue-800 mb-2">{{ lang('privacy.export.includes.title', [], 'security') }}</h5>
+                    <ul class="text-xs text-blue-700 list-disc pl-5 space-y-1">
+                        <li>{{ lang('privacy.export.includes.items.0', [], 'security') }}</li>
+                        <li>{{ lang('privacy.export.includes.items.1', [], 'security') }}</li>
+                        <li>{{ lang('privacy.export.includes.items.2', [], 'security') }}</li>
+                        <li>{{ lang('privacy.export.includes.items.3', [], 'security') }}</li>
+                    </ul>
                 </div>
                 
-                <div class="flex items-center justify-between">
-                    <div class="text-xs text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Export wordt real-time gegenereerd in gestructureerd JSON formaat
-                    </div>
-                    <a href="{{ route('account.export-data') }}" 
-                       onclick="this.innerHTML='<i class=\'fas fa-spinner fa-spin mr-2\'></i>Genereren...'; this.style.pointerEvents='none';"
-                       class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
-                        <i class="fas fa-download mr-2"></i> 
-                        Download Volledige Export
+                <div class="flex justify-end">
+                    <a href="{{ route('account.export-data') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-file-download mr-1.5"></i> {{ lang('privacy.export.button', [], 'security') }}
                     </a>
                 </div>
-                
-                <div class="mt-3 flex items-center justify-end space-x-4 text-xs text-gray-500">
-                    <span><i class="fas fa-file-code mr-1"></i>JSON formaat</span>
-                    <span><i class="fas fa-shield-check mr-1"></i>Veilige download</span>
-                    <span><i class="fas fa-clock mr-1"></i>Real-time data</span>
-                </div>
+                <p class="text-xs text-gray-500 mt-2 text-right">{{ lang('privacy.export.format', [], 'security') }}</p>
             </div>
             
             <!-- Account Deletion -->
