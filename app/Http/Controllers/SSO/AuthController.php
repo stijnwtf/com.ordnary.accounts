@@ -193,7 +193,7 @@ class AuthController extends Controller
                 "client_id" => $clientId,
             ]);
             return view("error", [
-                "message" => "Invalid client_id.",
+                "message" => "Invalid client_id. The application you're trying to access is not registered or has been removed.",
             ]);
         }
 
@@ -210,7 +210,7 @@ class AuthController extends Controller
                 "normalized_allowed_uris" => $normalizedAllowedUris
             ]);
             return view("error", [
-                "message" => "Redirect URI not allowed.",
+                "message" => "Redirect URI not allowed. The application is trying to redirect to an unauthorized location for security reasons.",
             ]);
         }
 
