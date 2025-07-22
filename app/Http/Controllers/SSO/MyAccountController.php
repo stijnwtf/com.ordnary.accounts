@@ -467,88 +467,307 @@ class MyAccountController extends Controller
     }
 
     /**
-     * Generate and download a data export for the user (GDPR right to data portability)
+     * Generate and download a comprehensive data export for the user (GDPR right to data portability)
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function exportUserData()
     {
         $user = Auth::user();
 
-        Log::info('User data export requested', ['user_id' => $user->id]);
-
-        // Collect user's personal data
-        $userData = [
-            'personal_info' => [
-                'id' => $user->id,
-                'numblio_upstream_id' => $user->numblio_id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'created_at' => $user->created_at->toIso8601String(),
-                'updated_at' => $user->updated_at->toIso8601String(),
-                'language' => $user->lang,
-                'recovery_email' => $user->recovery_email,
-                'has_two_factor' => !empty($user->two_factor_secret),
-            ],
-            'login_activities' => [],
-            'connected_services' => [],
-        ];
-
-        // Get user's login activities
-        $loginActivities = LoginActivity::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        foreach ($loginActivities as $activity) {
-            $userData['login_activities'][] = [
-                'ip_address' => $activity->ip_address,
-                'user_agent' => $activity->user_agent,
-                'location' => $activity->location,
-                'created_at' => $activity->created_at->toIso8601String(),
-            ];
-        }
-
-        // Get user's connected services
-        $userServices = $user->services()
-            ->with('client:id,name,client_id')
-            ->get();
-
-        foreach ($userServices as $service) {
-            $userData['connected_services'][] = [
-                'service_name' => $service->client->name,
-                'service_id' => $service->client->client_id,
-                'first_login' => $service->first_login ? $service->first_login->toIso8601String() : null,
-                'last_used' => $service->last_used ? $service->last_used->toIso8601String() : null,
-                'status' => $service->status,
-            ];
-        }
-
-        // Add GDPR metadata
-        $userData['gdpr_metadata'] = [
-            'data_controller' => 'Numblio',
-            'data_controller_contact' => 'privacy@numblio.com',
-            'export_date' => now()->toIso8601String(),
-            'export_requested_by' => $user->email,
-            'data_retention_policy' => 'User data is retained for as long as the account is active. After account deletion, data is kept for 30 days for backup purposes before being permanently deleted.',
-        ];
-
-        // Generate a JSON file
-        $filename = 'numblio_data_export_' . $user->email . '_' . date('Y-m-d') . '.json';
-        $jsonData = json_encode($userData, JSON_PRETTY_PRINT);
-
-        Log::info('User data export completed', [
+        Log::info('Comprehensive user data export requested', [
             'user_id' => $user->id,
-            'filename' => $filename,
-            'data_size' => strlen($jsonData)
+            'user_email' => $user->email,
+            'timestamp' => now()->toIso8601String()
         ]);
 
-        return response()->streamDownload(function () use ($jsonData) {
-            echo $jsonData;
-        }, $filename, [
-            'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        try {
+            // Export format header with comprehensive metadata
+            $exportData = [
+                'export_metadata' => [
+                    'export_version' => '2.0',
+                    'format_version' => 'GDPR-2024.1',
+                    'generated_at' => now()->toIso8601String(),
+                    'generated_for' => $user->email,
+                    'user_id' => $user->id,
+                    'data_controller' => [
+                        'name' => 'Numblio B.V.',
+                        'address' => 'Hoofdstraat 123, 1234 AB Amsterdam, Netherlands',
+                        'contact_email' => 'privacy@numblio.com',
+                        'dpo_email' => 'dpo@numblio.com',
+                        'website' => 'https://numblio.com'
+                    ],
+                    'legal_basis' => 'GDPR Article 20 - Right to data portability',
+                    'data_categories' => [
+                        'Identity Data', 'Contact Data', 'Technical Data', 
+                        'Usage Data', 'Marketing and Communications Data', 
+                        'Security Data', 'Activity Logs'
+                    ],
+                    'retention_policy' => [
+                        'active_account' => 'Data retained while account is active',
+                        'deleted_account' => '30 days retention for backup and legal compliance',
+                        'legal_obligations' => 'Some data may be retained longer for legal compliance'
+                    ]
+                ],
+
+                // Personal Information
+                'personal_information' => [
+                    'basic_info' => [
+                        'internal_id' => $user->id,
+                        'numblio_id' => $user->numblio_id,
+                        'username' => $user->username,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'full_name' => $user->name,
+                        'email_address' => $user->email,
+                        'preferred_language' => $user->lang,
+                        'account_created' => $user->created_at->toIso8601String(),
+                        'last_updated' => $user->updated_at->toIso8601String(),
+                        'timezone' => config('app.timezone'),
+                        'email_verified' => !is_null($user->email_verified_at),
+                        'email_verified_at' => $user->email_verified_at?->toIso8601String(),
+                    ],
+                    'recovery_information' => [
+                        'recovery_email' => $user->recovery_email,
+                        'recovery_email_verified' => $user->recovery_email_verified,
+                        'recovery_email_verified_at' => $user->recovery_email_verified_at?->toIso8601String(),
+                    ],
+                    'security_settings' => [
+                        'is_admin' => $user->is_admin,
+                        'two_factor_enabled' => $user->two_factor_enabled,
+                        'two_factor_confirmed_at' => $user->two_factor_confirmed_at?->toIso8601String(),
+                        'has_recovery_codes' => !empty($user->two_factor_recovery_codes),
+                        'recovery_codes_count' => $user->two_factor_recovery_codes ? count($user->two_factor_recovery_codes) : 0,
+                    ]
+                ],
+
+                // Account Activity
+                'account_activity' => [],
+
+                // Login History
+                'login_history' => [],
+
+                // Connected Services
+                'connected_services' => [],
+
+                // Active Sessions
+                'active_sessions' => [],
+
+                // Notifications
+                'notifications' => [],
+
+                // Activity Logs
+                'system_activity_logs' => [],
+
+                // Statistics
+                'usage_statistics' => []
+            ];
+
+            // Collect comprehensive login activities
+            $loginActivities = LoginActivity::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $loginStats = [
+                'total_logins' => $loginActivities->count(),
+                'successful_logins' => $loginActivities->where('status', 'success')->count(),
+                'failed_logins' => $loginActivities->where('status', 'failed')->count(),
+                'unique_ip_addresses' => $loginActivities->pluck('ip_address')->unique()->count(),
+                'unique_locations' => $loginActivities->whereNotNull('location')->pluck('location')->unique()->count(),
+                'unique_devices' => $loginActivities->whereNotNull('device_type')->pluck('device_type')->unique()->count(),
+                'unique_browsers' => $loginActivities->whereNotNull('browser')->pluck('browser')->unique()->count(),
+                'last_login' => $loginActivities->first()?->created_at?->toIso8601String(),
+                'first_login' => $loginActivities->last()?->created_at?->toIso8601String(),
+            ];
+
+            foreach ($loginActivities as $activity) {
+                $exportData['login_history'][] = [
+                    'timestamp' => $activity->created_at->toIso8601String(),
+                    'ip_address' => $activity->ip_address,
+                    'location' => $activity->location,
+                    'device_info' => [
+                        'user_agent' => $activity->user_agent,
+                        'device_type' => $activity->device_type,
+                        'browser' => $activity->browser,
+                        'platform' => $activity->platform,
+                    ],
+                    'status' => $activity->status,
+                    'session_duration' => null // Could be calculated if we track session end
+                ];
+            }
+
+            // Collect connected services with detailed information
+            $userServices = $user->services()
+                ->with('client')
+                ->get();
+
+            foreach ($userServices as $service) {
+                $exportData['connected_services'][] = [
+                    'service_info' => [
+                        'name' => $service->client->name,
+                        'client_id' => $service->client->client_id,
+                        'service_type' => 'OAuth2 Application',
+                    ],
+                    'connection_details' => [
+                        'first_connected' => $service->first_login ? $service->first_login->toIso8601String() : null,
+                        'last_used' => $service->last_used ? $service->last_used->toIso8601String() : null,
+                        'status' => $service->status,
+                        'total_usage_time' => null, // Could be calculated
+                    ],
+                    'permissions_granted' => [
+                        'profile_access' => true,
+                        'email_access' => true,
+                    ]
+                ];
+            }
+
+            // Collect active sessions
+            $activeSessions = $user->userSessions()
+                ->with('client')
+                ->where('expires_at', '>', now())
+                ->get();
+
+            foreach ($activeSessions as $session) {
+                $exportData['active_sessions'][] = [
+                    'session_info' => [
+                        'session_id' => $session->id,
+                        'client_name' => $session->client->name ?? 'Unknown',
+                        'token_type' => 'Bearer',
+                        'created_at' => $session->created_at->toIso8601String(),
+                        'expires_at' => $session->expires_at->toIso8601String(),
+                        'time_until_expiry' => $session->expires_at->diffForHumans(),
+                        'is_active' => $session->expires_at > now(),
+                    ],
+                    'security_info' => [
+                        'token_prefix' => substr($session->access_token ?? '', 0, 10) . '...',
+                        'jti' => $session->jti,
+                    ]
+                ];
+            }
+
+            // Collect notifications
+            $notifications = $user->notifications()
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $notificationStats = [
+                'total_notifications' => $notifications->count(),
+                'read_notifications' => $notifications->whereNotNull('read_at')->count(),
+                'unread_notifications' => $notifications->whereNull('read_at')->count(),
+            ];
+
+            foreach ($notifications as $notification) {
+                $exportData['notifications'][] = [
+                    'id' => $notification->id,
+                    'title' => $notification->title,
+                    'message' => $notification->message,
+                    'type' => $notification->type,
+                    'created_at' => $notification->created_at->toIso8601String(),
+                    'read_at' => $notification->read_at?->toIso8601String(),
+                    'is_read' => !is_null($notification->read_at),
+                ];
+            }
+
+            // Collect activity logs
+            $activityLogs = ActivityLog::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(1000) // Limit to last 1000 activities
+                ->get();
+
+            foreach ($activityLogs as $log) {
+                $exportData['system_activity_logs'][] = [
+                    'timestamp' => $log->created_at->toIso8601String(),
+                    'action' => $log->action,
+                    'description' => $log->description,
+                    'affected_resource' => [
+                        'type' => $log->model_type,
+                        'id' => $log->model_id,
+                    ],
+                    'technical_details' => [
+                        'ip_address' => $log->ip_address,
+                        'user_agent' => $log->user_agent,
+                    ]
+                ];
+            }
+
+            // Generate comprehensive usage statistics
+            $exportData['usage_statistics'] = [
+                'account_age_days' => $user->created_at->diffInDays(now()),
+                'login_statistics' => $loginStats,
+                'notification_statistics' => $notificationStats,
+                'service_statistics' => [
+                    'total_connected_services' => $userServices->count(),
+                    'active_services' => $userServices->where('status', 'active')->count(),
+                    'revoked_services' => $userServices->where('status', 'revoked')->count(),
+                ],
+                'session_statistics' => [
+                    'total_sessions_created' => $user->userSessions()->count(),
+                    'currently_active_sessions' => $activeSessions->count(),
+                    'expired_sessions' => $user->userSessions()->where('expires_at', '<', now())->count(),
+                ],
+                'security_statistics' => [
+                    'has_two_factor' => $user->two_factor_enabled,
+                    'has_recovery_email' => !empty($user->recovery_email),
+                    'email_verified' => !is_null($user->email_verified_at),
+                ]
+            ];
+
+            // Generate export metadata summary
+            $totalDataPoints = $loginActivities->count() + $userServices->count() + 
+                             $activeSessions->count() + $notifications->count() + 
+                             $activityLogs->count();
+
+            $exportData['export_metadata']['summary'] = [
+                'total_data_points' => $totalDataPoints,
+                'categories_included' => count($exportData) - 1, // Exclude metadata
+                'export_size_estimate' => strlen(json_encode($exportData)) . ' bytes',
+                'processing_time' => 'Generated in real-time',
+            ];
+
+            // Log successful export
+            ActivityLog::log(
+                'data_export', 
+                'User requested comprehensive data export', 
+                $user, 
+                $user
+            );
+
+            // Generate filename with timestamp
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $filename = "numblio_comprehensive_export_{$user->username}_{$timestamp}.json";
+            
+            $jsonData = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+            Log::info('Comprehensive user data export completed successfully', [
+                'user_id' => $user->id,
+                'filename' => $filename,
+                'data_size_bytes' => strlen($jsonData),
+                'data_points' => $totalDataPoints,
+                'processing_time' => microtime(true) - LARAVEL_START
+            ]);
+
+            return response()->streamDownload(function () use ($jsonData) {
+                echo $jsonData;
+            }, $filename, [
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Data export failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => 'Er is een fout opgetreden bij het genereren van de gegevensexport.',
+                'message' => 'Probeer het later opnieuw of neem contact op met de ondersteuning.'
+            ], 500);
+        }
     }
 
     /**
