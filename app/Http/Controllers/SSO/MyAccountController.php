@@ -660,8 +660,7 @@ class MyAccountController extends Controller
 
             // Generate export metadata summary
             $totalDataPoints = $loginActivities->count() + $userServices->count() + 
-                             $activeSessions->count() + $notifications->count() + 
-                             $activityLogs->count();
+                             $activeSessions->count();
 
             $exportData['export_metadata']['summary'] = [
                 'total_data_points' => $totalDataPoints,
