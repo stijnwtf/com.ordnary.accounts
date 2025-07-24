@@ -3,7 +3,7 @@
 @section('title', lang('title', [], 'security'))
 
 @section('content')
-<div x-data="{ activeTab: 'authentication' }" x-init="() => { 'authentication' }">
+<div x-data="{ activeTab: 'authentication' }" x-init="() => { activeTab = localStorage.getItem('securityTab') || 'authentication' }">
     <div class="mb-6">
         <h3 class="text-lg font-medium leading-6 text-gray-900">
             {{ lang('header', [], 'security') }}
