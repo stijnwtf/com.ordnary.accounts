@@ -246,7 +246,7 @@
 
                             <!-- Logout Button and Account ID -->
                             <div class="px-4 py-4 border-t border-gray-200 bg-gray-50">
-                                <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
+                                <a href="{{ route('logout/simple') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
                                     <i class="fas fa-sign-out-alt mr-2"></i> {{ lang('sidebar.logout', [], 'layout') }}
                                 </a>
                                 <div class="flex items-center justify-between">
