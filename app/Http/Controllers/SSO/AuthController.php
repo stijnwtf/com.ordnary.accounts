@@ -322,9 +322,11 @@ class AuthController extends Controller
         }
 
         // Get session variables or input values as fallback
-        $directLogin = session("direct_login", false);
         $clientId = session("client_id", $request->input('client_id'));
         $redirectUri = session("redirect_uri", $request->input('redirect_uri'));
+        
+        // Determine if this is a direct login based on presence of SSO parameters
+        $directLogin = session("direct_login", !($clientId && $redirectUri));
 
         // If values came from input and not session, store them in session for later
         if (!session("client_id") && $request->input('client_id')) {
@@ -387,6 +389,17 @@ class AuthController extends Controller
 
                 // Log the login activity
                 LoginActivity::logLogin($user, $request);
+
+                // Log parameters before redirect
+                Log::info("login: About to handle redirect", [
+                    "user_id" => $user->id,
+                    "direct_login" => $directLogin,
+                    "client_id" => $clientId,
+                    "redirect_uri" => $redirectUri,
+                    "session_client_id" => session("client_id"),
+                    "session_redirect_uri" => session("redirect_uri"),
+                    "session_direct_login" => session("direct_login")
+                ]);
 
                 // Handle redirect based on session parameters
                 return $this->handleLoginRedirect($user, $directLogin, $clientId, $redirectUri);
