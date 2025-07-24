@@ -147,7 +147,7 @@
     </div>
 
     <!-- Submit Button for Profile Form -->
-    <div class="pt-4 border-t border-gray-200 flex justify-end">
+    <div class="pt-4 flex justify-end">
         <button
             type="submit"
             class="flex items-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm transition-colors duration-150">
