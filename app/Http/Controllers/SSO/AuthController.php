@@ -525,18 +525,26 @@ class AuthController extends Controller
 
                 // Back-channel logout notification (server-to-server)
                 try {
-                    $response = Http::post($service->client->webhook_url, [
-                        'event' => 'user_logout',
-                        'user_id' => $userId,
-                        'service_id' => $service->client_id,
-                        'timestamp' => now()->toIso8601String()
-                    ]);
+                    // Only send webhook if webhook_url is not empty
+                    if (!empty($service->client->webhook_url)) {
+                        $response = Http::post($service->client->webhook_url, [
+                            'event' => 'user_logout',
+                            'user_id' => $userId,
+                            'service_id' => $service->client_id,
+                            'timestamp' => now()->toIso8601String()
+                        ]);
 
-                    Log::info("logout: Back-channel logout notification sent", [
-                        "user_id" => $userId,
-                        "service_id" => $service->client_id,
-                        "response_status" => $response->status()
-                    ]);
+                        Log::info("logout: Back-channel logout notification sent", [
+                            "user_id" => $userId,
+                            "service_id" => $service->client_id,
+                            "response_status" => $response->status()
+                        ]);
+                    } else {
+                        Log::info("logout: Skipping back-channel logout notification (no webhook URL)", [
+                            "user_id" => $userId,
+                            "service_id" => $service->client_id
+                        ]);
+                    }
                 } catch (\Exception $e) {
                     Log::error("logout: Back-channel logout notification failed", [
                         "user_id" => $userId,
