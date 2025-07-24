@@ -495,9 +495,19 @@ class AuthController extends Controller
     {
         $userId = Auth::id(); // Save the ID before logging out
 
-        // Get the active services for this user
+        // Check if this was a direct login (not SSO) or if forced to skip SSO
+        $isDirectLogin = session('direct_login', false);
+        $skipSSO = $request->query('skip_sso', false) || $isDirectLogin;
+        
+        Log::info("logout: User logging out", [
+            "user_id" => $userId,
+            "is_direct_login" => $isDirectLogin,
+            "skip_sso" => $skipSSO
+        ]);
+
+        // Get the active services for this user (only if not a direct login and not skipping SSO)
         $activeServices = [];
-        if ($userId) {
+        if ($userId && !$skipSSO) {
             $activeServices = UserService::where('user_id', $userId)
                 ->where('status', 'active')
                 ->with('client:client_id,name,logout_url')
@@ -507,15 +517,20 @@ class AuthController extends Controller
                 "user_id" => $userId,
                 "service_count" => $activeServices->count()
             ]);
+        } elseif ($skipSSO) {
+            Log::info("logout: Skipping SSO logout (direct login or forced skip)", [
+                "user_id" => $userId,
+                "is_direct_login" => $isDirectLogin,
+                "skip_sso_param" => $request->query('skip_sso', false)
+            ]);
         }
 
         // Log the user out from the current application
-        Log::info("logout: User logging out", ["user_id" => $userId]);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Process Single Logout for connected services
+        // Process Single Logout for connected services (only if not skipping SSO)
         $logoutRedirects = [];
 
         foreach ($activeServices as $service) {
