@@ -115,7 +115,7 @@ class AuthController extends Controller
                 }
 
                 // Verify the redirect URI is allowed
-                $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
+                $allowedRedirectUris = $this->parseRedirectUris($client->redirect_uris);
                 $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showLoginForm");
 
                 if (!in_array($redirectUri, $normalizedAllowedUris)) {
@@ -198,7 +198,7 @@ class AuthController extends Controller
         }
 
         // Check if the redirect URI is in the list of allowed URIs for this client
-        $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
+        $allowedRedirectUris = $this->parseRedirectUris($client->redirect_uris);
 
         // Normalize the allowed URIs to handle common typos
         $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showLoginForm");
@@ -1362,7 +1362,7 @@ class AuthController extends Controller
         }
 
         // Check if the redirect URI is in the list of allowed URIs for this client
-        $allowedRedirectUris = json_decode($client->redirect_uris) ?: [];
+        $allowedRedirectUris = $this->parseRedirectUris($client->redirect_uris);
 
         // Normalize the allowed URIs to handle common typos
         $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showRegistrationForm");
@@ -1454,6 +1454,36 @@ class AuthController extends Controller
                 "error" => "An error occurred while registering. Please try again later.",
             ]);
         }
+    }
+
+    /**
+     * Parse redirect URIs from database field
+     * Handles both JSON arrays and plain strings for backward compatibility
+     *
+     * @param  string  $redirectUrisField
+     * @return array
+     */
+    private function parseRedirectUris(string $redirectUrisField)
+    {
+        // Try to decode as JSON first
+        $decoded = json_decode($redirectUrisField, true);
+        
+        if (is_array($decoded)) {
+            // Successfully decoded as JSON array
+            return $decoded;
+        }
+        
+        // If not JSON, treat as a single URI string
+        // Handle cases where multiple URIs might be separated by newlines
+        $uris = preg_split('/\r\n|\r|\n/', trim($redirectUrisField));
+        $uris = array_filter(array_map('trim', $uris)); // Remove empty entries and trim whitespace
+        
+        Log::info("parseRedirectUris: Parsed redirect URIs from string format", [
+            "original" => $redirectUrisField,
+            "parsed" => $uris
+        ]);
+        
+        return array_values($uris); // Re-index array
     }
 
     /**

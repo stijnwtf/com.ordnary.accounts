@@ -30,7 +30,19 @@ class Client extends Model
      */
     public function getRedirectUrisArrayAttribute()
     {
-        return json_decode($this->redirect_uris) ?: [];
+        // Try to decode as JSON first
+        $decoded = json_decode($this->redirect_uris, true);
+        
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+        
+        // If not JSON, treat as a single URI string
+        // Handle cases where multiple URIs might be separated by newlines
+        $uris = preg_split('/\r\n|\r|\n/', trim($this->redirect_uris));
+        $uris = array_filter(array_map('trim', $uris)); // Remove empty entries and trim whitespace
+        
+        return array_values($uris); // Re-index array
     }
 
     /**
