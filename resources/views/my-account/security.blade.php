@@ -362,6 +362,12 @@
     [x-cloak] { display: none !important; }
 </style>
 <script>
+    // Check for new login and clear security tab preference
+    @if(session('new_login'))
+        localStorage.removeItem('securityTab');
+        @php session()->forget('new_login'); @endphp
+    @endif
+    
     // Fallback JavaScript for tab switching if Alpine.js fails to load
     document.addEventListener('DOMContentLoaded', function() {
         // Check if Alpine is not loaded after 500ms

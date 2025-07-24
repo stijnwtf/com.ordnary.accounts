@@ -387,6 +387,9 @@ class AuthController extends Controller
 
                 $request->session()->regenerate();
 
+                // Mark this as a new login to clear any UI preferences
+                session(['new_login' => true]);
+
                 // Log the login activity
                 LoginActivity::logLogin($user, $request);
 
@@ -806,6 +809,9 @@ class AuthController extends Controller
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
+        
+        // Mark this as a new login to clear any UI preferences
+        session(['new_login' => true]);
 
         // Log the login activity
         LoginActivity::logLogin($user, $request);
@@ -944,6 +950,9 @@ class AuthController extends Controller
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
+        
+        // Mark this as a new login to clear any UI preferences
+        session(['new_login' => true]);
 
         // Log the login activity
         LoginActivity::logLogin($user, $request);
