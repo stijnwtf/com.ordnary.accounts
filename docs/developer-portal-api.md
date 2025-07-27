@@ -4,6 +4,7 @@ Deze API is specifiek voor developers.numblio.com om clients aan te maken en beh
 
 ## Authenticatie
 
+### API Key Authenticatie (verplicht)
 Alle endpoints vereisen een API key in de header:
 
 ```
@@ -15,6 +16,16 @@ Of als Bearer token:
 ```
 Authorization: Bearer jouw-api-key-hier
 ```
+
+### User Authenticatie (verplicht voor lezen/bijwerken)
+Voor het ophalen en bijwerken van clients is aanvullende user authenticatie vereist via headers:
+
+```
+X-User-Email: user@example.com
+X-User-ID: 123 (optioneel, voor extra beveiliging)
+```
+
+**Belangrijk:** Gebruikers kunnen alleen hun eigen clients bekijken en wijzigen. Clients worden automatisch gekoppeld aan de persoon die ze aanmaakt op basis van het `developer_email` veld.
 
 ## Base URL
 
@@ -76,7 +87,16 @@ Maakt een nieuwe client aan na goedkeuring in developers.numblio.com.
 
 **GET** `/clients/{client_id}`
 
-Haalt gedetailleerde informatie op van een specifieke client.
+⚠️ **Vereist user authenticatie**: Deze endpoint vereist `X-User-Email` header. Je kunt alleen je eigen clients bekijken.
+
+**Headers:**
+```
+X-API-Key: jouw-api-key-hier
+X-User-Email: developer@example.com
+X-User-ID: 123 (optioneel)
+```
+
+Haalt gedetailleerde informatie op van een specifieke client die eigendom is van de geauthenticeerde gebruiker.
 
 **Response:**
 ```json
@@ -109,7 +129,16 @@ Haalt gedetailleerde informatie op van een specifieke client.
 
 **GET** `/clients`
 
-Haalt data op van meerdere clients.
+⚠️ **Vereist user authenticatie**: Deze endpoint vereist `X-User-Email` header. Je krijgt alleen je eigen clients te zien.
+
+**Headers:**
+```
+X-API-Key: jouw-api-key-hier
+X-User-Email: developer@example.com
+X-User-ID: 123 (optioneel)
+```
+
+Haalt data op van alle clients die eigendom zijn van de geauthenticeerde gebruiker.
 
 **Query Parameters:**
 - `client_ids[]` (optioneel) - Array van client IDs om te filteren
@@ -149,7 +178,16 @@ GET /clients?client_ids[]=client_123&client_ids[]=client_456
 
 **PUT** `/clients/{client_id}`
 
-Werkt een bestaande client bij.
+⚠️ **Vereist user authenticatie**: Deze endpoint vereist `X-User-Email` header. Je kunt alleen je eigen clients bijwerken.
+
+**Headers:**
+```
+X-API-Key: jouw-api-key-hier
+X-User-Email: developer@example.com
+X-User-ID: 123 (optioneel)
+```
+
+Werkt een bestaande client bij die eigendom is van de geauthenticeerde gebruiker.
 
 **Request Body (alle velden optioneel):**
 ```json
@@ -194,11 +232,19 @@ Alle endpoints kunnen de volgende error responses geven:
 }
 ```
 
+**401 User Authentication Required:**
+```json
+{
+  "success": false,
+  "message": "User authentication required. Please provide X-User-Email header."
+}
+```
+
 **404 Not Found:**
 ```json
 {
   "success": false,
-  "message": "Client not found"
+  "message": "Client not found or not owned by authenticated user"
 }
 ```
 
@@ -241,10 +287,14 @@ Genereer een sterke, willekeurige API key voor productie gebruik.
 class SSOClient {
     private $apiKey;
     private $baseUrl;
+    private $userEmail;
+    private $userId;
     
-    public function __construct($apiKey, $baseUrl) {
+    public function __construct($apiKey, $baseUrl, $userEmail = null, $userId = null) {
         $this->apiKey = $apiKey;
         $this->baseUrl = rtrim($baseUrl, '/');
+        $this->userEmail = $userEmail;
+        $this->userId = $userId;
     }
     
     public function createClient($data) {
@@ -255,6 +305,15 @@ class SSOClient {
         return $this->makeRequest('GET', "/clients/{$clientId}");
     }
     
+    public function getClients($clientIds = []) {
+        $endpoint = '/clients';
+        if (!empty($clientIds)) {
+            $queryString = http_build_query(['client_ids' => $clientIds]);
+            $endpoint .= '?' . $queryString;
+        }
+        return $this->makeRequest('GET', $endpoint);
+    }
+    
     public function updateClient($clientId, $data) {
         return $this->makeRequest('PUT', "/clients/{$clientId}", $data);
     }
@@ -262,13 +321,23 @@ class SSOClient {
     private function makeRequest($method, $endpoint, $data = null) {
         $url = $this->baseUrl . '/api/v1/developer-portal' . $endpoint;
         
+        $headers = [
+            'Content-Type: application/json',
+            'X-API-Key: ' . $this->apiKey
+        ];
+        
+        // Add user authentication headers for protected endpoints
+        if ($this->userEmail && in_array($method, ['GET', 'PUT'])) {
+            $headers[] = 'X-User-Email: ' . $this->userEmail;
+            if ($this->userId) {
+                $headers[] = 'X-User-ID: ' . $this->userId;
+            }
+        }
+        
         $options = [
             'http' => [
                 'method' => $method,
-                'header' => [
-                    'Content-Type: application/json',
-                    'X-API-Key: ' . $this->apiKey
-                ]
+                'header' => implode("\r\n", $headers)
             ]
         ];
         
@@ -284,15 +353,29 @@ class SSOClient {
 }
 
 // Gebruik
-$sso = new SSOClient('jouw-api-key', 'https://sso.numblio.com');
+$sso = new SSOClient('jouw-api-key', 'https://sso.numblio.com', 'dev@example.com', 123);
 
-// Client aanmaken
+// Client aanmaken (geen user auth vereist)
 $newClient = $sso->createClient([
     'name' => 'Mijn App',
     'developer_email' => 'dev@example.com',
     'redirect_uris' => ['https://app.com/callback']
 ]);
 
-// Client data ophalen
+// Client data ophalen (vereist user auth)
 $clientData = $sso->getClient('client_abc123');
+
+// Alle eigen clients ophalen (vereist user auth)
+$allClients = $sso->getClients();
+
+// Specifieke clients ophalen (vereist user auth)
+$someClients = $sso->getClients(['client_abc123', 'client_def456']);
+```
+
+## Eigenaarschap en Beveiliging
+
+- **Clients worden automatisch gekoppeld** aan de gebruiker op basis van het `developer_email` veld bij aanmaken
+- **Alleen eigen clients** zijn zichtbaar en bewerkbaar via de API
+- **Dubbele authenticatie** vereist: API key + user identificatie headers
+- **Extra beveiliging** mogelijk via optionele `X-User-ID` header verificatie
 ```

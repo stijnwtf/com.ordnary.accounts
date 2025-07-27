@@ -51,7 +51,11 @@ class DeveloperPortalController extends Controller
                 $clientId = 'client_' . Str::random(32);
             }
 
-            // Create the client
+            // Check if developer email belongs to an existing user
+            $existingUser = \App\Models\User::where('email', $request->input('developer_email'))->first();
+            $ownerUserId = $existingUser ? $existingUser->id : null;
+
+            // Create the client with owner information
             $client = Client::create([
                 'name' => $request->input('name'),
                 'client_id' => $clientId,
@@ -59,6 +63,10 @@ class DeveloperPortalController extends Controller
                 'redirect_uris' => json_encode($request->input('redirect_uris')),
                 'webhook_url' => $request->input('webhook_url'),
                 'logout_url' => $request->input('logout_url'),
+                'owner_email' => $request->input('developer_email'),
+                'owner_name' => $request->input('developer_name'),
+                'owner_user_id' => $ownerUserId,
+                'description' => $request->input('description'),
             ]);
 
             // Log the activity
@@ -107,19 +115,42 @@ class DeveloperPortalController extends Controller
 
     /**
      * Get client data by client_id for developers.numblio.com
+     * Requires user authentication to see only own clients
      * 
      * @param string $clientId
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getClient(string $clientId): JsonResponse
+    public function getClient(string $clientId, Request $request): JsonResponse
     {
         try {
-            $client = Client::where('client_id', $clientId)->first();
+            // Check for user authentication headers
+            $userEmail = $request->header('X-User-Email');
+            $userId = $request->header('X-User-ID');
+            
+            if (!$userEmail) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User authentication required. Please provide X-User-Email header.'
+                ], 401);
+            }
+
+            $client = Client::where('client_id', $clientId)
+                           ->where('owner_email', $userEmail)
+                           ->first();
+
+            // If user_id is provided, also filter by that for extra security
+            if ($userId && $client) {
+                $client = Client::where('client_id', $clientId)
+                               ->where('owner_email', $userEmail)
+                               ->where('owner_user_id', $userId)
+                               ->first();
+            }
 
             if (!$client) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Client not found'
+                    'message' => 'Client not found or not owned by authenticated user'
                 ], 404);
             }
 
@@ -175,6 +206,7 @@ class DeveloperPortalController extends Controller
 
     /**
      * Get multiple clients data for developers.numblio.com
+     * Requires user authentication to see only own clients
      * 
      * @param Request $request
      * @return JsonResponse
@@ -182,10 +214,26 @@ class DeveloperPortalController extends Controller
     public function getClients(Request $request): JsonResponse
     {
         try {
+            // Check for user authentication headers
+            $userEmail = $request->header('X-User-Email');
+            $userId = $request->header('X-User-ID');
+            
+            if (!$userEmail) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User authentication required. Please provide X-User-Email header.'
+                ], 401);
+            }
+
             // Optionally filter by client_ids if provided
             $clientIds = $request->input('client_ids', []);
             
-            $query = Client::query();
+            $query = Client::where('owner_email', $userEmail);
+            
+            // If user_id is provided, also filter by that for extra security
+            if ($userId) {
+                $query->where('owner_user_id', $userId);
+            }
             
             if (!empty($clientIds) && is_array($clientIds)) {
                 $query->whereIn('client_id', $clientIds);
@@ -243,6 +291,7 @@ class DeveloperPortalController extends Controller
 
     /**
      * Update client settings from developers.numblio.com
+     * Requires user authentication to update only own clients
      * 
      * @param Request $request
      * @param string $clientId
@@ -251,12 +300,33 @@ class DeveloperPortalController extends Controller
     public function updateClient(Request $request, string $clientId): JsonResponse
     {
         try {
-            $client = Client::where('client_id', $clientId)->first();
+            // Check for user authentication headers
+            $userEmail = $request->header('X-User-Email');
+            $userId = $request->header('X-User-ID');
+            
+            if (!$userEmail) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User authentication required. Please provide X-User-Email header.'
+                ], 401);
+            }
+
+            $client = Client::where('client_id', $clientId)
+                           ->where('owner_email', $userEmail)
+                           ->first();
+
+            // If user_id is provided, also filter by that for extra security
+            if ($userId && $client) {
+                $client = Client::where('client_id', $clientId)
+                               ->where('owner_email', $userEmail)
+                               ->where('owner_user_id', $userId)
+                               ->first();
+            }
 
             if (!$client) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Client not found'
+                    'message' => 'Client not found or not owned by authenticated user'
                 ], 404);
             }
 

@@ -15,9 +15,9 @@ DEVELOPER_PORTAL_API_KEY=test-api-key-123456789
 ### Test Client Aanmaken
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/developer-portal/clients \
+curl -X POST https://accounts.numblio.com/api/v1/developer-portal/clients \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: test-api-key-123456789" \
+  -H "X-API-Key: dG9v-V5p8KX3!bX#ZyL2t3@Q9W!rMf6Jv^pC7xE$" \
   -d '{
     "name": "Test Applicatie",
     "description": "Een test applicatie",
@@ -35,8 +35,8 @@ curl -X POST http://localhost:8000/api/v1/developer-portal/clients \
 
 ```bash
 # Vervang CLIENT_ID met de client_id uit de vorige response
-curl -X GET http://localhost:8000/api/v1/developer-portal/clients/CLIENT_ID \
-  -H "X-API-Key: test-api-key-123456789"
+curl -X GET https://accounts.numblio.com/api/v1/developer-portal/clients/CLIENT_ID \
+  -H "X-API-Key: dG9v-V5p8KX3!bX#ZyL2t3@Q9W!rMf6Jv^pC7xE$"
 ```
 
 ### Test Alle Clients Ophalen

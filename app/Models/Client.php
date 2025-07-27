@@ -21,6 +21,10 @@ class Client extends Model
         'redirect_uris',
         'webhook_url',
         'logout_url',
+        'owner_email',
+        'owner_name',
+        'owner_user_id',
+        'description',
     ];
 
     /**
@@ -74,5 +78,32 @@ class Client extends Model
             'client_id', // Local key on clients table
             'user_id' // Local key on user_services table
         );
+    }
+
+    /**
+     * Get the owner of this client.
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_user_id');
+    }
+
+    /**
+     * Check if a user is the owner of this client.
+     */
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->owner_user_id === $user->id || $this->owner_email === $user->email;
+    }
+
+    /**
+     * Scope to filter clients by owner.
+     */
+    public function scopeOwnedBy($query, User $user)
+    {
+        return $query->where(function ($q) use ($user) {
+            $q->where('owner_user_id', $user->id)
+              ->orWhere('owner_email', $user->email);
+        });
     }
 }
