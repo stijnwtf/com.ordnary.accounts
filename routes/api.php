@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\UserServiceController;
+use App\Http\Controllers\API\DeveloperPortalController;
 use App\Http\Controllers\SSO\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,14 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     // Token validation endpoint
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
+    
+    // Developer Portal API endpoints (voor developers.numblio.com)
+    Route::middleware(['developer.portal'])->prefix('developer-portal')->group(function () {
+        Route::post('/clients', [DeveloperPortalController::class, 'createClient']);
+        Route::get('/clients/{clientId}', [DeveloperPortalController::class, 'getClient']);
+        Route::get('/clients', [DeveloperPortalController::class, 'getClients']);
+        Route::put('/clients/{clientId}', [DeveloperPortalController::class, 'updateClient']);
+    });
 });
 
 // User API routes with authentication

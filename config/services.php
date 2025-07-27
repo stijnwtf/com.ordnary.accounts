@@ -39,4 +39,8 @@ return [
         'secret_key' => env('RECAPTCHA_SECRET_KEY', '6LfequQqAAAAALDQ7NOMeoeuBROa1rOiM7zaFVSq'),
     ],
 
+    'developer_portal' => [
+        'api_key' => env('DEVELOPER_PORTAL_API_KEY'),
+    ],
+
 ];

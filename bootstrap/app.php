@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'adminAuth' => \App\Http\Middleware\AdminAuthenticate::class,
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'developer.portal' => \App\Http\Middleware\DeveloperPortalAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
