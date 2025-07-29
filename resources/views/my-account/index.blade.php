@@ -171,7 +171,7 @@
                                 </a>
                                 <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-info-circle mr-3 text-gray-500"></i>
-                                    FAQ
+                                    Documentation
                                 </a>
                             </div>
                         </div>
