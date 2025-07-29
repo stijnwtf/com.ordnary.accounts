@@ -173,66 +173,8 @@
         </header>
 
         <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8">
-            <!-- Account Information Header Card -->
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 mb-8 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 h-32 relative">
-                    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-                    <!-- Profile picture positioned to overlap the gradient background -->
-                    <div class="absolute -bottom-12 left-8">
-                        <div class="relative">
-                            <img class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-xl"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                alt="{{ $user->first_name }} {{ $user->last_name }}">
-                            <div class="absolute bottom-1 right-1 h-6 w-6 bg-green-400 rounded-full border-3 border-white shadow-md flex items-center justify-center">
-                                <i class="fas fa-check text-white text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pt-16 pb-6 px-8">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                        <div class="flex-1">
-                            <div class="flex items-center space-x-3 mb-2">
-                                <h1 class="text-2xl font-bold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h1>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
-                                    <i class="fas fa-check-circle mr-1"></i>
-                                    {{ lang('status.verified', [], 'layout') }}
-                                </span>
-                            </div>
-                            <p class="text-gray-600 mb-3">{{ $user->email }}</p>
-                            <div class="flex items-center space-x-6 text-sm text-gray-500">
-                                <div class="flex items-center">
-                                    <i class="fas fa-calendar-alt mr-2"></i>
-                                    Joined {{ $user->created_at->format('M Y') }}
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-id-card mr-2"></i>
-                                    ID: {{ substr(md5($user->id), 0, 8) }}
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-globe mr-2"></i>
-                                    {{ $user->lang ?? 'en' }}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4 sm:mt-0 flex space-x-3">
-                            <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                                <i class="fas fa-edit mr-2"></i>
-                                Edit Profile
-                            </button>
-                            <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                                <i class="fas fa-cog mr-2"></i>
-                                Settings
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main container with sidebar and content -->
-            <div class="flex flex-col lg:flex-row gap-8 items-start">
+            <!-- Main container with two cards side by side -->
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
                 <!-- Left Sidebar Section -->
                 <div class="w-full lg:w-1/4 lg:block hidden">
                     <div class="space-y-4">
