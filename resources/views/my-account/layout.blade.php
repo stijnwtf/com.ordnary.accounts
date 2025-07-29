@@ -237,7 +237,7 @@
                                         <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                         {{ lang('sidebar.help_center', [], 'layout') }}
                                     </a>
-                                    <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                    <a href="https://docs.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-info-circle mr-3 text-gray-500"></i>
                                         {{ lang('sidebar.faq', [], 'layout') }}
                                     </a>
