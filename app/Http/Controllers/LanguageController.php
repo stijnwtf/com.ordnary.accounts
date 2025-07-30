@@ -21,19 +21,19 @@ class LanguageController extends Controller
         if (!in_array($language, $availableLanguages)) {
             $language = config('app.fallback_locale', 'en');
         }
-        
+
         // Set session language
         session(['language' => $language]);
-        
+
         // Update user language preference if logged in
         if (auth()->check()) {
             auth()->user()->update(['lang' => $language]);
         }
-        
+
         // Set application locale
         app()->setLocale($language);
-        
+
         // Redirect back to previous page
         return redirect()->back();
     }
-} 
+}

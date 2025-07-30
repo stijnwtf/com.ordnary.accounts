@@ -127,7 +127,7 @@ class DeveloperPortalController extends Controller
             // Check for user authentication headers
             $userEmail = $request->header('X-User-Email');
             $userId = $request->header('X-User-ID');
-            
+
             if (!$userEmail) {
                 return response()->json([
                     'success' => false,
@@ -136,15 +136,15 @@ class DeveloperPortalController extends Controller
             }
 
             $client = Client::where('client_id', $clientId)
-                           ->where('owner_email', $userEmail)
-                           ->first();
+                ->where('owner_email', $userEmail)
+                ->first();
 
             // If user_id is provided, also filter by that for extra security
             if ($userId && $client) {
                 $client = Client::where('client_id', $clientId)
-                               ->where('owner_email', $userEmail)
-                               ->where('owner_user_id', $userId)
-                               ->first();
+                    ->where('owner_email', $userEmail)
+                    ->where('owner_user_id', $userId)
+                    ->first();
             }
 
             if (!$client) {
@@ -217,7 +217,7 @@ class DeveloperPortalController extends Controller
             // Check for user authentication headers
             $userEmail = $request->header('X-User-Email');
             $userId = $request->header('X-User-ID');
-            
+
             if (!$userEmail) {
                 return response()->json([
                     'success' => false,
@@ -227,14 +227,14 @@ class DeveloperPortalController extends Controller
 
             // Optionally filter by client_ids if provided
             $clientIds = $request->input('client_ids', []);
-            
+
             $query = Client::where('owner_email', $userEmail);
-            
+
             // If user_id is provided, also filter by that for extra security
             if ($userId) {
                 $query->where('owner_user_id', $userId);
             }
-            
+
             if (!empty($clientIds) && is_array($clientIds)) {
                 $query->whereIn('client_id', $clientIds);
             }
@@ -303,7 +303,7 @@ class DeveloperPortalController extends Controller
             // Check for user authentication headers
             $userEmail = $request->header('X-User-Email');
             $userId = $request->header('X-User-ID');
-            
+
             if (!$userEmail) {
                 return response()->json([
                     'success' => false,
@@ -312,15 +312,15 @@ class DeveloperPortalController extends Controller
             }
 
             $client = Client::where('client_id', $clientId)
-                           ->where('owner_email', $userEmail)
-                           ->first();
+                ->where('owner_email', $userEmail)
+                ->first();
 
             // If user_id is provided, also filter by that for extra security
             if ($userId && $client) {
                 $client = Client::where('client_id', $clientId)
-                               ->where('owner_email', $userEmail)
-                               ->where('owner_user_id', $userId)
-                               ->first();
+                    ->where('owner_email', $userEmail)
+                    ->where('owner_user_id', $userId)
+                    ->first();
             }
 
             if (!$client) {

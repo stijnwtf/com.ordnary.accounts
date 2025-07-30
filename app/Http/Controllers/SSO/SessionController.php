@@ -96,4 +96,4 @@ class SessionController extends Controller
         return redirect()->route('sessions.index')
             ->with('success', $count . ' verlopen sessies succesvol opgeruimd.');
     }
-} 
+}

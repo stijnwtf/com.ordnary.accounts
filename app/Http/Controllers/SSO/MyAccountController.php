@@ -161,7 +161,7 @@ class MyAccountController extends Controller
     public function subscriptions()
     {
         $user = Auth::user();
-        
+
         // Example data structure for subscriptions
         // In a real implementation, you would fetch this from your subscription database/service
         $subscriptions = [
@@ -201,7 +201,7 @@ class MyAccountController extends Controller
 
         // In production, you would do something like this:
         // $subscriptions = SubscriptionService::getUserSubscriptions($user->id);
-        
+
         Log::info('User subscriptions fetched', [
             'user_id' => $user->id,
             'subscriptions_count' => count($subscriptions)
@@ -229,9 +229,9 @@ class MyAccountController extends Controller
             'phone' => 'nullable|string|max:20',
             'language' => 'required|string|size:2|in:' . implode(',', config('app.available_locales', ['en', 'nl'])),
         ]);
-        
+
         $user = auth()->user();
-        
+
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -239,11 +239,11 @@ class MyAccountController extends Controller
             'phone' => $request->phone,
             'lang' => $request->language,
         ]);
-        
+
         // Set the application language
         app()->setLocale($request->language);
         session(['language' => $request->language]);
-        
+
         return redirect()->back()->with('success', lang('notifications.success', [], 'profile'));
     }
 
@@ -293,7 +293,7 @@ class MyAccountController extends Controller
         $user->save();
 
         // Send verification email
-        Mail::send('emails.verify-recovery-email', ['token' => $token], function($message) use ($user) {
+        Mail::send('emails.verify-recovery-email', ['token' => $token], function ($message) use ($user) {
             $message->to($user->recovery_email);
             $message->subject('Verify Recovery Email');
         });
@@ -499,9 +499,13 @@ class MyAccountController extends Controller
                     ],
                     'legal_basis' => 'GDPR Article 20 - Right to data portability',
                     'data_categories' => [
-                        'Identity Data', 'Contact Data', 'Technical Data', 
-                        'Usage Data', 'Marketing and Communications Data', 
-                        'Security Data', 'Activity Logs'
+                        'Identity Data',
+                        'Contact Data',
+                        'Technical Data',
+                        'Usage Data',
+                        'Marketing and Communications Data',
+                        'Security Data',
+                        'Activity Logs'
                     ],
                     'retention_policy' => [
                         'active_account' => 'Data retained while account is active',
@@ -659,8 +663,8 @@ class MyAccountController extends Controller
             ];
 
             // Generate export metadata summary
-            $totalDataPoints = $loginActivities->count() + $userServices->count() + 
-                             $activeSessions->count();
+            $totalDataPoints = $loginActivities->count() + $userServices->count() +
+                $activeSessions->count();
 
             $exportData['export_metadata']['summary'] = [
                 'total_data_points' => $totalDataPoints,
@@ -672,7 +676,7 @@ class MyAccountController extends Controller
             // Generate filename with timestamp
             $timestamp = now()->format('Y-m-d_H-i-s');
             $filename = "numblio_comprehensive_export_{$user->username}_{$timestamp}.json";
-            
+
             $jsonData = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             Log::info('Comprehensive user data export completed successfully', [

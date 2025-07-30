@@ -21,14 +21,14 @@ class UserServiceController extends Controller
     public function index(): JsonResponse
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
             ], 401);
         }
-        
+
         $services = $user->services()
             ->where('status', 'active')
             ->with('client:id,name,client_id')
@@ -42,18 +42,18 @@ class UserServiceController extends Controller
                     'last_used' => $service->last_used->format('Y-m-d H:i:s'),
                 ];
             });
-            
+
         Log::info('UserServiceController@index: Retrieved user services', [
             'user_id' => $user->id,
             'services_count' => $services->count()
         ]);
-        
+
         return response()->json([
             'success' => true,
             'data' => $services
         ]);
     }
-    
+
     /**
      * Unlink (revoke) a service from the authenticated user.
      *
@@ -72,53 +72,53 @@ class UserServiceController extends Controller
         $request->validate([
             'service_id' => 'required|string'
         ]);
-        
+
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
             ], 401);
         }
-        
+
         $serviceId = $request->input('service_id');
-        
+
         // Find the service connection
         $service = $user->services()
             ->where('client_id', $serviceId)
             ->where('status', 'active')
             ->first();
-            
+
         if (!$service) {
             Log::warning('UserServiceController@unlinkService: Service not found or already revoked', [
                 'user_id' => $user->id,
                 'service_id' => $serviceId
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Service not found or already revoked'
             ], 404);
         }
-        
+
         // Get client details for webhook
         $client = Client::where('client_id', $serviceId)->first();
-        
+
         // Update status to revoked
         $service->status = 'revoked';
         $service->save();
-        
+
         // Delete any active user sessions for this client
         $user->userSessions()
             ->where('client_id', $serviceId)
             ->delete();
-            
+
         Log::info('UserServiceController@unlinkService: Service unlinked', [
             'user_id' => $user->id,
             'service_id' => $serviceId
         ]);
-        
+
         // Send webhook notification to the service if webhook_url is set
         if ($client && !empty($client->webhook_url)) {
             try {
@@ -128,7 +128,7 @@ class UserServiceController extends Controller
                     'service_id' => $serviceId,
                     'timestamp' => now()->toIso8601String()
                 ]);
-                
+
                 Log::info('UserServiceController@unlinkService: Webhook notification sent', [
                     'user_id' => $user->id,
                     'service_id' => $serviceId,
@@ -144,7 +144,7 @@ class UserServiceController extends Controller
                 ]);
             }
         }
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Service successfully unlinked'

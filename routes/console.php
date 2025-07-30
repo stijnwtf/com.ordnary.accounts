@@ -15,14 +15,14 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
     if ($this->option('all')) {
         $users = User::all();
         $this->info('Sending welcome emails to all users...');
-        
+
         $bar = $this->output->createProgressBar(count($users));
         $bar->start();
-        
+
         $successCount = 0;
         $failCount = 0;
         $failedEmails = [];
-        
+
         foreach ($users as $user) {
             try {
                 // Check if the email looks valid before sending
@@ -38,7 +38,7 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
                     $bar->advance();
                     continue;
                 }
-                
+
                 Mail::to($user->email)->send(new WelcomeEmail($user));
                 $successCount++;
             } catch (\Exception $e) {
@@ -58,11 +58,11 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
             }
             $bar->advance();
         }
-        
+
         $bar->finish();
         $this->newLine(2);
         $this->info("Welcome emails processed: {$successCount} succeeded, {$failCount} failed.");
-        
+
         if ($failCount > 0 && $this->confirm('Do you want to see the list of failed emails?')) {
             $this->table(
                 ['User ID', 'Email', 'Reason'],
@@ -75,18 +75,18 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
                 })->toArray()
             );
         }
-        
+
         return;
     }
-    
+
     if ($user) {
         $userModel = User::find($user);
-        
+
         if (!$userModel) {
             $this->error("User with ID {$user} not found.");
             return;
         }
-        
+
         // Check if the email looks valid
         if (!filter_var($userModel->email, FILTER_VALIDATE_EMAIL) && !$this->option('force')) {
             $this->warn("The email address '{$userModel->email}' appears to be invalid.");
@@ -95,7 +95,7 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
                 return;
             }
         }
-        
+
         try {
             Mail::to($userModel->email)->send(new WelcomeEmail($userModel));
             $this->info("Welcome email sent to {$userModel->email}!");
@@ -107,10 +107,10 @@ Artisan::command('email:send-welcome {user?} {--all} {--force}', function ($user
                 'error' => $e->getMessage()
             ]);
         }
-        
+
         return;
     }
-    
+
     $this->error('Please specify either a user ID or use the --all option.');
 })->purpose('Send welcome emails to users')
-  ->addOption('force', null, null, 'Force sending to potentially invalid email addresses');
+    ->addOption('force', null, null, 'Force sending to potentially invalid email addresses');

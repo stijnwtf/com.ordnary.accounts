@@ -49,7 +49,7 @@ Route::middleware('throttle:6,1')->group(function () {
     Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])->middleware('auth')->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
     Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail'])
-                ->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+        ->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
 });
 
 // My Account routes
@@ -90,26 +90,26 @@ Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
 // Legacy admin routes - redirect to new Filament admin panel
 Route::middleware(['adminAuth', 'admin'])->prefix('admin')->group(function () {
     // Redirect dashboard to Filament admin
-    Route::get('/', function() {
+    Route::get('/', function () {
         return redirect('/beheer');
     })->name('admin.dashboard');
-    
+
     // Redirect legacy resource routes to Filament admin
-    Route::get('/clients', function() {
+    Route::get('/clients', function () {
         return redirect('/beheer/clients');
     });
-    Route::get('/users', function() {
+    Route::get('/users', function () {
         return redirect('/beheer/users');
     });
-    Route::get('/sessions', function() {
+    Route::get('/sessions', function () {
         return redirect('/beheer/user-sessions');
     });
-    
+
     // Keep API-like routes that might be used by external systems
     Route::put('/clients/{client}/regenerate-credentials', [ClientController::class, 'regenerateCredentials'])->name('clients.regenerate-credentials');
     Route::post('/sessions/bulk-destroy', [SessionController::class, 'bulkDestroy'])->name('sessions.bulk-destroy');
     Route::post('/sessions/destroy-expired', [SessionController::class, 'destroyExpired'])->name('sessions.destroy-expired');
-    
+
     // Keep settings routes if they have special functionality
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');

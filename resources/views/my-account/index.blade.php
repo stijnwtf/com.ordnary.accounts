@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,14 +54,30 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.6; transform: scale(0.98); }
+            0% {
+                opacity: 0.6;
+                transform: scale(0.98);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.6;
+                transform: scale(0.98);
+            }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Prevent content flash */
@@ -74,14 +91,18 @@
         }
 
         .tab-content {
-            min-height: 380px; /* Zorgt voor consistente hoogte tussen tabbladen */
+            min-height: 380px;
+            /* Zorgt voor consistente hoogte tussen tabbladen */
         }
+
         .sidebar-item {
             transition: all 0.2s ease;
         }
+
         .sidebar-item:hover {
             background-color: rgba(59, 130, 246, 0.05);
         }
+
         .sidebar-item.active {
             border-left: 3px solid #3b82f6;
             background-color: rgba(59, 130, 246, 0.1);
@@ -99,6 +120,7 @@
     <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
+
 <body>
     <!-- Loading screen -->
     <div id="loading-screen">
@@ -116,18 +138,20 @@
                         <div class="p-5 border-b border-gray-200">
                             <div class="flex items-center space-x-3">
                                 <img class="h-12 w-12 rounded-full object-cover border-2 border-blue-100"
-                                     src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
-                                     alt="{{ $user->name }}">
+                                    src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                                    alt="{{ $user->name }}">
                                 <div>
                                     <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
                                     <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                                 </div>
                             </div>
                             <div class="mt-3 flex">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
                                     <i class="fas fa-check-circle mr-1"></i> Verified
                                 </span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                                     <i class="fas fa-user-shield mr-1"></i> Active
                                 </span>
                             </div>
@@ -139,23 +163,28 @@
                                 <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                     Account Settings
                                 </div>
-                                <a href="#profile" id="sidebar-profile" class="sidebar-item active text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="#profile" id="sidebar-profile"
+                                    class="sidebar-item active text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-user mr-3 text-gray-500"></i>
                                     Profile Information
                                 </a>
-                                <a href="#password" id="sidebar-password" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="#password" id="sidebar-password"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-lock mr-3 text-gray-500"></i>
                                     Password
                                 </a>
-                                <a href="#security" id="sidebar-security" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="#security" id="sidebar-security"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
                                     Security
                                 </a>
-                                <a href="#notifications" id="sidebar-notifications" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="#notifications" id="sidebar-notifications"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-bell mr-3 text-gray-500"></i>
                                     Notifications
                                 </a>
-                                <a href="#connected" id="sidebar-connected" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="#connected" id="sidebar-connected"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-link mr-3 text-gray-500"></i>
                                     Connections
                                 </a>
@@ -165,11 +194,13 @@
                                 <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                     Support
                                 </div>
-                                <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="https://support.numblio.com"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                     Help Center
                                 </a>
-                                <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                                <a href="/faq"
+                                    class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-info-circle mr-3 text-gray-500"></i>
                                     Documentation
                                 </a>
@@ -178,7 +209,8 @@
 
                         <!-- Logout Button and Account ID -->
                         <div class="px-4 py-4 border-t border-gray-200">
-                            <a href="{{ route('logout') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4">
+                            <a href="{{ route('logout') }}"
+                                class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4">
                                 <i class="fas fa-sign-out-alt mr-2"></i> Log out
                             </a>
                             <div class="flex items-center justify-between">
@@ -207,58 +239,62 @@
                         <!-- Welcome header -->
                         <div class="p-6 border-b border-gray-200">
                             <h2 class="text-xl font-bold text-gray-900">Welcome back, {{ $user->name }}</h2>
-                            <p class="text-sm text-gray-600 mt-1">Manage your personal information and security settings for your Numblio-account.</p>
+                            <p class="text-sm text-gray-600 mt-1">Manage your personal information and security settings
+                                for your Numblio-account.</p>
                         </div>
 
                         <!-- Success Message -->
                         @if (session('status'))
-                        <div class="mx-6 mt-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-green-800">Success!</h3>
-                                    <div class="mt-1 text-sm text-green-700">
-                                        {{ session('status') }}
+                            <div class="mx-6 mt-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-green-800">Success!</h3>
+                                        <div class="mt-1 text-sm text-green-700">
+                                            {{ session('status') }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
                         <!-- Error Message -->
                         @if ($errors->any())
-                        <div class="mx-6 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-red-800">Something went wrong.</h3>
-                                    <div class="mt-1 text-sm text-red-700">
-                                        <ul class="list-disc pl-4">
-                                            @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
+                            <div class="mx-6 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-red-800">Something went wrong.</h3>
+                                        <div class="mt-1 text-sm text-red-700">
+                                            <ul class="list-disc pl-4">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
                         <!-- Content Sections -->
                         <div class="px-6 pt-6">
                             <!-- Hidden section tabs for mobile -->
                             <div class="lg:hidden flex flex-wrap border-b border-gray-200 mb-6">
-                                <button id="profile-tab" class="px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-medium text-sm flex items-center">
+                                <button id="profile-tab"
+                                    class="px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-medium text-sm flex items-center">
                                     <i class="fas fa-user mr-2"></i> Profile
                                 </button>
-                                <button id="password-tab" class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
+                                <button id="password-tab"
+                                    class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
                                     <i class="fas fa-lock mr-2"></i> Password
                                 </button>
-                                <button id="security-tab" class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
+                                <button id="security-tab"
+                                    class="px-4 py-2 text-gray-500 font-medium text-sm flex items-center">
                                     <i class="fas fa-shield-alt mr-2"></i> Security
                                 </button>
                             </div>
@@ -267,98 +303,118 @@
                             <div id="profile-content" class="tab-content">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Personal information</h3>
-                                    <p class="text-sm text-gray-600">Update your personal information to personalize your Numblio experience.</p>
+                                    <p class="text-sm text-gray-600">Update your personal information to personalize
+                                        your Numblio experience.</p>
                                 </div>
                                 <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
                                     @csrf
 
                                     <!-- Name Input -->
                                     <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Numblio ID</label>
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Numblio
+                                            ID</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-link text-gray-400"></i>
                                             </div>
-                                            <input type="text" placeholder="idnblo_12345678" name="name" id="name" value="{{ $user->numblio_id }}" required
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
+                                            <input type="text" placeholder="idnblo_12345678" name="name" id="name"
+                                                value="{{ $user->numblio_id }}" required
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('name')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
+                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                         <p class="mt-1 text-xs text-gray-500">{{$user->numblio_id}}.</p>
                                     </div>
 
                                     <!-- Email Input -->
                                     <div>
-                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                        <label for="email"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-envelope text-gray-400"></i>
                                             </div>
-                                            <input placeholder="john.doe@example.com" type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
+                                            <input placeholder="john.doe@example.com" type="email" name="email"
+                                                id="email" value="{{ old('email', $user->email) }}" required
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('email')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
+                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                {{ $message }}
+                                            </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">This email address is used for login and communication.</p>
+                                        <p class="mt-1 text-xs text-gray-500">This email address is used for login and
+                                            communication.</p>
                                     </div>
 
                                     <!-- Additional Fields -->
                                     <div>
-                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-gray-400">(Optional)</span></label>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone
+                                            Number <span class="text-gray-400">(Optional)</span></label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-phone text-gray-400"></i>
                                             </div>
-                                            <input placeholder="+31 6 12345678" type="tel" name="phone" id="phone" value="{{ old('phone', $user->phone ?? '') }}"
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('phone') ? 'border-red-500' : 'border-gray-300' }}">
+                                            <input placeholder="+31 6 12345678" type="tel" name="phone" id="phone"
+                                                value="{{ old('phone', $user->phone ?? '') }}"
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('phone') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('phone')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
+                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                {{ $message }}
+                                            </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">Used for account recovery and important notifications.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Used for account recovery and important
+                                            notifications.</p>
                                     </div>
 
                                     <!-- Language Preference -->
                                     <div>
-                                        <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Language Preference</label>
+                                        <label for="language"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Language
+                                            Preference</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-globe text-gray-400"></i>
                                             </div>
                                             <select name="language" id="language"
-                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
                                                 <option value="nl" {{ (old('language', $user->lang ?? 'nl') == 'nl') ? 'selected' : '' }}>Nederlands</option>
                                                 <option value="en" {{ (old('language', $user->lang ?? 'nl') == 'en') ? 'selected' : '' }}>English</option>
                                                 <option value="de" {{ (old('language', $user->lang ?? 'nl') == 'de') ? 'selected' : '' }}>Deutsch</option>
                                                 <option value="fr" {{ (old('language', $user->lang ?? 'nl') == 'fr') ? 'selected' : '' }}>Français</option>
                                             </select>
                                         </div>
-                                        <p class="mt-1 text-xs text-gray-500">Choose your preferred language for the platform.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Choose your preferred language for the
+                                            platform.</p>
                                     </div>
 
                                     <!-- Account Info -->
                                     <div class="pt-4 border-t border-gray-200 space-y-2">
                                         <p class="text-xs text-gray-500">
-                                            <span class="font-medium">Account created at:</span> {{ $user->created_at->format('d-m-Y') }}
+                                            <span class="font-medium">Account created at:</span>
+                                            {{ $user->created_at->format('d-m-Y') }}
                                         </p>
                                         <p class="text-xs text-gray-500">
-                                            <span class="font-medium">Last update:</span> {{ $user->updated_at->format('d-m-Y') }}
+                                            <span class="font-medium">Last update:</span>
+                                            {{ $user->updated_at->format('d-m-Y') }}
                                         </p>
                                         <p class="text-xs text-gray-500">
-                                            <span class="font-medium">Last login:</span> {{ now()->subDays(rand(0, 5))->format('d-m-Y H:i') }}
+                                            <span class="font-medium">Last login:</span>
+                                            {{ now()->subDays(rand(0, 5))->format('d-m-Y H:i') }}
                                             <span class="text-xs text-gray-400">(from {{ request()->ip() }})</span>
                                         </p>
                                         <p class="text-xs text-gray-500">
                                             <span class="font-medium">Account type:</span>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                                 <i class="fas fa-star mr-1"></i> Standard
                                             </span>
                                         </p>
@@ -366,8 +422,7 @@
 
                                     <!-- Submit Button for Profile Form -->
                                     <div class="pb-6 flex justify-end">
-                                        <button
-                                            type="submit"
+                                        <button type="submit"
                                             class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                             <i class="fas fa-save mr-2"></i> Confirm changes
                                         </button>
@@ -379,7 +434,8 @@
                             <div id="password-content" class="tab-content hidden">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Change your password</h3>
-                                    <p class="text-sm text-gray-600">Make sure you have a strong password that you don't use on other websites.</p>
+                                    <p class="text-sm text-gray-600">Make sure you have a strong password that you don't
+                                        use on other websites.</p>
                                 </div>
 
                                 <!-- Password Strength Meter -->
@@ -390,12 +446,15 @@
                                         </div>
                                         <div>
                                             <h4 class="text-sm font-medium text-yellow-800">Password security check</h4>
-                                            <p class="text-xs text-yellow-700 mt-1">Your password was last changed {{ now()->subMonths(rand(2, 6))->format('d-m-Y') }}</p>
+                                            <p class="text-xs text-yellow-700 mt-1">Your password was last changed
+                                                {{ now()->subMonths(rand(2, 6))->format('d-m-Y') }}</p>
                                             <div class="mt-2">
                                                 <div class="w-full bg-gray-200 rounded-full h-2">
-                                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%">
+                                                    </div>
                                                 </div>
-                                                <p class="text-xs text-yellow-700 mt-1">Your password strength is <span class="font-medium">good</span>.</p>
+                                                <p class="text-xs text-yellow-700 mt-1">Your password strength is <span
+                                                        class="font-medium">good</span>.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -406,84 +465,101 @@
 
                                     <!-- Current Password Input -->
                                     <div>
-                                        <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current password</label>
+                                        <label for="current_password"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Current
+                                            password</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-lock text-gray-400"></i>
                                             </div>
-                                            <input type="password" name="current_password" id="current_password" required
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
+                                            <input type="password" name="current_password" id="current_password"
+                                                required
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                                <button type="button"
+                                                    class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </div>
                                         @error('current_password')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
+                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                {{ $message }}
+                                            </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">Enter your current password for verification.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Enter your current password for
+                                            verification.</p>
                                     </div>
 
                                     <!-- New Password Input -->
                                     <div>
-                                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New password</label>
+                                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New
+                                            password</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-lock text-gray-400"></i>
                                             </div>
                                             <input type="password" name="password" id="password" required
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                                <button type="button"
+                                                    class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </div>
                                         @error('password')
-                                        <p class="mt-1 text-sm text-red-600 flex items-center">
-                                            {{ $message }}
-                                        </p>
+                                            <p class="mt-1 text-sm text-red-600 flex items-center">
+                                                {{ $message }}
+                                            </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">Use at least 8 characters with letters, numbers and symbols.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Use at least 8 characters with letters,
+                                            numbers and symbols.</p>
                                     </div>
 
                                     <!-- Confirm Password Input -->
                                     <div>
-                                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
+                                        <label for="password_confirmation"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Confirm new
+                                            password</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-lock text-gray-400"></i>
                                             </div>
-                                            <input type="password" name="password_confirmation" id="password_confirmation" required
-                                                   class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            <input type="password" name="password_confirmation"
+                                                id="password_confirmation" required
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                                <button type="button"
+                                                    class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <p class="mt-1 text-xs text-gray-500">Enter your new password again to confirm.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Enter your new password again to confirm.
+                                        </p>
                                     </div>
 
                                     <!-- Password Security Tips -->
                                     <div class="p-4 bg-blue-50 rounded-lg mt-4">
-                                        <h4 class="text-sm font-medium text-blue-800 mb-2">Tips for a strong password:</h4>
+                                        <h4 class="text-sm font-medium text-blue-800 mb-2">Tips for a strong password:
+                                        </h4>
                                         <ul class="text-xs text-blue-700 list-disc pl-4 space-y-1">
                                             <li>Use at least 8 characters</li>
                                             <li>Combine upper and lower case letters</li>
                                             <li>Include numbers and symbols (e.g. !@#$%)</li>
-                                            <li>Avoid easily guessable information such as your name or date of birth</li>
+                                            <li>Avoid easily guessable information such as your name or date of birth
+                                            </li>
                                             <li>Use a unique password for each website</li>
                                         </ul>
                                     </div>
 
                                     <!-- Submit Button for Password Form -->
                                     <div class="pb-6 flex justify-end">
-                                        <button
-                                            type="submit"
+                                        <button type="submit"
                                             class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                             <i class="fas fa-key mr-2"></i> Confirm changes
                                         </button>
@@ -495,7 +571,8 @@
                             <div id="security-content" class="tab-content hidden">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Account security</h3>
-                                    <p class="text-sm text-gray-600">Enhance the security of your Numblio account with additional protection measures.</p>
+                                    <p class="text-sm text-gray-600">Enhance the security of your Numblio account with
+                                        additional protection measures.</p>
                                 </div>
 
                                 <!-- Security Overview Card -->
@@ -503,35 +580,44 @@
                                     <h4 class="text-sm font-medium text-green-800 mb-3">Security status</h4>
                                     <div class="space-y-4">
                                         <div class="flex items-center">
-                                            <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
                                                 <i class="fas fa-check text-white text-xs"></i>
                                             </div>
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-700">Password protection</p>
-                                                <p class="text-xs text-gray-500">Your account is protected with a strong password</p>
+                                                <p class="text-xs text-gray-500">Your account is protected with a strong
+                                                    password</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center">
-                                            <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3">
                                                 <i class="fas fa-times text-red-500 text-xs"></i>
                                             </div>
                                             <div class="flex-1">
-                                                <p class="text-sm font-medium text-gray-700">Two-factor authentication</p>
-                                                <p class="text-xs text-gray-500">Add an extra layer of security by enabling 2FA</p>
+                                                <p class="text-sm font-medium text-gray-700">Two-factor authentication
+                                                </p>
+                                                <p class="text-xs text-gray-500">Add an extra layer of security by
+                                                    enabling 2FA</p>
                                             </div>
-                                            <a href="{{ route('account.security.setup-2fa') }}" class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                            <a href="{{ route('account.security.setup-2fa') }}"
+                                                class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
                                                 Enable
                                             </a>
                                         </div>
                                         <div class="flex items-center">
-                                            <div class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
                                                 <i class="fas fa-exclamation text-yellow-600 text-xs"></i>
                                             </div>
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-700">Recovery email</p>
-                                                <p class="text-xs text-gray-500">Set up a recovery email for account access</p>
+                                                <p class="text-xs text-gray-500">Set up a recovery email for account
+                                                    access</p>
                                             </div>
-                                            <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                            <button
+                                                class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
                                                 Setup
                                             </button>
                                         </div>
@@ -547,38 +633,44 @@
                                         </h4>
                                     </div>
                                     <div class="p-4">
-                                        <p class="text-sm text-gray-600 mb-4">Add an extra layer of security to your account by requiring both your password and a verification code from your mobile phone to log in.</p>
+                                        <p class="text-sm text-gray-600 mb-4">Add an extra layer of security to your
+                                            account by requiring both your password and a verification code from your
+                                            mobile phone to log in.</p>
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
                                                 @if($user->hasTwoFactorEnabled())
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    <i class="fas fa-check-circle mr-1"></i> Enabled
-                                                </span>
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        <i class="fas fa-check-circle mr-1"></i> Enabled
+                                                    </span>
                                                 @else
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    <i class="fas fa-times-circle mr-1"></i> Not enabled
-                                                </span>
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                        <i class="fas fa-times-circle mr-1"></i> Not enabled
+                                                    </span>
                                                 @endif
                                             </div>
                                             @if($user->hasTwoFactorEnabled())
-                                            <div class="flex space-x-2">
-                                                <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.remove('hidden')"
-                                                    class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                                    <i class="fas fa-times-circle mr-1"></i> Disable 2FA
-                                                </button>
-                                                <form action="{{ route('account.security.regenerate-recovery-codes') }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                                        <i class="fas fa-sync-alt mr-1"></i> Regenerate Recovery Codes
+                                                <div class="flex space-x-2">
+                                                    <button type="button"
+                                                        onclick="document.getElementById('disable-2fa-modal').classList.remove('hidden')"
+                                                        class="px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                        <i class="fas fa-times-circle mr-1"></i> Disable 2FA
                                                     </button>
-                                                </form>
-                                            </div>
+                                                    <form action="{{ route('account.security.regenerate-recovery-codes') }}"
+                                                        method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                            <i class="fas fa-sync-alt mr-1"></i> Regenerate Recovery Codes
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @else
-                                            <a href="{{ route('account.security.setup-2fa') }}"
-                                                class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                                <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
-                                            </a>
+                                                <a href="{{ route('account.security.setup-2fa') }}"
+                                                    class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    <i class="fas fa-plus-circle mr-1"></i> Enable 2FA
+                                                </a>
                                             @endif
                                         </div>
                                     </div>
@@ -593,56 +685,77 @@
                                         </h4>
                                     </div>
                                     <div class="p-4">
-                                        <p class="text-sm text-gray-600 mb-4">Monitor your recent login activity to ensure your account hasn't been compromised.</p>
+                                        <p class="text-sm text-gray-600 mb-4">Monitor your recent login activity to
+                                            ensure your account hasn't been compromised.</p>
                                         <div class="overflow-hidden rounded-lg border border-gray-200">
                                             <table class="min-w-full divide-y divide-gray-200">
                                                 <thead class="bg-gray-50">
                                                     <tr>
-                                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
-                                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                                                        <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th scope="col"
+                                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            Date & Time</th>
+                                                        <th scope="col"
+                                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            Device</th>
+                                                        <th scope="col"
+                                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            Location</th>
+                                                        <th scope="col"
+                                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            Status</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="bg-white divide-y divide-gray-200">
                                                     <tr>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->format('d-m-Y H:i') }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            {{ now()->format('d-m-Y H:i') }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
                                                             <div class="flex items-center">
-                                                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome on macOS
+                                                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome
+                                                                on macOS
                                                             </div>
                                                         </td>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Amsterdam, NL</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            Amsterdam, NL</td>
                                                         <td class="px-4 py-2 whitespace-nowrap">
-                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                            <span
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                                 <i class="fas fa-check-circle mr-1"></i> Current
                                                             </span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->subDays(2)->format('d-m-Y H:i') }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            {{ now()->subDays(2)->format('d-m-Y H:i') }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
                                                             <div class="flex items-center">
-                                                                <i class="fas fa-mobile-alt mr-1 text-gray-400"></i> Mobile App
+                                                                <i class="fas fa-mobile-alt mr-1 text-gray-400"></i>
+                                                                Mobile App
                                                             </div>
                                                         </td>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Amsterdam, NL</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            Amsterdam, NL</td>
                                                         <td class="px-4 py-2 whitespace-nowrap">
-                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                            <span
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                                 <i class="fas fa-check-circle mr-1"></i> Success
                                                             </span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">{{ now()->subDays(5)->format('d-m-Y H:i') }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            {{ now()->subDays(5)->format('d-m-Y H:i') }}</td>
                                                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
                                                             <div class="flex items-center">
-                                                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome on Windows
+                                                                <i class="fas fa-laptop mr-1 text-gray-400"></i> Chrome
+                                                                on Windows
                                                             </div>
                                                         </td>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">Rotterdam, NL</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                            Rotterdam, NL</td>
                                                         <td class="px-4 py-2 whitespace-nowrap">
-                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                            <span
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                                 <i class="fas fa-check-circle mr-1"></i> Success
                                                             </span>
                                                         </td>
@@ -667,23 +780,28 @@
                                         </h4>
                                     </div>
                                     <div class="p-4">
-                                        <p class="text-sm text-gray-600 mb-4">Set up recovery options to help you regain access to your account if you lose your password.</p>
+                                        <p class="text-sm text-gray-600 mb-4">Set up recovery options to help you regain
+                                            access to your account if you lose your password.</p>
                                         <div class="space-y-4">
                                             <div class="flex items-center justify-between">
                                                 <div>
                                                     <h5 class="text-sm font-medium text-gray-900">Recovery Email</h5>
-                                                    <p class="text-xs text-gray-500">A backup email address for account recovery</p>
+                                                    <p class="text-xs text-gray-500">A backup email address for account
+                                                        recovery</p>
                                                 </div>
-                                                <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                                <button
+                                                    class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
                                                     <i class="fas fa-plus-circle mr-1"></i> Add
                                                 </button>
                                             </div>
                                             <div class="flex items-center justify-between">
                                                 <div>
                                                     <h5 class="text-sm font-medium text-gray-900">Recovery Phone</h5>
-                                                    <p class="text-xs text-gray-500">A phone number for account recovery via SMS</p>
+                                                    <p class="text-xs text-gray-500">A phone number for account recovery
+                                                        via SMS</p>
                                                 </div>
-                                                <button class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
+                                                <button
+                                                    class="px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none">
                                                     <i class="fas fa-plus-circle mr-1"></i> Add
                                                 </button>
                                             </div>
@@ -696,7 +814,8 @@
                             <div id="notifications-content" class="tab-content hidden">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Notifications</h3>
-                                    <p class="text-sm text-gray-600">Manage your notification preferences and settings.</p>
+                                    <p class="text-sm text-gray-600">Manage your notification preferences and settings.
+                                    </p>
                                 </div>
 
                                 <!-- Notifications Overview Card -->
@@ -707,7 +826,8 @@
                                         </div>
                                         <div>
                                             <h4 class="text-md font-semibold text-gray-900">Notification settings</h4>
-                                            <p class="text-sm text-gray-600">Customize your notification preferences to receive relevant updates and alerts.</p>
+                                            <p class="text-sm text-gray-600">Customize your notification preferences to
+                                                receive relevant updates and alerts.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -717,42 +837,49 @@
 
                                     <!-- Email Notifications -->
                                     <div>
-                                        <label for="email_notifications" class="block text-sm font-medium text-gray-700 mb-1">Email Notifications</label>
+                                        <label for="email_notifications"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Email
+                                            Notifications</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-envelope text-gray-400"></i>
                                             </div>
                                             <select name="email_notifications" id="email_notifications"
-                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email_notifications') ? 'border-red-500' : 'border-gray-300' }}">
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email_notifications') ? 'border-red-500' : 'border-gray-300' }}">
                                                 <option value="daily">Daily summary</option>
                                                 <option value="weekly">Weekly summary</option>
                                                 <option value="none">No email notifications</option>
                                             </select>
                                         </div>
-                                        <p class="mt-1 text-xs text-gray-500">Choose the frequency of email notifications.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Choose the frequency of email
+                                            notifications.</p>
                                     </div>
 
                                     <!-- Push Notifications -->
                                     <div>
-                                        <label for="push_notifications" class="block text-sm font-medium text-gray-700 mb-1">Push Notifications</label>
+                                        <label for="push_notifications"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Push
+                                            Notifications</label>
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <i class="fas fa-mobile-alt text-gray-400"></i>
                                             </div>
                                             <select name="push_notifications" id="push_notifications"
-                                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('push_notifications') ? 'border-red-500' : 'border-gray-300' }}">
+                                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('push_notifications') ? 'border-red-500' : 'border-gray-300' }}">
                                                 <option value="all">All notifications</option>
                                                 <option value="important">Important notifications only</option>
                                                 <option value="none">No push notifications</option>
                                             </select>
                                         </div>
-                                        <p class="mt-1 text-xs text-gray-500">Choose the types of notifications you want to receive via push notifications.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Choose the types of notifications you want
+                                            to receive via push notifications.</p>
                                     </div>
 
                                     <!-- Submit Button for Notifications Form -->
                                     <div class="pb-6 flex justify-end">
-                                        <button
-                                            type="submit"
+                                        <button type="submit"
                                             class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                             <i class="fas fa-save mr-2"></i> Confirm changes
                                         </button>
@@ -764,7 +891,8 @@
                             <div id="connected-content" class="tab-content hidden">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Connected services</h3>
-                                    <p class="text-sm text-gray-600">Manage the services and applications connected to your Numblio account.</p>
+                                    <p class="text-sm text-gray-600">Manage the services and applications connected to
+                                        your Numblio account.</p>
                                 </div>
 
                                 <!-- Connected Services Overview -->
@@ -775,7 +903,8 @@
                                         </div>
                                         <div>
                                             <h4 class="text-md font-semibold text-gray-900">Connected applications</h4>
-                                            <p class="text-sm text-gray-600">View and manage third-party applications that have access to your Numblio account.</p>
+                                            <p class="text-sm text-gray-600">View and manage third-party applications
+                                                that have access to your Numblio account.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -787,23 +916,28 @@
                                         <div class="p-4">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center">
-                                                    <img src="https://cdn.cdnlogo.com/logos/g/35/google-icon.svg" alt="Google" class="h-8 w-8 mr-3">
+                                                    <img src="https://cdn.cdnlogo.com/logos/g/35/google-icon.svg"
+                                                        alt="Google" class="h-8 w-8 mr-3">
                                                     <div>
                                                         <h5 class="text-sm font-medium text-gray-900">Google</h5>
-                                                        <p class="text-xs text-gray-500">Connected on {{ now()->subMonths(rand(1, 6))->format('d-m-Y') }}</p>
+                                                        <p class="text-xs text-gray-500">Connected on
+                                                            {{ now()->subMonths(rand(1, 6))->format('d-m-Y') }}</p>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                         <i class="fas fa-check-circle mr-1"></i> Connected
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="mt-3 flex items-center justify-between">
                                                 <div class="text-xs text-gray-500">
-                                                    <p>This connection allows you to log in using your Google account.</p>
+                                                    <p>This connection allows you to log in using your Google account.
+                                                    </p>
                                                 </div>
-                                                <button class="px-3 py-1 rounded text-xs font-medium text-red-600 hover:text-red-800 focus:outline-none border border-red-200 hover:bg-red-50">
+                                                <button
+                                                    class="px-3 py-1 rounded text-xs font-medium text-red-600 hover:text-red-800 focus:outline-none border border-red-200 hover:bg-red-50">
                                                     <i class="fas fa-unlink mr-1"></i> Disconnect
                                                 </button>
                                             </div>
@@ -813,7 +947,8 @@
 
                                 <!-- Add More Connections Button -->
                                 <div class="pb-6 flex justify-end mt-6">
-                                    <button class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
+                                    <button
+                                        class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
                                         <i class="fas fa-plus-circle mr-2"></i> Connect more services
                                     </button>
                                 </div>
@@ -830,7 +965,8 @@
         <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
         <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div class="absolute top-0 right-0 -mr-12 pt-2">
-                <button id="close-sidebar" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <button id="close-sidebar"
+                    class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span class="sr-only">Close sidebar</span>
                     <i class="fas fa-times text-white text-2xl"></i>
                 </button>
@@ -846,8 +982,8 @@
                 <div class="border-t border-b border-gray-200 py-4 px-4 mb-4">
                     <div class="flex items-center">
                         <img class="h-10 w-10 rounded-full object-cover border-2 border-blue-100"
-                             src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
-                             alt="{{ $user->name }}">
+                            src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=3b82f6&background=dbeafe"
+                            alt="{{ $user->name }}">
                         <div class="ml-3">
                             <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
                             <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
@@ -855,23 +991,28 @@
                     </div>
                 </div>
                 <nav class="px-2 space-y-1">
-                    <a href="#profile" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="#profile"
+                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-user mr-4 text-gray-500"></i>
                         Profile
                     </a>
-                    <a href="#password" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="#password"
+                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-lock mr-4 text-gray-500"></i>
                         Password
                     </a>
-                    <a href="#security" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="#security"
+                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-shield-alt mr-4 text-gray-500"></i>
                         Security
                     </a>
-                    <a href="#notifications" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="#notifications"
+                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-bell mr-4 text-gray-500"></i>
                         Notifications
                     </a>
-                    <a href="#connected" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="#connected"
+                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-link mr-4 text-gray-500"></i>
                         Connected Services
                     </a>
@@ -885,7 +1026,8 @@
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Disable Two-Factor Authentication</h3>
-                <p class="text-sm text-gray-500 mb-4">Please enter your 2FA verification code to disable two-factor authentication.</p>
+                <p class="text-sm text-gray-500 mb-4">Please enter your 2FA verification code to disable two-factor
+                    authentication.</p>
 
                 <form action="{{ route('account.security.disable-2fa') }}" method="POST">
                     @csrf
@@ -894,9 +1036,7 @@
                         <div class="mt-1">
                             <input type="text" name="code" id="code" required
                                 class="block w-full px-4 py-2 text-sm border-gray-300 rounded-md shadow-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
-                                placeholder="Enter 6-digit code"
-                                pattern="[0-9]{6}"
-                                maxlength="6">
+                                placeholder="Enter 6-digit code" pattern="[0-9]{6}" maxlength="6">
                         </div>
                         @error('code')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -904,7 +1044,8 @@
                     </div>
 
                     <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="document.getElementById('disable-2fa-modal').classList.add('hidden')"
+                        <button type="button"
+                            onclick="document.getElementById('disable-2fa-modal').classList.add('hidden')"
                             class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                             Cancel
                         </button>
@@ -920,20 +1061,20 @@
 
     <script>
         // Loading screen handling
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Hide loading screen after DOM content is loaded
-            setTimeout(function() {
+            setTimeout(function () {
                 document.body.classList.add('loaded');
             }, 300); // Small delay to ensure smooth transition
         });
 
         // Fallback for slow connections - hide loading screen after max wait time
-        setTimeout(function() {
+        setTimeout(function () {
             document.body.classList.add('loaded');
         }, 2000);
 
         // Tab functionality with lazy loading for better performance
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Tab elements
             const profileTab = document.getElementById('profile-tab');
             const passwordTab = document.getElementById('password-tab');
@@ -1002,62 +1143,62 @@
             }
 
             // Sidebar click events
-            sidebarProfile.addEventListener('click', function(e) {
+            sidebarProfile.addEventListener('click', function (e) {
                 e.preventDefault();
                 activateTab(profileContent, sidebarProfile);
             });
 
-            sidebarPassword.addEventListener('click', function(e) {
+            sidebarPassword.addEventListener('click', function (e) {
                 e.preventDefault();
                 activateTab(passwordContent, sidebarPassword);
             });
 
-            sidebarSecurity.addEventListener('click', function(e) {
+            sidebarSecurity.addEventListener('click', function (e) {
                 e.preventDefault();
                 activateTab(securityContent, sidebarSecurity);
             });
 
-            sidebarNotifications.addEventListener('click', function(e) {
+            sidebarNotifications.addEventListener('click', function (e) {
                 e.preventDefault();
                 activateTab(notificationsContent, sidebarNotifications);
             });
 
-            sidebarConnected.addEventListener('click', function(e) {
+            sidebarConnected.addEventListener('click', function (e) {
                 e.preventDefault();
                 activateTab(connectedContent, sidebarConnected);
             });
 
             // Mobile tab events
             if (profileTab) {
-                profileTab.addEventListener('click', function() {
+                profileTab.addEventListener('click', function () {
                     activateTab(profileContent, sidebarProfile);
                 });
 
-                passwordTab.addEventListener('click', function() {
+                passwordTab.addEventListener('click', function () {
                     activateTab(passwordContent, sidebarPassword);
                 });
 
-                securityTab.addEventListener('click', function() {
+                securityTab.addEventListener('click', function () {
                     activateTab(securityContent, sidebarSecurity);
                 });
             }
 
             // Mobile menu functionality
-            mobileMenuButton.addEventListener('click', function() {
+            mobileMenuButton.addEventListener('click', function () {
                 mobileSidebar.classList.remove('hidden');
             });
 
-            closeSidebar.addEventListener('click', function() {
+            closeSidebar.addEventListener('click', function () {
                 mobileSidebar.classList.add('hidden');
             });
 
             // Mobile navigation links
             mobileNavLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                     e.preventDefault();
                     const href = this.getAttribute('href').substring(1);
 
-                    switch(href) {
+                    switch (href) {
                         case 'profile':
                             activateTab(profileContent, sidebarProfile);
                             break;
@@ -1080,7 +1221,7 @@
             // Password visibility toggle
             const passwordToggles = document.querySelectorAll('.password-toggle');
             passwordToggles.forEach(toggle => {
-                toggle.addEventListener('click', function() {
+                toggle.addEventListener('click', function () {
                     const input = this.closest('.relative').querySelector('input');
                     const icon = this.querySelector('i');
 
@@ -1123,4 +1264,5 @@
         });
     </script>
 </body>
+
 </html>

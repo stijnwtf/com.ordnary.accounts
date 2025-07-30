@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     // Token validation endpoint
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
-    
+
     // Developer Portal API endpoints (voor developers.numblio.com)
     Route::middleware(['developer.portal'])->prefix('developer-portal')->group(function () {
         Route::post('/clients', [DeveloperPortalController::class, 'createClient']);

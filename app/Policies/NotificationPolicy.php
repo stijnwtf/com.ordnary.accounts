@@ -41,4 +41,4 @@ class NotificationPolicy
     {
         return $user->id === $notification->user_id || $user->is_admin;
     }
-} 
+}

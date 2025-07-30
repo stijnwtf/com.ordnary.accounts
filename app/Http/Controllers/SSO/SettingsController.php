@@ -27,7 +27,7 @@ class SettingsController extends Controller
             'timezone' => config('app.timezone'),
             'locale' => config('app.locale'),
         ];
-        
+
         // Haal systeeminformatie op
         $systemInfo = [
             'php_version' => phpversion(),
@@ -36,10 +36,10 @@ class SettingsController extends Controller
             'database' => config('database.connections.' . config('database.default') . '.driver'),
             'database_name' => config('database.connections.' . config('database.default') . '.database'),
         ];
-        
+
         return view('admin.settings.index', compact('settings', 'systemInfo'));
     }
-    
+
     /**
      * Update de instellingen
      */
@@ -51,21 +51,21 @@ class SettingsController extends Controller
             'timezone' => 'required|string',
             'locale' => 'required|string',
         ]);
-        
+
         // Update de instellingen in de .env file
         $this->updateEnvFile([
             'SESSION_LIFETIME' => $validated['session_lifetime'],
             'APP_TIMEZONE' => $validated['timezone'],
             'APP_LOCALE' => $validated['locale'],
         ]);
-        
+
         // Clear cache
         Artisan::call('config:clear');
         Cache::flush();
-        
+
         return redirect()->route('admin.settings')->with('success', 'Instellingen zijn succesvol bijgewerkt.');
     }
-    
+
     /**
      * Wis de applicatie cache
      */
@@ -75,10 +75,10 @@ class SettingsController extends Controller
         Artisan::call('config:clear');
         Artisan::call('view:clear');
         Artisan::call('route:clear');
-        
+
         return redirect()->route('admin.settings')->with('success', 'Applicatie cache is succesvol gewist.');
     }
-    
+
     /**
      * Update de .env file
      */
@@ -86,7 +86,7 @@ class SettingsController extends Controller
     {
         $envFile = app()->environmentFilePath();
         $envContents = file_get_contents($envFile);
-        
+
         foreach ($values as $key => $value) {
             // Als de instelling al bestaat, update deze
             if (strpos($envContents, "{$key}=") !== false) {
@@ -96,7 +96,7 @@ class SettingsController extends Controller
                 $envContents .= "\n{$key}={$value}";
             }
         }
-        
+
         file_put_contents($envFile, $envContents);
     }
-} 
+}
