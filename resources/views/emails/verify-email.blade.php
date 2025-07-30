@@ -283,48 +283,11 @@
                     {{ $verificationUrl }}
                 </div>
 
-                <div class="steps-section">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <div class="step-title">Verify your email address</div>
-                            <p class="step-description">Click the verification link above to confirm your email address.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <div class="step-title">Log in to your account</div>
-                            <p class="step-description">After verification, you can log in with your email and password.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <div class="step-title">Enjoy all Numblio services</div>
-                            <p class="step-description">Access all Numblio services with a single account.</p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="help-section">
                     <div class="help-title">Need Help?</div>
                     <p class="help-text">If you did not request this email or need assistance, please contact our
                         support team at <a href="mailto:support@numblio.com"
                             style="color: #2563eb;">support@numblio.com</a>.</p>
-                </div>
-            </div>
-
-            <div class="footer-wrapper">
-                <div class="footer">
-                    <p>&copy; {{ date('Y') }} Numblio. All rights reserved.</p>
-                    <div class="footer-links">
-                        <a href="#" class="footer-link">Privacy Policy</a>
-                        <a href="#" class="footer-link">Terms of Service</a>
-                        <a href="#" class="footer-link">Contact</a>
-                    </div>
                 </div>
             </div>
         </div>
