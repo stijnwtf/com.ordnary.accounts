@@ -1481,11 +1481,8 @@ class AuthController extends Controller
                 // Continue with registration process even if email fails
             }
 
-            // Fire registered event
+            // Fire registered event (this will automatically send verification email)
             event(new Registered($user));
-
-            // Send verification email
-            $user->sendEmailVerificationNotification();
 
             // Instead of auto-login, redirect to verification notice
             Auth::login($user); // We login the user temporarily so they can see the verification notice
