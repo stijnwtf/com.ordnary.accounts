@@ -102,8 +102,7 @@ class AuthController extends Controller
             if ($directLogin) {
                 // Direct login to Numblio account
                 return redirect()->route("account.profile");
-            }
-            else if ($clientId && $redirectUri) {
+            } else if ($clientId && $redirectUri) {
                 // SSO login with client parameters
                 $client = Client::where("client_id", $clientId)->first();
 
@@ -324,7 +323,7 @@ class AuthController extends Controller
         // Get session variables or input values as fallback
         $clientId = session("client_id", $request->input('client_id'));
         $redirectUri = session("redirect_uri", $request->input('redirect_uri'));
-        
+
         // Determine if this is a direct login based on presence of SSO parameters
         $directLogin = session("direct_login", !($clientId && $redirectUri));
 
@@ -351,13 +350,13 @@ class AuthController extends Controller
                 // Check if email is verified
                 if (!$user->hasVerifiedEmail()) {
                     Auth::logout();
-                    
+
                     return redirect()->route('login')
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
-                            'email' => 'You need to verify your email address before logging in. 
+                                'email' => 'You need to verify your email address before logging in. 
                                         <a href="' . route('verification.notice') . '" class="text-blue-500 hover:underline">Verify email</a>'
-                        ]);
+                            ]);
                 }
 
                 Log::info("login: Authentication successful", ["email" => $request->email]);
@@ -498,7 +497,7 @@ class AuthController extends Controller
         // Check if this was a direct login (not SSO) or if forced to skip SSO
         $isDirectLogin = session('direct_login', false);
         $skipSSO = $request->query('skip_sso', false) || $isDirectLogin;
-        
+
         Log::info("logout: User logging out", [
             "user_id" => $userId,
             "is_direct_login" => $isDirectLogin,
@@ -702,11 +701,11 @@ class AuthController extends Controller
         return response()->json([
             "success" => true,
             "user" => [
-                "id" => $user->id,
-                "name" => $user->name,
-                "email" => $user->email,
-                "is_admin" => $user->is_admin,
-            ],
+                    "id" => $user->id,
+                    "name" => $user->name,
+                    "email" => $user->email,
+                    "is_admin" => $user->is_admin,
+                ],
         ]);
     }
 
@@ -832,7 +831,7 @@ class AuthController extends Controller
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
-        
+
         // Mark this as a new login to clear any UI preferences
         session(['new_login' => true]);
 
@@ -973,7 +972,7 @@ class AuthController extends Controller
         // Log the user in
         Auth::login($user);
         $request->session()->regenerate();
-        
+
         // Mark this as a new login to clear any UI preferences
         session(['new_login' => true]);
 
@@ -1006,8 +1005,7 @@ class AuthController extends Controller
             ]);
             session()->forget("direct_login");
             return redirect()->route("account.profile");
-        }
-        else if ($clientId && $redirectUri) {
+        } else if ($clientId && $redirectUri) {
             // SSO login with client parameters
             Log::info("handleLoginRedirect: SSO login successful, generating token", [
                 "user_id" => $user->id,
@@ -1027,8 +1025,7 @@ class AuthController extends Controller
             $targetUrl = $redirectUri . "?token=" . $token;
             Log::info("handleLoginRedirect: Redirecting to client URL", ["target_url" => $targetUrl]);
             return redirect()->away($targetUrl);
-        }
-        else {
+        } else {
             // Fallback if no valid session parameters (shouldn't happen normally)
             Log::warning("handleLoginRedirect: No valid session parameters for redirect", [
                 "user_id" => $user->id,
@@ -1066,7 +1063,7 @@ class AuthController extends Controller
             UserSession::where('user_id', $user->id)
                 ->oldest()
                 ->first()
-                ?->delete();
+                    ?->delete();
         }
 
         // Register this service for the user or update last_used timestamp
@@ -1129,8 +1126,10 @@ class AuthController extends Controller
         $recaptchaResponse = $request->input('g-recaptcha-response');
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] ||
-            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)) {
+        if (
+            !$recaptchaResult['success'] ||
+            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)
+        ) {
             Log::warning("forgotPassword: reCAPTCHA verification failed", [
                 "email" => $request->email,
                 "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
@@ -1179,7 +1178,7 @@ class AuthController extends Controller
         ]);
 
         // Send the reset link email
-        Mail::send('emails.password-reset', ['resetUrl' => $resetUrl], function($message) use ($request) {
+        Mail::send('emails.password-reset', ['resetUrl' => $resetUrl], function ($message) use ($request) {
             $message->to($request->email);
             $message->subject('Password Reset Request for Numblio');
         });
@@ -1257,8 +1256,10 @@ class AuthController extends Controller
         $recaptchaResponse = $request->input('g-recaptcha-response');
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] ||
-            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)) {
+        if (
+            !$recaptchaResult['success'] ||
+            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)
+        ) {
             Log::warning("resetPassword: reCAPTCHA verification failed", [
                 "email" => $request->email,
                 "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
@@ -1482,7 +1483,7 @@ class AuthController extends Controller
 
             // Fire registered event
             event(new Registered($user));
-            
+
             // Send verification email
             $user->sendEmailVerificationNotification();
 
@@ -1512,22 +1513,22 @@ class AuthController extends Controller
     {
         // Try to decode as JSON first
         $decoded = json_decode($redirectUrisField, true);
-        
+
         if (is_array($decoded)) {
             // Successfully decoded as JSON array
             return $decoded;
         }
-        
+
         // If not JSON, treat as a single URI string
         // Handle cases where multiple URIs might be separated by newlines
         $uris = preg_split('/\r\n|\r|\n/', trim($redirectUrisField));
         $uris = array_filter(array_map('trim', $uris)); // Remove empty entries and trim whitespace
-        
+
         Log::info("parseRedirectUris: Parsed redirect URIs from string format", [
             "original" => $redirectUrisField,
             "parsed" => $uris
         ]);
-        
+
         return array_values($uris); // Re-index array
     }
 
