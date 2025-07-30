@@ -42,10 +42,6 @@
                             <i class="fas fa-paper-plane mr-2"></i> Resend Verification Email
                         </button>
                     </form>
-
-                    <a href="{{ route('logout') }}" class="text-sm text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-sign-out-alt mr-1"></i> Log Out
-                    </a>
                 </div>
             </div>
 
@@ -69,17 +65,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="bg-white py-4 border-t">
-        <div class="container mx-auto px-4 text-center text-xs text-gray-500">
-            <p>© {{ date('Y') }} Numblio. All rights reserved.</p>
-            <div class="mt-1">
-                <a href="#" class="text-gray-500 hover:text-gray-700 mx-2">Privacy Policy</a>
-                <a href="#" class="text-gray-500 hover:text-gray-700 mx-2">Terms of Service</a>
-                <a href="#" class="text-gray-500 hover:text-gray-700 mx-2">Help</a>
-            </div>
-        </div>
-    </footer>
 </body>
 
 </html>
