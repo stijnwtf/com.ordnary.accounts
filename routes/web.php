@@ -26,7 +26,7 @@ Route::get('/logout/simple', function (Illuminate\Http\Request $request) {
 Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('logout.process');
 
 // Banned/Suspended Account route
-Route::get('/locked', function () {
+Route::get('/suspended', function () {
     return view('banned');
 })->name('banned');
 
