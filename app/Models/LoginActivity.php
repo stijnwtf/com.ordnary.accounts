@@ -70,8 +70,38 @@ class LoginActivity extends Model
 
     private static function getLocation($ip)
     {
-        // For now, we'll return a static location
-        // In a production environment, you would want to use a geolocation service
-        return 'Amsterdam, NL';
+        // Skip location detection for local IPs
+        if (self::isLocalIp($ip)) {
+            return 'Lokale verbinding';
+        }
+
+        try {
+            // Use ipapi.co for geolocation (free tier allows 1000 requests/month)
+            $response = file_get_contents("http://ipapi.co/{$ip}/json/");
+            $data = json_decode($response, true);
+
+            if (isset($data['city']) && isset($data['country_name'])) {
+                $city = $data['city'];
+                $country = $data['country_name'];
+                $region = $data['region'] ?? '';
+                
+                if ($region && $region !== $city) {
+                    return "{$city}, {$region}, {$country}";
+                }
+                return "{$city}, {$country}";
+            }
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::warning('Failed to get location for IP: ' . $ip . ' - ' . $e->getMessage());
+        }
+
+        // Fallback
+        return 'Onbekende locatie';
+    }
+
+    private static function isLocalIp($ip)
+    {
+        return in_array($ip, ['127.0.0.1', '::1']) || 
+               filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false;
     }
 }
