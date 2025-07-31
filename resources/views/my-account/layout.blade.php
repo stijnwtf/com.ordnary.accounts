@@ -111,34 +111,22 @@
 
         .sidebar-item {
             transition: all 0.2s ease;
-            border-radius: 0.75rem;
+            border-radius: 0.375rem;
             margin-bottom: 0.25rem;
-            color: #6b7280;
         }
 
         .sidebar-item:hover {
             background-color: rgba(59, 130, 246, 0.05);
-            color: #1d4ed8;
-            transform: translateX(2px);
         }
 
         .sidebar-item.active {
             background-color: rgba(59, 130, 246, 0.1);
-            color: #1d4ed8;
-            font-weight: 600;
-            border-left: 3px solid #3b82f6;
+            color: var(--primary);
+            font-weight: 500;
         }
 
         .sidebar-item.active i {
-            color: #3b82f6 !important;
-        }
-
-        .sidebar-item.active .w-8 {
-            background-color: rgba(59, 130, 246, 0.1) !important;
-        }
-
-        .sidebar-item.active .w-8 i {
-            color: #3b82f6 !important;
+            color: var(--primary) !important;
         }
 
         .fade-in {
