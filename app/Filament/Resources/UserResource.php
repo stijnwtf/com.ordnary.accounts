@@ -125,15 +125,14 @@ class UserResource extends Resource
                     ->boolean()
                     ->trueIcon('heroicon-o-shield-check')
                     ->falseIcon('heroicon-o-user'),
-                Tables\Columns\IconColumn::make('is_suspended')
+                Tables\Columns\TextColumn::make('status')
                     ->label('Status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-no-symbol')
-                    ->falseIcon('heroicon-o-check-circle')
-                    ->trueColor('danger')
-                    ->falseColor('success')
-                    ->getStateUsing(fn ($record) => $record->is_suspended)
-                    ->formatStateUsing(fn ($state) => $state ? 'Gesuspendeerd' : 'Actief'),
+                    ->getStateUsing(fn ($record) => $record->is_suspended ? 'Gesuspendeerd' : 'Actief')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Actief' => 'success',
+                        'Gesuspendeerd' => 'danger',
+                    }),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Geverifieerd')
                     ->boolean()
