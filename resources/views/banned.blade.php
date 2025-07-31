@@ -92,7 +92,13 @@
                         </div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-sm font-medium text-gray-500">Suspended Since</span>
-                            <span class="text-sm text-gray-900">{{ date('M j, Y') }}</span>
+                            <span class="text-sm text-gray-900">
+                                @if(isset($user) && $user->suspended_at)
+                                    {{ $user->suspended_at->format('M j, Y') }}
+                                @else
+                                    {{ date('M j, Y') }}
+                                @endif
+                            </span>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-500">Type</span>
@@ -104,7 +110,11 @@
                         <h3 class="text-sm font-medium text-gray-900 mb-3">Reason for Suspension</h3>
                         <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
                             <p class="text-sm text-gray-700">
-                                Your account has been permanently suspended due to a violation of our terms of service. This action was taken after careful review of your account activity.
+                                @if(isset($user) && $user->suspension_reason)
+                                    {{ $user->suspension_reason }}
+                                @else
+                                    Your account has been permanently suspended due to a violation of our terms of service. This action was taken after careful review of your account activity.
+                                @endif
                             </p>
                         </div>
                     </div>

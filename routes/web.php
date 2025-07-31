@@ -27,7 +27,16 @@ Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('l
 
 // Banned/Suspended Account route
 Route::get('/suspended', function () {
-    return view('banned');
+    $user = null;
+    
+    // Try to get the user from session if they were just logged out
+    $userId = session('suspended_user_id');
+    if ($userId) {
+        $user = \App\Models\User::find($userId);
+        session()->forget('suspended_user_id'); // Remove after use
+    }
+    
+    return view('banned', compact('user'));
 })->name('banned');
 
 Route::middleware('throttle:5,1')->group(function () {

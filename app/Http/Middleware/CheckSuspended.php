@@ -17,6 +17,11 @@ class CheckSuspended
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->isSuspended()) {
+            $user = Auth::user();
+            
+            // Store user ID in session for the banned page
+            $request->session()->put('suspended_user_id', $user->id);
+            
             // Log out the suspended user
             Auth::logout();
             $request->session()->invalidate();
