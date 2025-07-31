@@ -282,11 +282,6 @@
                                     <div>
                                         <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
                                         <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
-                                        <div class="mt-1 flex">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                                <i class="fas fa-check-circle mr-1"></i> {{ lang('status.verified', [], 'layout') }}
-                                            </span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
