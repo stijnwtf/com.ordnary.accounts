@@ -77,24 +77,62 @@ class LoginActivity extends Model
         }
 
         try {
-            // Use ipapi.co for free geolocation lookup
-            $response = file_get_contents("http://ipapi.co/{$ip}/json/");
+            // Use cURL for better reliability
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "http://ip-api.com/json/{$ip}?fields=status,message,country,countryCode,city");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; LocationBot/1.0)');
             
-            if ($response === false) {
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+            
+            if ($response === false || !empty($error)) {
+                \Log::warning("cURL error for IP {$ip}: " . $error);
+                return 'Unknown';
+            }
+            
+            if ($httpCode !== 200) {
+                \Log::warning("HTTP error for IP {$ip}: HTTP {$httpCode}");
                 return 'Unknown';
             }
             
             $data = json_decode($response, true);
             
-            if (json_last_error() !== JSON_ERROR_NONE || !isset($data['city']) || !isset($data['country_code'])) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                \Log::warning("JSON decode error for IP {$ip}: " . json_last_error_msg());
                 return 'Unknown';
             }
             
-            return $data['city'] . ', ' . $data['country_code'];
+            // Log the response for debugging
+            \Log::info("Geolocation response for IP {$ip}: " . json_encode($data));
+            
+            if (!isset($data['status']) || $data['status'] !== 'success') {
+                \Log::warning("API error for IP {$ip}: " . ($data['message'] ?? 'Unknown error'));
+                return 'Unknown';
+            }
+            
+            $city = $data['city'] ?? '';
+            $countryCode = $data['countryCode'] ?? '';
+            
+            if (empty($city) && empty($countryCode)) {
+                return 'Unknown';
+            }
+            
+            if (empty($city)) {
+                return $countryCode;
+            }
+            
+            if (empty($countryCode)) {
+                return $city;
+            }
+            
+            return $city . ', ' . $countryCode;
             
         } catch (Exception $e) {
-            // Log the error if needed
-            \Log::warning('Failed to get geolocation for IP: ' . $ip . '. Error: ' . $e->getMessage());
+            \Log::error('Exception in getLocation for IP: ' . $ip . '. Error: ' . $e->getMessage());
             return 'Unknown';
         }
     }
