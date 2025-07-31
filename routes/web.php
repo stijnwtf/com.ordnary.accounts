@@ -25,6 +25,11 @@ Route::get('/logout/simple', function (Illuminate\Http\Request $request) {
 })->name('logout.simple');
 Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('logout.process');
 
+// Banned/Suspended Account route
+Route::get('/locked', function () {
+    return view('banned');
+})->name('banned');
+
 Route::middleware('throttle:5,1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
     Route::post('/register', [AuthController::class, 'register']);
