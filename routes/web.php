@@ -21,11 +21,6 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Enterprise Login routes
-Route::get('/enterprise', function () {
-    return view('enterprise-login');
-})->name('enterprise.login');
-
 // Banned/Suspended Account route
 Route::get('/suspended', function () {
     $user = null;
