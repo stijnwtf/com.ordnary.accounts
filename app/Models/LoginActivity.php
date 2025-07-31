@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 class LoginActivity extends Model
 {
@@ -70,8 +71,31 @@ class LoginActivity extends Model
 
     private static function getLocation($ip)
     {
-        // For now, we'll return a static location
-        // In a production environment, you would want to use a geolocation service
-        return 'Amsterdam, NL';
+        // Skip location lookup for local/private IPs
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+            return 'Local';
+        }
+
+        try {
+            // Use ipapi.co for free geolocation lookup
+            $response = file_get_contents("http://ipapi.co/{$ip}/json/");
+            
+            if ($response === false) {
+                return 'Unknown';
+            }
+            
+            $data = json_decode($response, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE || !isset($data['city']) || !isset($data['country_code'])) {
+                return 'Unknown';
+            }
+            
+            return $data['city'] . ', ' . $data['country_code'];
+            
+        } catch (Exception $e) {
+            // Log the error if needed
+            \Log::warning('Failed to get geolocation for IP: ' . $ip . '. Error: ' . $e->getMessage());
+            return 'Unknown';
+        }
     }
 }
