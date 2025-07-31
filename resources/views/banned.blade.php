@@ -12,11 +12,11 @@
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
     <div class="flex-grow p-8">
         <!-- Header with logo and title -->
-        <div class="mb-8">
-            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-4">
+        <div class="mb-8 flex items-center">
+            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mr-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900">Account Suspended</h1>
-                <p class="text-lg text-gray-600 mt-2">Your access to this application has been restricted.</p>
+                <p class="text-lg text-gray-600 mt-1">Your access to this application has been restricted.</p>
             </div>
         </div>
 
