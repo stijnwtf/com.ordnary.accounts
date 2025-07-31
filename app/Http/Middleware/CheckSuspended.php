@@ -19,13 +19,27 @@ class CheckSuspended
         if (Auth::check() && Auth::user()->isSuspended()) {
             $user = Auth::user();
             
-            // Store user ID in session for the banned page
+            // Store user ID in session for the banned page (before logout)
             $request->session()->put('suspended_user_id', $user->id);
+            $request->session()->put('suspended_user_timeout', now()->addHours(24));
+            
+            // Force save the session before logout
+            $request->session()->save();
             
             // Log out the suspended user
             Auth::logout();
+            
+            // Regenerate session but keep our suspended user data
+            $suspendedUserId = $request->session()->get('suspended_user_id');
+            $suspendedTimeout = $request->session()->get('suspended_user_timeout');
+            
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            
+            // Restore the suspended user data
+            $request->session()->put('suspended_user_id', $suspendedUserId);
+            $request->session()->put('suspended_user_timeout', $suspendedTimeout);
+            $request->session()->save();
             
             // Redirect to the banned page
             return redirect()->route('banned');

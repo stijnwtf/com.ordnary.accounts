@@ -349,6 +349,12 @@ class AuthController extends Controller
 
                 // Check if user is suspended
                 if ($user->isSuspended()) {
+                    // Store user info for banned page before logout
+                    session([
+                        'suspended_user_id' => $user->id,
+                        'suspended_user_timeout' => now()->addHours(24)
+                    ]);
+                    
                     Auth::logout();
                     Log::warning("login: Suspended user attempted to login", [
                         "user_id" => $user->id,

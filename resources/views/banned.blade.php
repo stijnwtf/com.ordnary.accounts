@@ -11,6 +11,22 @@
 
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
     <div class="flex-grow p-8">
+        @if(config('app.debug'))
+            <!-- Debug info (only in debug mode) -->
+            <div class="max-w-6xl mx-auto mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+                <strong>Debug Info:</strong><br>
+                User isset: {{ isset($user) ? 'Yes' : 'No' }}<br>
+                User exists: {{ (isset($user) && $user) ? 'Yes' : 'No' }}<br>
+                @if(isset($user) && $user)
+                    User ID: {{ $user->id }}<br>
+                    Suspended: {{ $user->is_suspended ? 'Yes' : 'No' }}<br>
+                    Suspended At: {{ $user->suspended_at ? $user->suspended_at->format('Y-m-d H:i:s') : 'Not set' }}<br>
+                    Suspension Reason: {{ $user->suspension_reason ?: 'Not set' }}<br>
+                @endif
+                Session suspended_user_id: {{ session('suspended_user_id', 'Not set') }}<br>
+            </div>
+        @endif
+
         <!-- Header with logo and title -->
         <div class="mb-8 text-center">
             <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mx-auto mb-4">
@@ -93,8 +109,8 @@
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-sm font-medium text-gray-500">Suspended Since</span>
                             <span class="text-sm text-gray-900">
-                                @if(isset($user) && $user->suspended_at)
-                                    {{ $user->suspended_at->format('M j, Y') }}
+                                @if(isset($user) && $user && $user->suspended_at)
+                                    {{ $user->suspended_at->format('M j, Y \a\t G:i') }}
                                 @else
                                     {{ date('M j, Y') }}
                                 @endif
@@ -110,10 +126,16 @@
                         <h3 class="text-sm font-medium text-gray-900 mb-3">Reason for Suspension</h3>
                         <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
                             <p class="text-sm text-gray-700">
-                                @if(isset($user) && $user->suspension_reason)
+                                @if(isset($user) && $user && $user->suspension_reason)
                                     {{ $user->suspension_reason }}
                                 @else
-                                    Your account has been permanently suspended due to a violation of our terms of service. This action was taken after careful review of your account activity.
+                                    @if(isset($user) && $user)
+                                        <!-- User found but no specific reason -->
+                                        Account suspended due to violation of terms of service. No specific reason provided by administrator.
+                                    @else
+                                        <!-- No user data available -->
+                                        Your account has been permanently suspended due to a violation of our terms of service. This action was taken after careful review of your account activity.
+                                    @endif
                                 @endif
                             </p>
                         </div>
