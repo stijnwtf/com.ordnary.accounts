@@ -166,30 +166,17 @@
         }
 
         .sidebar-item:hover {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            transform: translateX(2px);
+            background: #f8fafc;
         }
 
         .sidebar-item.active {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            color: var(--primary) !important;
-            font-weight: 600;
-            border-left: 3px solid var(--primary);
+            background: #f1f5f9;
+            color: #374151;
+            font-weight: 500;
         }
 
         .sidebar-item.active i {
-            color: var(--primary) !important;
-        }
-
-        .sidebar-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--primary);
-            border-radius: 0 2px 2px 0;
+            color: #6b7280;
         }
 
         /* Mobile navigation styling */
@@ -199,14 +186,13 @@
         }
 
         .mobile-nav.active {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            color: var(--primary) !important;
-            font-weight: 600;
-            border-left: 3px solid var(--primary);
+            background: #f1f5f9;
+            color: #374151;
+            font-weight: 500;
         }
 
         .mobile-nav.active i {
-            color: var(--primary) !important;
+            color: #6b7280;
         }
 
         /* Loading animation */
