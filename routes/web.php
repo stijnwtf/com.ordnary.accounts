@@ -20,10 +20,10 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/logout/simple', function (Illuminate\Http\Request $request) {
-    return app(AuthController::class)->logout($request->merge(['skip_sso' => true]));
-})->name('logout.simple');
-Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('logout.process');
+
+// Enterprise Login routes
+Route::get('/enterprise', [AuthController::class, 'showEnterpriseLoginForm'])->name('enterprise.login');
+Route::post('/enterprise', [AuthController::class, 'processEnterpriseLogin'])->name('enterprise.login.submit');
 
 // Banned/Suspended Account route
 Route::get('/suspended', function () {
