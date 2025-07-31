@@ -6,7 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="{{ lang('meta.description', [], 'layout') }}">
     <title>Numblio · {{ lang('title', [], 'layout') }}</title>
-    <link rel="icon" href="https://numblio.com/img/icon_black.png" type="image/gif" sizes="20x20">
+
+    <link rel="icon" type="image/x-icon" href="favicons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicons/android-chrome-512x512.png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
