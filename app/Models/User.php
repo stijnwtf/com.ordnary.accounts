@@ -30,6 +30,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'is_admin',
+        'is_suspended',
+        'suspended_at',
+        'suspension_reason',
         'lang',
         'recovery_email',
         'recovery_email_verified',
@@ -62,6 +65,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_suspended' => 'boolean',
+            'suspended_at' => 'datetime',
             'recovery_email_verified_at' => 'datetime',
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
@@ -225,5 +230,35 @@ class User extends Authenticatable implements MustVerifyEmail
                 "trace" => $e->getTraceAsString()
             ]);
         }
+    }
+
+    /**
+     * Check if the user is suspended.
+     */
+    public function isSuspended(): bool
+    {
+        return $this->is_suspended;
+    }
+
+    /**
+     * Suspend the user.
+     */
+    public function suspend(string $reason = null): void
+    {
+        $this->is_suspended = true;
+        $this->suspended_at = now();
+        $this->suspension_reason = $reason;
+        $this->save();
+    }
+
+    /**
+     * Unsuspend the user.
+     */
+    public function unsuspend(): void
+    {
+        $this->is_suspended = false;
+        $this->suspended_at = null;
+        $this->suspension_reason = null;
+        $this->save();
     }
 }

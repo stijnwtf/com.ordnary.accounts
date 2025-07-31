@@ -347,6 +347,19 @@ class AuthController extends Controller
             if (Auth::attempt($request->only("email", "password"))) {
                 $user = Auth::user();
 
+                // Check if user is suspended
+                if ($user->isSuspended()) {
+                    Auth::logout();
+                    Log::warning("login: Suspended user attempted to login", [
+                        "user_id" => $user->id,
+                        "email" => $user->email,
+                        "suspended_at" => $user->suspended_at,
+                        "suspension_reason" => $user->suspension_reason
+                    ]);
+
+                    return redirect()->route('banned');
+                }
+
                 // Check if email is verified
                 if (!$user->hasVerifiedEmail()) {
                     Auth::logout();

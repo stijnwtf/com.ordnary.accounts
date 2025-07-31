@@ -75,10 +75,20 @@ class UserResource extends Resource
                         Forms\Components\Toggle::make('is_admin')
                             ->label('Beheerder')
                             ->helperText('Geef deze gebruiker beheerdersrechten'),
+                        Forms\Components\Toggle::make('is_suspended')
+                            ->label('Gesuspendeerd')
+                            ->helperText('Gebruiker kan niet inloggen wanneer gesuspendeerd')
+                            ->live(),
                         Forms\Components\DateTimePicker::make('email_verified_at')
                             ->label('E-mail geverifieerd op')
                             ->displayFormat('d-m-Y H:i'),
-                    ])->columns(2),
+                        Forms\Components\Textarea::make('suspension_reason')
+                            ->label('Reden voor suspensie')
+                            ->helperText('Optionele reden waarom deze gebruiker is gesuspendeerd')
+                            ->rows(3)
+                            ->columnSpanFull()
+                            ->visible(fn (Forms\Get $get) => $get('is_suspended')),
+                    ])->columns(3),
                     
                 Forms\Components\Section::make('Twee-Factor Authenticatie')
                     ->schema([
@@ -115,6 +125,15 @@ class UserResource extends Resource
                     ->boolean()
                     ->trueIcon('heroicon-o-shield-check')
                     ->falseIcon('heroicon-o-user'),
+                Tables\Columns\IconColumn::make('is_suspended')
+                    ->label('Status')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-no-symbol')
+                    ->falseIcon('heroicon-o-check-circle')
+                    ->trueColor('danger')
+                    ->falseColor('success')
+                    ->getStateUsing(fn ($record) => $record->is_suspended)
+                    ->formatStateUsing(fn ($state) => $state ? 'Gesuspendeerd' : 'Actief'),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Geverifieerd')
                     ->boolean()
@@ -142,6 +161,11 @@ class UserResource extends Resource
                     ->placeholder('Alle gebruikers')
                     ->trueLabel('Alleen beheerders')
                     ->falseLabel('Geen beheerders'),
+                Tables\Filters\TernaryFilter::make('is_suspended')
+                    ->label('Suspensie status')
+                    ->placeholder('Alle gebruikers')
+                    ->trueLabel('Gesuspendeerd')
+                    ->falseLabel('Actief'),
                 Tables\Filters\TernaryFilter::make('email_verified_at')
                     ->label('E-mail verificatie')
                     ->placeholder('Alle gebruikers')
@@ -157,12 +181,70 @@ class UserResource extends Resource
                     ->label('Bekijken'),
                 Tables\Actions\EditAction::make()
                     ->label('Bewerken'),
+                Tables\Actions\Action::make('suspend')
+                    ->label('Suspendeer')
+                    ->icon('heroicon-o-no-symbol')
+                    ->color('warning')
+                    ->visible(fn ($record) => !$record->is_suspended)
+                    ->form([
+                        Forms\Components\Textarea::make('suspension_reason')
+                            ->label('Reden voor suspensie')
+                            ->placeholder('Voer een reden in waarom deze gebruiker wordt gesuspendeerd...')
+                            ->required()
+                            ->rows(3),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $record->suspend($data['suspension_reason']);
+                    })
+                    ->requiresConfirmation('Weet je zeker dat je deze gebruiker wilt suspenderen?'),
+                Tables\Actions\Action::make('unsuspend')
+                    ->label('Herstel')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn ($record) => $record->is_suspended)
+                    ->action(function ($record) {
+                        $record->unsuspend();
+                    })
+                    ->requiresConfirmation('Weet je zeker dat je de suspensie van deze gebruiker wilt opheffen?'),
                 Tables\Actions\DeleteAction::make()
                     ->label('Verwijderen')
                     ->requiresConfirmation(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('suspend')
+                        ->label('Suspendeer geselecteerde')
+                        ->icon('heroicon-o-no-symbol')
+                        ->color('warning')
+                        ->form([
+                            Forms\Components\Textarea::make('suspension_reason')
+                                ->label('Reden voor suspensie')
+                                ->placeholder('Voer een reden in waarom deze gebruikers worden gesuspendeerd...')
+                                ->required()
+                                ->rows(3),
+                        ])
+                        ->action(function ($records, array $data) {
+                            foreach ($records as $record) {
+                                if (!$record->is_suspended) {
+                                    $record->suspend($data['suspension_reason']);
+                                }
+                            }
+                        })
+                        ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    Tables\Actions\BulkAction::make('unsuspend')
+                        ->label('Herstel geselecteerde')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                if ($record->is_suspended) {
+                                    $record->unsuspend();
+                                }
+                            }
+                        })
+                        ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\DeleteBulkAction::make()
                         ->label('Verwijderen'),
                 ]),

@@ -58,7 +58,7 @@ Route::middleware('throttle:6,1')->group(function () {
 });
 
 // My Account routes
-Route::prefix('app')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('app')->middleware(['auth', 'verified', 'checkSuspended'])->group(function () {
     // Bestaande route als redirect naar account/profile
     Route::get('/', [MyAccountController::class, 'index'])->name('my-account');
 
