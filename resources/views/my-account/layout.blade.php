@@ -111,22 +111,34 @@
 
         .sidebar-item {
             transition: all 0.2s ease;
-            border-radius: 0.375rem;
+            border-radius: 0.75rem;
             margin-bottom: 0.25rem;
+            color: #6b7280;
         }
 
         .sidebar-item:hover {
             background-color: rgba(59, 130, 246, 0.05);
+            color: #1d4ed8;
+            transform: translateX(2px);
         }
 
         .sidebar-item.active {
             background-color: rgba(59, 130, 246, 0.1);
-            color: var(--primary);
-            font-weight: 500;
+            color: #1d4ed8;
+            font-weight: 600;
+            border-left: 3px solid #3b82f6;
         }
 
         .sidebar-item.active i {
-            color: var(--primary) !important;
+            color: #3b82f6 !important;
+        }
+
+        .sidebar-item.active .w-8 {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .sidebar-item.active .w-8 i {
+            color: #3b82f6 !important;
         }
 
         .fade-in {
@@ -202,82 +214,156 @@
             <div class="flex flex-col lg:flex-row gap-6 items-start">
                 <!-- Left Sidebar Section -->
                 <div class="w-full lg:w-1/4 lg:block hidden">
-                    <div class="space-y-4">
-                        <!-- Sidebar Card -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-8">
-                            <!-- Account Summary -->
-                            <div class="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                <div class="flex items-center space-x-3">
-                                    <div class="relative">
-                                        <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                            alt="{{ $user->first_name }} {{ $user->last_name }}">
-                                        <div
-                                            class="absolute bottom-0 right-0 h-4 w-4 bg-green-400 rounded-full border-2 border-white">
+                    <div class="space-y-6">
+                        <!-- Modern User Profile Card -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden sticky top-8">
+                            <!-- Profile Header with Gradient Background -->
+                            <div class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-6">
+                                <div class="absolute inset-0 bg-black/10"></div>
+                                <div class="relative z-10">
+                                    <div class="flex flex-col items-center text-center">
+                                        <div class="relative mb-4">
+                                            <img class="h-20 w-20 rounded-full object-cover border-4 border-white shadow-xl ring-4 ring-white/20"
+                                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                                                alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                            <div class="absolute -bottom-1 -right-1 h-6 w-6 bg-green-400 rounded-full border-3 border-white shadow-lg flex items-center justify-center">
+                                                <i class="fas fa-check text-white text-xs"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }}
-                                            {{ $user->last_name }}</h2>
-                                        <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
-                                        <div class="mt-1 flex">
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                                <i class="fas fa-check-circle mr-1"></i>
-                                                {{ lang('status.verified', [], 'layout') }}
-                                            </span>
+                                        
+                                        <div class="text-white">
+                                            <h2 class="text-lg font-bold mb-1">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                            <p class="text-blue-100 text-sm mb-3 opacity-90">{{ $user->email }}</p>
+                                            
+                                            <div class="inline-flex items-center px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full border border-white/30">
+                                                <i class="fas fa-shield-check text-green-300 mr-2 text-sm"></i>
+                                                <span class="text-white text-xs font-medium">{{ lang('status.verified', [], 'layout') }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Navigation Section -->
-                            <div class="p-3">
-                                <div class="mb-4">
-                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                            <!-- Account Details -->
+                            <div class="p-4 bg-gray-50 border-b border-gray-100">
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-gray-500 font-medium">{{ lang('sidebar.account_id', [], 'layout') }}</span>
+                                        <span class="text-gray-700 font-mono bg-gray-200 px-2 py-1 rounded">#{{ substr(md5($user->id), 0, 8) }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-gray-500 font-medium">Lid sinds</span>
+                                        <span class="text-gray-700">{{ $user->created_at->format('M Y') }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-gray-500 font-medium">Taal</span>
+                                        <span class="text-gray-700 uppercase">{{ $user->lang ?? 'nl' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Menu -->
+                            <div class="p-4">
+                                <div class="space-y-1">
+                                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2 mb-2">
                                         {{ lang('sidebar.account_settings', [], 'layout') }}
                                     </div>
-                                    <a href="{{ route('account.profile') }}"
-                                        class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-user mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.profile', [], 'layout') }}
+                                    
+                                    <a href="{{ route('account.profile') }}" 
+                                       class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-blue-50 hover:text-blue-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 mr-3 transition-colors">
+                                            <i class="fas fa-user text-gray-500 group-hover:text-blue-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.profile', [], 'layout') }}</span>
+                                        @if($active_page == 'profile')
+                                            <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></div>
+                                        @endif
                                     </a>
-                                    <a href="{{ route('account.password') }}"
-                                        class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-lock mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.password', [], 'layout') }}
+                                    
+                                    <a href="{{ route('account.password') }}" 
+                                       class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-blue-50 hover:text-blue-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 mr-3 transition-colors">
+                                            <i class="fas fa-lock text-gray-500 group-hover:text-blue-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.password', [], 'layout') }}</span>
+                                        @if($active_page == 'password')
+                                            <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></div>
+                                        @endif
                                     </a>
-                                    <a href="{{ route('account.security') }}"
-                                        class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.security', [], 'layout') }}
+                                    
+                                    <a href="{{ route('account.security') }}" 
+                                       class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-blue-50 hover:text-blue-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 mr-3 transition-colors">
+                                            <i class="fas fa-shield-alt text-gray-500 group-hover:text-blue-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.security', [], 'layout') }}</span>
+                                        @if($active_page == 'security')
+                                            <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></div>
+                                        @endif
                                     </a>
-                                    <a href="{{ route('account.connections') }}"
-                                        class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-globe mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.connections', [], 'layout') }}
+                                    
+                                    <a href="{{ route('account.connections') }}" 
+                                       class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-blue-50 hover:text-blue-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 mr-3 transition-colors">
+                                            <i class="fas fa-globe text-gray-500 group-hover:text-blue-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.connections', [], 'layout') }}</span>
+                                        @if($active_page == 'connections')
+                                            <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></div>
+                                        @endif
                                     </a>
-                                    <a href="{{ route('account.subscriptions') }}"
-                                        class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-credit-card mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.subscriptions', [], 'layout') }}
+                                    
+                                    <a href="{{ route('account.subscriptions') }}" 
+                                       class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-blue-50 hover:text-blue-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-100 mr-3 transition-colors">
+                                            <i class="fas fa-credit-card text-gray-500 group-hover:text-blue-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.subscriptions', [], 'layout') }}</span>
+                                        @if($active_page == 'subscriptions')
+                                            <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full"></div>
+                                        @endif
                                     </a>
                                 </div>
 
-                                <div class="mt-3 border-t border-gray-200 pt-3">
-                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                                <!-- Support Section -->
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-2 mb-2">
                                         {{ lang('sidebar.support', [], 'layout') }}
                                     </div>
-                                    <a href="https://support.numblio.com"
-                                        class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-question-circle mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.help_center', [], 'layout') }}
+                                    
+                                    <a href="https://support.numblio.com" 
+                                       class="sidebar-item group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-gray-50 hover:text-gray-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-gray-200 mr-3 transition-colors">
+                                            <i class="fas fa-question-circle text-gray-500 group-hover:text-gray-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.help_center', [], 'layout') }}</span>
+                                        <i class="fas fa-external-link-alt text-xs text-gray-400 ml-auto"></i>
                                     </a>
-                                    <a href="https://docs.numblio.com"
-                                        class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-info-circle mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.faq', [], 'layout') }}
+                                    
+                                    <a href="https://docs.numblio.com" 
+                                       class="sidebar-item group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-gray-50 hover:text-gray-700">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-gray-200 mr-3 transition-colors">
+                                            <i class="fas fa-book text-gray-500 group-hover:text-gray-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.faq', [], 'layout') }}</span>
+                                        <i class="fas fa-external-link-alt text-xs text-gray-400 ml-auto"></i>
                                     </a>
+                                </div>
+
+                                <!-- Logout Button -->
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <a href="{{ route('logout.simple') }}" 
+                                       class="group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 hover:bg-red-50 hover:text-red-700 text-gray-600">
+                                        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-red-100 mr-3 transition-colors">
+                                            <i class="fas fa-sign-out-alt text-gray-500 group-hover:text-red-600 text-sm"></i>
+                                        </div>
+                                        <span>{{ lang('sidebar.logout', [], 'layout') }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                                 </div>
                             </div>
 
