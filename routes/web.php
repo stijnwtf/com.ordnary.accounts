@@ -33,7 +33,16 @@ Route::get('/suspended', function () {
     $userId = session('suspended_user_id');
     if ($userId) {
         $user = \App\Models\User::find($userId);
-        session()->forget('suspended_user_id'); // Remove after use
+        // Keep the session data for potential page reloads, but set a timeout
+        if (!session()->has('suspended_user_timeout')) {
+            session()->put('suspended_user_timeout', now()->addHours(24));
+        }
+        
+        // Clean up expired sessions
+        if (session('suspended_user_timeout') && now()->gt(session('suspended_user_timeout'))) {
+            session()->forget(['suspended_user_id', 'suspended_user_timeout']);
+            $user = null;
+        }
     }
     
     return view('banned', compact('user'));
