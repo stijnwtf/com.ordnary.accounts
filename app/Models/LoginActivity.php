@@ -76,9 +76,46 @@ class LoginActivity extends Model
         }
 
         try {
-            // Use ipapi.co for geolocation (free tier allows 1000 requests/month)
-            $response = file_get_contents("http://ipapi.co/{$ip}/json/");
+            // First try ipapi.co
+            $location = self::getLocationFromIpApi($ip);
+            if ($location !== null) {
+                return $location;
+            }
+
+            // Fallback to ip-api.com (free, no key required)
+            $location = self::getLocationFromIpApiCom($ip);
+            if ($location !== null) {
+                return $location;
+            }
+
+        } catch (\Exception $e) {
+            \Log::warning('Failed to get location for IP: ' . $ip . ' - ' . $e->getMessage());
+        }
+
+        // Final fallback
+        return 'Onbekende locatie';
+    }
+
+    private static function getLocationFromIpApi($ip)
+    {
+        try {
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 5,
+                    'method' => 'GET',
+                    'header' => 'User-Agent: Numblio-SSO/1.0'
+                ]
+            ]);
+            
+            $response = file_get_contents("http://ipapi.co/{$ip}/json/", false, $context);
+            if ($response === false) {
+                return null;
+            }
+
             $data = json_decode($response, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return null;
+            }
 
             if (isset($data['city']) && isset($data['country_name'])) {
                 $city = $data['city'];
@@ -91,12 +128,48 @@ class LoginActivity extends Model
                 return "{$city}, {$country}";
             }
         } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::warning('Failed to get location for IP: ' . $ip . ' - ' . $e->getMessage());
+            \Log::debug('ipapi.co failed: ' . $e->getMessage());
         }
+        
+        return null;
+    }
 
-        // Fallback
-        return 'Onbekende locatie';
+    private static function getLocationFromIpApiCom($ip)
+    {
+        try {
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 5,
+                    'method' => 'GET',
+                    'header' => 'User-Agent: Numblio-SSO/1.0'
+                ]
+            ]);
+            
+            $response = file_get_contents("http://ip-api.com/json/{$ip}?fields=status,country,regionName,city", false, $context);
+            if ($response === false) {
+                return null;
+            }
+
+            $data = json_decode($response, true);
+            if (json_last_error() !== JSON_ERROR_NONE || $data['status'] !== 'success') {
+                return null;
+            }
+
+            if (isset($data['city']) && isset($data['country'])) {
+                $city = $data['city'];
+                $country = $data['country'];
+                $region = $data['regionName'] ?? '';
+                
+                if ($region && $region !== $city) {
+                    return "{$city}, {$region}, {$country}";
+                }
+                return "{$city}, {$country}";
+            }
+        } catch (\Exception $e) {
+            \Log::debug('ip-api.com failed: ' . $e->getMessage());
+        }
+        
+        return null;
     }
 
     private static function isLocalIp($ip)
