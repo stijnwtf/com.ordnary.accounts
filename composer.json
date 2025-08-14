@@ -18,6 +18,7 @@
         "marcelweidum/filament-expiration-notice": "^1.0",
         "pragmarx/google2fa": "^8.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "tailflow/laravel-orion": "^2.23",
         "tomatophp/filament-seo": "^1.0"
     },
     "require-dev": {

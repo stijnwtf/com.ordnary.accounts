@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb4dfeb51872ae26003da1889e291dcb",
+    "content-hash": "e6c205f80f6ddb6c231184211ea6bd44",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9537,6 +9537,153 @@
             "time": "2025-07-29T20:02:46+00:00"
         },
         {
+            "name": "symfony/yaml",
+            "version": "v7.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "b8d7d868da9eb0919e99c8830431ea087d6aae30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/b8d7d868da9eb0919e99c8830431ea087d6aae30",
+                "reference": "b8d7d868da9eb0919e99c8830431ea087d6aae30",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3.0",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "conflict": {
+                "symfony/console": "<6.4"
+            },
+            "require-dev": {
+                "symfony/console": "^6.4|^7.0"
+            },
+            "bin": [
+                "Resources/bin/yaml-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Loads and dumps YAML files",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/v7.3.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-07-10T08:47:49+00:00"
+        },
+        {
+            "name": "tailflow/laravel-orion",
+            "version": "2.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tailflow/laravel-orion.git",
+                "reference": "686c16c5c72eb4ade67fc108e7ae8b5593c686da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tailflow/laravel-orion/zipball/686c16c5c72eb4ade67fc108e7ae8b5593c686da",
+                "reference": "686c16c5c72eb4ade67fc108e7ae8b5593c686da",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.9|^3.1|^4.0",
+                "ext-json": "*",
+                "illuminate/bus": ">=5.7",
+                "illuminate/contracts": ">=5.7",
+                "illuminate/database": ">=5.7",
+                "illuminate/http": ">=5.7",
+                "illuminate/pagination": ">=5.7",
+                "illuminate/support": ">=5.7",
+                "php": ">=7.3",
+                "symfony/yaml": "^5.3|^6.0|^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^3.7|^4.0|^5.0|^6.0|^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Orion": "Orion\\Facades\\Orion"
+                    },
+                    "providers": [
+                        "Orion\\OrionServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Orion\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aleksei Zarubin",
+                    "email": "alex@tailflow.org"
+                }
+            ],
+            "description": "Orion for Laravel allows you to build a fully featured REST API based on your Eloquent models and relationships with the simplicity of Laravel as you love it.",
+            "keywords": [
+                "api",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/tailflow/laravel-orion/issues",
+                "source": "https://github.com/tailflow/laravel-orion"
+            },
+            "time": "2024-11-04T09:10:16+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "v2.3.0",
             "source": {
@@ -12263,82 +12410,6 @@
                 }
             ],
             "time": "2024-10-20T05:08:20+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v7.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "b8d7d868da9eb0919e99c8830431ea087d6aae30"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/b8d7d868da9eb0919e99c8830431ea087d6aae30",
-                "reference": "b8d7d868da9eb0919e99c8830431ea087d6aae30",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3.0",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "symfony/console": "<6.4"
-            },
-            "require-dev": {
-                "symfony/console": "^6.4|^7.0"
-            },
-            "bin": [
-                "Resources/bin/yaml-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Loads and dumps YAML files",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.3.2"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2025-07-10T08:47:49+00:00"
         },
         {
             "name": "theseer/tokenizer",

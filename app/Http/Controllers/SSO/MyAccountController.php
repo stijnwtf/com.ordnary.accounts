@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redis;
@@ -257,7 +258,7 @@ class MyAccountController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', Password::defaults(), 'confirmed'],
+            'password' => ['required', 'string', PasswordRule::defaults(), 'confirmed'],
         ]);
 
         $user = Auth::user();
