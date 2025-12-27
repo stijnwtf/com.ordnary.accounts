@@ -2,6 +2,10 @@
   "title": "Profielinformatie",
   "subtitle": "Werk je persoonlijke gegevens en accountvoorkeuren bij.",
   "personal_info": "Persoonlijke informatie",
+  "tabs": {
+    "gegevens": "Gegevens",
+    "customization": "Personalisatie"
+  },
   "fields": {
     "first_name": "Voornaam",
     "first_name_helper": "Je voornaam zoals weergegeven in Ordnary diensten.",

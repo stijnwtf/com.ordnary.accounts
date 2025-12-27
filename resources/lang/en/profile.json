@@ -2,6 +2,10 @@
   "title": "Profile Information",
   "subtitle": "Update your personal details and account preferences.",
   "personal_info": "Personal Information",
+  "tabs": {
+    "gegevens": "Details",
+    "customization": "Customization"
+  },
   "fields": {
     "first_name": "First Name",
     "first_name_helper": "Your first name as displayed in Ordnary services.",

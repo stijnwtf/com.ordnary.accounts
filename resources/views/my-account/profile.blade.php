@@ -21,7 +21,7 @@
                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
                     data-tab="gegevens">
-                    <i class="fas fa-user mr-2"></i> Gegevens
+                    <i class="fas fa-user mr-2"></i> {{ lang('tabs.gegevens', [], 'profile') }}
                 </button>
 
                 <button @click="activeTab = 'customization'; localStorage.setItem('profileTab', 'customization')"
@@ -29,7 +29,7 @@
                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
                     data-tab="customization">
-                    <i class="fas fa-palette mr-2"></i> Customization
+                    <i class="fas fa-palette mr-2"></i> {{ lang('tabs.customization', [], 'profile') }}
                 </button>
             </div>
         </div>
