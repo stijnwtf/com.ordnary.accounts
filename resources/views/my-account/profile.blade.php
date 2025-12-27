@@ -40,7 +40,6 @@
                 @csrf
 
                 <!-- Name, Email, Phone & Language -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- First Name Input -->
                         <div>
@@ -152,7 +151,6 @@
                             <p class="mt-1 text-xs text-gray-500">{{ lang('fields.language_helper', [], 'profile') }}</p>
                         </div>
                     </div>
-                </div>
 
                 <!-- Submit Button -->
                 <div class="flex justify-end">
