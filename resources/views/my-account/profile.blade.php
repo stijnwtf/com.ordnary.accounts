@@ -3,108 +3,74 @@
 @section('title', lang('profile.title', [], 'profile'))
 
 @section('content')
-    <!-- Page Header -->
-    <div class="mb-8">
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ lang('personal_info', [], 'profile') }}</h3>
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ lang('personal_info', [], 'profile') }}</h3>
         <p class="text-sm text-gray-600">{{ lang('subtitle', [], 'profile') }}</p>
     </div>
 
     <!-- Profile Picture & Banner Section -->
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 mb-6 hover:shadow-md transition-shadow duration-200">
-        <div class="flex items-center mb-6">
-            <div class="flex-shrink-0">
-                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-image text-blue-600 text-lg"></i>
-                </div>
-            </div>
-            <div class="ml-4">
-                <h4 class="text-lg font-semibold text-gray-900">Profile Appearance</h4>
-                <p class="text-sm text-gray-600">Customize your profile with a picture and banner image</p>
-            </div>
-        </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <h4 class="text-lg font-medium text-gray-900 mb-4">Profile Picture & Banner</h4>
         
-        <div class="space-y-8">
-            <!-- Profile Picture -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-4">Profile Picture</label>
-                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-4 sm:space-y-0">
-                    <div class="relative flex-shrink-0">
-                        <img class="h-24 w-24 rounded-full object-cover border-4 border-gray-100 shadow-md"
+        <div class="space-y-6">
+            <!-- Profile Picture + Full Name Row -->
+            <div class="flex flex-col md:flex-row md:items-start gap-6">
+                <!-- Left: Profile Picture -->
+                <div class="flex-shrink-0">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Profile Picture</label>
+                    <div class="relative">
+                        <img class="h-32 w-32 rounded-full object-cover border-2 border-gray-200"
                             src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
                             alt="{{ $user->first_name }} {{ $user->last_name }}">
-                        <div class="absolute bottom-1 right-1 h-6 w-6 bg-green-400 rounded-full border-3 border-white shadow-sm"></div>
+                        <div class="absolute bottom-1 right-1 h-6 w-6 bg-green-400 rounded-full border-2 border-white"></div>
                     </div>
-                    <div class="flex-1">
-                        <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
-                            <button type="button" 
-                                class="inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 shadow-sm hover:shadow">
-                                <i class="fas fa-upload mr-2"></i>Upload Photo
-                            </button>
-                            <button type="button" 
-                                class="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150">
-                                <i class="fas fa-trash-alt mr-2"></i>Remove
-                            </button>
-                        </div>
-                        <p class="mt-3 text-xs text-gray-500 flex items-start">
-                            <i class="fas fa-info-circle mr-1.5 mt-0.5 text-blue-500"></i>
-                            <span>JPG, PNG or GIF. Max 2MB. Recommended 400x400px for best quality</span>
-                        </p>
+                    <div class="mt-3 space-y-2">
+                        <button type="button" 
+                            class="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-upload mr-2"></i>Upload
+                        </button>
+                        <button type="button" 
+                            class="w-full px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">
+                            <i class="fas fa-trash-alt mr-2"></i>Remove
+                        </button>
                     </div>
+                    <p class="mt-2 text-xs text-gray-500">JPG, PNG or GIF. Max 2MB.</p>
+                </div>
+
+                <!-- Right: Full Name -->
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Full Name</label>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                        <p class="text-2xl font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</p>
+                        <p class="text-sm text-gray-500 mt-1">{{ $user->email }}</p>
+                    </div>
+                    <p class="text-xs text-gray-500">Your display name as shown across the platform.</p>
                 </div>
             </div>
 
-            <!-- Divider -->
-            <div class="border-t border-gray-200"></div>
-
-            <!-- Banner Image -->
+            <!-- Banner Customization -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-4">Profile Banner</label>
+                <label class="block text-sm font-medium text-gray-700 mb-3">Banner Customization</label>
                 <div class="relative">
-                    <div class="w-full h-40 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl overflow-hidden shadow-inner relative">
-                        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-                        <div class="relative w-full h-full flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-clock text-white text-2xl mb-2 opacity-75"></i>
-                                <span class="text-white text-sm font-semibold opacity-90 block">Coming Soon</span>
-                                <span class="text-white text-xs opacity-75">Banner customization will be available soon</span>
-                            </div>
+                    <div class="w-full h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg overflow-hidden">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="text-white text-sm font-medium opacity-50">Coming Soon</span>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-start">
-                        <button type="button" disabled
-                            class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-200 text-gray-400 text-sm font-medium rounded-lg cursor-not-allowed">
-                            <i class="fas fa-upload mr-2"></i>Upload Banner
-                        </button>
-                        <p class="ml-4 mt-2 text-xs text-gray-500 flex items-start">
-                            <i class="fas fa-info-circle mr-1.5 mt-0.5 text-gray-400"></i>
-                            <span>JPG or PNG. Max 5MB. Recommended 1500x500px</span>
-                        </p>
-                    </div>
+                    <button type="button" disabled
+                        class="mt-3 px-4 py-2 bg-gray-300 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed">
+                        <i class="fas fa-upload mr-2"></i>Upload Banner (Coming Soon)
+                    </button>
+                    <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 5MB. Recommended: 1500x500px</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Personal Information Form -->
     <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
         @csrf
 
-        <!-- Basic Information Card -->
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow duration-200">
-            <div class="flex items-center mb-6">
-                <div class="flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-user text-blue-600 text-lg"></i>
-                    </div>
-                </div>
-                <div class="ml-4">
-                    <h4 class="text-lg font-semibold text-gray-900">Basic Information</h4>
-                    <p class="text-sm text-gray-600">Your personal details and identification</p>
-                </div>
-            </div>
-
-            <div class="space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- First Name Input -->
                     <div>
                         <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
