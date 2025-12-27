@@ -17,7 +17,7 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
                 <div class="mb-8 flex flex-col items-start">
-                    <img src="/img/dark.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
+                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900">Create your Ordnary-account.</h2>
                         <p class="text-sm text-gray-600 mt-2">Get access to all Ordnary services with a single account.

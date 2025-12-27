@@ -13,7 +13,7 @@
     <div class="flex items-center justify-center flex-grow">
         <div class="w-full max-w-md p-8">
             <div class="mb-8 flex flex-col items-start">
-                <img src="/img/dark.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
+                <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Verify your email address</h2>
                     <p class="text-sm text-gray-600 mt-2">We've sent a verification link to your email address. Please

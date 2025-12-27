@@ -16,7 +16,7 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
                 <div class="mb-8 flex flex-col items-start">
-                    <img src="/img/dark.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
+                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <h2 class="text-2xl font-bold text-gray-900">Forgot password?</h2>
                     <p class="text-sm text-gray-600 mt-2">Enter your email address to receive a password reset link.</p>
                 </div>

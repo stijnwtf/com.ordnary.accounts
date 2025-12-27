@@ -219,7 +219,7 @@
                                     <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                                 </p>
                                 <a href="/" class="flex items-center">
-                                    <img src="/img/dark.png" alt="Ordnary" class="h-4 w-auto">
+                                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary" class="h-4 w-auto">
                                 </a>
                             </div>
                         </div>
@@ -975,7 +975,7 @@
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div class="flex items-center px-4 mb-4">
                     <div class="flex items-center flex-shrink-0">
-                        <img class="h-5 w-auto" src="/img/dark.png" alt="Ordnary">
+                        <img class="h-5 w-auto" src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary">
                         <span class="ml-2 text-sm font-semibold text-gray-800">My Account</span>
                     </div>
                 </div>
