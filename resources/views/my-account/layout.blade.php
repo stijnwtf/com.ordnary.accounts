@@ -17,9 +17,6 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -250,7 +247,7 @@
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <a href="/" class="flex items-center">
-                        <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary" class="h-6 w-auto">
+                        <img src="/img/dark.png" alt="Numblio" class="h-6 w-auto">
                     </a>
                 </div>
                 <div class="flex items-center">
@@ -343,7 +340,7 @@
                                         <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                                     </p>
                                     <a href="/" class="flex items-center">
-                                        <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary" class="h-4 w-auto">
+                                        <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
                                     </a>
                                 </div>
                             </div>
@@ -405,7 +402,7 @@
             <div class="mt-8 py-3 px-4 border-t border-gray-200 bg-white rounded-lg shadow-sm lg:hidden">
                 <div class="text-xs text-gray-400">
                     <div class="flex flex-col space-y-2">
-                        <span>&copy; {{ date('Y') }} Ordnary. {{ lang('footer.rights', [], 'layout') }}</span>
+                        <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
                         <div class="flex items-center space-x-3">
                             <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
                             <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
@@ -431,7 +428,7 @@
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div class="flex items-center px-4 mb-4">
                     <div class="flex items-center flex-shrink-0">
-                        <img class="h-6 w-auto" src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary">
+                        <img class="h-6 w-auto" src="/img/dark.png" alt="Numblio">
                         <span class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
