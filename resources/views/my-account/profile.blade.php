@@ -202,29 +202,6 @@
                         <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 2MB.</p>
                     </div>
                 </div>
-
-                <!-- Banner Customization -->
-                <h4 class="text-base font-medium text-gray-900 flex items-center">
-                    Banner Customization
-                </h4>
-                <p class="text-sm text-gray-600 mb-4">Customize your profile banner to make your account unique.</p>
-                <div
-                    class="w-full h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg overflow-hidden relative mb-4">
-                    <div class="w-full h-full flex items-center justify-center">
-                        <span class="text-white text-sm font-medium opacity-75">Coming Soon</span>
-                    </div>
-                </div>
-                <div class="flex gap-3">
-                    <button type="button" disabled
-                        class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-gray-400 cursor-not-allowed">
-                        <i class="fas fa-upload mr-1.5"></i>Upload Banner
-                    </button>
-                    <button type="button" disabled
-                        class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-gray-600 bg-white border border-gray-300 cursor-not-allowed">
-                        <i class="fas fa-trash-alt mr-1.5"></i>Remove
-                    </button>
-                </div>
-                <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 5MB. Recommended: 1500x500px</p>
             </div>
         </div>
     </div>
