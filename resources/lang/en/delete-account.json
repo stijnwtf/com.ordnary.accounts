@@ -4,7 +4,7 @@
   "subheader": "This action cannot be undone. Please read the information below carefully.",
   
   "warning.title": "Warning: Account Deletion",
-  "warning.description": "You are about to request the deletion of your Numblio account and all associated personal data. This action is <strong>permanent and cannot be undone</strong>.",
+  "warning.description": "You are about to request the deletion of your Ordnary account and all associated personal data. This action is <strong>permanent and cannot be undone</strong>.",
   
   "what_will_be_deleted.title": "What Will Be Deleted",
   "what_will_be_deleted.items.personal_info": "Your personal information (name, email, etc.)",

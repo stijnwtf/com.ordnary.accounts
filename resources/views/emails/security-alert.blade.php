@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Alert - Numblio</title>
+    <title>Security Alert - Ordnary</title>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -283,11 +283,11 @@
         <div class="container">
             <div class="content-wrapper">
                 <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                    <img src="{{ asset('img/dark.png') }}" alt="Ordnary Logo" class="logo">
                 </div>
 
                 <h2>Security Alert</h2>
-                <p class="subtitle">We have detected unusual activity on your Numblio account. Please review the details
+                <p class="subtitle">We have detected unusual activity on your Ordnary account. Please review the details
                     below and take action if necessary.</p>
 
                 <div class="warning-box">
@@ -342,8 +342,8 @@
                 <div class="help-section">
                     <div class="help-title">Need Help?</div>
                     <p class="help-text">If you don't recognize this activity or have questions about your account
-                        security, please contact our security team immediately at <a href="mailto:security@numblio.com"
-                            style="color: #2563eb;">security@numblio.com</a>.</p>
+                        security, please contact our security team immediately at <a href="mailto:security@ordnary.com"
+                            style="color: #2563eb;">security@ordnary.com</a>.</p>
                 </div>
             </div>
         </div>

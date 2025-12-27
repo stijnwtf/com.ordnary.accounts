@@ -1,6 +1,6 @@
 # Developer Portal API
 
-Deze API is specifiek voor developers.numblio.com om clients aan te maken en beheren in de SSO.
+Deze API is specifiek voor developers.ordnary.com om clients aan te maken en beheren in de SSO.
 
 ## Authenticatie
 
@@ -39,7 +39,7 @@ https://jouw-sso-domain.com/api/v1/developer-portal
 
 **POST** `/clients`
 
-Maakt een nieuwe client aan na goedkeuring in developers.numblio.com.
+Maakt een nieuwe client aan na goedkeuring in developers.ordnary.com.
 
 **Request Body:**
 ```json
@@ -279,7 +279,7 @@ DEVELOPER_PORTAL_API_KEY=jouw-geheime-api-key-hier
 
 Genereer een sterke, willekeurige API key voor productie gebruik.
 
-## Voorbeeld PHP Code voor developers.numblio.com
+## Voorbeeld PHP Code voor developers.ordnary.com
 
 ```php
 <?php
@@ -353,7 +353,7 @@ class SSOClient {
 }
 
 // Gebruik
-$sso = new SSOClient('jouw-api-key', 'https://sso.numblio.com', 'dev@example.com', 123);
+$sso = new SSOClient('jouw-api-key', 'https://sso.ordnary.com', 'dev@example.com', 123);
 
 // Client aanmaken (geen user auth vereist)
 $newClient = $sso->createClient([

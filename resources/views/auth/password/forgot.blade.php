@@ -16,7 +16,7 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
                 <div class="mb-8 flex flex-col items-start">
-                    <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
+                    <img src="/img/dark.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <h2 class="text-2xl font-bold text-gray-900">Forgot password?</h2>
                     <p class="text-sm text-gray-600 mt-2">Enter your email address to receive a password reset link.</p>
                 </div>
@@ -69,14 +69,14 @@
                 <!-- Footer -->
                 <footer class="mt-8 text-xs text-gray-400">
                     <div class="flex flex-col space-y-1">
-                        <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services
+                        <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated services
                             are protected by copyright and intellectual property laws.</span>
                         <div class="flex items-center space-x-2 mt-1">
-                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">Terms</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                            <a href="https://support.ordnary.com" class="hover:text-gray-600">Help</a>
                         </div>
                     </div>
                 </footer>

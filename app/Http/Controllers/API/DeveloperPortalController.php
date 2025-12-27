@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class DeveloperPortalController extends Controller
 {
     /**
-     * Create a new client from developers.numblio.com
+     * Create a new client from developers.ordnary.com
      * 
      * @param Request $request
      * @return JsonResponse
@@ -114,7 +114,7 @@ class DeveloperPortalController extends Controller
     }
 
     /**
-     * Get client data by client_id for developers.numblio.com
+     * Get client data by client_id for developers.ordnary.com
      * Requires user authentication to see only own clients
      * 
      * @param string $clientId
@@ -205,7 +205,7 @@ class DeveloperPortalController extends Controller
     }
 
     /**
-     * Get multiple clients data for developers.numblio.com
+     * Get multiple clients data for developers.ordnary.com
      * Requires user authentication to see only own clients
      * 
      * @param Request $request
@@ -290,7 +290,7 @@ class DeveloperPortalController extends Controller
     }
 
     /**
-     * Update client settings from developers.numblio.com
+     * Update client settings from developers.ordnary.com
      * Requires user authentication to update only own clients
      * 
      * @param Request $request

@@ -19,7 +19,7 @@ Route::prefix('v1')->group(function () {
     // Token validation endpoint
     Route::post('/validate-token', [AuthController::class, 'validateToken']);
 
-    // Developer Portal API endpoints (voor developers.numblio.com)
+    // Developer Portal API endpoints (voor developers.ordnary.com)
     Route::middleware(['developer.portal'])->prefix('developer-portal')->group(function () {
         Route::post('/clients', [DeveloperPortalController::class, 'createClient']);
         Route::get('/clients/{clientId}', [DeveloperPortalController::class, 'getClient']);

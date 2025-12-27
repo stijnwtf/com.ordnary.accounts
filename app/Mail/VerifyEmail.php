@@ -46,7 +46,7 @@ class VerifyEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Numblio | Verify Your Email Address')
+        return $this->subject('Ordnary | Verify Your Email Address')
                     ->view('emails.verify-email');
     }
 } 

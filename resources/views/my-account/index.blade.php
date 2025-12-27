@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Manage your Numblio account settings">
-    <title>My Account | Numblio</title>
+    <meta name="description" content="Manage your Ordnary account settings">
+    <title>My Account | Ordnary</title>
 
     <!-- Inline critical CSS to prevent FOUC -->
     <style>
@@ -194,7 +194,7 @@
                                 <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                     Support
                                 </div>
-                                <a href="https://support.numblio.com"
+                                <a href="https://support.ordnary.com"
                                     class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                                     <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                     Help Center
@@ -219,7 +219,7 @@
                                     <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                                 </p>
                                 <a href="/" class="flex items-center">
-                                    <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
+                                    <img src="/img/dark.png" alt="Ordnary" class="h-4 w-auto">
                                 </a>
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                         <div class="p-6 border-b border-gray-200">
                             <h2 class="text-xl font-bold text-gray-900">Welcome back, {{ $user->name }}</h2>
                             <p class="text-sm text-gray-600 mt-1">Manage your personal information and security settings
-                                for your Numblio-account.</p>
+                                for your Ordnary-account.</p>
                         </div>
 
                         <!-- Success Message -->
@@ -304,14 +304,14 @@
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Personal information</h3>
                                     <p class="text-sm text-gray-600">Update your personal information to personalize
-                                        your Numblio experience.</p>
+                                        your Ordnary experience.</p>
                                 </div>
                                 <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
                                     @csrf
 
                                     <!-- Name Input -->
                                     <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Numblio
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Ordnary
                                             ID</label>
                                         <div class="relative">
                                             <div
@@ -319,7 +319,7 @@
                                                 <i class="fas fa-link text-gray-400"></i>
                                             </div>
                                             <input type="text" placeholder="idnblo_12345678" name="name" id="name"
-                                                value="{{ $user->numblio_id }}" required
+                                                value="{{ $user->ordnary_id }}" required
                                                 class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}">
                                         </div>
                                         @error('name')
@@ -327,7 +327,7 @@
                                                 {{ $message }}
                                             </p>
                                         @enderror
-                                        <p class="mt-1 text-xs text-gray-500">{{$user->numblio_id}}.</p>
+                                        <p class="mt-1 text-xs text-gray-500">{{$user->ordnary_id}}.</p>
                                     </div>
 
                                     <!-- Email Input -->
@@ -571,7 +571,7 @@
                             <div id="security-content" class="tab-content hidden">
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Account security</h3>
-                                    <p class="text-sm text-gray-600">Enhance the security of your Numblio account with
+                                    <p class="text-sm text-gray-600">Enhance the security of your Ordnary account with
                                         additional protection measures.</p>
                                 </div>
 
@@ -892,7 +892,7 @@
                                 <div class="mb-6">
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">Connected services</h3>
                                     <p class="text-sm text-gray-600">Manage the services and applications connected to
-                                        your Numblio account.</p>
+                                        your Ordnary account.</p>
                                 </div>
 
                                 <!-- Connected Services Overview -->
@@ -904,7 +904,7 @@
                                         <div>
                                             <h4 class="text-md font-semibold text-gray-900">Connected applications</h4>
                                             <p class="text-sm text-gray-600">View and manage third-party applications
-                                                that have access to your Numblio account.</p>
+                                                that have access to your Ordnary account.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -975,7 +975,7 @@
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div class="flex items-center px-4 mb-4">
                     <div class="flex items-center flex-shrink-0">
-                        <img class="h-5 w-auto" src="/img/dark.png" alt="Numblio">
+                        <img class="h-5 w-auto" src="/img/dark.png" alt="Ordnary">
                         <span class="ml-2 text-sm font-semibold text-gray-800">My Account</span>
                     </div>
                 </div>

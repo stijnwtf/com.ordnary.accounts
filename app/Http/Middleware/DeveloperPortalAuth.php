@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class DeveloperPortalAuth
 {
     /**
-     * Handle an incoming request from developers.numblio.com
+     * Handle an incoming request from developers.ordnary.com
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next

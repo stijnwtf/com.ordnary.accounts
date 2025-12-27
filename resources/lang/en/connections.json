@@ -1,16 +1,16 @@
 {
   "title": "Connected Services",
   "header": "Connected Services",
-  "subheader": "Manage the services and applications connected to your Numblio account.",
+  "subheader": "Manage the services and applications connected to your Ordnary account.",
   
   "connected_services": "Connected services",
-  "manage_services": "Manage the services and applications connected to your Numblio account.",
+  "manage_services": "Manage the services and applications connected to your Ordnary account.",
   
   "status.connected": "Connected",
   "status.connected_on": "Connected on",
   "status.last_used": "Last used on",
   "status.disconnect": "Disconnect",
-  "status.disconnect_confirm": "Are you sure you want to disconnect {service}? This will revoke access to your Numblio account.",
+  "status.disconnect_confirm": "Are you sure you want to disconnect {service}? This will revoke access to your Ordnary account.",
   "status.success_disconnect": "Successfully disconnected {service}",
   "status.error_disconnect": "Failed to disconnect service. Please try again.",
   "status.unexpected_error": "An unexpected error occurred. Please try again.",

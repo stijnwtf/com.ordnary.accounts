@@ -5,7 +5,7 @@
 @section('content')
     <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <img class="mx-auto h-12 w-auto" src="{{ asset('img/logo.svg') }}" alt="Numblio">
+            <img class="mx-auto h-12 w-auto" src="{{ asset('img/logo.svg') }}" alt="Ordnary">
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Account Successfully Deleted
             </h2>
@@ -44,7 +44,7 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-2">What Happens Next?</h3>
                         <p class="text-sm text-gray-600">
                             Your session has been terminated and you have been logged out of all devices. If you wish to use
-                            Numblio services again in the future, you will need to create a new account.
+                            Ordnary services again in the future, you will need to create a new account.
                         </p>
                     </div>
 
@@ -52,8 +52,8 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Questions?</h3>
                         <p class="text-sm text-gray-600">
                             If you have any questions about the data deletion process or need further assistance, please
-                            contact our support team at <a href="mailto:privacy@numblio.com"
-                                class="text-indigo-600 hover:text-indigo-500">privacy@numblio.com</a>.
+                            contact our support team at <a href="mailto:privacy@ordnary.com"
+                                class="text-indigo-600 hover:text-indigo-500">privacy@ordnary.com</a>.
                         </p>
                     </div>
 

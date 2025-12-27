@@ -185,7 +185,7 @@ class MyAccountController extends Controller
             // Example of another product
             [
                 'id' => 'sub_789012',
-                'product_name' => 'Numblio Forms',
+                'product_name' => 'Ordnary Forms',
                 'status' => 'active',
                 'started_at' => now()->subWeeks(3),
                 'expires_at' => null, // null means it renews automatically
@@ -492,11 +492,11 @@ class MyAccountController extends Controller
                     'generated_for' => $user->email,
                     'user_id' => $user->id,
                     'data_controller' => [
-                        'name' => 'Numblio B.V.',
+                        'name' => 'Ordnary B.V.',
                         'address' => 'Hoofdstraat 123, 1234 AB Amsterdam, Netherlands',
-                        'contact_email' => 'privacy@numblio.com',
-                        'dpo_email' => 'dpo@numblio.com',
-                        'website' => 'https://numblio.com'
+                        'contact_email' => 'privacy@ordnary.com',
+                        'dpo_email' => 'dpo@ordnary.com',
+                        'website' => 'https://ordnary.com'
                     ],
                     'legal_basis' => 'GDPR Article 20 - Right to data portability',
                     'data_categories' => [
@@ -519,7 +519,7 @@ class MyAccountController extends Controller
                 'personal_information' => [
                     'basic_info' => [
                         'internal_id' => $user->id,
-                        'numblio_id' => $user->numblio_id,
+                        'ordnary_id' => $user->ordnary_id,
                         'username' => $user->username,
                         'first_name' => $user->first_name,
                         'last_name' => $user->last_name,
@@ -676,7 +676,7 @@ class MyAccountController extends Controller
 
             // Generate filename with timestamp
             $timestamp = now()->format('Y-m-d_H-i-s');
-            $filename = "numblio_comprehensive_export_{$user->username}_{$timestamp}.json";
+            $filename = "ordnary_comprehensive_export_{$user->username}_{$timestamp}.json";
 
             $jsonData = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 

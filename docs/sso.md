@@ -1,29 +1,29 @@
 ## Overzicht
 
-Numblio Single Sign-On (SSO) is een gecentreerd authenticatiesysteem dat gebruikers in staat stelt zich aan te melden bij meerdere applicaties met één set inloggegevens. Dit document beschrijft hoe je de Numblio SSO kunt integreren in je applicatie.
+Ordnary Single Sign-On (SSO) is een gecentreerd authenticatiesysteem dat gebruikers in staat stelt zich aan te melden bij meerdere applicaties met één set inloggegevens. Dit document beschrijft hoe je de Ordnary SSO kunt integreren in je applicatie.
 
 ## Hoe SSO Werkt
 
 ### 1. Authenticatie Flow
 
 ```
-Gebruiker → Jouw App → Numblio SSO → Authenticatie → Token → Jouw App → Ingelogd
+Gebruiker → Jouw App → Ordnary SSO → Authenticatie → Token → Jouw App → Ingelogd
 ```
 
 ### 2. Gedetailleerde Stappen
 
-1. **Initiële Redirect**: Gebruiker wordt doorgestuurd naar Numblio SSO met `client_id` en `redirect_uri`
-2. **Authenticatie**: Gebruiker logt in bij Numblio (inclusief 2FA indien ingeschakeld)
-3. **Token Generatie**: Numblio genereert een veilige token
+1. **Initiële Redirect**: Gebruiker wordt doorgestuurd naar Ordnary SSO met `client_id` en `redirect_uri`
+2. **Authenticatie**: Gebruiker logt in bij Ordnary (inclusief 2FA indien ingeschakeld)
+3. **Token Generatie**: Ordnary genereert een veilige token
 4. **Callback**: Gebruiker wordt teruggestuurd naar jouw app met de token
-5. **Token Validatie**: Jouw app valideert de token bij Numblio
+5. **Token Validatie**: Jouw app valideert de token bij Ordnary
 6. **Gebruiker Data**: Bij succesvolle validatie ontvang je gebruikersgegevens
 
 ## Client Registratie
 
 ### 1. Een Client Aanmaken
 
-In de Numblio SSO admin panel moet je een client registreren met:
+In de Ordnary SSO admin panel moet je een client registreren met:
 
 - **Naam**: Naam van je applicatie
 - **Client ID**: Unieke identifier (wordt automatisch gegenereerd)
@@ -54,7 +54,7 @@ In de Numblio SSO admin panel moet je een client registreren met:
 Stuur gebruikers naar deze URL om het SSO proces te starten:
 
 ```
-https://accounts.numblio.com/login?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
+https://accounts.ordnary.com/login?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
 ```
 
 **Parameters:**
@@ -74,7 +74,7 @@ https://mijnapplicatie.nl/auth/callback?token=abc123xyz789token
 Valideer de ontvangen token door een POST request te maken naar:
 
 ```
-POST https://accounts.numblio.com/api/v1/validate-token
+POST https://accounts.ordnary.com/api/v1/validate-token
 ```
 
 **Headers:**
@@ -142,13 +142,13 @@ Content-Type: application/json
 ### 4. HTTPS Vereist
 
 - Alle communicatie moet via HTTPS verlopen
-- Numblio accepteert geen HTTP callbacks (behalve localhost voor development)
+- Ordnary accepteert geen HTTP callbacks (behalve localhost voor development)
 
 ## Features
 
 ### 1. Two-Factor Authentication (2FA)
 
-Numblio ondersteunt 2FA met:
+Ordnary ondersteunt 2FA met:
 - Google Authenticator / Authy
 - SMS (indien geconfigureerd)
 - Recovery codes
@@ -173,10 +173,10 @@ Numblio ondersteunt 2FA met:
 ### 1. Environment Configuratie
 
 ```env
-NUMBLIO_SSO_URL=https://accounts.numblio.com
-NUMBLIO_CLIENT_ID=jouw_client_id_hier
-NUMBLIO_CLIENT_SECRET=jouw_client_secret_hier
-NUMBLIO_REDIRECT_URI=https://mijnapplicatie.nl/auth/callback
+ORDNARY_SSO_URL=https://accounts.ordnary.com
+ORDNARY_CLIENT_ID=jouw_client_id_hier
+ORDNARY_CLIENT_SECRET=jouw_client_secret_hier
+ORDNARY_REDIRECT_URI=https://mijnapplicatie.nl/auth/callback
 ```
 
 ### 2. Routes
@@ -293,9 +293,9 @@ Log::info('SSO token validation', [
 
 Voor vragen over de SSO integratie:
 
-- **Support:** support@numblio.com
-- **Documentatie:** https://docs.numblio.com/sso
-- **Status:** https://status.numblio.com
+- **Support:** support@ordnary.com
+- **Documentatie:** https://docs.ordnary.com/sso
+- **Status:** https://status.ordnary.com
 
 ## Changelog
 

@@ -1,16 +1,16 @@
 {
   "title": "Verbonden diensten",
   "header": "Verbonden diensten",
-  "subheader": "Beheer de diensten en applicaties die verbonden zijn met je Numblio-account.",
+  "subheader": "Beheer de diensten en applicaties die verbonden zijn met je Ordnary-account.",
   
   "connected_services": "Verbonden diensten",
-  "manage_services": "Beheer de diensten en applicaties die verbonden zijn met je Numblio-account.",
+  "manage_services": "Beheer de diensten en applicaties die verbonden zijn met je Ordnary-account.",
   
   "status.connected": "Verbonden",
   "status.connected_on": "Verbonden op",
   "status.last_used": "Laatst gebruikt op",
   "status.disconnect": "Loskoppelen",
-  "status.disconnect_confirm": "Weet je zeker dat je {service} wilt loskoppelen? Hiermee wordt de toegang tot je Numblio-account ingetrokken.",
+  "status.disconnect_confirm": "Weet je zeker dat je {service} wilt loskoppelen? Hiermee wordt de toegang tot je Ordnary-account ingetrokken.",
   "status.success_disconnect": "Succesvol losgekoppeld {service}",
   "status.error_disconnect": "Het loskoppelen van de dienst is mislukt. Probeer het opnieuw.",
   "status.unexpected_error": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",

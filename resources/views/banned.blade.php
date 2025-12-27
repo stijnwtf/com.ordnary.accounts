@@ -29,7 +29,7 @@
 
         <!-- Header with logo and title -->
         <div class="mb-8 text-center">
-            <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mx-auto mb-4">
+            <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mx-auto mb-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900">Account Suspended</h1>
                 <p class="text-lg text-gray-600 mt-2">Your access to this application has been restricted.</p>
@@ -79,7 +79,7 @@
                                 <p class="text-sm text-blue-700 mb-3">
                                     If you believe this is a mistake or would like to appeal this decision, please contact our support team.
                                 </p>
-                                <a href="https://support.numblio.com" class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm leading-4 font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                <a href="https://support.ordnary.com" class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm leading-4 font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                                     <i class="fas fa-external-link-alt mr-2"></i>
                                     Contact Support
                                 </a>
@@ -180,9 +180,9 @@
     <!-- Footer -->
     <footer class="py-4 text-center text-xs text-gray-400">
         <div class="flex items-center justify-center space-x-4">
-            <span>&copy; {{ date('Y') }} Numblio. All rights reserved.</span>
-            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600 transition-colors">Privacy Policy</a>
-            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600 transition-colors">Terms of Service</a>
+            <span>&copy; {{ date('Y') }} Ordnary. All rights reserved.</span>
+            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600 transition-colors">Privacy Policy</a>
+            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600 transition-colors">Terms of Service</a>
         </div>
     </footer>
 </body>

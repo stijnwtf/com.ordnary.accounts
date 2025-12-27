@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Numblio SSO</title>
+    <title>Register - Ordnary SSO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Using reCAPTCHA v2 Invisible -->
@@ -17,10 +17,10 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
                 <div class="mb-8 flex flex-col items-start">
-                    <img src="/img/dark.png" alt="Numblio Logo" class="h-8 w-auto mb-3">
+                    <img src="/img/dark.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Create your Numblio-account.</h2>
-                        <p class="text-sm text-gray-600 mt-2">Get access to all Numblio services with a single account.
+                        <h2 class="text-2xl font-bold text-gray-900">Create your Ordnary-account.</h2>
+                        <p class="text-sm text-gray-600 mt-2">Get access to all Ordnary services with a single account.
                             It's free and only takes a minute.</p>
                     </div>
                 </div>
@@ -58,8 +58,8 @@
                                 <h3 class="text-sm font-medium text-yellow-800">You are creating an account to use with
                                     <b>{{ $client_name }}</b>.</h3>
                                 <div class="mt-1 text-sm text-yellow-700">
-                                    Sign up to create your Numblio account and proceed to {{ $client_name }}. This
-                                    registration is managed via Single Sign-On (SSO), allowing you to access all Numblio
+                                    Sign up to create your Ordnary account and proceed to {{ $client_name }}. This
+                                    registration is managed via Single Sign-On (SSO), allowing you to access all Ordnary
                                     services with one account.
                                 </div>
                             </div>
@@ -229,9 +229,9 @@
                                 <div class="ml-3 text-sm">
                                     <label for="gdpr_consent" class="text-gray-700">
                                         I consent to the processing of my personal data in accordance with the <span
-                                            class="font-medium">GDPR</span>. I understand that Numblio will collect,
+                                            class="font-medium">GDPR</span>. I understand that Ordnary will collect,
                                         store, and process my data as described in the <a
-                                            href="https://numblio.com/documents/privacy"
+                                            href="https://ordnary.com/documents/privacy"
                                             class="text-blue-600 hover:underline">Privacy Policy</a>, and that I have
                                         the right to access, modify, export, or request deletion of my personal data at
                                         any time.
@@ -262,14 +262,14 @@
                 <!-- Footer -->
                 <footer class="mt-8 text-xs text-gray-400">
                     <div class="flex flex-col space-y-1">
-                        <span>&copy; {{ date('Y') }} Numblio. All rights reserved. Numblio and all associated services
+                        <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated services
                             are protected by copyright and intellectual property laws.</span>
                         <div class="flex items-center space-x-2 mt-1">
-                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">Terms</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://support.numblio.com" class="hover:text-gray-600">Help</a>
+                            <a href="https://support.ordnary.com" class="hover:text-gray-600">Help</a>
                         </div>
                     </div>
                 </footer>

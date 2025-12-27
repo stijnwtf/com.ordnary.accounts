@@ -49,7 +49,7 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
-            'numblio_id' => (string) \Illuminate\Support\Str::uuid(),
+            'ordnary_id' => (string) \Illuminate\Support\Str::uuid(),
             'username' => $validated['username'],
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],

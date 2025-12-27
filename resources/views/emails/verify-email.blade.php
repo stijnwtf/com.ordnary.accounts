@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Your Email Address - Numblio</title>
+    <title>Verify Your Email Address - Ordnary</title>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -248,13 +248,13 @@
         <div class="container">
             <div class="content-wrapper">
                 <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                    <img src="{{ asset('img/dark.png') }}" alt="Ordnary Logo" class="logo">
                     <div class="header-divider"></div>
                     <span class="header-text">Email Verification</span>
                 </div>
 
                 <h2>Verify Your Email Address</h2>
-                <p class="subtitle">Thank you for registering with Numblio. Please verify your email address to activate
+                <p class="subtitle">Thank you for registering with Ordnary. Please verify your email address to activate
                     your account and gain access to all features.</p>
 
                 <div class="info-box">
@@ -286,8 +286,8 @@
                 <div class="help-section">
                     <div class="help-title">Need Help?</div>
                     <p class="help-text">If you did not request this email or need assistance, please contact our
-                        support team at <a href="mailto:support@numblio.com"
-                            style="color: #2563eb;">support@numblio.com</a>.</p>
+                        support team at <a href="mailto:support@ordnary.com"
+                            style="color: #2563eb;">support@ordnary.com</a>.</p>
                 </div>
             </div>
         </div>

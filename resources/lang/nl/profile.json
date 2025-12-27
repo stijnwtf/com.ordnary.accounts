@@ -4,9 +4,9 @@
   "personal_info": "Persoonlijke informatie",
   "fields": {
     "first_name": "Voornaam",
-    "first_name_helper": "Je voornaam zoals weergegeven in Numblio diensten.",
+    "first_name_helper": "Je voornaam zoals weergegeven in Ordnary diensten.",
     "last_name": "Achternaam",
-    "last_name_helper": "Je achternaam zoals weergegeven in Numblio diensten.",
+    "last_name_helper": "Je achternaam zoals weergegeven in Ordnary diensten.",
     "email": "E-mailadres",
     "email_helper": "Dit e-mailadres wordt gebruikt voor inloggen, communicatie en Gravatar.",
     "phone": "Telefoonnummer",

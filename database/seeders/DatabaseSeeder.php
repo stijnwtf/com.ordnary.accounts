@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'numblio_id' => (string) Str::uuid(),
+            'ordnary_id' => (string) Str::uuid(),
             'username' => 'testuser',
             'first_name' => 'Test',
             'last_name' => 'User',

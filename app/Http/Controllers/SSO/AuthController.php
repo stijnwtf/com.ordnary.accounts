@@ -100,7 +100,7 @@ class AuthController extends Controller
             ]);
 
             if ($directLogin) {
-                // Direct login to Numblio account
+                // Direct login to Ordnary account
                 return redirect()->route("account.profile");
             } else if ($clientId && $redirectUri) {
                 // SSO login with client parameters
@@ -179,7 +179,7 @@ class AuthController extends Controller
             session(["direct_login" => true]);
 
             return view("auth.login", [
-                "client_name" => "Numblio Account",
+                "client_name" => "Ordnary Account",
                 "recaptcha_site_key" => config('services.recaptcha.site_key'),
                 "direct_login" => true
             ]);
@@ -758,7 +758,7 @@ class AuthController extends Controller
         }
 
         // Get client name for display purposes
-        $clientName = "Numblio Account";
+        $clientName = "Ordnary Account";
         $clientId = session('auth.2fa.client_id');
         $directLogin = session('auth.2fa.direct_login', false);
         $redirectUri = session('auth.2fa.redirect_uri');
@@ -885,7 +885,7 @@ class AuthController extends Controller
         }
 
         // Get client name for display purposes
-        $clientName = "Numblio Account";
+        $clientName = "Ordnary Account";
         $clientId = session('auth.2fa.client_id');
         $directLogin = session('auth.2fa.direct_login', false);
         $redirectUri = session('auth.2fa.redirect_uri');
@@ -1018,7 +1018,7 @@ class AuthController extends Controller
     private function handleLoginRedirect(User $user, bool $directLogin, ?string $clientId, ?string $redirectUri)
     {
         if ($directLogin) {
-            // Direct login to Numblio account
+            // Direct login to Ordnary account
             Log::info("handleLoginRedirect: Direct login successful, redirecting to profile", [
                 "user_id" => $user->id
             ]);
@@ -1199,7 +1199,7 @@ class AuthController extends Controller
         // Send the reset link email
         Mail::send('emails.password-reset', ['resetUrl' => $resetUrl], function ($message) use ($request) {
             $message->to($request->email);
-            $message->subject('Password Reset Request for Numblio');
+            $message->subject('Password Reset Request for Ordnary');
         });
 
         return redirect()->route('password.sent')->with('status', 'If your email exists in our system, you will receive a password reset link shortly.');
@@ -1409,7 +1409,7 @@ class AuthController extends Controller
             session(["direct_login" => true]);
 
             return view("auth.register", [
-                "client_name" => "Numblio Account",
+                "client_name" => "Ordnary Account",
                 "recaptcha_site_key" => config('services.recaptcha.site_key'),
                 "direct_login" => true
             ]);
@@ -1472,7 +1472,7 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                'numblio_id' => 'idnblo_' . Str::uuid(),
+                'ordnary_id' => 'idnblo_' . Str::uuid(),
                 'username' => $request->username,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,

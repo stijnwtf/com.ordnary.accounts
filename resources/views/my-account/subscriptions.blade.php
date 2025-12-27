@@ -8,7 +8,7 @@
             Subscriptions & Usage
         </h3>
         <p class="mt-2 text-sm text-gray-600">
-            Manage your Numblio product subscriptions and monitor your usage.
+            Manage your Ordnary product subscriptions and monitor your usage.
         </p>
     </div>
 
@@ -220,7 +220,7 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-900">
                                     {{ now()->subMonths(2)->format('d M Y') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-600">Numblio Forms - Monthly
+                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-600">Ordnary Forms - Monthly
                                     subscription</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-900">€9.99</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -248,10 +248,10 @@
             </div>
             <h4 class="text-lg font-medium text-gray-900 mb-2">No Active Subscriptions</h4>
             <p class="text-gray-600 max-w-md mx-auto mb-6">
-                You don't have any active subscriptions with Numblio products. Explore our range of products to find tools that
+                You don't have any active subscriptions with Ordnary products. Explore our range of products to find tools that
                 can help you.
             </p>
-            <a href="https://numblio.com/products"
+            <a href="https://ordnary.com/products"
                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Explore Products
             </a>

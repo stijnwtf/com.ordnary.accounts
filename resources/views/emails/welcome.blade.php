@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Numblio | Your Account Details</title>
+    <title>Welcome to Ordnary | Your Account Details</title>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -247,11 +247,11 @@
         <div class="container">
             <div class="content-wrapper">
                 <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                    <img src="{{ asset('img/dark.png') }}" alt="Ordnary Logo" class="logo">
                 </div>
 
                 <h2>Hi, {{ $user->name }}!</h2>
-                <p class="subtitle">Thank you for creating your Numblio-account. You now have access to all Numblio
+                <p class="subtitle">Thank you for creating your Ordnary-account. You now have access to all Ordnary
                     services with a single account.</p>
 
                 <div class="success-box">
@@ -262,7 +262,7 @@
                         </svg>
                         Account Successfully Created
                     </div>
-                    <p class="success-text">Your account is ready to use. You can now log in to all Numblio services
+                    <p class="success-text">Your account is ready to use. You can now log in to all Ordnary services
                         with your email and password.</p>
                 </div>
 
@@ -277,7 +277,7 @@
                         </svg>
                         <div class="feature-content">
                             <div class="feature-title">Single Sign-On</div>
-                            <p class="feature-description">Easily log in to all Numblio services with one account. No
+                            <p class="feature-description">Easily log in to all Ordnary services with one account. No
                                 more remembering multiple passwords.</p>
                         </div>
                     </div>
@@ -289,7 +289,7 @@
                         </svg>
                         <div class="feature-content">
                             <div class="feature-title">Seamless Integration</div>
-                            <p class="feature-description">Switch effortlessly between different Numblio services
+                            <p class="feature-description">Switch effortlessly between different Ordnary services
                                 without logging in again.</p>
                         </div>
                     </div>
@@ -310,8 +310,8 @@
                 <div class="help-section">
                     <div class="help-title">Need Help?</div>
                     <p class="help-text">If you have any questions or need assistance with your account, please contact
-                        our support team at <a href="mailto:support@numblio.com"
-                            style="color: #2563eb;">support@numblio.com</a>.</p>
+                        our support team at <a href="mailto:support@ordnary.com"
+                            style="color: #2563eb;">support@ordnary.com</a>.</p>
                 </div>
             </div>
         </div>

@@ -4,9 +4,9 @@
   "personal_info": "Personal Information",
   "fields": {
     "first_name": "First Name",
-    "first_name_helper": "Your first name as displayed in Numblio services.",
+    "first_name_helper": "Your first name as displayed in Ordnary services.",
     "last_name": "Last Name",
-    "last_name_helper": "Your last name as displayed in Numblio services.",
+    "last_name_helper": "Your last name as displayed in Ordnary services.",
     "email": "Email Address",
     "email_helper": "This email address is used for login, communication, and Gravatar.",
     "phone": "Phone Number",

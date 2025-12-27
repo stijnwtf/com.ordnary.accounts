@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Recovery Email | Numblio</title>
+    <title>Verify Recovery Email | Ordnary</title>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -169,7 +169,7 @@
         <div class="container">
             <div class="content-wrapper">
                 <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Numblio Logo" class="logo">
+                    <img src="{{ asset('img/dark.png') }}" alt="Ordnary Logo" class="logo">
                 </div>
 
                 <h2>Verify Your Recovery Email</h2>
@@ -184,7 +184,7 @@
                         </svg>
                         Email Verification Required
                     </div>
-                    <p class="info-text">You have added a recovery email to your Numblio account. Please verify this
+                    <p class="info-text">You have added a recovery email to your Ordnary account. Please verify this
                         email address by clicking the button below. This link will expire in 24 hours.</p>
                 </div>
 
@@ -205,8 +205,8 @@
                 <div class="help-section">
                     <div class="help-title">Need Help?</div>
                     <p class="help-text">If you have any questions or need assistance with your account, please contact
-                        our support team at <a href="mailto:support@numblio.com"
-                            style="color: #2563eb;">support@numblio.com</a>.</p>
+                        our support team at <a href="mailto:support@ordnary.com"
+                            style="color: #2563eb;">support@ordnary.com</a>.</p>
                 </div>
             </div>
         </div>
