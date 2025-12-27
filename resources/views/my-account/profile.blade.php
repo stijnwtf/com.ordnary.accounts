@@ -240,6 +240,11 @@
                     const tabButtons = document.querySelectorAll('[data-tab]');
                     const tabContents = document.querySelectorAll('[data-tab-content]');
 
+                    // Remove x-cloak from all tab contents
+                    tabContents.forEach(content => {
+                        content.removeAttribute('x-cloak');
+                    });
+
                     // Get saved tab from localStorage or default to gegevens
                     const savedTab = localStorage.getItem('profileTab') || 'gegevens';
 
