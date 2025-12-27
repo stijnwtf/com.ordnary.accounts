@@ -180,38 +180,32 @@
 
         <!-- Customization Tab -->
         <div x-show="activeTab === 'customization'" x-cloak data-tab-content="customization">
-            <div class="space-y-6">
-                <!-- Profile Picture -->
-                <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
-                    Profile Picture
-                </h4>
-                <div class="flex items-center gap-6">
-                    <div class="flex-shrink-0">
-                        <div class="relative">
-                            <img class="h-24 w-24 rounded-full object-cover border-2 border-gray-200"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                alt="{{ $user->first_name }} {{ $user->last_name }}">
-                            <div class="absolute bottom-0 right-0 h-5 w-5 bg-green-400 rounded-full border-2 border-white">
-                            </div>
-                        </div>
+            <form method="POST" action="{{ route('account.update-bio') }}">
+                @csrf
+                <div class="space-y-6">
+                    <!-- Bio -->
+                    <div>
+                        <label for="bio" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-align-left mr-2"></i>Bio
+                        </label>
+                        <textarea id="bio" name="bio" rows="4" maxlength="500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Tell us about yourself...">{!! old('bio', $user->bio) !!}</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Max 500 characters</p>
+                        @error('bio')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <div class="flex-1">
-                        <p class="text-sm text-gray-600 mb-3">Update your profile picture. We use Gravatar for profile
-                            images.</p>
-                        <div class="flex gap-3">
-                            <button type="button"
-                                class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <i class="fas fa-upload mr-1.5"></i>Upload
-                            </button>
-                            <button type="button"
-                                class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-red-600 bg-white border border-red-300 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                <i class="fas fa-trash-alt mr-1.5"></i>Remove
-                            </button>
-                        </div>
-                        <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 2MB.</p>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-save mr-2"></i>Save Bio
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

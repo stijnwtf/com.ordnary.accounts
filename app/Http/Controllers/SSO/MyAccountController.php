@@ -249,6 +249,29 @@ class MyAccountController extends Controller
     }
 
     /**
+     * Update the user's bio.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateBio(Request $request)
+    {
+        $request->validate([
+            'bio' => 'nullable|string|max:500',
+        ]);
+
+        $user = auth()->user();
+
+        $user->update([
+            'bio' => $request->bio,
+        ]);
+
+        Log::info('User bio updated', ['user_id' => $user->id]);
+
+        return redirect()->back()->with('success', 'Bio successfully updated!');
+    }
+
+    /**
      * Update the user's password.
      *
      * @param  \Illuminate\Http\Request  $request
