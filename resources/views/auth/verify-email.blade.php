@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="bg-white rounded-lg p-6 mb-6">
                 @if (session('resent'))
                     <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
                         <span class="font-medium">Success!</span> A fresh verification link has been sent to your email
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="bg-white rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Didn't receive the email?</h3>
                 <ul class="space-y-3 text-sm text-gray-600">
                     <li class="flex items-start">
