@@ -8,6 +8,51 @@
         <p class="text-sm text-gray-600">{{ lang('subtitle', [], 'profile') }}</p>
     </div>
 
+    <!-- Profile Picture & Banner Section -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <h4 class="text-lg font-medium text-gray-900 mb-4">Profile Picture & Banner</h4>
+        <p class="text-sm text-gray-600 mb-6">Customize your profile appearance with a profile picture and banner image.</p>
+        
+        <div class="space-y-6">
+            <!-- Profile Picture -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">Profile Picture</label>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <img class="h-24 w-24 rounded-full object-cover border-2 border-gray-200"
+                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                            alt="{{ $user->first_name }} {{ $user->last_name }}">
+                        <div class="absolute bottom-0 right-0 h-6 w-6 bg-green-400 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="flex-1">
+                        <button type="button" 
+                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-150">
+                            <i class="fas fa-upload mr-2"></i>Upload New Picture
+                        </button>
+                        <p class="mt-2 text-xs text-gray-500">JPG, PNG or GIF. Max size 2MB. Recommended: 400x400px</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Image -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">Banner Image</label>
+                <div class="relative">
+                    <div class="w-full h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg overflow-hidden">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <span class="text-white text-sm font-medium opacity-50">Coming Soon</span>
+                        </div>
+                    </div>
+                    <button type="button" disabled
+                        class="mt-3 px-4 py-2 bg-gray-300 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed">
+                        <i class="fas fa-upload mr-2"></i>Upload Banner (Coming Soon)
+                    </button>
+                    <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max size 5MB. Recommended: 1500x500px</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
         @csrf
 
