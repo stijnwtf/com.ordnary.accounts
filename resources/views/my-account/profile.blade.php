@@ -40,7 +40,7 @@
                 @csrf
 
                 <!-- Name, Email, Phone & Language -->
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 space-y-4">
+                <div class="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- First Name Input -->
                         <div>
