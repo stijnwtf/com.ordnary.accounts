@@ -301,6 +301,32 @@
             document.querySelectorAll('.text-blue-600')[1].classList.remove('text-blue-600');
             document.querySelectorAll('.text-blue-600')[1].classList.add('text-gray-600');
         }
+
+        // Handle Enter key press on step 1 inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const step1Inputs = document.querySelectorAll('#step1 input');
+            
+            step1Inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        nextStep();
+                    }
+                });
+            });
+
+            // Handle Enter key on step 2 to submit (except last button which is submit)
+            const step2Inputs = document.querySelectorAll('#step2 input[type="text"], #step2 input[type="email"]');
+            
+            step2Inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        document.querySelector('#step2 button[type="submit"]').click();
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
