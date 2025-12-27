@@ -226,8 +226,9 @@
             </div>
         </div>
     </div>
+@endsection
 
-    @section('scripts')
+@section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Wait for Alpine.js to be available, or use fallback after 500ms

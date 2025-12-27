@@ -247,7 +247,7 @@
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <a href="/" class="flex items-center">
-                        <img src="/img/dark.png" alt="Numblio" class="h-6 w-auto">
+                        <img src="/img/dark.png" alt="ordnary" class="h-6 w-auto">
                     </a>
                 </div>
                 <div class="flex items-center">
@@ -318,7 +318,7 @@
                                     <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                         {{ lang('sidebar.support', [], 'layout') }}
                                     </div>
-                                    <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                    <a href="https://support.ordnary.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                         {{ lang('sidebar.help_center', [], 'layout') }}
                                     </a>
@@ -340,7 +340,7 @@
                                         <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
                                     </p>
                                     <a href="/" class="flex items-center">
-                                        <img src="/img/dark.png" alt="Numblio" class="h-4 w-auto">
+                                        <img src="/img/dark.png" alt="ordnary" class="h-4 w-auto">
                                     </a>
                                 </div>
                             </div>
@@ -402,11 +402,11 @@
             <div class="mt-8 py-3 px-4 border-t border-gray-200 bg-white rounded-lg shadow-sm lg:hidden">
                 <div class="text-xs text-gray-400">
                     <div class="flex flex-col space-y-2">
-                        <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
+                        <span>&copy; {{ date('Y') }} ordnary. {{ lang('footer.rights', [], 'layout') }}</span>
                         <div class="flex items-center space-x-3">
-                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
-                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
-                            <a href="https://support.numblio.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
+                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
+                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
+                            <a href="https://support.ordnary.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
                         </div>
                     </div>
                 </div>
@@ -428,7 +428,7 @@
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div class="flex items-center px-4 mb-4">
                     <div class="flex items-center flex-shrink-0">
-                        <img class="h-6 w-auto" src="/img/dark.png" alt="Numblio">
+                        <img class="h-6 w-auto" src="/img/dark.png" alt="ordnary">
                         <span class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
@@ -465,7 +465,7 @@
                         {{ lang('mobile.connections', [], 'layout') }}
                     </a>
                     <div class="border-t border-gray-200 my-2 pt-2"></div>
-                    <a href="https://support.numblio.com" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
+                    <a href="https://support.ordnary.com" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-question-circle mr-4 text-gray-500"></i>
                         {{ lang('mobile.help_center', [], 'layout') }}
                     </a>
