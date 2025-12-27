@@ -220,7 +220,7 @@
                         </div>
 
                         <!-- Turnstile Widget -->
-                        <div id="turnstile-container" class="flex justify-center"></div>
+                        <div id="turnstile-container" hidden class="flex justify-center"></div>
 
                         <!-- GDPR Consent -->
                         <div class="space-y-3 pt-2 pb-1">
