@@ -168,9 +168,8 @@
         <div x-show="activeTab === 'customization'" x-cloak data-tab-content="customization">
             <div class="space-y-6">
                 <!-- Profile Picture -->
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
-                        <i class="fas fa-user-circle text-blue-500 mr-2"></i>
                         Profile Picture
                     </h4>
                     <div class="flex items-center gap-6">
@@ -200,9 +199,8 @@
                 </div>
 
                 <!-- Banner Customization -->
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
-                        <i class="fas fa-image text-blue-500 mr-2"></i>
                         Banner Customization
                     </h4>
                     <p class="text-sm text-gray-600 mb-4">Customize your profile banner to make your account unique.</p>
