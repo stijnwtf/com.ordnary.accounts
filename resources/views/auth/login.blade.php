@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSO</title>
+    <title>Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
@@ -19,8 +19,8 @@
                 <div class="mb-8 flex flex-col items-start">
                     <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Log in to your Ordnary-account.</h2>
-                        <p class="text-sm text-gray-600 mt-2">Log in with your Ordnary account to easily access all your
+                        <h2 class="text-2xl font-bold text-gray-900">Sign in to your Ordnary-account.</h2>
+                        <p class="text-sm text-gray-600 mt-2">Sign in with your Ordnary account to easily access all your
                             Ordnary services. One account for everything you need.</p>
                     </div>
                 </div>
@@ -33,11 +33,11 @@
                                 <i class="fas fa-info-circle text-yellow-500 text-xl"></i>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">You are currently logging in to
+                                <h3 class="text-sm font-medium text-yellow-800">You are currently signing in to
                                     <b>{{ $client_name }}</b>.</h3>
                                 <div class="mt-1 text-sm text-yellow-700">
-                                    Log in to proceed and gain access to {{ $client_name }}. This login is managed via
-                                    Single Sign-On (SSO), allowing you to quickly and securely log in with your existing
+                                    Sign in to proceed and gain access to {{ $client_name }}. This sign-in is managed via
+                                    Single Sign-On (SSO), allowing you to quickly and securely sign in with your existing
                                     account.
                                 </div>
                             </div>
@@ -142,11 +142,11 @@
                         <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated services
                             are protected by copyright and intellectual property laws.</span>
                         <div class="flex items-center space-x-2 mt-1">
-                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                            <a href="https://ordnary.com/documents/privacy-policy" class="hover:text-gray-600">Privacy Policy</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                            <a href="https://ordnary.com/documents/terms-and-conditions" class="hover:text-gray-600">Terms & Conditions</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://support.ordnary.com" class="hover:text-gray-600">Help</a>
+                            <a href="https://ordnary.com/documents/disclaimer" class="hover:text-gray-600">Disclaimer</a>
                         </div>
                     </div>
                 </footer>

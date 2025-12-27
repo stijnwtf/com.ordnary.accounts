@@ -265,11 +265,11 @@
                         <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated services
                             are protected by copyright and intellectual property laws.</span>
                         <div class="flex items-center space-x-2 mt-1">
-                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">Privacy</a>
+                            <a href="https://ordnary.com/documents/privacy-policy" class="hover:text-gray-600">Privacy Policy</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">Terms</a>
+                            <a href="https://ordnary.com/documents/terms-and-conditions" class="hover:text-gray-600">Terms & Conditions</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://support.ordnary.com" class="hover:text-gray-600">Help</a>
+                            <a href="https://ordnary.com/documents/disclaimer" class="hover:text-gray-600">Disclaimer</a>
                         </div>
                     </div>
                 </footer>
