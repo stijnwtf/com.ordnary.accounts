@@ -8,7 +8,8 @@
     <title>Reset Password</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
@@ -81,7 +82,8 @@
                         </div>
                     </div>
 
-                    <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
+                    <!-- Turnstile Widget -->
+                    <div id="turnstile-container" class="flex justify-center"></div>
 
                     <div>
                         <button type="submit"
@@ -108,6 +110,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Render Turnstile widget on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof turnstile !== 'undefined') {
+                turnstile.render('#turnstile-container', {
+                    sitekey: '{{ config("services.turnstile.site_key") }}',
+                    theme: 'light',
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

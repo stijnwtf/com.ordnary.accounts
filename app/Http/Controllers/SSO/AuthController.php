@@ -248,17 +248,17 @@ class AuthController extends Controller
             // Remove the g-recaptcha-response required validation
         ]);
 
-        // Check for recaptcha response manually
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        if (empty($recaptchaResponse)) {
-            Log::warning("login: Missing reCAPTCHA response", [
+        // Check for Turnstile response manually
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        if (empty($turnstileResponse)) {
+            Log::warning("login: Missing Turnstile response", [
                 "email" => $request->email
             ]);
 
             // Check if this is a direct login
             if (session("direct_login")) {
                 return redirect()->route("login")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again."
+                    "turnstile" => "Security verification failed. Please try again."
                 ]);
             }
 
@@ -267,24 +267,23 @@ class AuthController extends Controller
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
             return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
+                "turnstile" => "Security verification failed. Please try again."
             ]);
         }
 
-        // Verify reCAPTCHA
-        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+        // Verify Turnstile
+        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
 
-        if (!$recaptchaResult['success']) {
-            Log::warning("login: reCAPTCHA verification failed", [
+        if (!$turnstileResult['success']) {
+            Log::warning("login: Turnstile verification failed", [
                 "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
-                "score" => $recaptchaResult['score'] ?? 'N/A'
+                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
             ]);
 
             // Check if this is a direct login
             if (session("direct_login")) {
                 return redirect()->route("login")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again."
+                    "turnstile" => "Security verification failed. Please try again."
                 ]);
             }
 
@@ -293,30 +292,7 @@ class AuthController extends Controller
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
             return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
-            ]);
-        }
-
-        // Check score for invisible reCAPTCHA v3 (if score is too low, reject the login)
-        if (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5) {
-            Log::warning("login: reCAPTCHA score too low", [
-                "email" => $request->email,
-                "score" => $recaptchaResult['score']
-            ]);
-
-            // Check if this is a direct login
-            if (session("direct_login")) {
-                return redirect()->route("login")->withErrors([
-                    "recaptcha" => "Security verification failed. Please try again later."
-                ]);
-            }
-
-            $clientId = session("client_id");
-            $redirectUri = session("redirect_uri");
-            $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-
-            return redirect($redirectUrl)->withErrors([
-                "recaptcha" => "Security verification failed. Please try again later."
+                "turnstile" => "Security verification failed. Please try again."
             ]);
         }
 
@@ -497,6 +473,31 @@ class AuthController extends Controller
         ]);
 
         Log::debug("verifyRecaptcha: Verification response", [
+            'response' => $response->json()
+        ]);
+
+        return $response->json();
+    }
+
+    /**
+     * Verify Cloudflare Turnstile response
+     *
+     * @param  string  $turnstileResponse
+     * @return array
+     */
+    private function verifyTurnstile($turnstileResponse)
+    {
+        if (empty($turnstileResponse)) {
+            return ['success' => false, 'error-codes' => ['missing-input-response']];
+        }
+
+        $response = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => config('services.turnstile.secret_key'),
+            'response' => $turnstileResponse,
+            'remoteip' => request()->ip()
+        ]);
+
+        Log::debug("verifyTurnstile: Verification response", [
             'response' => $response->json()
         ]);
 
@@ -1123,9 +1124,7 @@ class AuthController extends Controller
      */
     public function showForgotForm(Request $request)
     {
-        return view('auth.password.forgot', [
-            "recaptcha_site_key" => config('services.recaptcha.site_key')
-        ]);
+        return view('auth.password.forgot');
     }
 
     /**
@@ -1138,25 +1137,21 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'g-recaptcha-response' => 'required'
+            'cf-turnstile-response' => 'required'
         ]);
 
-        // Verify reCAPTCHA
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+        // Verify Turnstile
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
 
-        if (
-            !$recaptchaResult['success'] ||
-            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)
-        ) {
-            Log::warning("forgotPassword: reCAPTCHA verification failed", [
+        if (!$turnstileResult['success']) {
+            Log::warning("forgotPassword: Turnstile verification failed", [
                 "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
-                "score" => $recaptchaResult['score'] ?? 'N/A'
+                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
             ]);
 
             return redirect()->back()->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
+                "turnstile" => "Security verification failed. Please try again."
             ]);
         }
 
@@ -1251,8 +1246,7 @@ class AuthController extends Controller
 
         return view('auth.password.reset', [
             'token' => $token,
-            'email' => $email,
-            "recaptcha_site_key" => config('services.recaptcha.site_key')
+            'email' => $email
         ]);
     }
 
@@ -1268,25 +1262,21 @@ class AuthController extends Controller
             'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed|min:8',
-            'g-recaptcha-response' => 'required'
+            'cf-turnstile-response' => 'required'
         ]);
 
-        // Verify reCAPTCHA
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+        // Verify Turnstile
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
 
-        if (
-            !$recaptchaResult['success'] ||
-            (isset($recaptchaResult['score']) && $recaptchaResult['score'] < 0.5)
-        ) {
-            Log::warning("resetPassword: reCAPTCHA verification failed", [
+        if (!$turnstileResult['success']) {
+            Log::warning("resetPassword: Turnstile verification failed", [
                 "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error',
-                "score" => $recaptchaResult['score'] ?? 'N/A'
+                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
             ]);
 
             return redirect()->back()->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
+                "turnstile" => "Security verification failed. Please try again."
             ]);
         }
 
@@ -1469,6 +1459,29 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+        // Verify Turnstile
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        if (empty($turnstileResponse)) {
+            Log::warning("register: Missing Turnstile response", [
+                "email" => $request->email
+            ]);
+            return redirect()->back()->withInput()->withErrors([
+                "turnstile" => "Security verification failed. Please try again."
+            ]);
+        }
+
+        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
+
+        if (!$turnstileResult['success']) {
+            Log::warning("register: Turnstile verification failed", [
+                "email" => $request->email,
+                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
+            ]);
+            return redirect()->back()->withInput()->withErrors([
+                "turnstile" => "Security verification failed. Please try again."
+            ]);
+        }
 
         try {
             $user = User::create([

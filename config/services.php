@@ -34,6 +34,12 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+    ],
+    
+    // Legacy reCAPTCHA (deprecated, use Turnstile)
     'recaptcha' => [
         'site_key' => env('RECAPTCHA_SITE_KEY', '6LfequQqAAAAABMcV2XHaBAPjvop2geDre87MQAN'),
         'secret_key' => env('RECAPTCHA_SECRET_KEY', '6LfequQqAAAAALDQ7NOMeoeuBROa1rOiM7zaFVSq'),

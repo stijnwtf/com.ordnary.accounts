@@ -7,8 +7,8 @@
     <title>Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
@@ -118,12 +118,13 @@
                         <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in ') }}</label>
                     </div>
 
-                    <!-- Submit Button with invisible reCAPTCHA -->
+                    <!-- Turnstile Widget -->
+                    <div id="turnstile-container" class="flex justify-center mb-4"></div>
+
+                    <!-- Submit Button -->
                     <div>
                         <button type="submit"
-                            class="g-recaptcha w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            data-sitekey="{{ config('services.recaptcha.site_key') }}" data-callback="onSubmit"
-                            data-action="login" data-size="invisible">
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Sign In
                         </button>
                     </div>
@@ -155,9 +156,15 @@
     </div>
 
     <script>
-        function onSubmit(token) {
-            document.getElementById("login-form").submit();
-        }
+        // Render Turnstile widget on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof turnstile !== 'undefined') {
+                turnstile.render('#turnstile-container', {
+                    sitekey: '{{ config("services.turnstile.site_key") }}',
+                    theme: 'light',
+                });
+            }
+        });
     </script>
 </body>
 

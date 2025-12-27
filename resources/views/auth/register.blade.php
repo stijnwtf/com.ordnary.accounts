@@ -7,8 +7,8 @@
     <title>Register - Ordnary SSO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Using reCAPTCHA v2 Invisible -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
@@ -219,6 +219,9 @@
                             @enderror
                         </div>
 
+                        <!-- Turnstile Widget -->
+                        <div id="turnstile-container" class="flex justify-center"></div>
+
                         <!-- GDPR Consent -->
                         <div class="space-y-3 pt-2 pb-1">
                             <div class="flex items-start">
@@ -250,10 +253,8 @@
                                 class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                                 Previous
                             </button>
-                            <button type="submit"
-                                class="g-recaptcha flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                data-sitekey="{{ config('services.recaptcha.site_key') }}" data-callback="onSubmit"
-                                data-action="register" data-size="invisible">
+                            <button type="submit" id="submit-button"
+                                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                 Create Account
                             </button>
                         </div>
@@ -278,9 +279,7 @@
     </div>
 
     <script>
-        function onSubmit(token) {
-            document.getElementById("register-form").submit();
-        }
+        let turnstileWidgetId = null;
 
         function nextStep() {
             // Get step 1 inputs
@@ -333,6 +332,19 @@
             document.querySelectorAll('.w-8.h-8')[1].classList.add('bg-blue-600', 'text-white');
             document.querySelectorAll('.text-gray-600')[1].classList.remove('text-gray-600');
             document.querySelectorAll('.text-gray-600')[1].classList.add('text-blue-600');
+            
+            // Render Turnstile widget when moving to step 2
+            if (turnstileWidgetId === null && typeof turnstile !== 'undefined') {
+                setTimeout(() => {
+                    const container = document.getElementById('turnstile-container');
+                    if (container) {
+                        turnstileWidgetId = turnstile.render('#turnstile-container', {
+                            sitekey: '{{ config("services.turnstile.site_key") }}',
+                            theme: 'light',
+                        });
+                    }
+                }, 100);
+            }
         }
         
         function showError(input, message) {
@@ -357,6 +369,11 @@
             document.querySelectorAll('.w-8.h-8')[1].classList.remove('bg-blue-600', 'text-white');
             document.querySelectorAll('.text-blue-600')[1].classList.remove('text-blue-600');
             document.querySelectorAll('.text-blue-600')[1].classList.add('text-gray-600');
+            
+            // Reset Turnstile widget
+            if (turnstileWidgetId !== null && typeof turnstile !== 'undefined') {
+                turnstile.reset(turnstileWidgetId);
+            }
         }
 
         // Handle Enter key press on step 1 inputs
