@@ -7,6 +7,9 @@
         activeTab: (() => {
             const navigation = performance.getEntriesByType('navigation')[0];
             const isReload = navigation && navigation.type === 'reload';
+            if (!isReload) {
+                sessionStorage.removeItem('securityTab');
+            }
             return isReload ? (sessionStorage.getItem('securityTab') || 'authentication') : 'authentication';
         })()
     }">

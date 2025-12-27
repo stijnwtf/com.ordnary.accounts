@@ -7,6 +7,9 @@
         activeTab: (() => {
             const navigation = performance.getEntriesByType('navigation')[0];
             const isReload = navigation && navigation.type === 'reload';
+            if (!isReload) {
+                sessionStorage.removeItem('profileTab');
+            }
             return isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
         })()
     }">
@@ -232,6 +235,11 @@
                 // Check if this is a page reload
                 const navigation = performance.getEntriesByType('navigation')[0];
                 const isReload = navigation && navigation.type === 'reload';
+                
+                // Clear sessionStorage if not a reload
+                if (!isReload) {
+                    sessionStorage.removeItem('profileTab');
+                }
                 
                 // Get saved tab from sessionStorage only if it's a reload, otherwise default to details
                 const savedTab = isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
