@@ -19,13 +19,15 @@
             <div class="flex -mb-px">
                 <button @click="activeTab = 'gegevens'; localStorage.setItem('profileTab', 'gegevens')"
                     :class="activeTab === 'gegevens' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
+                    data-tab="gegevens">
                     <i class="fas fa-user mr-2"></i> Gegevens
                 </button>
 
                 <button @click="activeTab = 'customization'; localStorage.setItem('profileTab', 'customization')"
                     :class="activeTab === 'customization' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
+                    data-tab="customization">
                     <i class="fas fa-palette mr-2"></i> Customization
                 </button>
             </div>
@@ -33,7 +35,7 @@
 
         <!-- Tab Content -->
         <!-- Gegevens Tab -->
-        <div x-show="activeTab === 'gegevens'" x-cloak>
+        <div x-show="activeTab === 'gegevens'" x-cloak data-tab-content="gegevens">
             <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
                 @csrf
 
@@ -165,7 +167,7 @@
         </div>
 
         <!-- Customization Tab -->
-        <div x-show="activeTab === 'customization'" x-cloak>
+        <div x-show="activeTab === 'customization'" x-cloak data-tab-content="customization">
             <div class="space-y-6">
                 <!-- Profile Picture -->
                 <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
