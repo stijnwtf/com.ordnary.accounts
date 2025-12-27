@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('beheer')
             ->login()
             ->brandName('ordnary.sso')
-            ->brandLogo(asset('img/white.png'))
+            ->brandLogo(asset('https://cdn.ordnary.com/site_assets/ordnary-white.png'))
             ->colors([
                 'primary' => Color::Blue,
             ])
