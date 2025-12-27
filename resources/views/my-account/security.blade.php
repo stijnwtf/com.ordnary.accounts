@@ -4,7 +4,11 @@
 
 @section('content')
     <div x-data="{ activeTab: 'authentication' }"
-        x-init="() => { activeTab = localStorage.getItem('securityTab') || 'authentication' }">
+        x-init="() => { 
+            const navigation = performance.getEntriesByType('navigation')[0];
+            const isReload = navigation && navigation.type === 'reload';
+            activeTab = isReload ? (sessionStorage.getItem('securityTab') || 'authentication') : 'authentication';
+        }">
         <div class="mb-6">
             <h3 class="text-lg font-medium leading-6 text-gray-900">
                 {{ lang('header', [], 'security') }}
@@ -17,25 +21,25 @@
         <!-- Tabs Navigation -->
         <div class="mb-6 border-b border-gray-200">
             <div class="flex -mb-px">
-                <button @click="activeTab = 'authentication'; localStorage.setItem('securityTab', 'authentication')"
+                <button @click="activeTab = 'authentication'; sessionStorage.setItem('securityTab', 'authentication')"
                     :class="activeTab === 'authentication' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
                     <i class="fas fa-shield-alt mr-2"></i> {{ lang('tabs.authentication', [], 'security') }}
                 </button>
 
-                <button @click="activeTab = 'activity'; localStorage.setItem('securityTab', 'activity')"
+                <button @click="activeTab = 'activity'; sessionStorage.setItem('securityTab', 'activity')"
                     :class="activeTab === 'activity' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
                     <i class="fas fa-history mr-2"></i> {{ lang('tabs.activity', [], 'security') }}
                 </button>
 
-                <button @click="activeTab = 'recovery'; localStorage.setItem('securityTab', 'recovery')"
+                <button @click="activeTab = 'recovery'; sessionStorage.setItem('securityTab', 'recovery')"
                     :class="activeTab === 'recovery' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
                     <i class="fas fa-life-ring mr-2"></i> {{ lang('tabs.recovery', [], 'security') }}
                 </button>
 
-                <button @click="activeTab = 'privacy'; localStorage.setItem('securityTab', 'privacy')"
+                <button @click="activeTab = 'privacy'; sessionStorage.setItem('securityTab', 'privacy')"
                     :class="activeTab === 'privacy' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
                     <i class="fas fa-user-shield mr-2"></i> {{ lang('tabs.privacy', [], 'security') }}
