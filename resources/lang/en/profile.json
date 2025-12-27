@@ -3,7 +3,7 @@
   "subtitle": "Update your personal details and account preferences.",
   "personal_info": "Personal Information",
   "tabs": {
-    "gegevens": "Details",
+    "details": "Details",
     "customization": "Customization"
   },
   "fields": {

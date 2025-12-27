@@ -3,7 +3,11 @@
 @section('title', lang('profile.title', [], 'profile'))
 
 @section('content')
-    <div x-data="{ activeTab: 'gegevens' }" x-init="() => { activeTab = localStorage.getItem('profileTab') || 'gegevens' }">
+    <div x-data="{ activeTab: 'details' }" x-init="() => { 
+        const navigation = performance.getEntriesByType('navigation')[0];
+        const isReload = navigation && navigation.type === 'reload';
+        activeTab = isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
+    }">
         <div class="mb-6">
             <h3 class="text-lg font-medium leading-6 text-gray-900">
                 {{ lang('personal_info', [], 'profile') }}
@@ -16,15 +20,15 @@
         <!-- Tabs Navigation -->
         <div class="mb-6 border-b border-gray-200">
             <div class="flex -mb-px">
-                <button @click="activeTab = 'gegevens'; localStorage.setItem('profileTab', 'gegevens')"
-                    :class="activeTab === 'gegevens' ? 'border-blue-500 text-blue-600' :
+                <button @click="activeTab = 'details'; sessionStorage.setItem('profileTab', 'details')"
+                    :class="activeTab === 'details' ? 'border-blue-500 text-blue-600' :
                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
-                    data-tab="gegevens">
-                    <i class="fas fa-user mr-2"></i> {{ lang('tabs.gegevens', [], 'profile') }}
+                    data-tab="details">
+                    <i class="fas fa-user mr-2"></i> {{ lang('tabs.details', [], 'profile') }}
                 </button>
 
-                <button @click="activeTab = 'customization'; localStorage.setItem('profileTab', 'customization')"
+                <button @click="activeTab = 'customization'; sessionStorage.setItem('profileTab', 'customization')"
                     :class="activeTab === 'customization' ? 'border-blue-500 text-blue-600' :
                         'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
@@ -35,8 +39,8 @@
         </div>
 
         <!-- Tab Content -->
-        <!-- Gegevens Tab -->
-        <div x-show="activeTab === 'gegevens'" x-cloak data-tab-content="gegevens">
+        <!-- Details Tab -->
+        <div x-show="activeTab === 'details'" x-cloak data-tab-content="details">
             <form method="POST" action="{{ route('my-account.profile') }}" class="space-y-6">
                 @csrf
 
@@ -223,8 +227,12 @@
                     content.removeAttribute('x-cloak');
                 });
 
-                // Get saved tab from localStorage or default to gegevens
-                const savedTab = localStorage.getItem('profileTab') || 'gegevens';
+                // Check if this is a page reload
+                const navigation = performance.getEntriesByType('navigation')[0];
+                const isReload = navigation && navigation.type === 'reload';
+                
+                // Get saved tab from sessionStorage only if it's a reload, otherwise default to details
+                const savedTab = isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
 
                 // Function to activate a tab
                 function activateTab(tabId) {
@@ -250,8 +258,8 @@
                         }
                     });
 
-                    // Save to localStorage
-                    localStorage.setItem('profileTab', tabId);
+                    // Save to sessionStorage
+                    sessionStorage.setItem('profileTab', tabId);
                 }
 
                 // Add click event listeners to tab buttons
