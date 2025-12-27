@@ -119,7 +119,7 @@
                     </div>
 
                     <!-- Turnstile Widget -->
-                    <div id="turnstile-container" class="flex justify-center mb-4"></div>
+                    <div id="turnstile-container" class="flex justify-center"></div>
 
                     <!-- Submit Button -->
                     <div>
