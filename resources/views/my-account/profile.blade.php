@@ -3,10 +3,12 @@
 @section('title', lang('profile.title', [], 'profile'))
 
 @section('content')
-    <div x-data="{ activeTab: 'details' }" x-init="() => { 
-        const navigation = performance.getEntriesByType('navigation')[0];
-        const isReload = navigation && navigation.type === 'reload';
-        activeTab = isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
+    <div x-data="{ 
+        activeTab: (() => {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            const isReload = navigation && navigation.type === 'reload';
+            return isReload ? (sessionStorage.getItem('profileTab') || 'details') : 'details';
+        })()
     }">
         <div class="mb-6">
             <h3 class="text-lg font-medium leading-6 text-gray-900">

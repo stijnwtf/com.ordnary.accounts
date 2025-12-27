@@ -3,12 +3,13 @@
 @section('title', lang('title', [], 'security'))
 
 @section('content')
-    <div x-data="{ activeTab: 'authentication' }"
-        x-init="() => { 
+    <div x-data="{ 
+        activeTab: (() => {
             const navigation = performance.getEntriesByType('navigation')[0];
             const isReload = navigation && navigation.type === 'reload';
-            activeTab = isReload ? (sessionStorage.getItem('securityTab') || 'authentication') : 'authentication';
-        }">
+            return isReload ? (sessionStorage.getItem('securityTab') || 'authentication') : 'authentication';
+        })()
+    }">
         <div class="mb-6">
             <h3 class="text-lg font-medium leading-6 text-gray-900">
                 {{ lang('header', [], 'security') }}
