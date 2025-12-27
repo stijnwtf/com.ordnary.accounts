@@ -283,6 +283,49 @@
         }
 
         function nextStep() {
+            // Get step 1 inputs
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const passwordConfirmation = document.getElementById('password_confirmation');
+            
+            // Clear any previous error messages
+            const errorElements = document.querySelectorAll('#step1 .validation-error');
+            errorElements.forEach(el => el.remove());
+            
+            let isValid = true;
+            
+            // Validate email
+            if (!email.value.trim()) {
+                showError(email, 'Email is required.');
+                isValid = false;
+            } else if (!isValidEmail(email.value)) {
+                showError(email, 'Please enter a valid email address.');
+                isValid = false;
+            }
+            
+            // Validate password
+            if (!password.value) {
+                showError(password, 'Password is required.');
+                isValid = false;
+            } else if (password.value.length < 8) {
+                showError(password, 'Password must be at least 8 characters.');
+                isValid = false;
+            }
+            
+            // Validate password confirmation
+            if (!passwordConfirmation.value) {
+                showError(passwordConfirmation, 'Please confirm your password.');
+                isValid = false;
+            } else if (password.value !== passwordConfirmation.value) {
+                showError(passwordConfirmation, 'Passwords do not match.');
+                isValid = false;
+            }
+            
+            // Only proceed if all validations pass
+            if (!isValid) {
+                return;
+            }
+            
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
             document.getElementById('progress-bar').style.width = '100%';
@@ -290,6 +333,20 @@
             document.querySelectorAll('.w-8.h-8')[1].classList.add('bg-blue-600', 'text-white');
             document.querySelectorAll('.text-gray-600')[1].classList.remove('text-gray-600');
             document.querySelectorAll('.text-gray-600')[1].classList.add('text-blue-600');
+        }
+        
+        function showError(input, message) {
+            const errorDiv = document.createElement('p');
+            errorDiv.className = 'mt-1 text-sm text-red-600 flex items-center validation-error';
+            errorDiv.textContent = message;
+            input.parentElement.parentElement.appendChild(errorDiv);
+            input.classList.add('border-red-500');
+            input.classList.remove('border-gray-300');
+        }
+        
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
 
         function prevStep() {
@@ -311,6 +368,16 @@
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         nextStep();
+                    }
+                });
+                
+                // Clear error styling on input
+                input.addEventListener('input', function() {
+                    this.classList.remove('border-red-500');
+                    this.classList.add('border-gray-300');
+                    const errorElement = this.parentElement.parentElement.querySelector('.validation-error');
+                    if (errorElement) {
+                        errorElement.remove();
                     }
                 });
             });
