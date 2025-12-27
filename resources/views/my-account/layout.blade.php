@@ -318,7 +318,7 @@
                                     <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
                                         {{ lang('sidebar.support', [], 'layout') }}
                                     </div>
-                                    <a href="https://support.ordnary.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
+                                    <a href="https://support.numblio.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
                                         <i class="fas fa-question-circle mr-3 text-gray-500"></i>
                                         {{ lang('sidebar.help_center', [], 'layout') }}
                                     </a>
@@ -404,9 +404,9 @@
                     <div class="flex flex-col space-y-2">
                         <span>&copy; {{ date('Y') }} Numblio. {{ lang('footer.rights', [], 'layout') }}</span>
                         <div class="flex items-center space-x-3">
-                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
-                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
-                            <a href="https://support.ordnary.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
+                            <a href="https://numblio.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
+                            <a href="https://numblio.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
+                            <a href="https://support.numblio.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
                         </div>
                     </div>
                 </div>
@@ -465,7 +465,7 @@
                         {{ lang('mobile.connections', [], 'layout') }}
                     </a>
                     <div class="border-t border-gray-200 my-2 pt-2"></div>
-                    <a href="https://support.ordnary.com" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
+                    <a href="https://support.numblio.com" class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
                         <i class="fas fa-question-circle mr-4 text-gray-500"></i>
                         {{ lang('mobile.help_center', [], 'layout') }}
                     </a>
