@@ -227,6 +227,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* Alpine.js cloak - hide elements until Alpine.js is loaded */
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 
     <!-- Using reCAPTCHA v2 Invisible instead of v3 -->
