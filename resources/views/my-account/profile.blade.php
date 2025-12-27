@@ -166,7 +166,6 @@
         <div x-show="activeTab === 'customization'" x-cloak data-tab-content="customization">
             <div class="space-y-6">
                 <!-- Profile Picture -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                         Profile Picture
                     </h4>
@@ -194,10 +193,8 @@
                             <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 2MB.</p>
                         </div>
                     </div>
-                </div>
 
                 <!-- Banner Customization -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                         Banner Customization
                     </h4>
@@ -218,7 +215,6 @@
                         </button>
                     </div>
                     <p class="mt-2 text-xs text-gray-500">JPG or PNG. Max 5MB. Recommended: 1500x500px</p>
-                </div>
             </div>
         </div>
     </div>
