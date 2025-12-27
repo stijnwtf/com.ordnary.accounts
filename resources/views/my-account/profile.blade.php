@@ -188,11 +188,6 @@
                 </div>
             </div>
         </div>
-                    </div>
-                </div>
-                <p class="mt-1 text-xs text-gray-500">{{ lang('fields.language_helper', [], 'profile') }}</p>
-            </div>
-        </div>
 
         <!-- Account Info -->
         <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
