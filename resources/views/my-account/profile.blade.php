@@ -210,63 +210,61 @@
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait for Alpine.js to be available, or use fallback after 500ms
-            setTimeout(function() {
-                if (typeof Alpine === 'undefined') {
-                    console.log('Alpine.js not loaded, using fallback');
+            // Check immediately for Alpine.js fallback
+            if (typeof Alpine === 'undefined') {
+                console.log('Alpine.js not loaded, using fallback');
 
-                    // Get all tab buttons and content sections
-                    const tabButtons = document.querySelectorAll('[data-tab]');
-                    const tabContents = document.querySelectorAll('[data-tab-content]');
+                // Get all tab buttons and content sections
+                const tabButtons = document.querySelectorAll('[data-tab]');
+                const tabContents = document.querySelectorAll('[data-tab-content]');
 
-                    // Remove x-cloak from all tab contents
+                // Remove x-cloak from all tab contents
+                tabContents.forEach(content => {
+                    content.removeAttribute('x-cloak');
+                });
+
+                // Get saved tab from localStorage or default to gegevens
+                const savedTab = localStorage.getItem('profileTab') || 'gegevens';
+
+                // Function to activate a tab
+                function activateTab(tabId) {
+                    // Hide all tab contents
                     tabContents.forEach(content => {
-                        content.removeAttribute('x-cloak');
+                        content.style.display = 'none';
                     });
 
-                    // Get saved tab from localStorage or default to gegevens
-                    const savedTab = localStorage.getItem('profileTab') || 'gegevens';
-
-                    // Function to activate a tab
-                    function activateTab(tabId) {
-                        // Hide all tab contents
-                        tabContents.forEach(content => {
-                            content.style.display = 'none';
-                        });
-
-                        // Show the selected tab content
-                        const activeContent = document.querySelector(`[data-tab-content="${tabId}"]`);
-                        if (activeContent) {
-                            activeContent.style.display = 'block';
-                        }
-
-                        // Update tab button styles
-                        tabButtons.forEach(button => {
-                            if (button.getAttribute('data-tab') === tabId) {
-                                button.classList.add('border-blue-500', 'text-blue-600');
-                                button.classList.remove('border-transparent', 'text-gray-500');
-                            } else {
-                                button.classList.remove('border-blue-500', 'text-blue-600');
-                                button.classList.add('border-transparent', 'text-gray-500');
-                            }
-                        });
-
-                        // Save to localStorage
-                        localStorage.setItem('profileTab', tabId);
+                    // Show the selected tab content
+                    const activeContent = document.querySelector(`[data-tab-content="${tabId}"]`);
+                    if (activeContent) {
+                        activeContent.style.display = 'block';
                     }
 
-                    // Add click event listeners to tab buttons
+                    // Update tab button styles
                     tabButtons.forEach(button => {
-                        button.addEventListener('click', function() {
-                            const tabId = this.getAttribute('data-tab');
-                            activateTab(tabId);
-                        });
+                        if (button.getAttribute('data-tab') === tabId) {
+                            button.classList.add('border-blue-500', 'text-blue-600');
+                            button.classList.remove('border-transparent', 'text-gray-500');
+                        } else {
+                            button.classList.remove('border-blue-500', 'text-blue-600');
+                            button.classList.add('border-transparent', 'text-gray-500');
+                        }
                     });
 
-                    // Activate the saved tab on page load
-                    activateTab(savedTab);
+                    // Save to localStorage
+                    localStorage.setItem('profileTab', tabId);
                 }
-            }, 500);
+
+                // Add click event listeners to tab buttons
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-tab');
+                        activateTab(tabId);
+                    });
+                });
+
+                // Activate the saved tab on page load
+                activateTab(savedTab);
+            }
         });
     </script>
 @endsection
