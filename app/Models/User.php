@@ -74,6 +74,20 @@ class User extends Authenticatable implements MustVerifyEmail
             'deleted_at' => 'datetime',
         ];
     }
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->ordnary_id)) {
+                $user->ordnary_id = 'idnblo_' . Str::uuid();
+            }
+        });
+    }
     
     /**
      * Get the user's full name.
