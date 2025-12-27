@@ -226,4 +226,62 @@
             </div>
         </div>
     </div>
+
+    @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Wait for Alpine.js to be available, or use fallback after 500ms
+            setTimeout(function () {
+                if (typeof Alpine === 'undefined') {
+                    console.log('Alpine.js not loaded, using fallback');
+
+                    // Get all tab buttons and content sections
+                    const tabButtons = document.querySelectorAll('[data-tab]');
+                    const tabContents = document.querySelectorAll('[data-tab-content]');
+
+                    // Get saved tab from localStorage or default to gegevens
+                    const savedTab = localStorage.getItem('profileTab') || 'gegevens';
+
+                    // Function to activate a tab
+                    function activateTab(tabId) {
+                        // Hide all tab contents
+                        tabContents.forEach(content => {
+                            content.style.display = 'none';
+                        });
+
+                        // Show the selected tab content
+                        const activeContent = document.querySelector(`[data-tab-content="${tabId}"]`);
+                        if (activeContent) {
+                            activeContent.style.display = 'block';
+                        }
+
+                        // Update tab button styles
+                        tabButtons.forEach(button => {
+                            if (button.getAttribute('data-tab') === tabId) {
+                                button.classList.add('border-blue-500', 'text-blue-600');
+                                button.classList.remove('border-transparent', 'text-gray-500');
+                            } else {
+                                button.classList.remove('border-blue-500', 'text-blue-600');
+                                button.classList.add('border-transparent', 'text-gray-500');
+                            }
+                        });
+
+                        // Save to localStorage
+                        localStorage.setItem('profileTab', tabId);
+                    }
+
+                    // Add click event listeners to tab buttons
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const tabId = this.getAttribute('data-tab');
+                            activateTab(tabId);
+                        });
+                    });
+
+                    // Activate the saved tab on page load
+                    activateTab(savedTab);
+                }
+            }, 500);
+        });
+    </script>
 @endsection
