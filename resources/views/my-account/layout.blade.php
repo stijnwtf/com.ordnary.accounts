@@ -403,8 +403,8 @@
                 </div>
 
                 <!-- Right Content Area -->
-                <div class="flex-1 lg:py-8 lg:pl-8 px-4 sm:px-6 lg:px-0 py-6 lg:py-8">
-                    <div class="bg-white w-full overflow-x-hidden">
+                <div class="flex-1 lg:py-8 lg:pl-8 w-full">
+                    <div class="bg-white w-full px-4 sm:px-6 lg:px-0 py-6 lg:py-8 overflow-x-hidden"
 
                         <!-- Success Message -->
                         @if (session('status'))
