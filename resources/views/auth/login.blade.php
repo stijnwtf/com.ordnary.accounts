@@ -56,7 +56,7 @@
                     @endif
 
                     <!-- Step 1: Email Input -->
-                    <div id="step1" class="space-y-6 {{ ($errors->has('password') || $errors->has('turnstile')) && old('email') ? 'hidden' : '' }}">
+                    <div id="step1" class="space-y-6 {{ $errors->has('password') || $errors->has('turnstile') ? 'hidden' : '' }}">
                         <div>
                             <label for="email"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
@@ -83,7 +83,7 @@
                     </div>
 
                     <!-- Step 2: Password Input -->
-                    <div id="step2" class="space-y-6 {{ ($errors->has('password') || $errors->has('turnstile')) && old('email') ? '' : 'hidden' }}">
+                    <div id="step2" class="space-y-6 {{ $errors->has('password') || $errors->has('turnstile') ? '' : 'hidden' }}">
                         <div>
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
@@ -216,7 +216,7 @@
                 </form>
                 
                 <!-- Sign Up Link - Only show on step 1 -->
-                <div id="signup-link" class="text-center text-sm mt-6 {{ ($errors->has('password') || $errors->has('turnstile')) && old('email') ? 'hidden' : '' }}">
+                <div id="signup-link" class="text-center text-sm mt-6 {{ $errors->has('password') || $errors->has('turnstile') ? 'hidden' : '' }}">
                     <a href="{{ route('register', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}"
                         class="text-[#0866FF] hover:underline font-medium">{{ __('New here? Create an account') }}</a>
                 </div>
@@ -243,15 +243,29 @@
         let userEmail = '';
 
         // Initialize on page load
-        @if(($errors->has('password') || $errors->has('turnstile')) && old('email'))
+        @if($errors->has('password') || $errors->has('turnstile'))
             currentStep = 2;
-            userEmail = '{{ old('email') }}';
+            @if(old('email'))
+                userEmail = '{{ old('email') }}';
+            @elseif(session('login_email'))
+                userEmail = '{{ session('login_email') }}';
+            @endif
             
             // Update title and subtitle for step 2
             document.addEventListener('DOMContentLoaded', function() {
+                const emailToShow = '{{ old('email', session('login_email', '')) }}';
+                if (emailToShow) {
+                    userEmail = emailToShow;
+                    document.getElementById('email').value = emailToShow;
+                }
+                
                 document.getElementById('page-title').textContent = 'Enter your password';
                 const subtitle = document.getElementById('page-subtitle');
-                subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">{{ old('email') }}</button> to continue.';
+                if (emailToShow) {
+                    subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + emailToShow + '</button> to continue.';
+                } else {
+                    subtitle.textContent = 'Enter your password to continue.';
+                }
                 
                 // Render Turnstile widget
                 if (typeof turnstile !== 'undefined') {
