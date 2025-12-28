@@ -14,9 +14,12 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
                 <div class="mb-8 flex flex-col items-start">
-                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
-                    <h2 class="text-2xl font-bold text-gray-900">Account Suspended</h2>
-                    <p class="text-sm text-gray-600 mt-2">Your access has been restricted.</p>
+                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo"
+                        class="h-8 w-auto mb-3">
+                    <h2 class="text-2xl font-semibold text-gray-900">Account Suspension Notice</h2>
+                    <p class="text-sm text-gray-600 mt-2">Your account has been suspended and is no longer authorized to
+                        access Ordnary services. If you believe this is an error, please contact our support team for
+                        further assistance.</p>
                 </div>
 
                 <!-- Suspension Alert -->
@@ -28,15 +31,16 @@
                         <div class="ml-3">
                             <h3 class="text-sm font-medium text-red-800 mb-2">Your account has been suspended</h3>
                             <p class="text-sm text-red-700 mb-2">
-                                @if(isset($user) && $user && $user->suspension_reason)
+                                @if (isset($user) && $user && $user->suspension_reason)
                                     {{ $user->suspension_reason }}
                                 @else
-                                    Your account has been suspended due to a violation of our terms of service. This action was taken after careful review of your account activity.
+                                    Your account has been suspended due to a violation of our terms of service. This
+                                    action was taken after careful review of your account activity.
                                 @endif
                             </p>
                             <p class="text-xs text-red-600 mt-3">
-                                Suspended since: 
-                                @if(isset($user) && $user && $user->suspended_at)
+                                Suspended since:
+                                @if (isset($user) && $user && $user->suspended_at)
                                     {{ $user->suspended_at->format('M j, Y') }}
                                 @else
                                     {{ date('M j, Y') }}
@@ -54,9 +58,10 @@
                         </div>
                         <div class="ml-3">
                             <p class="text-sm text-gray-700 mb-3">
-                                If you believe this is a mistake or would like to appeal this decision, please contact our support team.
+                                If you believe this is a mistake or would like to appeal this decision, please contact
+                                our support team.
                             </p>
-                            <a href="https://support.ordnary.com" 
+                            <a href="https://support.ordnary.com"
                                 class="inline-flex items-center px-4 py-2 bg-[#0866FF] text-white text-sm font-medium rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200">
                                 <i class="fas fa-headset mr-2"></i>
                                 Contact Support
@@ -77,14 +82,18 @@
                 <!-- Footer -->
                 <footer class="mt-8 text-xs text-gray-400">
                     <div class="flex flex-col space-y-1">
-                        <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated services
+                        <span>&copy; {{ date('Y') }} Ordnary. All rights reserved. Ordnary and all associated
+                            services
                             are protected by copyright and intellectual property laws.</span>
                         <div class="flex items-center space-x-2 mt-1">
-                            <a href="https://ordnary.com/documents/privacy-policy" class="hover:text-gray-600">Privacy Policy</a>
+                            <a href="https://ordnary.com/documents/privacy-policy" class="hover:text-gray-600">Privacy
+                                Policy</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://ordnary.com/documents/terms-and-conditions" class="hover:text-gray-600">Terms & Conditions</a>
+                            <a href="https://ordnary.com/documents/terms-and-conditions"
+                                class="hover:text-gray-600">Terms & Conditions</a>
                             <span class="text-gray-500">•</span>
-                            <a href="https://ordnary.com/documents/disclaimer" class="hover:text-gray-600">Disclaimer</a>
+                            <a href="https://ordnary.com/documents/disclaimer"
+                                class="hover:text-gray-600">Disclaimer</a>
                         </div>
                     </div>
                 </footer>
