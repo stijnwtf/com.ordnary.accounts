@@ -258,9 +258,9 @@
                 <div class="flex items-center">
                     <div class="relative">
                         <button id="mobile-user-menu" class="flex items-center">
-                            <img class="h-8 w-8 rounded-full object-cover border-2 border-blue-100"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                alt="{{ $user->first_name }} {{ $user->last_name }}">
+                            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-xs">
+                                {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -274,16 +274,16 @@
                 <div class="hidden lg:block lg:w-80 border-r border-gray-200 py-8 pr-8">
                     <div class="space-y-1">
                         <!-- Account Summary -->
-                        <div class="px-4 py-4 mb-6">
+                        <div class="px-4 py-3 mb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="relative">
-                                    <img class="h-14 w-14 rounded-full object-cover"
-                                        src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                <div class="relative flex-shrink-0">
+                                    <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-sm">
+                                        {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                                    </div>
                                 </div>
-                                <div>
-                                    <h2 class="text-base font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
-                                    <p class="text-sm text-gray-500 truncate">{{ $user->email }}</p>
+                                <div class="min-w-0 flex-1">
+                                    <h2 class="text-[15px] font-semibold text-gray-900 truncate">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                    <p class="text-[13px] text-gray-500 truncate">{{ $user->email }}</p>
                                 </div>
                             </div>
                         </div>
@@ -433,13 +433,13 @@
                         <span class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
-                <div class="border-t border-b border-gray-200 py-4 px-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div class="border-t border-b border-gray-200 py-4 px-4 mb-4">
                     <div class="flex items-center">
-                        <img class="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
-                             src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                             alt="{{ $user->name }}">
-                        <div class="ml-3">
-                            <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
+                        <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                            {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                        </div>
+                        <div class="ml-3 min-w-0 flex-1">
+                            <h2 class="text-sm font-semibold text-gray-900 truncate">{{ $user->first_name }} {{ $user->last_name }}</h2>
                             <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
                         </div>
                     </div>
