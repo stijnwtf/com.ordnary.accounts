@@ -313,7 +313,7 @@
                         </div>
 
                         <!-- Logout Button -->
-                        <div class="px-4 mt-4 pt-4 border-t border-gray-200">
+                        <div class="px-4 mt-4 border-t border-gray-200">
                             <a href="{{ route('logout.simple') }}" class="flex items-center text-sm text-gray-600 hover:text-gray-900 font-medium pt-4">
                                 <i class="fas fa-sign-out-alt mr-2 text-gray-500 w-5"></i> {{ lang('sidebar.logout', [], 'layout') }}
                             </a>
