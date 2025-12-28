@@ -1325,21 +1325,21 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'cf-turnstile-response' => 'required'
+            'g-recaptcha-response' => 'required'
         ]);
 
-        // Verify Turnstile
-        $turnstileResponse = $request->input('cf-turnstile-response');
-        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
+        // Verify reCAPTCHA
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$turnstileResult['success']) {
-            Log::warning("forgotPassword: Turnstile verification failed", [
+        if (!$recaptchaResult['success']) {
+            Log::warning("forgotPassword: reCAPTCHA verification failed", [
                 "email" => $request->email,
-                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
+                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error'
             ]);
 
             return redirect()->back()->withErrors([
-                "turnstile" => "Security verification failed. Please try again."
+                "recaptcha" => "Security verification failed. Please try again."
             ]);
         }
 

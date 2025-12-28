@@ -8,11 +8,11 @@
     <title>Forgot password?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Cloudflare Turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Google reCAPTCHA v2 Invisible -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
-<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col">
     <div class="flex items-center justify-center flex-grow">
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
@@ -52,17 +52,17 @@
                                 <i class="fas fa-envelope text-gray-400"></i>
                             </div>
                             <input placeholder="john.doe@example.com" type="email" name="email" id="email" required
-                                class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+                                class="w-full px-3 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent"
                                 value="{{ old('email') }}">
                         </div>
                     </div>
 
-                    <!-- Turnstile Widget -->
-                    <div id="turnstile-container" hidden class="flex justify-center"></div>
-
                     <div>
                         <button type="submit"
-                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            class="g-recaptcha w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium"
+                            data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                            data-callback="onSubmit"
+                            data-action="forgot_password">
                             Send Reset Link
                         </button>
                     </div>
@@ -87,15 +87,10 @@
     </div>
 
     <script>
-        // Render Turnstile widget on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof turnstile !== 'undefined') {
-                turnstile.render('#turnstile-container', {
-                    sitekey: '{{ config("services.turnstile.site_key") }}',
-                    theme: 'light',
-                });
-            }
-        });
+        // reCAPTCHA v2 invisible callback
+        function onSubmit(token) {
+            document.querySelector('form').submit();
+        }
     </script>
 </body>
 
