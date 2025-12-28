@@ -134,10 +134,13 @@
                             </button>
                         </div>
 
-                        <!-- Forgot Password Link -->
-                        <div class="text-center">
+                        <!-- Forgot Password and Alternative Login Links -->
+                        <div class="flex justify-between items-center text-sm">
                             <a href="{{route('password.forgot')}}"
-                                class="text-sm text-[#0866FF] hover:underline font-medium">{{ __('Forgot password?') }}</a>
+                                class="text-[#0866FF] hover:underline font-medium">{{ __('Forgot password?') }}</a>
+                            <button type="button" class="text-[#0866FF] hover:underline font-medium">
+                                {{ __('Login another way') }}
+                            </button>
                         </div>
                     </div>
 
