@@ -290,8 +290,8 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->failed_login_attempts = ($this->failed_login_attempts ?? 0) + 1;
         $this->last_failed_login_at = now();
         
-        // Auto-suspend after 5 failed attempts
-        if ($this->failed_login_attempts >= 5) {
+        // Auto-suspend after 6 failed attempts
+        if ($this->failed_login_attempts >= 6) {
             $this->suspend('Account suspended due to multiple failed login attempts. Please contact support.');
             
             \Log::warning('User account suspended due to failed login attempts', [
@@ -321,6 +321,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getRemainingLoginAttempts(): int
     {
-        return max(0, 5 - ($this->failed_login_attempts ?? 0));
+        return max(0, 6 - ($this->failed_login_attempts ?? 0));
     }
 }
