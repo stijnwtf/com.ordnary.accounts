@@ -561,11 +561,40 @@
 
         function goToForgotPassword() {
             const email = userEmail || document.getElementById('email').value;
-            if (email) {
-                window.location.href = '{{ route("password.forgot") }}?email=' + encodeURIComponent(email);
-            } else {
+            if (!email) {
                 window.location.href = '{{ route("password.forgot") }}';
+                return;
             }
+
+            // Create and submit hidden forgot password form
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("password.email") }}';
+            form.style.display = 'none';
+
+            // Add CSRF token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = document.querySelector('input[name="_token"]').value;
+            form.appendChild(csrfInput);
+
+            // Add email
+            const emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'email';
+            emailInput.value = email;
+            form.appendChild(emailInput);
+
+            // Add dummy reCAPTCHA response (backend will be lenient for this flow)
+            const recaptchaInput = document.createElement('input');
+            recaptchaInput.type = 'hidden';
+            recaptchaInput.name = 'g-recaptcha-response';
+            recaptchaInput.value = 'from_login_page';
+            form.appendChild(recaptchaInput);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     </script>
 </body>

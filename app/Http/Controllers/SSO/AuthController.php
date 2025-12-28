@@ -1328,19 +1328,24 @@ class AuthController extends Controller
             'g-recaptcha-response' => 'required'
         ]);
 
-        // Verify reCAPTCHA
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
+        // Skip reCAPTCHA verification if coming from login page
+        $fromLoginPage = $request->input('g-recaptcha-response') === 'from_login_page';
 
-        if (!$recaptchaResult['success']) {
-            Log::warning("forgotPassword: reCAPTCHA verification failed", [
-                "email" => $request->email,
-                "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error'
-            ]);
+        if (!$fromLoginPage) {
+            // Verify reCAPTCHA
+            $recaptchaResponse = $request->input('g-recaptcha-response');
+            $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-            return redirect()->back()->withErrors([
-                "recaptcha" => "Security verification failed. Please try again."
-            ]);
+            if (!$recaptchaResult['success']) {
+                Log::warning("forgotPassword: reCAPTCHA verification failed", [
+                    "email" => $request->email,
+                    "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error'
+                ]);
+
+                return redirect()->back()->withErrors([
+                    "recaptcha" => "Security verification failed. Please try again."
+                ]);
+            }
         }
 
         // Check if user exists before sending reset link
