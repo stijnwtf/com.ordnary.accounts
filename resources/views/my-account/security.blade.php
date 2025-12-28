@@ -286,7 +286,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
         </div>
 
         <!-- Recovery Tab Content -->
