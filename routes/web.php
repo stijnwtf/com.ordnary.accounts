@@ -19,8 +19,8 @@ Route::get('/', function () {
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/logout/simple', function (Illuminate\Http\Request $request) {
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout/simple', function (Illuminate\Http\Request $request) {
     return app(AuthController::class)->logout($request->merge(['skip_sso' => true]));
 })->name('logout.simple');
 Route::get('/logout/process', [AuthController::class, 'processLogout'])->name('logout.process');
@@ -65,7 +65,7 @@ Route::get('/reset-password-sent', [AuthController::class, 'showSentForm'])->nam
 Route::get('/pw/callback/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::get('/reset-success', [AuthController::class, 'showSuccessForm'])->name('password.success');
 Route::get('/admin/login', [ClientController::class, 'showLoginForm'])->name('admin.loginForm');
-Route::get('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
+Route::post('/admin/logout', [ClientController::class, 'logout'])->name('admin.logout');
 
 // Email Verification Routes
 Route::middleware('throttle:6,1')->group(function () {
