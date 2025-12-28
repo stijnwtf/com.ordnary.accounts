@@ -8,197 +8,126 @@
     <title>Password Reset Request for Ordnary</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.5;
-            color: #374151;
-            background-color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background-color: #f3f4f6;
             margin: 0;
             padding: 0;
         }
 
         .email-wrapper {
-            padding: 24px;
-            background-color: #f9fafb;
+            padding: 40px 20px;
+            background-color: #f3f4f6;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             overflow: hidden;
         }
 
-        .content-wrapper {
-            padding: 40px 24px;
-        }
-
         .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 24px;
+            padding: 32px 40px 24px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .logo {
-            height: 32px;
+            height: 28px;
             width: auto;
-            margin-right: 12px;
         }
 
-        .header-divider {
-            height: 24px;
-            width: 1px;
-            background-color: #d1d5db;
-            margin: 0 12px;
+        .content-wrapper {
+            padding: 40px;
         }
 
-        .header-text {
-            font-size: 14px;
-            color: #6b7280;
-        }
-
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
             color: #111827;
-            margin-top: 0;
-            margin-bottom: 8px;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
         }
 
         .subtitle {
-            font-size: 16px;
-            color: #4b5563;
-            margin-bottom: 24px;
+            font-size: 15px;
+            color: #6b7280;
+            margin: 0 0 32px 0;
+            line-height: 1.5;
         }
 
         p {
-            font-size: 16px;
-            margin-bottom: 16px;
-            color: #4b5563;
-        }
-
-        .message {
-            font-size: 14px;
-            color: #6b7280;
+            font-size: 15px;
+            margin: 0 0 16px 0;
+            color: #374151;
+            line-height: 1.6;
         }
 
         .button {
             display: inline-block;
-            background-color: #2563eb;
-            color: white !important;
+            background: linear-gradient(135deg, #0866FF 0%, #0652CC 100%);
+            color: #ffffff !important;
             text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: 500;
-            margin: 24px 0;
-            transition: background-color 0.2s;
-        }
-
-        .button:hover {
-            background-color: #1d4ed8;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 32px 0;
+            box-shadow: 0 4px 12px rgba(8, 102, 255, 0.2);
         }
 
         .info-box {
             background-color: #eff6ff;
-            border: 1px solid #dbeafe;
+            border-left: 3px solid #0866FF;
             border-radius: 8px;
-            padding: 16px;
+            padding: 16px 20px;
             margin: 24px 0;
-        }
-
-        .info-title {
-            font-weight: 500;
-            color: #1e40af;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-        }
-
-        .info-icon {
-            margin-right: 8px;
-            color: #3b82f6;
-            width: 16px;
-            text-align: center;
         }
 
         .info-text {
             color: #1e40af;
             font-size: 14px;
             margin: 0;
+            line-height: 1.6;
         }
 
         .url-display {
-            padding: 12px;
-            background-color: #f3f4f6;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 16px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            font-size: 13px;
             word-break: break-all;
             margin: 16px 0;
             border: 1px solid #e5e7eb;
-        }
-
-        .help-section {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .help-title {
-            font-weight: 600;
-            font-size: 16px;
-            color: #374151;
-            margin-bottom: 8px;
-        }
-
-        .help-text {
-            font-size: 14px;
             color: #6b7280;
-        }
-
-        .footer-wrapper {
-            background-color: #f9fafb;
-            border-top: 1px solid #e5e7eb;
         }
 
         .footer {
-            padding: 24px;
-            font-size: 14px;
-            color: #6b7280;
+            padding: 32px 40px;
+            font-size: 13px;
+            color: #9ca3af;
             text-align: center;
-        }
-
-        .footer-links {
-            margin-top: 8px;
-        }
-
-        .footer-link {
-            color: #4b5563;
-            text-decoration: none;
-            margin-right: 16px;
-        }
-
-        .footer-link:hover {
-            color: #1f2937;
-        }
-
-        .bottom-spacer {
-            height: 24px;
             background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
         }
 
-        .icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            margin-right: 8px;
-            vertical-align: middle;
+        .footer a {
+            color: #0866FF;
+            text-decoration: none;
         }
 
         @media (max-width: 640px) {
             .content-wrapper {
-                padding: 24px 16px;
+                padding: 32px 24px;
+            }
+            .header {
+                padding: 24px 24px 20px;
+            }
+            .footer {
+                padding: 24px;
             }
         }
     </style>
@@ -207,46 +136,36 @@
 <body>
     <div class="email-wrapper">
         <div class="container">
-            <div class="content-wrapper">
-                <div class="header">
-                    <img src="{{ asset('img/dark.png') }}" alt="Ordnary Logo" class="logo">
-                </div>
+            <div class="header">
+                <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary" class="logo">
+            </div>
 
-                <h2>Reset Your Password</h2>
-                <p class="subtitle">Follow the steps below to reset your Ordnary account password and regain access to
-                    all your Ordnary services.</p>
+            <div class="content-wrapper">
+                <h1>Reset Your Password</h1>
+                <p class="subtitle">Follow the link below to securely reset your password.</p>
 
                 <div class="info-box">
-                    <div class="info-title">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#3b82f6">
-                            <path
-                                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
-                        </svg>
-                        Password Reset Request
-                    </div>
-                    <p class="info-text">You are receiving this email because we received a password reset request for
-                        your account. This link will expire in 60 minutes.</p>
+                    <p class="info-text">You are receiving this email because we received a password reset request for your account. This link will expire in 60 minutes for security purposes.</p>
                 </div>
 
-                <p>Please click the button below to reset your password:</p>
+                <p>Click the button below to reset your password:</p>
 
-                <a href="{{ $resetUrl }}" class="button">Reset Password</a>
+                <center>
+                    <a href="{{ $resetUrl }}" class="button">Reset Password</a>
+                </center>
 
-                <p class="message">If you did not request a password reset, no further action is required.</p>
+                <p style="color: #6b7280; font-size: 14px;">If you didn't request a password reset, you can safely ignore this email.</p>
 
-                <p>If you're having trouble with the button above, copy and paste the URL below into your web browser:
-                </p>
+                <p style="margin-top: 32px; font-size: 14px; color: #6b7280;">If the button doesn't work, copy and paste this URL into your browser:</p>
 
                 <div class="url-display">
                     {{ $resetUrl }}
                 </div>
+            </div>
 
-                <div class="help-section">
-                    <div class="help-title">Need Help?</div>
-                    <p class="help-text">If you have any questions or need assistance with resetting your password,
-                        please contact our support team at <a href="mailto:support@ordnary.com"
-                            style="color: #2563eb;">support@ordnary.com</a>.</p>
-                </div>
+            <div class="footer">
+                <p style="margin: 0;">Need help? Contact us at <a href="mailto:support@ordnary.com">support@ordnary.com</a></p>
+                <p style="margin: 8px 0 0 0;">&copy; {{ date('Y') }} Ordnary. All rights reserved.</p>
             </div>
         </div>
     </div>
