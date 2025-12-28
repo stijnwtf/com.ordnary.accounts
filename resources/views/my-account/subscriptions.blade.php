@@ -243,18 +243,10 @@
     @else
         <!-- No Subscriptions State -->
         <div class="text-center py-12">
-            <div class="mx-auto flex items-center justify-center h-20 w-20 bg-blue-50 rounded-full mb-4">
-                <i class="fas fa-credit-card text-blue-500 text-3xl"></i>
-            </div>
             <h4 class="text-xl font-medium text-gray-900 mb-2">No Active Subscriptions</h4>
             <p class="text-gray-600 max-w-md mx-auto mb-6">
                 You don't have any active subscriptions yet. Explore our range of products to find tools that can help you grow your business.
             </p>
-            <a href="https://ordnary.com/products"
-                class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <i class="fas fa-shopping-bag mr-2"></i>
-                Explore Products
-            </a>
         </div>
     @endif
 
