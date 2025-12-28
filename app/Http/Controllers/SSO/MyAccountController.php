@@ -225,6 +225,33 @@ class MyAccountController extends Controller
     }
 
     /**
+     * Update the user's preferences (language, etc.).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePreferences(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|string|size:2|in:' . implode(',', config('app.available_locales', ['en', 'nl'])),
+        ]);
+
+        $user = auth()->user();
+
+        $user->update([
+            'lang' => $request->language,
+        ]);
+
+        // Set the application language
+        app()->setLocale($request->language);
+        session(['language' => $request->language]);
+
+        Log::info('User preferences updated', ['user_id' => $user->id, 'language' => $request->language]);
+
+        return redirect()->back()->with('success', 'Preferences successfully updated!');
+    }
+
+    /**
      * Update the user's password.
      *
      * @param  \Illuminate\Http\Request  $request

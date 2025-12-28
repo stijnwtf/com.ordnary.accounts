@@ -100,6 +100,7 @@ Route::prefix('app')->middleware(['auth', 'verified', 'checkSuspended'])->group(
     // API routes voor het updaten van gegevens
     Route::post('/profile', [MyAccountController::class, 'updateProfile'])->name('my-account.profile');
     Route::post('/profile/bio', [MyAccountController::class, 'updateBio'])->name('account.update-bio');
+    Route::post('/profile/preferences', [MyAccountController::class, 'updatePreferences'])->name('account.update-preferences');
     Route::post('/password', [MyAccountController::class, 'updatePassword'])->name('my-account.password');
     Route::post('/security/add-recovery-email', [MyAccountController::class, 'addRecoveryEmail'])->name('account.security.add-recovery-email');
     Route::post('/security/remove-recovery-email', [MyAccountController::class, 'removeRecoveryEmail'])->name('account.security.remove-recovery-email');
