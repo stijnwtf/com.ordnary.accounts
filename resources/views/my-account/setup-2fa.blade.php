@@ -105,19 +105,4 @@
             </div>
         </form>
     </div>
-
-    <!-- Warning Section -->
-    <div class="rounded-lg bg-yellow-50 border border-yellow-200 p-4 mt-8">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-triangle text-yellow-500 text-lg"></i>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-yellow-800 mb-1">{{ lang('warning.title', [], 'setup-2fa') }}</h3>
-                <p class="text-sm text-yellow-700">
-                    {{ lang('warning.description', [], 'setup-2fa') }}
-                </p>
-            </div>
-        </div>
-    </div>
 @endsection
