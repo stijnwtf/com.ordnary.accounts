@@ -161,12 +161,12 @@
         .sidebar-item {
             position: relative;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 8px;
+            border-radius: 999px;
             margin-bottom: 2px;
         }
 
         .sidebar-item:hover {
-            background: #f0f2f5;
+            text-decoration: underline;
         }
 
         .sidebar-item.active {
