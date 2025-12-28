@@ -166,12 +166,12 @@
                 <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('two_factor.title', [], 'security') }}</h3>
                 <p class="text-sm text-gray-600">{{ lang('subtitle', [], 'security') }}</p>
             </div>
-            <div>
+            <div class="border border-gray-200 rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-base font-medium text-gray-900 flex items-center">
+                    <div class="flex items-center">
                         <i class="fas fa-lock text-blue-500 mr-2"></i>
-                        {{ lang('two_factor.title', [], 'security') }}
-                    </h4>
+                        <span class="text-base font-medium text-gray-900">{{ lang('two_factor.title', [], 'security') }}</span>
+                    </div>
                     <div>
                         @if($user->hasTwoFactorEnabled())
                             <span
@@ -228,7 +228,7 @@
                 <p class="text-sm text-gray-600">{{ lang('activity.description', [], 'security') }}</p>
             </div>
 
-                <div class="overflow-hidden rounded-md border border-gray-200">
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -286,6 +286,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
         </div>
 
         <!-- Recovery Tab Content -->
@@ -295,8 +296,8 @@
                 <p class="text-sm text-gray-600">{{ lang('recovery.description', [], 'security') }}</p>
             </div>
 
-                <div class="border border-gray-200 rounded-md p-4 hover:bg-gray-50 transition-colors duration-150">
-                    <div class="flex items-center justify-between">
+            <div class="border border-gray-200 rounded-lg p-6">
+                <div class="flex items-center justify-between">
                         <div>
                             <h5 class="text-sm font-medium text-gray-900 flex items-center">
                                 <i class="fas fa-envelope text-gray-500 mr-1.5"></i>
@@ -340,6 +341,7 @@
                         @endif
                     </div>
                 </div>
+            </div>
         </div>
 
         <!-- Privacy & Data Tab Content -->
