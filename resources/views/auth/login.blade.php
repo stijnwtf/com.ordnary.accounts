@@ -123,8 +123,8 @@
                             <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in') }}</label>
                         </div>
 
-                        <!-- Turnstile Widget -->
-                        <div id="turnstile-container" class="flex justify-center"></div>
+                        <!-- Turnstile Widget (hidden but functional) -->
+                        <div id="turnstile-container" class="hidden"></div>
 
                         <!-- Submit Button -->
                         <div>
