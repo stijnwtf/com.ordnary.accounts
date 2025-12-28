@@ -340,8 +340,8 @@
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit"
-                                        class="text-gray-600 hover:text-gray-900 hover:underline font-medium text-sm flex items-center transition-all">
-                                        <i class="fas fa-arrow-right-from-bracket mr-2 text-gray-500"></i>
+                                        class="text-red-600 hover:text-red-700 hover:underline font-medium text-sm flex items-center transition-all">
+                                        <i class="fas fa-arrow-right-from-bracket mr-2 text-red-500"></i>
                                         {{ lang('sidebar.logout', [], 'layout') }}
                                     </button>
                                 </form>
