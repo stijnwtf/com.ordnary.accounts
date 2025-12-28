@@ -335,18 +335,6 @@
                         </div>
 
                         <div class="px-4 mt-4 ">
-                            <!-- Logout Form -->
-                            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="text-red-600 hover:text-red-700 hover:underline font-medium text-sm flex items-center transition-all">
-                                        <i class="fas fa-arrow-right-from-bracket mr-2 text-red-500"></i>
-                                        {{ lang('sidebar.logout', [], 'layout') }}
-                                    </button>
-                                </form>
-                            </div>
-
                             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                                 <p class="text-xs text-gray-400">
                                     <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
