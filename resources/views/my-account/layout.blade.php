@@ -274,7 +274,7 @@
                     <div class="relative">
                         <button id="mobile-user-menu" class="flex items-center">
                             <img class="h-8 w-8 rounded-full object-cover border-2 border-blue-100"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=initials&r=pg"
                                 alt="{{ $user->first_name }} {{ $user->last_name }}">
                         </button>
                     </div>
