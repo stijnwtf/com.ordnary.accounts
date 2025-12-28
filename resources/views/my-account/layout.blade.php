@@ -73,6 +73,13 @@
         select,
         textarea {
             max-width: 100%;
+            width: 100%;
+        }
+        
+        /* Ensure labels and text don't overflow */
+        label, p, span, div {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .glass-effect {
