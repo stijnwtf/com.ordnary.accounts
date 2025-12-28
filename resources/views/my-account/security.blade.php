@@ -60,8 +60,11 @@
         <!-- Tab Content -->
         <!-- Password Tab Content -->
         <div x-show="activeTab === 'password'" x-cloak>
-            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-                <form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Change your password</h3>
+                <p class="text-sm text-gray-600">Make sure you have a strong password that you don't use on other websites.</p>
+            </div>
+            <form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
                     @csrf
 
                     <!-- Current Password Section -->
@@ -154,13 +157,16 @@
                             Update Password
                         </button>
                     </div>
-                </form>
-            </div>
+            </form>
         </div>
 
         <!-- Authentication Tab Content -->
         <div x-show="activeTab === 'authentication'" x-cloak>
-            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('two_factor.title', [], 'security') }}</h3>
+                <p class="text-sm text-gray-600">{{ lang('subtitle', [], 'security') }}</p>
+            </div>
+            <div>
                 <div class="flex items-center justify-between mb-4">
                     <h4 class="text-base font-medium text-gray-900 flex items-center">
                         <i class="fas fa-lock text-blue-500 mr-2"></i>
@@ -217,15 +223,10 @@
 
         <!-- Activity Tab Content -->
         <div x-show="activeTab === 'activity'" x-cloak>
-            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-                <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
-                    <i class="fas fa-history text-blue-500 mr-2"></i>
-                    {{ lang('activity.title', [], 'security') }}
-                </h4>
-
-                <p class="text-sm text-gray-600 mb-5">
-                    {{ lang('activity.description', [], 'security') }}
-                </p>
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('activity.title', [], 'security') }}</h3>
+                <p class="text-sm text-gray-600">{{ lang('activity.description', [], 'security') }}</p>
+            </div>
 
                 <div class="overflow-hidden rounded-md border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -285,20 +286,14 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
         </div>
 
         <!-- Recovery Tab Content -->
         <div x-show="activeTab === 'recovery'" x-cloak>
-            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-                <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
-                    <i class="fas fa-life-ring text-blue-500 mr-2"></i>
-                    {{ lang('recovery.title', [], 'security') }}
-                </h4>
-
-                <p class="text-sm text-gray-600 mb-5">
-                    {{ lang('recovery.description', [], 'security') }}
-                </p>
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('recovery.title', [], 'security') }}</h3>
+                <p class="text-sm text-gray-600">{{ lang('recovery.description', [], 'security') }}</p>
+            </div>
 
                 <div class="border border-gray-200 rounded-md p-4 hover:bg-gray-50 transition-colors duration-150">
                     <div class="flex items-center justify-between">
@@ -345,11 +340,14 @@
                         @endif
                     </div>
                 </div>
-            </div>
         </div>
 
         <!-- Privacy & Data Tab Content -->
         <div x-show="activeTab === 'privacy'" x-cloak>
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('privacy.title', [], 'security') }}</h3>
+                <p class="text-sm text-gray-600">Manage your data and privacy settings.</p>
+            </div>
             <div class="space-y-6">
                 <!-- GDPR Data Export -->
                 <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
