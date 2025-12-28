@@ -368,10 +368,6 @@
                                     class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
                                     {{ lang('sidebar.profile', [], 'layout') }}
                                 </a>
-                                <a href="{{ route('account.password') }}"
-                                    class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    {{ lang('sidebar.password', [], 'layout') }}
-                                </a>
                                 <a href="{{ route('account.security') }}"
                                     class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
                                     {{ lang('sidebar.security', [], 'layout') }}
