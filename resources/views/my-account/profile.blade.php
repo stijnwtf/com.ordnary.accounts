@@ -40,6 +40,14 @@
                     data-tab="customization">
                     <i class="fas fa-palette mr-2"></i> {{ lang('tabs.customization', [], 'profile') }}
                 </button>
+
+                <button @click="activeTab = 'preferences'; sessionStorage.setItem('profileTab', 'preferences')"
+                    :class="activeTab === 'preferences' ? 'border-blue-500 text-blue-600' :
+                        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center"
+                    data-tab="preferences">
+                    <i class="fas fa-cog mr-2"></i> Preferences
+                </button>
             </div>
         </div>
 
@@ -110,62 +118,26 @@
                     <p class="mt-1 text-xs text-gray-500">{{ lang('fields.email_helper', [], 'profile') }}</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Phone Number Input -->
-                    <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ lang('fields.phone', [], 'profile') }} <span
-                                class="text-gray-400">{{ lang('fields.phone_optional', [], 'profile') }}</span>
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-phone text-gray-400"></i>
-                            </div>
-                            <input placeholder="+31 6 12345678" type="tel" name="phone" id="phone"
-                                value="{{ old('phone', $user->phone ?? '') }}"
-                                class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('phone') ? 'border-red-500' : 'border-gray-300' }}">
+                <!-- Phone Number Input -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ lang('fields.phone', [], 'profile') }} <span
+                            class="text-gray-400">{{ lang('fields.phone_optional', [], 'profile') }}</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-phone text-gray-400"></i>
                         </div>
-                        @error('phone')
-                            <p class="mt-1 text-xs text-red-600 flex items-center">
-                                <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
-                            </p>
-                        @enderror
-                        <p class="mt-1 text-xs text-gray-500">{{ lang('fields.phone_helper', [], 'profile') }}</p>
+                        <input placeholder="+31 6 12345678" type="tel" name="phone" id="phone"
+                            value="{{ old('phone', $user->phone ?? '') }}"
+                            class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('phone') ? 'border-red-500' : 'border-gray-300' }}">
                     </div>
-
-                    <!-- Language Preference -->
-                    <div>
-                        <label for="language"
-                            class="block text-sm font-medium text-gray-700 mb-1">{{ lang('fields.language', [], 'profile') }}</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-globe text-gray-400"></i>
-                            </div>
-                            <select name="language" id="language" onchange="this.form.submit()"
-                                class="w-full px-3 py-2.5 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
-                                @foreach (config('app.available_locales', ['en', 'nl']) as $locale)
-                                    <option value="{{ $locale }}"
-                                        {{ old('language', $user->lang ?? config('app.locale')) == $locale ? 'selected' : '' }}>
-                                        @if ($locale == 'nl')
-                                            Nederlands
-                                        @elseif($locale == 'en')
-                                            English
-                                        @elseif($locale == 'de')
-                                            Deutsch
-                                        @elseif($locale == 'fr')
-                                            Français
-                                        @else
-                                            {{ strtoupper($locale) }}
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <i class="fas fa-chevron-down text-gray-400"></i>
-                            </div>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500">{{ lang('fields.language_helper', [], 'profile') }}</p>
-                    </div>
+                    @error('phone')
+                        <p class="mt-1 text-xs text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                        </p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500">{{ lang('fields.phone_helper', [], 'profile') }}</p>
                 </div>
 
                 <!-- Submit Button -->
@@ -202,6 +174,68 @@
                         <button type="submit"
                             class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             <i class="fas fa-save mr-2"></i>Save Bio
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div x-show="activeTab === 'preferences'" x-cloak data-tab-content="preferences">
+            <form method="POST" action="{{ route('account.update-preferences') }}">
+                @csrf
+                <div class="space-y-6">
+                    <div class="border border-gray-200 rounded-lg p-6">
+                        <h4 class="text-base font-medium text-gray-900 mb-4">
+                            <i class="fas fa-globe text-gray-400 mr-2"></i>
+                            Language & Region
+                        </h4>
+                        
+                        <!-- Language Preference -->
+                        <div>
+                            <label for="language"
+                                class="block text-sm font-medium text-gray-700 mb-2">{{ lang('fields.language', [], 'profile') }}</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-language text-gray-400"></i>
+                                </div>
+                                <select name="language" id="language"
+                                    class="w-full px-3 py-2.5 pl-10 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none {{ $errors->has('language') ? 'border-red-500' : 'border-gray-300' }}">
+                                    @foreach (config('app.available_locales', ['en', 'nl']) as $locale)
+                                        <option value="{{ $locale }}"
+                                            {{ old('language', $user->lang ?? config('app.locale')) == $locale ? 'selected' : '' }}>
+                                            @if ($locale == 'nl')
+                                                Nederlands (Dutch)
+                                            @elseif($locale == 'en')
+                                                English
+                                            @elseif($locale == 'de')
+                                                Deutsch (German)
+                                            @elseif($locale == 'fr')
+                                                Français (French)
+                                            @else
+                                                {{ strtoupper($locale) }}
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400"></i>
+                                </div>
+                            </div>
+                            @error('language')
+                                <p class="mt-1 text-xs text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}
+                                </p>
+                            @enderror
+                            <p class="mt-2 text-xs text-gray-500">{{ lang('fields.language_helper', [], 'profile') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm">
+                            <i class="fas fa-save mr-1.5"></i> Save Preferences
                         </button>
                     </div>
                 </div>
