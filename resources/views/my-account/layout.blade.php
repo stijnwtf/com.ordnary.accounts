@@ -295,28 +295,23 @@
                                     {{ lang('sidebar.account_settings', [], 'layout') }}
                                 </div>
                                 <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-user mr-3 text-gray-500 w-5"></i>
                                     {{ lang('sidebar.profile', [], 'layout') }}
                                 </a>
                                 <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-lock mr-3 text-gray-500 w-5"></i>
                                     {{ lang('sidebar.password', [], 'layout') }}
                                 </a>
                                 <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-shield-alt mr-3 text-gray-500 w-5"></i>
                                     {{ lang('sidebar.security', [], 'layout') }}
                                 </a>
                                 <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-globe mr-3 text-gray-500 w-5"></i>
                                     {{ lang('sidebar.connections', [], 'layout') }}
                                 </a>
                                 <a href="{{ route('account.subscriptions') }}" class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-credit-card mr-3 text-gray-500 w-5"></i>
                                     {{ lang('sidebar.subscriptions', [], 'layout') }}
                                 </a>
                             </div>
 
-                            <div class="px-4 pt-4 mt-4 border-t border-gray-200">
+                            <div class="mt-4 pt-4 border-t border-gray-200">
                                 <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2 mb-1">
                                     {{ lang('sidebar.support', [], 'layout') }}
                                 </div>
