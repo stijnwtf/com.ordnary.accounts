@@ -316,7 +316,7 @@
                                 </a>
                             </div>
 
-                            <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="px-4 pt-4 mt-4 border-t border-gray-200">
                                 <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2 mb-1">
                                     {{ lang('sidebar.support', [], 'layout') }}
                                 </div>
@@ -394,20 +394,6 @@
                         <!-- Content Section -->
                         <div>
                             @yield('content')
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile Footer (only visible on small screens) -->
-            <div class="mt-8 py-3 px-4 border-t border-gray-200 lg:hidden">
-                <div class="text-xs text-gray-400">
-                    <div class="flex flex-col space-y-2">
-                        <span>&copy; {{ date('Y') }} ordnary. {{ lang('footer.rights', [], 'layout') }}</span>
-                        <div class="flex items-center space-x-3">
-                            <a href="https://ordnary.com/documents/privacy" class="hover:text-gray-600">{{ lang('footer.privacy', [], 'layout') }}</a>
-                            <a href="https://ordnary.com/documents/terms" class="hover:text-gray-600">{{ lang('footer.terms', [], 'layout') }}</a>
-                            <a href="https://support.ordnary.com" class="hover:text-gray-600">{{ lang('footer.help', [], 'layout') }}</a>
                         </div>
                     </div>
                 </div>
