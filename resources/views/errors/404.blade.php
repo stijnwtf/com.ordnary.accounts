@@ -16,18 +16,8 @@
                 <div class="mb-8 flex flex-col items-start">
                     <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">404 - Page Not Found</h2>
+                        <h2 class="text-2xl font-bold text-gray-900">404 Page Not Found</h2>
                         <p class="text-sm text-gray-600 mt-2">The page you're looking for doesn't exist or has been moved.</p>
-                    </div>
-                </div>
-
-                <!-- 404 Icon Display -->
-                <div class="mb-6 flex justify-center">
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-4">
-                            <i class="fas fa-search text-gray-400 text-4xl"></i>
-                        </div>
-                        <p class="text-6xl font-bold text-gray-200">404</p>
                     </div>
                 </div>
 
@@ -48,10 +38,6 @@
 
                 <!-- Actions -->
                 <div class="space-y-3">
-                    <a href="{{ route('login') }}" 
-                        class="block w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium text-center">
-                        <i class="fas fa-home mr-2"></i>Back to Login
-                    </a>
                     <button onclick="window.history.back()" 
                         class="block w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-colors duration-200 font-medium text-center">
                         <i class="fas fa-arrow-left mr-2"></i>Go Back
