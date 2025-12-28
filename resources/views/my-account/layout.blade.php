@@ -328,11 +328,11 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto lg:px-8">
+        <div class="w-full lg:max-w-7xl mx-auto lg:px-8">
             <!-- Main container with sidebar and content -->
             <div class="flex flex-col lg:flex-row min-h-screen">
                 <!-- Left Sidebar Section -->
-                <div class="hidden lg:block lg:w-80 border-r border-gray-200 py-8 pr-8">
+                <div class="hidden lg:block lg:w-72 lg:flex-shrink-0 border-r border-gray-200 py-8 pr-6">
                     <div class="space-y-1">
                         <!-- Account Summary -->
                         <div class="px-4 py-4 mb-6">
@@ -403,8 +403,8 @@
                 </div>
 
                 <!-- Right Content Area -->
-                <div class="flex-1 lg:py-8 lg:pl-8 w-full">
-                    <div class="bg-white w-full px-4 sm:px-6 lg:px-0 py-6 lg:py-8 overflow-x-hidden"
+                <div class="flex-1 lg:py-8 lg:pl-8 w-full min-w-0">
+                    <div class="bg-white w-full max-w-full px-4 sm:px-6 lg:px-0 py-6 lg:py-8">
 
                         <!-- Success Message -->
                         @if (session('status'))
