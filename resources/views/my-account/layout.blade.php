@@ -51,7 +51,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background: #ffffff;
             min-height: 100vh;
         }
 
@@ -161,22 +161,22 @@
         .sidebar-item {
             position: relative;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 6px;
-            margin-bottom: 1px;
+            border-radius: 8px;
+            margin-bottom: 2px;
         }
 
         .sidebar-item:hover {
-            background: #f8fafc;
+            background: #f0f2f5;
         }
 
         .sidebar-item.active {
-            background: #f1f5f9;
-            color: #374151;
+            background: #e7f3ff;
+            color: #0866ff;
             font-weight: 500;
         }
 
         .sidebar-item.active i {
-            color: #6b7280;
+            color: #0866ff;
         }
 
         /* Mobile navigation styling */
@@ -243,7 +243,7 @@
         <div id="loading-spinner"></div>
     </div>
 
-    <div class="content-container bg-[#f9fafb] min-h-screen">
+    <div class="content-container bg-white min-h-screen">
         <!-- Top navigation bar for mobile -->
         <header class="lg:hidden bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
             <div class="flex items-center justify-between px-4 py-3">
@@ -267,99 +267,95 @@
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8">
-            <!-- Main container with two cards side by side -->
-            <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <div class="max-w-7xl mx-auto lg:px-8">
+            <!-- Main container with sidebar and content -->
+            <div class="flex flex-col lg:flex-row min-h-screen">
                 <!-- Left Sidebar Section -->
-                <div class="w-full lg:w-1/4 lg:block hidden">
-                    <div class="space-y-4">
-                        <!-- Sidebar Card -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-8">
-                            <!-- Account Summary -->
-                            <div class="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                                <div class="flex items-center space-x-3">
-                                    <div class="relative">
-                                        <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                            alt="{{ $user->first_name }} {{ $user->last_name }}">
-                                        <div class="absolute bottom-0 right-0 h-4 w-4 bg-green-400 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-sm font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
-                                        <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
-                                    </div>
+                <div class="hidden lg:block lg:w-80 border-r border-gray-200 py-8 pr-8">
+                    <div class="space-y-1">
+                        <!-- Account Summary -->
+                        <div class="px-4 py-4 mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="relative">
+                                    <img class="h-14 w-14 rounded-full object-cover"
+                                        src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                </div>
+                                <div>
+                                    <h2 class="text-base font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                    <p class="text-sm text-gray-500 truncate">{{ $user->email }}</p>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Navigation Section -->
-                            <div class="p-3">
-                                <div class="mb-4">
-                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                        {{ lang('sidebar.account_settings', [], 'layout') }}
-                                    </div>
-                                    <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-user mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.profile', [], 'layout') }}
-                                    </a>
-                                    <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-lock mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.password', [], 'layout') }}
-                                    </a>
-                                    <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.security', [], 'layout') }}
-                                    </a>
-                                    <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-globe mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.connections', [], 'layout') }}
-                                    </a>
-                                    <a href="{{ route('account.subscriptions') }}" class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-credit-card mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.subscriptions', [], 'layout') }}
-                                    </a>
+                        <!-- Navigation Section -->
+                        <div>
+                            <div class="mb-1">
+                                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2 mb-1">
+                                    {{ lang('sidebar.account_settings', [], 'layout') }}
                                 </div>
-
-                                <div class="mt-3 border-t border-gray-200 pt-3">
-                                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
-                                        {{ lang('sidebar.support', [], 'layout') }}
-                                    </div>
-                                    <a href="https://support.ordnary.com" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-question-circle mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.help_center', [], 'layout') }}
-                                    </a>
-                                    <a href="/faq" class="sidebar-item text-gray-600 hover:text-gray-900 group flex items-center px-3 py-2.5 text-sm font-medium">
-                                        <i class="fas fa-info-circle mr-3 text-gray-500"></i>
-                                        {{ lang('sidebar.faq', [], 'layout') }}
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Logout Button and Account ID -->
-                            <div class="px-4 py-4 border-t border-gray-200 bg-gray-50">
-                                <a href="{{ route('logout.simple') }}" class="flex items-center text-sm text-red-600 hover:text-red-700 mb-4 font-medium">
-                                    <i class="fas fa-sign-out-alt mr-2"></i> {{ lang('sidebar.logout', [], 'layout') }}
+                                <a href="{{ route('account.profile') }}" class="sidebar-item {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-user mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.profile', [], 'layout') }}
                                 </a>
-                                <div class="flex items-center justify-between">
-                                    <p class="text-xs text-gray-500">
-                                        <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
-                                        <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
-                                    </p>
-                                    <a href="/" class="flex items-center">
-                                        <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="ordnary" class="h-4 w-auto">
-                                    </a>
+                                <a href="{{ route('account.password') }}" class="sidebar-item {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-lock mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.password', [], 'layout') }}
+                                </a>
+                                <a href="{{ route('account.security') }}" class="sidebar-item {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-shield-alt mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.security', [], 'layout') }}
+                                </a>
+                                <a href="{{ route('account.connections') }}" class="sidebar-item {{ $active_page == 'connections' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-globe mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.connections', [], 'layout') }}
+                                </a>
+                                <a href="{{ route('account.subscriptions') }}" class="sidebar-item {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-credit-card mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.subscriptions', [], 'layout') }}
+                                </a>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2 mb-1">
+                                    {{ lang('sidebar.support', [], 'layout') }}
                                 </div>
+                                <a href="https://support.ordnary.com" class="sidebar-item text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-question-circle mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.help_center', [], 'layout') }}
+                                </a>
+                                <a href="/faq" class="sidebar-item text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
+                                    <i class="fas fa-info-circle mr-3 text-gray-500 w-5"></i>
+                                    {{ lang('sidebar.faq', [], 'layout') }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Logout Button -->
+                        <div class="px-4 pt-4 mt-4 border-t border-gray-200">
+                            <a href="{{ route('logout.simple') }}" class="flex items-center text-sm text-gray-600 hover:text-gray-900 font-medium">
+                                <i class="fas fa-sign-out-alt mr-2 text-gray-500 w-5"></i> {{ lang('sidebar.logout', [], 'layout') }}
+                            </a>
+                            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-400">
+                                    <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
+                                    <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
+                                </p>
+                                <a href="/" class="flex items-center">
+                                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="ordnary" class="h-3 w-auto opacity-50">
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Content Card -->
-                <div class="w-full lg:w-3/4">
-                    <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
+                <!-- Right Content Area -->
+                <div class="flex-1 lg:py-8 lg:pl-8">
+                    <div class="bg-white">
 
                         <!-- Success Message -->
                         @if (session('status'))
-                        <div class="mx-6 mt-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
+                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg fade-in">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <i class="fas fa-check-circle text-green-500 text-xl"></i>
@@ -376,7 +372,7 @@
 
                         <!-- Error Message -->
                         @if ($errors->any())
-                        <div class="mx-6 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
@@ -396,7 +392,7 @@
                         @endif
 
                         <!-- Content Section -->
-                        <div class="p-6">
+                        <div>
                             @yield('content')
                         </div>
                     </div>
@@ -404,7 +400,7 @@
             </div>
             
             <!-- Mobile Footer (only visible on small screens) -->
-            <div class="mt-8 py-3 px-4 border-t border-gray-200 bg-white rounded-lg shadow-sm lg:hidden">
+            <div class="mt-8 py-3 px-4 border-t border-gray-200 lg:hidden">
                 <div class="text-xs text-gray-400">
                     <div class="flex flex-col space-y-2">
                         <span>&copy; {{ date('Y') }} ordnary. {{ lang('footer.rights', [], 'layout') }}</span>
