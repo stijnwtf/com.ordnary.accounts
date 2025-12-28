@@ -505,6 +505,205 @@ class AuthController extends Controller
     }
 
     /**
+     * Send a login code to the user's email
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendLoginCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $email = $request->email;
+
+        // Check if user exists
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email address not found.'
+            ], 404);
+        }
+
+        // Generate 6-digit code
+        $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Store code in database (expires in 10 minutes)
+        \App\Models\LoginCode::create([
+            'email' => $email,
+            'code' => $code,
+            'expires_at' => now()->addMinutes(10),
+            'used' => false
+        ]);
+
+        // Send email with code
+        try {
+            Mail::raw("Your Ordnary login code is: {$code}\n\nThis code will expire in 10 minutes.\n\nIf you didn't request this code, please ignore this email.", function ($message) use ($email) {
+                $message->to($email)
+                    ->subject('Your Ordnary Login Code');
+            });
+
+            Log::info("sendLoginCode: Code sent successfully", [
+                'email' => $email
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Code sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error("sendLoginCode: Failed to send email", [
+                'email' => $email,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send code. Please try again.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify the login code and log the user in
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verifyLoginCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string|size:6'
+        ]);
+
+        $email = $request->email;
+        $code = $request->code;
+
+        // Find the most recent unused code for this email
+        $loginCode = \App\Models\LoginCode::where('email', $email)
+            ->where('code', $code)
+            ->where('used', false)
+            ->where('expires_at', '>', now())
+            ->latest()
+            ->first();
+
+        if (!$loginCode) {
+            Log::warning("verifyLoginCode: Invalid or expired code", [
+                'email' => $email
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired code.'
+            ], 400);
+        }
+
+        // Mark code as used
+        $loginCode->markAsUsed();
+
+        // Find and log in the user
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found.'
+            ], 404);
+        }
+
+        // Check if user is suspended
+        if ($user->isSuspended()) {
+            session([
+                'suspended_user_id' => $user->id,
+                'suspended_user_timeout' => now()->addHours(24)
+            ]);
+            
+            Log::warning("verifyLoginCode: Suspended user attempted to login", [
+                "user_id" => $user->id,
+                "email" => $user->email
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Account suspended.',
+                'redirect_url' => route('banned')
+            ], 403);
+        }
+
+        // Check if email is verified
+        if (!$user->hasVerifiedEmail()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please verify your email address before logging in.'
+            ], 403);
+        }
+
+        // Log the user in
+        Auth::login($user, true); // true = remember me
+
+        // Log login activity
+        LoginActivity::create([
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'login_at' => now(),
+            'login_method' => 'email_code'
+        ]);
+
+        Log::info("verifyLoginCode: User logged in successfully", [
+            "user_id" => $user->id,
+            "email" => $user->email
+        ]);
+
+        // Get session parameters for redirect
+        $clientId = session("client_id");
+        $redirectUri = session("redirect_uri");
+        $directLogin = session("direct_login", !($clientId && $redirectUri));
+
+        // Handle redirect
+        $redirectUrl = $this->getLoginRedirectUrl($user, $directLogin, $clientId, $redirectUri);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login successful',
+            'redirect_url' => $redirectUrl
+        ]);
+    }
+
+    /**
+     * Get the redirect URL after login
+     *
+     * @param  \App\Models\User  $user
+     * @param  bool  $directLogin
+     * @param  string|null  $clientId
+     * @param  string|null  $redirectUri
+     * @return string
+     */
+    private function getLoginRedirectUrl($user, $directLogin, $clientId, $redirectUri)
+    {
+        if ($directLogin) {
+            return route('my-account.index');
+        }
+
+        if ($clientId && $redirectUri) {
+            // Generate authorization code for SSO
+            $authCode = Str::random(32);
+            
+            // Store auth code in session or database as needed
+            session(['auth_code' => $authCode, 'auth_user_id' => $user->id]);
+            
+            // Build redirect URL with auth code
+            $separator = strpos($redirectUri, '?') !== false ? '&' : '?';
+            return $redirectUri . $separator . 'code=' . $authCode;
+        }
+
+        return route('my-account.index');
+    }
+
+    /**
      * Log the user out of the application.
      *
      * @param  \Illuminate\Http\Request  $request

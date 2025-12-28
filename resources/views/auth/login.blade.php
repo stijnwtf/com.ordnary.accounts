@@ -138,8 +138,89 @@
                         <div class="flex justify-between items-center text-sm">
                             <a href="{{route('password.forgot')}}"
                                 class="text-[#0866FF] hover:underline font-medium">{{ __('Forgot password?') }}</a>
-                            <button type="button" class="text-[#0866FF] hover:underline font-medium">
+                            <button type="button" onclick="showLoginOptions()" class="text-[#0866FF] hover:underline font-medium">
                                 {{ __('Sign in using another way') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2.5: Login Method Selection -->
+                    <div id="step2-options" class="space-y-4 hidden">
+                        <div class="text-sm text-gray-600 mb-4">
+                            Choose how you want to sign in:
+                        </div>
+
+                        <!-- Password Option -->
+                        <button type="button" onclick="selectPasswordLogin()" 
+                            class="w-full flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:border-[#0866FF] hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-lock text-gray-600"></i>
+                                </div>
+                                <div class="text-left">
+                                    <div class="font-medium text-gray-900">Password</div>
+                                    <div class="text-sm text-gray-500">Sign in with your password</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </button>
+
+                        <!-- Email Code Option -->
+                        <button type="button" onclick="selectCodeLogin()" 
+                            class="w-full flex items-center justify-between p-4 border border-gray-300 rounded-lg hover:border-[#0866FF] hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-envelope text-gray-600"></i>
+                                </div>
+                                <div class="text-left">
+                                    <div class="font-medium text-gray-900">Email code</div>
+                                    <div class="text-sm text-gray-500">Get a code sent to your email</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </button>
+
+                        <!-- Back Button -->
+                        <div class="text-center mt-4">
+                            <button type="button" onclick="backFromOptions()" class="text-sm text-gray-600 hover:text-gray-900">
+                                <i class="fas fa-arrow-left mr-1"></i> Back
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Email Code Input -->
+                    <div id="step3" class="space-y-6 hidden">
+                        <div>
+                            <label for="email_code"
+                                class="block text-sm font-medium text-gray-700 mb-1">{{ __('Enter code') }}</label>
+                            <div class="relative">
+                                <input placeholder="Enter 6-digit code" type="text" name="email_code" id="email_code" maxlength="6"
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent text-center text-2xl tracking-widest font-mono">
+                            </div>
+                            <p class="mt-2 text-xs text-gray-500 text-center">
+                                We sent a code to <span id="code-email" class="font-medium"></span>. Check your inbox and spam folder.
+                            </p>
+                        </div>
+
+                        <!-- Resend Code Link -->
+                        <div class="text-center">
+                            <button type="button" onclick="resendCode()" class="text-sm text-[#0866FF] hover:underline font-medium">
+                                {{ __('Didn\'t receive a code? Send again') }}
+                            </button>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div>
+                            <button type="button" onclick="verifyCode()"
+                                class="w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
+                                Continue
+                            </button>
+                        </div>
+
+                        <!-- Back to Password Login Link -->
+                        <div class="text-center">
+                            <button type="button" onclick="switchToPasswordLogin()" class="text-sm text-[#0866FF] hover:underline font-medium">
+                                {{ __('Sign in with password instead') }}
                             </button>
                         </div>
                     </div>
@@ -171,6 +252,7 @@
 
     <script>
         let currentStep = 1;
+        let userEmail = '';
 
         function nextStep() {
             const email = document.getElementById('email').value;
@@ -180,6 +262,8 @@
                 alert('Please enter a valid email address');
                 return;
             }
+
+            userEmail = email;
 
             // Hide step 1, show step 2
             document.getElementById('step1').classList.add('hidden');
@@ -208,8 +292,10 @@
         }
 
         function prevStep() {
-            // Show step 1, hide step 2
+            // Show step 1, hide step 2, step 2-options and step 3
             document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step2-options').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
             document.getElementById('step1').classList.remove('hidden');
             document.getElementById('signup-link').classList.remove('hidden');
             
@@ -223,6 +309,141 @@
             currentStep = 1;
         }
 
+        function showLoginOptions() {
+            // Hide step 2, show options
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step2-options').classList.remove('hidden');
+            
+            // Update title
+            document.getElementById('page-title').textContent = 'Choose how to sign in';
+            const subtitle = document.getElementById('page-subtitle');
+            subtitle.innerHTML = 'Select a sign-in method for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + userEmail + '</button>';
+        }
+
+        function backFromOptions() {
+            // Show step 2, hide options
+            document.getElementById('step2-options').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            
+            // Update title and subtitle
+            document.getElementById('page-title').textContent = 'Enter your password';
+            const subtitle = document.getElementById('page-subtitle');
+            subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + userEmail + '</button> to continue.';
+            
+            // Focus on password field
+            document.getElementById('password').focus();
+        }
+
+        function selectPasswordLogin() {
+            // Just go back to password screen
+            backFromOptions();
+        }
+
+        function selectCodeLogin() {
+            // Send code to email
+            sendLoginCode(userEmail);
+            
+            // Hide options, show step 3
+            document.getElementById('step2-options').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            
+            // Update title and subtitle
+            document.getElementById('page-title').textContent = 'Check your email';
+            const subtitle = document.getElementById('page-subtitle');
+            subtitle.innerHTML = 'We sent a login code to <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + userEmail + '</button>';
+            
+            // Update the code email display
+            document.getElementById('code-email').textContent = userEmail;
+            
+            // Focus on code field
+            document.getElementById('email_code').focus();
+            
+            currentStep = 3;
+        }
+
+        function switchToCodeLogin() {
+            // This function is kept for backward compatibility but now calls selectCodeLogin
+            selectCodeLogin();
+        }
+
+        function switchToPasswordLogin() {
+            // Hide step 3, show step 2
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            
+            // Update title and subtitle
+            document.getElementById('page-title').textContent = 'Enter your password';
+            const subtitle = document.getElementById('page-subtitle');
+            subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + userEmail + '</button> to continue.';
+            
+            // Focus on password field
+            document.getElementById('password').focus();
+            
+            currentStep = 2;
+        }
+
+        function sendLoginCode(email) {
+            fetch('{{ route("login.send-code") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Code sent successfully');
+                } else {
+                    alert('Failed to send code. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+        function resendCode() {
+            sendLoginCode(userEmail);
+            alert('A new code has been sent to your email.');
+        }
+
+        function verifyCode() {
+            const code = document.getElementById('email_code').value;
+            
+            if (!code || code.length !== 6) {
+                alert('Please enter a valid 6-digit code');
+                return;
+            }
+
+            fetch('{{ route("login.verify-code") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({ 
+                    email: userEmail,
+                    code: code
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the appropriate page
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Invalid code. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
         // Handle Enter key press on email input
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.getElementById('email');
@@ -231,6 +452,20 @@
                     e.preventDefault();
                     nextStep();
                 }
+            });
+
+            // Handle Enter key press on code input
+            const codeInput = document.getElementById('email_code');
+            codeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    verifyCode();
+                }
+            });
+
+            // Auto-format code input (only numbers)
+            codeInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
             });
         });
     </script>
