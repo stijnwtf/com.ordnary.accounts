@@ -329,6 +329,29 @@ class AuthController extends Controller
         ]);
 
         try {
+            // First check if user exists
+            $user = User::where('email', $request->email)->first();
+            
+            if (!$user) {
+                Log::warning("login: User not found", ["email" => $request->email]);
+                
+                if ($directLogin) {
+                    return redirect()->route("login")
+                        ->withInput($request->only('email'))
+                        ->withErrors([
+                            "email" => "No account found with this email address.",
+                        ]);
+                }
+                
+                $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+                return redirect($redirectUrl)
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "email" => "No account found with this email address.",
+                    ]);
+            }
+            
+            // User exists, now try to authenticate
             if (Auth::attempt($request->only("email", "password"))) {
                 $user = Auth::user();
 
@@ -420,44 +443,52 @@ class AuthController extends Controller
                 return $this->handleLoginRedirect($user, $directLogin, $clientId, $redirectUri);
             }
 
-            // Use generic error message to prevent email enumeration
-            Log::warning("login: Authentication failed", ["email" => $request->email]);
+            // Password is incorrect - track failed attempt
+            Log::warning("login: Incorrect password", ["email" => $request->email]);
             
-            // Track failed login attempt
-            $user = User::where('email', $request->email)->first();
-            $errorMessage = "Invalid email or password.";
+            $user->recordFailedLoginAttempt();
             
-            if ($user) {
-                $user->recordFailedLoginAttempt();
+            // Check if user was just suspended
+            if ($user->isSuspended()) {
+                Log::warning("login: User account suspended after failed attempts", [
+                    "user_id" => $user->id,
+                    "email" => $user->email,
+                    "attempts" => $user->failed_login_attempts
+                ]);
                 
-                // Check if user was just suspended
-                if ($user->isSuspended()) {
-                    Log::warning("login: User account suspended after failed attempts", [
-                        "user_id" => $user->id,
-                        "email" => $user->email,
-                        "attempts" => $user->failed_login_attempts
-                    ]);
-                    
-                    $errorMessage = "Your account has been suspended due to multiple failed login attempts. Please contact support.";
-                } else {
-                    $remainingAttempts = $user->getRemainingLoginAttempts();
-                    
-                    if ($remainingAttempts <= 2 && $remainingAttempts > 0) {
-                        $errorMessage .= " Warning: {$remainingAttempts} attempts remaining before account suspension.";
-                    } else {
-                        $errorMessage .= " Please try again.";
-                    }
+                Auth::logout();
+                
+                if ($directLogin) {
+                    return redirect()->route("login")
+                        ->withInput($request->only('email'))
+                        ->withErrors([
+                            "password" => "Your account has been suspended due to multiple failed login attempts. Please contact support.",
+                        ]);
                 }
-            } else {
+                
+                $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
+                return redirect($redirectUrl)
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "password" => "Your account has been suspended due to multiple failed login attempts. Please contact support.",
+                    ]);
+            }
+            
+            $remainingAttempts = $user->getRemainingLoginAttempts();
+            $errorMessage = "Incorrect password.";
+            
+            if ($remainingAttempts <= 2 && $remainingAttempts > 0) {
+                $errorMessage .= " Warning: {$remainingAttempts} attempts remaining before account suspension.";
+            } elseif ($remainingAttempts > 0) {
                 $errorMessage .= " Please try again.";
             }
 
-            // Check if this is a direct login
+            // Stay on password step (step 2)
             if ($directLogin) {
                 return redirect()->route("login")
                     ->withInput($request->only('email'))
                     ->withErrors([
-                        "email" => $errorMessage,
+                        "password" => $errorMessage,
                     ]);
             }
 
@@ -476,7 +507,7 @@ class AuthController extends Controller
             return redirect($redirectUrl)
                 ->withInput($request->only('email'))
                 ->withErrors([
-                    "email" => $errorMessage,
+                    "password" => $errorMessage,
                 ]);
         } catch (\Exception $e) {
             Log::error("login: Exception occurred during login", [
