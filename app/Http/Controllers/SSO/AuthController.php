@@ -467,32 +467,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Verify reCAPTCHA response with Google's API
-     * Updated to handle invisible reCAPTCHA v3
-     *
-     * @param string $recaptchaResponse
-     * @return array
-     */
-    private function verifyRecaptcha($recaptchaResponse)
-    {
-        if (empty($recaptchaResponse)) {
-            return ['success' => false, 'error-codes' => ['missing-input-response']];
-        }
-
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret_key'),
-            'response' => $recaptchaResponse,
-            'remoteip' => request()->ip()
-        ]);
-
-        Log::debug("verifyRecaptcha: Verification response", [
-            'response' => $response->json()
-        ]);
-
-        return $response->json();
-    }
-
-    /**
      * Verify Google reCAPTCHA v3 response
      *
      * @param  string  $recaptchaResponse
