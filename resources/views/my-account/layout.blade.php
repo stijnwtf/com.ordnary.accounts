@@ -292,9 +292,9 @@
                         <div class="px-4 py-4 mb-6">
                             <div class="flex items-center justify-between space-x-3">
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
-<img class="h-14 w-14 rounded-full object-cover"
-     src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name.' '.$user->last_name) }}&size=200&background=1A202C&color=ffffff&font-size=0.5&bold=true"
-     alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                    <img class="h-14 w-14 rounded-full object-cover"
+                                        src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name . ' ' . $user->last_name) }}&size=200&background=E5E7EB&color=4B5563&font-size=0.5&bold=true"
+                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
 
                                     <div class="min-w-0 flex-1">
                                         <h1 class="text-base font-semibold text-gray-900">{{ $user->first_name }}
