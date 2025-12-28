@@ -69,7 +69,9 @@
             box-sizing: border-box;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             max-width: 100%;
         }
 
@@ -462,9 +464,10 @@
                         <div class="flex items-center space-x-3 min-w-0 flex-1">
                             <img class="h-12 w-12 rounded-full object-cover flex-shrink-0"
                                 src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name . ' ' . $user->last_name) }}&size=200&background=E5E7EB&color=4B5563&font-size=0.5&bold=true"
-                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                alt="{{ $user->first_name }} {{ $user->last_name }}">
                             <div class="min-w-0 flex-1">
-                                <h2 class="text-base font-semibold text-gray-900 truncate">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                <h2 class="text-base font-semibold text-gray-900 truncate">{{ $user->first_name }}
+                                    {{ $user->last_name }}</h2>
                                 <form method="POST" action="{{ route('logout') }}" class="inline">
                                     @csrf
                                     <button type="submit"
@@ -483,49 +486,29 @@
                     </div>
                     <a href="{{ route('account.profile') }}"
                         class="mobile-nav {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-user mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.profile', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.password') }}"
                         class="mobile-nav {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-lock mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.password', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.security') }}"
                         class="mobile-nav {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-shield-alt mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.security', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.notifications') }}"
                         class="mobile-nav {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-bell mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.notifications', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.connections') }}"
                         class="mobile-nav {{ $active_page == 'connections' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-globe mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.connections', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.subscriptions') }}"
                         class="mobile-nav {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-credit-card mr-3 text-gray-500 w-5"></i>
                         {{ lang('sidebar.subscriptions', [], 'layout') }}
                     </a>
-                    <div class="border-t border-gray-200 my-3 pt-3">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2 mb-1">
-                            {{ lang('sidebar.support', [], 'layout') }}
-                        </div>
-                    </div>
-                    <a href="https://support.ordnary.com"
-                        class="mobile-nav text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-question-circle mr-3 text-gray-500 w-5"></i>
-                        {{ lang('mobile.help_center', [], 'layout') }}
-                    </a>
-                    <a href="/faq"
-                        class="mobile-nav text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        <i class="fas fa-info-circle mr-3 text-gray-500 w-5"></i>
-                        {{ lang('mobile.faq', [], 'layout') }}
-                    </a>
+
                 </nav>
             </div>
         </div>
