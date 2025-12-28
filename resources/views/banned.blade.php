@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col">
     <div class="flex-grow p-8">
         @if(config('app.debug'))
             <!-- Debug info (only in debug mode) -->
@@ -71,15 +71,15 @@
                         </li>
                     </ul>
 
-                    <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="mt-6 p-4 bg-[#E7F3FF] border border-[#0866FF] rounded-lg">
                         <div class="flex items-start">
-                            <i class="fas fa-headset text-blue-500 text-lg mt-0.5 mr-3 flex-shrink-0"></i>
+                            <i class="fas fa-headset text-[#0866FF] text-lg mt-0.5 mr-3 flex-shrink-0"></i>
                             <div>
-                                <h3 class="text-sm font-medium text-blue-800 mb-2">Need Help?</h3>
-                                <p class="text-sm text-blue-700 mb-3">
+                                <h3 class="text-sm font-medium text-gray-900 mb-2">Need Help?</h3>
+                                <p class="text-sm text-gray-700 mb-3">
                                     If you believe this is a mistake or would like to appeal this decision, please contact our support team.
                                 </p>
-                                <a href="https://support.ordnary.com" class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm leading-4 font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                <a href="https://support.ordnary.com" class="inline-flex items-center px-4 py-2.5 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-[#0866FF] hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0866FF] transition-colors duration-200">
                                     <i class="fas fa-external-link-alt mr-2"></i>
                                     Contact Support
                                 </a>
@@ -170,7 +170,7 @@
 
         <!-- Back to Home -->
         <div class="max-w-6xl mx-auto mt-8 text-center">
-            <a href="/" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors">
+            <a href="/" class="inline-flex items-center text-sm text-[#0866FF] hover:underline font-medium transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Homepage
             </a>
