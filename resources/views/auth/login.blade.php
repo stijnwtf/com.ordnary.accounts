@@ -139,7 +139,7 @@
                             <a href="{{route('password.forgot')}}"
                                 class="text-[#0866FF] hover:underline font-medium">{{ __('Forgot password?') }}</a>
                             <button type="button" class="text-[#0866FF] hover:underline font-medium">
-                                {{ __('Login another way') }}
+                                {{ __('Sign in using another way') }}
                             </button>
                         </div>
                     </div>
