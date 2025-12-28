@@ -299,9 +299,70 @@ class User extends Authenticatable implements MustVerifyEmail
                 'email' => $this->email,
                 'attempts' => $this->failed_login_attempts,
             ]);
+            
+            // Send security alert email
+            try {
+                $request = request();
+                $userAgent = $request->userAgent() ?? 'Unknown';
+                
+                \Mail::to($this->email)->send(new \App\Mail\SecurityAlert(
+                    $this,
+                    'Account Suspended',
+                    'Your account has been automatically suspended due to multiple failed login attempts.',
+                    now()->format('F j, Y \a\t g:i A'),
+                    'Unknown', // Location can be enhanced with IP geolocation service
+                    $request->ip() ?? 'Unknown',
+                    $this->getDeviceInfo($userAgent)
+                ));
+                
+                \Log::info('Security alert email sent for suspended account', [
+                    'user_id' => $this->id,
+                    'email' => $this->email,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Failed to send security alert email', [
+                    'user_id' => $this->id,
+                    'email' => $this->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         } else {
             $this->save();
         }
+    }
+    
+    /**
+     * Get device info from user agent string.
+     */
+    private function getDeviceInfo($userAgent): string
+    {
+        if (stripos($userAgent, 'Windows') !== false) {
+            $os = 'Windows';
+        } elseif (stripos($userAgent, 'Mac') !== false) {
+            $os = 'macOS';
+        } elseif (stripos($userAgent, 'Linux') !== false) {
+            $os = 'Linux';
+        } elseif (stripos($userAgent, 'Android') !== false) {
+            $os = 'Android';
+        } elseif (stripos($userAgent, 'iOS') !== false || stripos($userAgent, 'iPhone') !== false) {
+            $os = 'iOS';
+        } else {
+            $os = 'Unknown OS';
+        }
+        
+        if (stripos($userAgent, 'Chrome') !== false) {
+            $browser = 'Chrome';
+        } elseif (stripos($userAgent, 'Firefox') !== false) {
+            $browser = 'Firefox';
+        } elseif (stripos($userAgent, 'Safari') !== false) {
+            $browser = 'Safari';
+        } elseif (stripos($userAgent, 'Edge') !== false) {
+            $browser = 'Edge';
+        } else {
+            $browser = 'Unknown Browser';
+        }
+        
+        return "{$browser} on {$os}";
     }
 
     /**

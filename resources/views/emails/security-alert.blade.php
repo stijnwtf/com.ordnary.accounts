@@ -215,23 +215,19 @@
             </div>
 
             <div class="content-wrapper">
-                <h1>Security Alert</h1>
-                <p class="subtitle">We have detected unusual activity on your Ordnary account. Please review the details below.</p>
+                <h1>Account Suspended</h1>
+                <p class="subtitle">Your Ordnary account has been suspended due to multiple failed login attempts.</p>
 
                 <div class="warning-box">
-                    <p class="warning-text"><strong>{{ $alertTitle }}</strong><br>{{ $alertMessage }}</p>
+                    <p class="warning-text"><strong>Security Protection Activated</strong><br>We detected 6 consecutive failed login attempts on your account. As a security measure, your account has been automatically suspended to prevent unauthorized access.</p>
                 </div>
 
                 <div class="details-section">
-                    <div class="details-header">Activity Details</div>
+                    <div class="details-header">Suspension Details</div>
                     <div class="details-content">
                         <div class="details-row">
                             <div class="details-label">Time:</div>
                             <div class="details-value">{{ $activityTime }}</div>
-                        </div>
-                        <div class="details-row">
-                            <div class="details-label">Location:</div>
-                            <div class="details-value">{{ $activityLocation }}</div>
                         </div>
                         <div class="details-row">
                             <div class="details-label">IP Address:</div>
@@ -245,17 +241,17 @@
                 </div>
 
                 <div class="action-section">
-                    <div class="action-title">Recommended Actions</div>
-                    <div class="action-item">If you recognize this activity, no action is needed.</div>
-                    <div class="action-item">If you don't recognize this activity, we recommend changing your password immediately and terminating all active sessions.</div>
-                    <div class="action-item">Check your account settings for any unauthorized changes.</div>
+                    <div class="action-title">What You Should Do</div>
+                    <div class="action-item">If these login attempts were made by you, contact our support team to restore your account access.</div>
+                    <div class="action-item">If you don't recognize these attempts, someone may be trying to access your account. Please contact our security team immediately.</div>
+                    <div class="action-item">Once your account is restored, we recommend enabling Two-Factor Authentication for additional security.</div>
                 </div>
 
                 <center>
-                    <a href="{{ url('/app/security') }}" class="button">Review Security Settings</a>
+                    <a href="mailto:support@ordnary.com" class="button">Contact Support</a>
                 </center>
 
-                <p style="margin-top: 32px; font-size: 14px; color: #6b7280;">If you don't recognize this activity, please contact our security team immediately.</p>
+                <p style="margin-top: 32px; font-size: 14px; color: #6b7280;">For immediate assistance, email us at <strong>support@ordnary.com</strong> or <strong>security@ordnary.com</strong></p>
             </div>
 
             <div class="footer">
