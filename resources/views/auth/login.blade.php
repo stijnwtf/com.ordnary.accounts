@@ -473,6 +473,15 @@
                 return;
             }
 
+            // Check if userEmail is set
+            if (!userEmail) {
+                showError('code', 'Email not found. Please start over.');
+                console.error('userEmail is not set');
+                return;
+            }
+
+            console.log('Verifying code for email:', userEmail);
+
             fetch('{{ route("login.verify-code") }}', {
                 method: 'POST',
                 headers: {
@@ -484,8 +493,12 @@
                     code: code
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
             .then(data => {
+                console.log('Response data:', data);
                 if (data.success) {
                     // Redirect to the appropriate page
                     window.location.href = data.redirect_url;
