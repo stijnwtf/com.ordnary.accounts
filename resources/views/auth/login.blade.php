@@ -110,15 +110,13 @@
                             <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in') }}</label>
                         </div>
 
-                        <!-- reCAPTCHA Token (hidden) -->
-                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-
                         <!-- Submit Button -->
                         <div>
                             <button type="submit" id="login-submit-btn"
                                 class="g-recaptcha w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium"
                                 data-sitekey="{{ config('services.recaptcha.site_key') }}"
-                                data-callback="onSubmit">
+                                data-callback="onSubmit"
+                                data-action="login">
                                 Sign In
                             </button>
                         </div>
@@ -544,7 +542,7 @@
         });
 
         // reCAPTCHA v2 invisible callback
-        function onSubmit() {
+        function onSubmit(token) {
             document.getElementById('login-form').submit();
         }
     </script>

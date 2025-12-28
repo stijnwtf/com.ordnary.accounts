@@ -201,9 +201,6 @@
                             @enderror
                         </div>
 
-                        <!-- reCAPTCHA v3 Hidden Field -->
-                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-
                         <!-- GDPR Consent -->
                         <div class="space-y-3 pt-2 pb-1">
                             <div class="flex items-start">
@@ -238,7 +235,8 @@
                             <button type="submit" id="submit-button"
                                 class="g-recaptcha flex-1 bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium"
                                 data-sitekey="{{ config('services.recaptcha.site_key') }}"
-                                data-callback="onRegisterSubmit">
+                                data-callback="onRegisterSubmit"
+                                data-action="register">
                                 Create Account
                             </button>
                         </div>
@@ -379,7 +377,7 @@
         });
 
         // reCAPTCHA v2 invisible callback
-        function onRegisterSubmit() {
+        function onRegisterSubmit(token) {
             document.getElementById('register-form').submit();
         }
     </script>
