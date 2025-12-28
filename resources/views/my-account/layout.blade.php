@@ -310,20 +310,6 @@
                                     {{ lang('sidebar.subscriptions', [], 'layout') }}
                                 </a>
                             </div>
-
-                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-2 mb-1">
-                                    {{ lang('sidebar.support', [], 'layout') }}
-                                </div>
-                                <a href="https://support.ordnary.com" class="sidebar-item text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-question-circle mr-3 text-gray-500 w-5"></i>
-                                    {{ lang('sidebar.help_center', [], 'layout') }}
-                                </a>
-                                <a href="/faq" class="sidebar-item text-gray-700 hover:text-gray-900 group flex items-center px-4 py-3 text-[15px] font-medium">
-                                    <i class="fas fa-info-circle mr-3 text-gray-500 w-5"></i>
-                                    {{ lang('sidebar.faq', [], 'layout') }}
-                                </a>
-                            </div>
                         </div>
 
                         <!-- Logout Button -->
