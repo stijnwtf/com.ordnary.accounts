@@ -345,7 +345,7 @@
         <!-- Privacy & Data Tab Content -->
         <div x-show="activeTab === 'privacy'" x-cloak>
             <div class="mb-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('privacy.title', [], 'security') }}</h3>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('tabs.privacy', [], 'security') }}</h3>
                 <p class="text-sm text-gray-600">Manage your data and privacy settings.</p>
             </div>
             <div class="space-y-6">
