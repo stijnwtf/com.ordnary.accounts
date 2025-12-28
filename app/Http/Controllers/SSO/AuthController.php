@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SSO;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Models\LoginCode;
 use App\Models\User;
 use App\Models\UserSession;
 use Illuminate\Auth\Events\PasswordReset;
@@ -673,7 +674,7 @@ class AuthController extends Controller
     private function getLoginRedirectUrl($user, $directLogin, $clientId, $redirectUri)
     {
         if ($directLogin) {
-            return route('my-account.index');
+            return route('my-account');
         }
 
         if ($clientId && $redirectUri) {
