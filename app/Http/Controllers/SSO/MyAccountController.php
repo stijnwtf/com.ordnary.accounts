@@ -289,7 +289,7 @@ class MyAccountController extends Controller
         // Verify current password
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors([
-                'current_password' => 'Het huidige wachtwoord is onjuist.',
+                'current_password' => 'The current password is incorrect.',
             ]);
         }
 
@@ -298,7 +298,7 @@ class MyAccountController extends Controller
 
         Log::info('User password updated', ['user_id' => $user->id]);
 
-        return redirect()->route('account.security')->with('status', 'Wachtwoord succesvol bijgewerkt!');
+        return redirect()->route('account.security')->with('status', 'Password successfully updated!');
     }
 
     public function addRecoveryEmail(Request $request)
