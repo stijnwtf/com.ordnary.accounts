@@ -54,7 +54,7 @@ class MyAccountController extends Controller
     public function index()
     {
         // Redirect naar de profielpagina
-        return redirect()->route('account.index');
+        return view('my-account.index');
     }
 
     /**
