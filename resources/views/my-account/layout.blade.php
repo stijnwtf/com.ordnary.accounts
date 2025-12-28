@@ -319,6 +319,16 @@
 
                         <!-- Logout Button -->
                         <div class="px-4 mt-4 ">
+                                                    <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-400">
+                                    <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
+                                    <span class="text-gray-400">{{ substr(md5($user->id), 0, 8) }}</span>
+                                </p>
+                                <a href="/" class="flex items-center">
+                                    <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="ordnary" class="h-3 w-auto opacity-50">
+                                </a>
+                            </div>
+
                             <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                                 <p class="text-xs text-gray-400">
                                     <span class="font-medium">{{ lang('sidebar.account_id', [], 'layout') }}:</span>
