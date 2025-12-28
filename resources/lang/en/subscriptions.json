@@ -1,0 +1,9 @@
+{
+  "title": "Subscriptions & Usage",
+  "header": "Subscriptions & Usage",
+  "subtitle": "Manage your Ordnary product subscriptions and monitor your usage.",
+  
+  "empty_state.icon": "credit-card",
+  "empty_state.title": "No Active Subscriptions",
+  "empty_state.description": "You don't have any active subscriptions with Ordnary products."
+}

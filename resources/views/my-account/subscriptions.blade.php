@@ -1,14 +1,14 @@
 @extends('my-account.layout')
 
-@section('title', 'Subscriptions & Usage')
+@section('title', lang('title', [], 'subscriptions'))
 
 @section('content')
     <div class="mb-6">
         <h3 class="text-lg font-medium leading-6 text-gray-900">
-            Subscriptions & Usage
+            {{ lang('header', [], 'subscriptions') }}
         </h3>
         <p class="mt-2 text-sm text-gray-600">
-            Manage your Ordnary product subscriptions and monitor your usage.
+            {{ lang('subtitle', [], 'subscriptions') }}
         </p>
     </div>
 
@@ -244,9 +244,9 @@
         <!-- No Subscriptions State -->
         <div class="text-center py-8 border border-gray-200 rounded-lg">
             <div class="flex flex-col items-center justify-center">
-                <i class="fas fa-credit-card text-gray-400 text-4xl mb-3"></i>
-                <h5 class="text-md font-medium text-gray-900 mb-1">No Active Subscriptions</h5>
-                <p class="text-sm text-gray-500">You don't have any active subscriptions with Ordnary products.</p>
+                <i class="fas fa-{{ lang('empty_state.icon', [], 'subscriptions') }} text-gray-400 text-4xl mb-3"></i>
+                <h5 class="text-md font-medium text-gray-900 mb-1">{{ lang('empty_state.title', [], 'subscriptions') }}</h5>
+                <p class="text-sm text-gray-500">{{ lang('empty_state.description', [], 'subscriptions') }}</p>
             </div>
         </div>
     @endif

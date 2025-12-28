@@ -28,7 +28,7 @@
                 <button @click="activeTab = 'password'; sessionStorage.setItem('securityTab', 'password')"
                     :class="activeTab === 'password' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                     class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
-                    <i class="fas fa-key mr-2"></i> Password
+                    <i class="fas fa-key mr-2"></i> {{ lang('tabs.password', [], 'security') }}
                 </button>
 
                 <button @click="activeTab = 'authentication'; sessionStorage.setItem('securityTab', 'authentication')"
@@ -61,17 +61,17 @@
         <!-- Password Tab Content -->
         <div x-show="activeTab === 'password'" x-cloak>
             <div class="mb-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-2">Change your password</h3>
-                <p class="text-sm text-gray-600">Make sure you have a strong password that you don't use on other websites.</p>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ lang('password.title', [], 'security') }}</h3>
+                <p class="text-sm text-gray-600">{{ lang('password.subtitle', [], 'security') }}</p>
             </div>
             <form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
                     @csrf
 
                     <!-- Current Password Section -->
                     <div>
-                        <label for="current_password" class="block text-sm font-medium text-gray-900 mb-2">Current Password</label>
+                        <label for="current_password" class="block text-sm font-medium text-gray-900 mb-2">{{ lang('password.current_password.label', [], 'security') }}</label>
                         <div class="relative">
-                            <input placeholder="Enter your current password" type="password"
+                            <input placeholder="{{ lang('password.current_password.placeholder', [], 'security') }}" type="password"
                                 name="current_password" id="current_password" required
                                 class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -87,9 +87,9 @@
 
                     <!-- New Password Section -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-900 mb-2">New Password</label>
+                        <label for="password" class="block text-sm font-medium text-gray-900 mb-2">{{ lang('password.new_password.label', [], 'security') }}</label>
                         <div class="relative">
-                            <input placeholder="Enter your new password" type="password"
+                            <input placeholder="{{ lang('password.new_password.placeholder', [], 'security') }}" type="password"
                                 name="password" id="password" required
                                 class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}"
                                 oninput="checkPasswordStrength()">
@@ -106,21 +106,21 @@
                         <!-- Password Strength Meter -->
                         <div class="mt-3">
                             <div class="flex justify-between mb-1">
-                                <span class="text-xs text-gray-500">Password Strength</span>
-                                <span id="password-strength-text" class="text-xs font-medium text-red-600">Too Weak</span>
+                                <span class="text-xs text-gray-500">{{ lang('password.strength.label', [], 'security') }}</span>
+                                <span id="password-strength-text" class="text-xs font-medium text-red-600">{{ lang('password.strength.too_weak', [], 'security') }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-1.5">
                                 <div id="password-strength-meter" class="bg-red-500 h-1.5 rounded-full transition-all duration-300" style="width: 10%"></div>
                             </div>
                         </div>
-                        <p class="mt-1.5 text-xs text-gray-500">Must be at least 8 characters</p>
+                        <p class="mt-1.5 text-xs text-gray-500">{{ lang('password.requirements', [], 'security') }}</p>
                     </div>
 
                     <!-- Confirm Password -->
                     <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-900 mb-2">Confirm New Password</label>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-900 mb-2">{{ lang('password.confirm_password.label', [], 'security') }}</label>
                         <div class="relative">
-                            <input placeholder="Confirm your new password" type="password"
+                            <input placeholder="{{ lang('password.confirm_password.placeholder', [], 'security') }}" type="password"
                                 name="password_confirmation" id="password_confirmation" required
                                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -138,12 +138,12 @@
                                 <i class="fas fa-info-circle text-blue-500"></i>
                             </div>
                             <div class="ml-3">
-                                <h4 class="text-sm font-medium text-blue-800">Password Security Tips</h4>
+                                <h4 class="text-sm font-medium text-blue-800">{{ lang('password.tips.title', [], 'security') }}</h4>
                                 <ul class="mt-2 text-xs text-blue-700 list-disc space-y-1 pl-5">
-                                    <li>Use a mix of uppercase and lowercase letters</li>
-                                    <li>Include numbers and special characters</li>
-                                    <li>Avoid common words and personal information</li>
-                                    <li>Use at least 12 characters for better security</li>
+                                    <li>{{ lang('password.tips.uppercase', [], 'security') }}</li>
+                                    <li>{{ lang('password.tips.numbers', [], 'security') }}</li>
+                                    <li>{{ lang('password.tips.avoid', [], 'security') }}</li>
+                                    <li>{{ lang('password.tips.length', [], 'security') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                         <button type="submit"
                             class="inline-flex items-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm font-medium">
                             <i class="fas fa-save mr-2"></i>
-                            Update Password
+                            {{ lang('password.update_button', [], 'security') }}
                         </button>
                     </div>
             </form>

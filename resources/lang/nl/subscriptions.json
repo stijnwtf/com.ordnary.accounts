@@ -1,0 +1,9 @@
+{
+  "title": "Abonnementen & Gebruik",
+  "header": "Abonnementen & Gebruik",
+  "subtitle": "Beheer uw Ordnary productabonnementen en bekijk uw gebruik.",
+  
+  "empty_state.icon": "credit-card",
+  "empty_state.title": "Geen actieve abonnementen",
+  "empty_state.description": "U heeft geen actieve abonnementen met Ordnary producten."
+}
