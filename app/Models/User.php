@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'bio',
         'password',
-        'is_admin',
+        // 'is_admin', // REMOVED: Not mass assignable for security - must be set explicitly
         'is_suspended',
         'suspended_at',
         'suspension_reason',

@@ -89,13 +89,13 @@ class DeveloperPortalController extends Controller
                     'id' => $client->id,
                     'name' => $client->name,
                     'client_id' => $client->client_id,
-                    'client_secret' => $client->client_secret,
+                    'client_secret' => $client->client_secret, // Only shown at creation
                     'redirect_uris' => $request->input('redirect_uris'),
                     'webhook_url' => $client->webhook_url,
                     'logout_url' => $client->logout_url,
                     'created_at' => $client->created_at->toIso8601String(),
                 ],
-                'message' => 'Client created successfully'
+                'message' => 'Client created successfully. Store the client_secret securely - it will not be shown again.'
             ], 201);
 
         } catch (\Exception $e) {
@@ -173,6 +173,7 @@ class DeveloperPortalController extends Controller
                     'id' => $client->id,
                     'name' => $client->name,
                     'client_id' => $client->client_id,
+                    // client_secret is intentionally excluded for security
                     'redirect_uris' => json_decode($client->redirect_uris, true),
                     'webhook_url' => $client->webhook_url,
                     'logout_url' => $client->logout_url,
@@ -250,6 +251,7 @@ class DeveloperPortalController extends Controller
                     'id' => $client->id,
                     'name' => $client->name,
                     'client_id' => $client->client_id,
+                    // client_secret is intentionally excluded for security
                     'redirect_uris' => json_decode($client->redirect_uris, true),
                     'webhook_url' => $client->webhook_url,
                     'logout_url' => $client->logout_url,

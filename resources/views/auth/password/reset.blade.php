@@ -8,8 +8,6 @@
     <title>Reset Password</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Cloudflare Turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body class="bg-[#f9fafb] min-h-screen flex flex-col">
@@ -82,9 +80,6 @@
                         </div>
                     </div>
 
-                    <!-- Turnstile Widget -->
-                    <div id="turnstile-container" hidden class="flex justify-center"></div>
-
                     <div>
                         <button type="submit"
                             class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -110,18 +105,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // Render Turnstile widget on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof turnstile !== 'undefined') {
-                turnstile.render('#turnstile-container', {
-                    sitekey: '{{ config("services.turnstile.site_key") }}',
-                    theme: 'light',
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>

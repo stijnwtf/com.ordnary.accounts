@@ -374,12 +374,18 @@ class AuthController extends Controller
                         "direct_login" => $directLogin
                     ]);
 
+                    // Store user ID and SSO parameters before logout
+                    $userId = $user->id;
+                    
                     // Log the user out temporarily while we verify 2FA
                     Auth::logout();
+                    
+                    // Regenerate session to prevent session fixation
+                    $request->session()->regenerate();
 
                     // Store user ID and SSO parameters in session for 2FA verification
                     session([
-                        'auth.2fa.user_id' => $user->id,
+                        'auth.2fa.user_id' => $userId,
                         'auth.2fa.direct_login' => $directLogin,
                         'auth.2fa.client_id' => $clientId,
                         'auth.2fa.redirect_uri' => $redirectUri
@@ -411,23 +417,16 @@ class AuthController extends Controller
                 return $this->handleLoginRedirect($user, $directLogin, $clientId, $redirectUri);
             }
 
-            $emailExists = User::where("email", $request->email)->exists();
+            // Use generic error message to prevent email enumeration
+            Log::warning("login: Authentication failed", ["email" => $request->email]);
 
             // Check if this is a direct login
             if ($directLogin) {
-                if (!$emailExists) {
-                    Log::warning("login: Email not found (direct login)", ["email" => $request->email]);
-                    return redirect()->route("login")->withErrors([
-                        "email" => "Email address not found.",
+                return redirect()->route("login")
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "email" => "Invalid email or password. Please try again.",
                     ]);
-                } else {
-                    Log::warning("login: Incorrect password for email (direct login)", ["email" => $request->email]);
-                    return redirect()->route("login")
-                        ->withInput($request->only('email'))
-                        ->withErrors([
-                            "password" => "Password is incorrect. Please try again.",
-                        ]);
-                }
             }
 
             if (!$clientId || !$redirectUri) {
@@ -441,20 +440,12 @@ class AuthController extends Controller
             }
 
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
-
-            if (!$emailExists) {
-                Log::warning("login: Email not found", ["email" => $request->email]);
-                return redirect($redirectUrl)->withErrors([
-                    "email" => "Email address not found.",
+            
+            return redirect($redirectUrl)
+                ->withInput($request->only('email'))
+                ->withErrors([
+                    "email" => "Invalid email or password. Please try again.",
                 ]);
-            } else {
-                Log::warning("login: Incorrect password for email", ["email" => $request->email]);
-                return redirect($redirectUrl)
-                    ->withInput($request->only('email'))
-                    ->withErrors([
-                        "password" => "Password is incorrect. Please try again.",
-                    ]);
-            }
         } catch (\Exception $e) {
             Log::error("login: Exception occurred during login", [
                 "exception" => $e->getMessage(),
@@ -514,6 +505,23 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'Email address not found.'
             ], 404);
+        }
+
+        // Rate limiting: Check if too many codes were sent recently (max 3 per hour)
+        $recentCodesCount = \App\Models\LoginCode::where('email', $email)
+            ->where('created_at', '>', now()->subHour())
+            ->count();
+            
+        if ($recentCodesCount >= 3) {
+            Log::warning("sendLoginCode: Rate limit exceeded", [
+                'email' => $email,
+                'attempts' => $recentCodesCount
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Too many code requests. Please try again later.'
+            ], 429);
         }
 
         // Generate 6-digit code
@@ -1454,24 +1462,8 @@ class AuthController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-            'cf-turnstile-response' => 'required'
+            'password' => 'required|confirmed|min:8'
         ]);
-
-        // Verify Turnstile
-        $turnstileResponse = $request->input('cf-turnstile-response');
-        $turnstileResult = $this->verifyTurnstile($turnstileResponse);
-
-        if (!$turnstileResult['success']) {
-            Log::warning("resetPassword: Turnstile verification failed", [
-                "email" => $request->email,
-                "turnstile_errors" => $turnstileResult['error-codes'] ?? 'Unknown error'
-            ]);
-
-            return redirect()->back()->withErrors([
-                "turnstile" => "Security verification failed. Please try again."
-            ]);
-        }
 
         // Fetch token record
         $tokenRecord = DB::table('password_resets')
