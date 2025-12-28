@@ -292,11 +292,10 @@
                         <div class="px-4 py-4 mb-6">
                             <div class="flex items-center justify-between space-x-3">
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
-                                    <div class="relative flex-shrink-0">
-                                        <img class="h-14 w-14 rounded-full object-cover"
-                                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=initials&r=pg"
-                                            alt="{{ $user->first_name }} {{ $user->last_name }}">
-                                    </div>
+<img class="h-14 w-14 rounded-full object-cover"
+     src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name.' '.$user->last_name) }}&size=200&background=random&color=fff"
+     alt="{{ $user->first_name }} {{ $user->last_name }}">
+
                                     <div class="min-w-0 flex-1">
                                         <h1 class="text-base font-semibold text-gray-900">{{ $user->first_name }}
                                             {{ $user->last_name }}</h1>
