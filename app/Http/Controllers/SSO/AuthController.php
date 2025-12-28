@@ -278,7 +278,7 @@ class AuthController extends Controller
         // Verify reCAPTCHA
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] || $recaptchaResult['score'] < 0.5) {
+        if (!$recaptchaResult['success'] || ($recaptchaResult['score'] ?? 0) < 0.5) {
             Log::warning("login: reCAPTCHA verification failed", [
                 "email" => $request->email,
                 "score" => $recaptchaResult['score'] ?? 'N/A',
@@ -1661,7 +1661,7 @@ class AuthController extends Controller
 
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] || $recaptchaResult['score'] < 0.5) {
+        if (!$recaptchaResult['success'] || ($recaptchaResult['score'] ?? 0) < 0.5) {
             Log::warning("register: reCAPTCHA verification failed", [
                 "email" => $request->email,
                 "score" => $recaptchaResult['score'] ?? 'N/A',
