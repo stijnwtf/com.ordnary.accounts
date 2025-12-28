@@ -7,8 +7,8 @@
     <title>Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Cloudflare Turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Google reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col">
@@ -56,7 +56,7 @@
                     @endif
 
                     <!-- Step 1: Email Input -->
-                    <div id="step1" class="space-y-6 {{ $errors->has('password') || $errors->has('turnstile') ? 'hidden' : '' }}">
+                    <div id="step1" class="space-y-6 {{ $errors->has('password') || $errors->has('recaptcha') ? 'hidden' : '' }}">
                         <div>
                             <label for="email"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
@@ -83,7 +83,7 @@
                     </div>
 
                     <!-- Step 2: Password Input -->
-                    <div id="step2" class="space-y-6 {{ $errors->has('password') || $errors->has('turnstile') ? '' : 'hidden' }}">
+                    <div id="step2" class="space-y-6 {{ $errors->has('password') || $errors->has('recaptcha') ? '' : 'hidden' }}">
                         <div>
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
@@ -97,7 +97,7 @@
                                     {{ $message }}
                                 </p>
                             @enderror
-                            @error('turnstile')
+                            @error('recaptcha')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
                                     {{ $message }}
                                 </p>
@@ -110,12 +110,12 @@
                             <label for="remember" class="ml-2 text-sm text-gray-700">{{ __('Keep me logged in') }}</label>
                         </div>
 
-                        <!-- Turnstile Widget (hidden but functional) -->
-                        <div id="turnstile-container" class="hidden"></div>
+                        <!-- reCAPTCHA Token (hidden) -->
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
                         <!-- Submit Button -->
                         <div>
-                            <button type="submit"
+                            <button type="submit" id="login-submit-btn"
                                 class="w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
                                 Sign In
                             </button>
@@ -216,7 +216,7 @@
                 </form>
                 
                 <!-- Sign Up Link - Only show on step 1 -->
-                <div id="signup-link" class="text-center text-sm mt-6 {{ $errors->has('password') || $errors->has('turnstile') ? 'hidden' : '' }}">
+                <div id="signup-link" class="text-center text-sm mt-6 {{ $errors->has('password') || $errors->has('recaptcha') ? 'hidden' : '' }}">
                     <a href="{{ route('register', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}"
                         class="text-[#0866FF] hover:underline font-medium">{{ __('New here? Create an account') }}</a>
                 </div>
@@ -243,7 +243,7 @@
         let userEmail = '';
 
         // Initialize on page load
-        @if($errors->has('password') || $errors->has('turnstile'))
+        @if($errors->has('password') || $errors->has('recaptcha'))
             currentStep = 2;
             @if(old('email'))
                 userEmail = '{{ old('email') }}';
@@ -265,16 +265,6 @@
                     subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + emailToShow + '</button> to continue.';
                 } else {
                     subtitle.textContent = 'Enter your password to continue.';
-                }
-                
-                // Render Turnstile widget
-                if (typeof turnstile !== 'undefined') {
-                    setTimeout(() => {
-                        turnstile.render('#turnstile-container', {
-                            sitekey: '{{ config("services.turnstile.site_key") }}',
-                            theme: 'light',
-                        });
-                    }, 100);
                 }
             });
         @endif
@@ -335,16 +325,6 @@
             
             // Focus on password field
             document.getElementById('password').focus();
-            
-            // Render Turnstile widget when moving to step 2
-            if (typeof turnstile !== 'undefined') {
-                setTimeout(() => {
-                    turnstile.render('#turnstile-container', {
-                        sitekey: '{{ config("services.turnstile.site_key") }}',
-                        theme: 'light',
-                    });
-                }, 100);
-            }
             
             currentStep = 2;
         }
@@ -524,6 +504,19 @@
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             const codeInput = document.getElementById('email_code');
+            const loginForm = document.getElementById('login-form');
+            
+            // reCAPTCHA v3 on form submit
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('{{ config("services.recaptcha.site_key") }}', {action: 'login'}).then(function(token) {
+                        document.getElementById('g-recaptcha-response').value = token;
+                        loginForm.submit();
+                    });
+                });
+            });
             
             // Clear error on input
             emailInput.addEventListener('input', function() {

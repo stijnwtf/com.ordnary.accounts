@@ -7,8 +7,8 @@
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Cloudflare Turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Google reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col">
@@ -201,8 +201,8 @@
                             @enderror
                         </div>
 
-                        <!-- Turnstile Widget -->
-                        <div id="turnstile-container" hidden class="flex justify-center"></div>
+                        <!-- reCAPTCHA v3 Hidden Field -->
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
 
                         <!-- GDPR Consent -->
                         <div class="space-y-3 pt-2 pb-1">
@@ -261,8 +261,6 @@
     </div>
 
     <script>
-        let turnstileWidgetId = null;
-
         function nextStep() {
             // Get step 1 inputs
             const email = document.getElementById('email');
@@ -314,19 +312,6 @@
             document.querySelectorAll('.w-8.h-8')[1].classList.add('bg-blue-600', 'text-white');
             document.querySelectorAll('.text-gray-600')[1].classList.remove('text-gray-600');
             document.querySelectorAll('.text-gray-600')[1].classList.add('text-blue-600');
-            
-            // Render Turnstile widget when moving to step 2
-            if (turnstileWidgetId === null && typeof turnstile !== 'undefined') {
-                setTimeout(() => {
-                    const container = document.getElementById('turnstile-container');
-                    if (container) {
-                        turnstileWidgetId = turnstile.render('#turnstile-container', {
-                            sitekey: '{{ config("services.turnstile.site_key") }}',
-                            theme: 'light',
-                        });
-                    }
-                }, 100);
-            }
         }
         
         function showError(input, message) {
@@ -351,11 +336,6 @@
             document.querySelectorAll('.w-8.h-8')[1].classList.remove('bg-blue-600', 'text-white');
             document.querySelectorAll('.text-blue-600')[1].classList.remove('text-blue-600');
             document.querySelectorAll('.text-blue-600')[1].classList.add('text-gray-600');
-            
-            // Reset Turnstile widget
-            if (turnstileWidgetId !== null && typeof turnstile !== 'undefined') {
-                turnstile.reset(turnstileWidgetId);
-            }
         }
 
         // Handle Enter key press on step 1 inputs
@@ -378,6 +358,20 @@
                     if (errorElement) {
                         errorElement.remove();
                     }
+                });
+            });
+
+            const registerForm = document.getElementById('register-form');
+            
+            // reCAPTCHA v3 on form submit
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('{{ config("services.recaptcha.site_key") }}', {action: 'register'}).then(function(token) {
+                        document.getElementById('g-recaptcha-response').value = token;
+                        registerForm.submit();
+                    });
                 });
             });
 
