@@ -11,7 +11,7 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
-<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col">
     <div class="flex items-center justify-center flex-grow">
         <!-- Left Registration Section -->
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
@@ -29,13 +29,13 @@
                 <div class="mb-8">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full bg-[#0866FF] text-white flex items-center justify-center">
                                 1
                             </div>
-                            <div class="ml-2 text-sm font-medium text-blue-600">Account</div>
+                            <div class="ml-2 text-sm font-medium text-[#0866FF]">Account</div>
                         </div>
                         <div class="flex-1 h-1 mx-4 bg-gray-200">
-                            <div id="progress-bar" class="h-1 bg-blue-600" style="width: 0%"></div>
+                            <div id="progress-bar" class="h-1 bg-[#0866FF]" style="width: 0%"></div>
                         </div>
                         <div class="flex items-center">
                             <div
@@ -105,12 +105,9 @@
                             <label for="email"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-envelope text-gray-400"></i>
-                                </div>
-                                <input placeholder="john.doe@example.com" type="email" name="email" id="email"
+                                <input placeholder="Email" type="email" name="email" id="email"
                                     value="{{ old('email') }}" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('email') ? 'border-red-500' : 'border-gray-300' }}">
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('email') ? 'border-red-500' : '' }}">
                             </div>
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -124,11 +121,8 @@
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-lock text-gray-400"></i>
-                                </div>
-                                <input placeholder="••••••••" type="password" name="password" id="password" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}">
+                                <input placeholder="Password" type="password" name="password" id="password" required
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('password') ? 'border-red-500' : '' }}">
                             </div>
                             <p class="mt-1 text-xs text-gray-500">
                                 Password must be at least 8 characters and contain letters and numbers.
@@ -145,18 +139,15 @@
                             <label for="password_confirmation"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm Password') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-lock text-gray-400"></i>
-                                </div>
-                                <input placeholder="••••••••" type="password" name="password_confirmation"
+                                <input placeholder="Confirm Password" type="password" name="password_confirmation"
                                     id="password_confirmation" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent">
                             </div>
                         </div>
 
                         <button type="button" onclick="nextStep()"
-                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            Next Step
+                            class="w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
+                            Next
                         </button>
                     </div>
 
@@ -167,12 +158,9 @@
                             <label for="username"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Username') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-user text-gray-400"></i>
-                                </div>
-                                <input placeholder="johndoe" type="text" name="username" id="username"
+                                <input placeholder="Username" type="text" name="username" id="username"
                                     value="{{ old('username') }}" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('username') ? 'border-red-500' : 'border-gray-300' }}">
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('username') ? 'border-red-500' : '' }}">
                             </div>
                             @error('username')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -186,12 +174,9 @@
                             <label for="first_name"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-user text-gray-400"></i>
-                                </div>
-                                <input placeholder="John" type="text" name="first_name" id="first_name"
+                                <input placeholder="First Name" type="text" name="first_name" id="first_name"
                                     value="{{ old('first_name') }}" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('first_name') ? 'border-red-500' : 'border-gray-300' }}">
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('first_name') ? 'border-red-500' : '' }}">
                             </div>
                             @error('first_name')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -205,12 +190,9 @@
                             <label for="last_name"
                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('Last Name') }}</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-user text-gray-400"></i>
-                                </div>
-                                <input placeholder="Doe" type="text" name="last_name" id="last_name"
+                                <input placeholder="Last Name" type="text" name="last_name" id="last_name"
                                     value="{{ old('last_name') }}" required
-                                    class="w-full px-3 py-2 pl-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('last_name') ? 'border-red-500' : 'border-gray-300' }}">
+                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('last_name') ? 'border-red-500' : '' }}">
                             </div>
                             @error('last_name')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
@@ -227,7 +209,7 @@
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
                                     <input id="gdpr_consent" name="gdpr_consent" type="checkbox" required
-                                        class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                        class="h-4 w-4 text-[#0866FF] border-gray-300 rounded focus:ring-[#0866FF]">
                                 </div>
                                 <div class="ml-3 text-sm">
                                     <label for="gdpr_consent" class="text-gray-700">
@@ -250,11 +232,11 @@
 
                         <div class="flex space-x-4">
                             <button type="button" onclick="prevStep()"
-                                class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                class="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 font-medium">
                                 Previous
                             </button>
                             <button type="submit" id="submit-button"
-                                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                class="flex-1 bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
                                 Create Account
                             </button>
                         </div>
