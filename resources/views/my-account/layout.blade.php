@@ -54,6 +54,23 @@
         body {
             background: #ffffff;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Responsive container */
+        @media (max-width: 1023px) {
+            .content-container {
+                padding: 0;
+            }
+        }
+
+        /* Prevent horizontal scroll on mobile */
+        * {
+            box-sizing: border-box;
+        }
+
+        input, select, textarea {
+            max-width: 100%;
         }
 
         .glass-effect {
@@ -191,16 +208,27 @@
         .mobile-nav {
             position: relative;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 999px;
+        }
+
+        .mobile-nav:hover {
+            text-decoration: underline;
+            background: transparent;
         }
 
         .mobile-nav.active {
-            background: #f1f5f9;
-            color: #374151;
+            background: #e7f3ff;
+            color: #0866ff;
             font-weight: 500;
         }
 
         .mobile-nav.active i {
-            color: #6b7280;
+            color: #0866ff;
+        }
+
+        .mobile-nav.active:hover {
+            color: #0866ff;
+            text-decoration-color: #0866ff;
         }
 
         /* Loading animation */
@@ -260,19 +288,19 @@
     <div class="content-container bg-white min-h-screen">
         <!-- Top navigation bar for mobile -->
         <header class="lg:hidden bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
-            <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center justify-between px-4 sm:px-6 py-3">
                 <div class="flex items-center space-x-3">
-                    <button id="mobile-menu-toggle" class="text-gray-500 hover:text-gray-700">
+                    <button id="mobile-menu-toggle" class="text-gray-500 hover:text-gray-700 p-2 -ml-2">
                         <i class="fas fa-bars text-lg"></i>
                     </button>
                     <a href="/" class="flex items-center">
                         <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="ordnary"
-                            class="h-6 w-auto">
+                            class="h-5 sm:h-6 w-auto">
                     </a>
                 </div>
                 <div class="flex items-center">
                     <div class="relative">
-                        <button id="mobile-user-menu" class="flex items-center">
+                        <button id="mobile-user-menu" class="flex items-center p-1">
                             <img class="h-8 w-8 rounded-full object-cover border-2 border-blue-100"
                                 src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=initials&r=pg"
                                 alt="{{ $user->first_name }} {{ $user->last_name }}">
@@ -357,8 +385,8 @@
                 </div>
 
                 <!-- Right Content Area -->
-                <div class="flex-1 lg:py-8 lg:pl-8">
-                    <div class="bg-white">
+                <div class="flex-1 lg:py-8 lg:pl-8 px-4 sm:px-6 lg:px-0 py-6 lg:py-8">
+                    <div class="bg-white w-full overflow-x-hidden">
 
                         <!-- Success Message -->
                         @if (session('status'))
@@ -431,60 +459,74 @@
                             class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
-                <div
-                    class="border-t border-b border-gray-200 py-4 px-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50">
-                    <div class="flex items-center">
-                        <img class="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
-                            src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                            alt="{{ $user->name }}">
-                        <div class="ml-3">
-                            <h2 class="text-sm font-semibold text-gray-900">{{ $user->name }}</h2>
-                            <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                <div class="py-4 px-4 mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3 min-w-0 flex-1">
+                            <img class="h-12 w-12 rounded-full object-cover flex-shrink-0"
+                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
+                                alt="{{ $user->first_name }} {{ $user->last_name }}">
+                            <div class="min-w-0 flex-1">
+                                <h2 class="text-base font-semibold text-gray-900 truncate">{{ $user->first_name }} {{ $user->last_name }}</h2>
+                                <form method="POST" action="{{ route('logout') }}" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="text-sm text-red-600 hover:text-red-700 hover:underline font-medium transition-all">
+                                        {{ lang('sidebar.logout', [], 'layout') }}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <nav class="px-2 space-y-1">
+                <div class="border-t border-gray-200 mb-4"></div>
+                <nav class="px-3 space-y-1">
+                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2 mb-1">
+                        {{ lang('sidebar.account_settings', [], 'layout') }}
+                    </div>
                     <a href="{{ route('account.profile') }}"
-                        class="mobile-nav {{ $active_page == 'profile' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-user mr-4 text-gray-500"></i>
+                        class="mobile-nav {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-user mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.profile', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.password') }}"
-                        class="mobile-nav {{ $active_page == 'password' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-lock mr-4 text-gray-500"></i>
+                        class="mobile-nav {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-lock mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.password', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.security') }}"
-                        class="mobile-nav {{ $active_page == 'security' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-shield-alt mr-4 text-gray-500"></i>
+                        class="mobile-nav {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-shield-alt mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.security', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.notifications') }}"
-                        class="mobile-nav {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-bell mr-4 text-gray-500"></i>
+                        class="mobile-nav {{ $active_page == 'notifications' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-bell mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.notifications', [], 'layout') }}
                     </a>
                     <a href="{{ route('account.connections') }}"
-                        class="mobile-nav {{ $active_page == 'connections' ? 'active' : '' }} text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-link mr-4 text-gray-500"></i>
+                        class="mobile-nav {{ $active_page == 'connections' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-globe mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.connections', [], 'layout') }}
                     </a>
-                    <div class="border-t border-gray-200 my-2 pt-2"></div>
+                    <a href="{{ route('account.subscriptions') }}"
+                        class="mobile-nav {{ $active_page == 'subscriptions' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-credit-card mr-3 text-gray-500 w-5"></i>
+                        {{ lang('sidebar.subscriptions', [], 'layout') }}
+                    </a>
+                    <div class="border-t border-gray-200 my-3 pt-3">
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2 mb-1">
+                            {{ lang('sidebar.support', [], 'layout') }}
+                        </div>
+                    </div>
                     <a href="https://support.ordnary.com"
-                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-question-circle mr-4 text-gray-500"></i>
+                        class="mobile-nav text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-question-circle mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.help_center', [], 'layout') }}
                     </a>
                     <a href="/faq"
-                        class="mobile-nav text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-info-circle mr-4 text-gray-500"></i>
+                        class="mobile-nav text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
+                        <i class="fas fa-info-circle mr-3 text-gray-500 w-5"></i>
                         {{ lang('mobile.faq', [], 'layout') }}
-                    </a>
-                    <div class="border-t border-gray-200 my-2 pt-2"></div>
-                    <a href="{{ route('logout') }}"
-                        class="mobile-nav text-red-600 hover:bg-red-50 hover:text-red-700 group flex items-center px-3 py-2.5 text-base font-medium rounded-md">
-                        <i class="fas fa-sign-out-alt mr-4 text-red-500"></i>
-                        {{ lang('mobile.logout', [], 'layout') }}
                     </a>
                 </nav>
             </div>
