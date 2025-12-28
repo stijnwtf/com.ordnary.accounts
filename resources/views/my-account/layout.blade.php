@@ -179,6 +179,11 @@
             color: #0866ff;
         }
 
+        .sidebar-item.active:hover {
+            color: #0866ff;
+            text-decoration-color: #0866ff;
+        }
+
         /* Mobile navigation styling */
         .mobile-nav {
             position: relative;
