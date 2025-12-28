@@ -10,7 +10,7 @@
             if (!isReload) {
                 sessionStorage.removeItem('securityTab');
             }
-            return isReload ? (sessionStorage.getItem('securityTab') || 'authentication') : 'authentication';
+            return isReload ? (sessionStorage.getItem('securityTab') || 'password') : 'password';
         })()
     }">
         <div class="mb-6">
@@ -24,34 +24,140 @@
 
         <!-- Tabs Navigation -->
         <div class="mb-6 border-b border-gray-200">
-            <div class="flex -mb-px">
+            <div class="flex -mb-px overflow-x-auto">
+                <button @click="activeTab = 'password'; sessionStorage.setItem('securityTab', 'password')"
+                    :class="activeTab === 'password' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
+                    <i class="fas fa-key mr-2"></i> Password
+                </button>
+
                 <button @click="activeTab = 'authentication'; sessionStorage.setItem('securityTab', 'authentication')"
                     :class="activeTab === 'authentication' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
                     <i class="fas fa-shield-alt mr-2"></i> {{ lang('tabs.authentication', [], 'security') }}
                 </button>
 
                 <button @click="activeTab = 'activity'; sessionStorage.setItem('securityTab', 'activity')"
                     :class="activeTab === 'activity' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
                     <i class="fas fa-history mr-2"></i> {{ lang('tabs.activity', [], 'security') }}
                 </button>
 
                 <button @click="activeTab = 'recovery'; sessionStorage.setItem('securityTab', 'recovery')"
                     :class="activeTab === 'recovery' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
                     <i class="fas fa-life-ring mr-2"></i> {{ lang('tabs.recovery', [], 'security') }}
                 </button>
 
                 <button @click="activeTab = 'privacy'; sessionStorage.setItem('securityTab', 'privacy')"
                     :class="activeTab === 'privacy' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center">
+                    class="py-3 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center whitespace-nowrap">
                     <i class="fas fa-user-shield mr-2"></i> {{ lang('tabs.privacy', [], 'security') }}
                 </button>
             </div>
         </div>
 
         <!-- Tab Content -->
+        <!-- Password Tab Content -->
+        <div x-show="activeTab === 'password'" x-cloak>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <form method="POST" action="{{ route('my-account.password') }}" class="space-y-6">
+                    @csrf
+
+                    <!-- Current Password Section -->
+                    <div>
+                        <label for="current_password" class="block text-sm font-medium text-gray-900 mb-2">Current Password</label>
+                        <div class="relative">
+                            <input placeholder="Enter your current password" type="password"
+                                name="current_password" id="current_password" required
+                                class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('current_password') ? 'border-red-500' : 'border-gray-300' }}">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @error('current_password')
+                            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- New Password Section -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-900 mb-2">New Password</label>
+                        <div class="relative">
+                            <input placeholder="Enter your new password" type="password"
+                                name="password" id="password" required
+                                class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 {{ $errors->has('password') ? 'border-red-500' : 'border-gray-300' }}"
+                                oninput="checkPasswordStrength()">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        @error('password')
+                            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+
+                        <!-- Password Strength Meter -->
+                        <div class="mt-3">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-xs text-gray-500">Password Strength</span>
+                                <span id="password-strength-text" class="text-xs font-medium text-red-600">Too Weak</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                <div id="password-strength-meter" class="bg-red-500 h-1.5 rounded-full transition-all duration-300" style="width: 10%"></div>
+                            </div>
+                        </div>
+                        <p class="mt-1.5 text-xs text-gray-500">Must be at least 8 characters</p>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-900 mb-2">Confirm New Password</label>
+                        <div class="relative">
+                            <input placeholder="Confirm your new password" type="password"
+                                name="password_confirmation" id="password_confirmation" required
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" class="password-toggle text-gray-400 hover:text-gray-500 focus:outline-none">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Tips -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-medium text-blue-800">Password Security Tips</h4>
+                                <ul class="mt-2 text-xs text-blue-700 list-disc space-y-1 pl-5">
+                                    <li>Use a mix of uppercase and lowercase letters</li>
+                                    <li>Include numbers and special characters</li>
+                                    <li>Avoid common words and personal information</li>
+                                    <li>Use at least 12 characters for better security</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end pt-4 border-t border-gray-200">
+                        <button type="submit"
+                            class="inline-flex items-center px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm font-medium">
+                            <i class="fas fa-save mr-2"></i>
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Authentication Tab Content -->
         <div x-show="activeTab === 'authentication'" x-cloak>
             <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
@@ -465,5 +571,94 @@
                 }
             }, 500);
         });
+
+        // Password Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.password-toggle').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const input = this.closest('.relative').querySelector('input');
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+        });
+
+        // Password Strength Checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const meter = document.getElementById('password-strength-meter');
+            const strengthText = document.getElementById('password-strength-text');
+
+            // Default - too weak
+            let strength = 0;
+            let strengthClass = 'bg-red-500';
+            let text = 'Too Weak';
+
+            // Check password strength
+            if (password.length >= 8) {
+                strength += 20;
+
+                // Check for mixed case
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+                    strength += 20;
+                }
+
+                // Check for numbers
+                if (password.match(/\d/)) {
+                    strength += 20;
+                }
+
+                // Check for special characters
+                if (password.match(/[^a-zA-Z0-9]/)) {
+                    strength += 20;
+                }
+
+                // Check password length
+                if (password.length >= 12) {
+                    strength += 20;
+                }
+            }
+
+            // Update the strength text and color
+            if (strength >= 80) {
+                strengthClass = 'bg-green-500';
+                text = 'Very Strong';
+            } else if (strength >= 60) {
+                strengthClass = 'bg-green-400';
+                text = 'Strong';
+            } else if (strength >= 40) {
+                strengthClass = 'bg-yellow-500';
+                text = 'Medium';
+            } else if (strength >= 20) {
+                strengthClass = 'bg-orange-500';
+                text = 'Weak';
+            }
+
+            // Update UI
+            meter.className = `h-1.5 rounded-full transition-all duration-300 ${strengthClass}`;
+            meter.style.width = `${strength}%`;
+            strengthText.textContent = text;
+
+            // Update text color based on strength
+            if (strength >= 60) {
+                strengthText.className = 'text-xs font-medium text-green-600';
+            } else if (strength >= 40) {
+                strengthText.className = 'text-xs font-medium text-yellow-600';
+            } else if (strength >= 20) {
+                strengthText.className = 'text-xs font-medium text-orange-600';
+            } else {
+                strengthText.className = 'text-xs font-medium text-red-600';
+            }
+        }
     </script>
 @endsection
