@@ -123,7 +123,7 @@
 
                         <!-- Forgot Password and Alternative Login Links -->
                         <div class="flex justify-between items-center text-sm">
-                            <a href="{{route('password.forgot')}}"
+                            <a href="#" onclick="goToForgotPassword()" 
                                 class="text-[#0866FF] hover:underline font-medium">{{ __('Forgot password?') }}</a>
                             <button type="button" onclick="showLoginOptions()" class="text-[#0866FF] hover:underline font-medium">
                                 {{ __('Sign in using another way') }}
@@ -557,6 +557,15 @@
         // reCAPTCHA v2 invisible callback
         function onSubmit(token) {
             document.getElementById('login-form').submit();
+        }
+
+        function goToForgotPassword() {
+            const email = userEmail || document.getElementById('email').value;
+            if (email) {
+                window.location.href = '{{ route("password.forgot") }}?email=' + encodeURIComponent(email);
+            } else {
+                window.location.href = '{{ route("password.forgot") }}';
+            }
         }
     </script>
 </body>

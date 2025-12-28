@@ -53,7 +53,7 @@
                             </div>
                             <input placeholder="john.doe@example.com" type="email" name="email" id="email" required
                                 class="w-full px-3 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent"
-                                value="{{ old('email') }}">
+                                value="{{ request('email') ?? old('email') }}">
                         </div>
                     </div>
 
@@ -91,6 +91,20 @@
         function onSubmit(token) {
             document.querySelector('form').submit();
         }
+
+        // Auto-submit if email is pre-filled from query parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('email');
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            
+            if (emailParam && emailInput.value) {
+                // Trigger reCAPTCHA verification automatically
+                setTimeout(function() {
+                    document.querySelector('button[type="submit"]').click();
+                }, 500);
+            }
+        });
     </script>
 </body>
 
