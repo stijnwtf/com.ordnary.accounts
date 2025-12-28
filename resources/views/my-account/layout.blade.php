@@ -293,7 +293,7 @@
                             <div class="flex items-center justify-between space-x-3">
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
 <img class="h-14 w-14 rounded-full object-cover"
-     src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name.' '.$user->last_name) }}&size=200&background=random&color=fff"
+     src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name.' '.$user->last_name) }}&size=200&background=4A5568&color=ffffff&font-size=0.5&bold=true"
      alt="{{ $user->first_name }} {{ $user->last_name }}">
 
                                     <div class="min-w-0 flex-1">
