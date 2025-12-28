@@ -77,16 +77,6 @@ class MyAccountController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function password()
-    {
-        $user = Auth::user();
-        return view('my-account.password', [
-            'user' => $user,
-            'recaptcha_site_key' => config('services.recaptcha.site_key'),
-            'active_page' => 'password'
-        ]);
-    }
-
     /**
      * Show the security settings page.
      *

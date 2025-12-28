@@ -84,7 +84,6 @@ Route::prefix('app')->middleware(['auth', 'verified', 'checkSuspended'])->group(
 
     // Nieuwe routes voor aparte pagina's
     Route::get('/profile', [MyAccountController::class, 'profile'])->name('account.profile');
-    Route::get('/password', [MyAccountController::class, 'password'])->name('account.password');
     Route::get('/security', [MyAccountController::class, 'security'])->name('account.security');
     Route::get('/notifications', [MyAccountController::class, 'notifications'])->name('account.notifications');
     Route::get('/connections', [MyAccountController::class, 'connections'])->name('account.connections');
