@@ -278,10 +278,9 @@ class AuthController extends Controller
         // Verify reCAPTCHA
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] || ($recaptchaResult['score'] ?? 0) < 0.5) {
+        if (!$recaptchaResult['success']) {
             Log::warning("login: reCAPTCHA verification failed", [
                 "email" => $request->email,
-                "score" => $recaptchaResult['score'] ?? 'N/A',
                 "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error'
             ]);
 
@@ -467,7 +466,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Verify Google reCAPTCHA v3 response
+     * Verify Google reCAPTCHA v2 invisible response
      *
      * @param  string  $recaptchaResponse
      * @return array
@@ -475,7 +474,7 @@ class AuthController extends Controller
     private function verifyRecaptcha($recaptchaResponse)
     {
         if (empty($recaptchaResponse)) {
-            return ['success' => false, 'score' => 0, 'error-codes' => ['missing-input-response']];
+            return ['success' => false, 'error-codes' => ['missing-input-response']];
         }
 
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
@@ -1661,10 +1660,9 @@ class AuthController extends Controller
 
         $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse);
 
-        if (!$recaptchaResult['success'] || ($recaptchaResult['score'] ?? 0) < 0.5) {
+        if (!$recaptchaResult['success']) {
             Log::warning("register: reCAPTCHA verification failed", [
                 "email" => $request->email,
-                "score" => $recaptchaResult['score'] ?? 'N/A',
                 "recaptcha_errors" => $recaptchaResult['error-codes'] ?? 'Unknown error'
             ]);
             return redirect()->back()->withInput()->withErrors([

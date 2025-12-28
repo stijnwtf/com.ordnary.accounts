@@ -7,8 +7,8 @@
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google reCAPTCHA v3 -->
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <!-- Google reCAPTCHA v2 Invisible -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col">
@@ -236,7 +236,9 @@
                                 Previous
                             </button>
                             <button type="submit" id="submit-button"
-                                class="flex-1 bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
+                                class="g-recaptcha flex-1 bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium"
+                                data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                                data-callback="onRegisterSubmit">
                                 Create Account
                             </button>
                         </div>
@@ -362,18 +364,6 @@
             });
 
             const registerForm = document.getElementById('register-form');
-            
-            // reCAPTCHA v3 on form submit
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                grecaptcha.ready(function() {
-                    grecaptcha.execute('{{ config("services.recaptcha.site_key") }}', {action: 'register'}).then(function(token) {
-                        document.getElementById('g-recaptcha-response').value = token;
-                        registerForm.submit();
-                    });
-                });
-            });
 
             // Handle Enter key on step 2 to submit (except last button which is submit)
             const step2Inputs = document.querySelectorAll('#step2 input[type="text"], #step2 input[type="email"]');
@@ -387,6 +377,11 @@
                 });
             });
         });
+
+        // reCAPTCHA v2 invisible callback
+        function onRegisterSubmit() {
+            document.getElementById('register-form').submit();
+        }
     </script>
 </body>
 

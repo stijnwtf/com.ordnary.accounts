@@ -7,8 +7,8 @@
     <title>Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google reCAPTCHA v3 -->
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <!-- Google reCAPTCHA v2 Invisible -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col">
@@ -116,7 +116,9 @@
                         <!-- Submit Button -->
                         <div>
                             <button type="submit" id="login-submit-btn"
-                                class="w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium">
+                                class="g-recaptcha w-full bg-[#0866FF] text-white py-3 px-4 rounded-full hover:bg-[#0952CC] focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:ring-offset-2 transition-colors duration-200 font-medium"
+                                data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                                data-callback="onSubmit">
                                 Sign In
                             </button>
                         </div>
@@ -506,18 +508,6 @@
             const codeInput = document.getElementById('email_code');
             const loginForm = document.getElementById('login-form');
             
-            // reCAPTCHA v3 on form submit
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                grecaptcha.ready(function() {
-                    grecaptcha.execute('{{ config("services.recaptcha.site_key") }}', {action: 'login'}).then(function(token) {
-                        document.getElementById('g-recaptcha-response').value = token;
-                        loginForm.submit();
-                    });
-                });
-            });
-            
             // Clear error on input
             emailInput.addEventListener('input', function() {
                 clearError('email');
@@ -552,6 +542,11 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
         });
+
+        // reCAPTCHA v2 invisible callback
+        function onSubmit() {
+            document.getElementById('login-form').submit();
+        }
     </script>
 </body>
 
