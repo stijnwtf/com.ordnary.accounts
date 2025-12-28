@@ -18,6 +18,8 @@ Route::get('/', function () {
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login/check-email', [AuthController::class, 'checkEmail'])->name('login.check-email');
+Route::get('/login/password', [AuthController::class, 'showPasswordForm'])->name('login.password');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/logout/simple', function (Illuminate\Http\Request $request) {
