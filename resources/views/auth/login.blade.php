@@ -21,7 +21,7 @@
                     <img src="https://cdn.ordnary.com/site_assets/ordnary-black.png" alt="Ordnary Logo" class="h-8 w-auto mb-3">
                     <div>
                         <h2 id="page-title" class="text-2xl font-bold text-gray-900">What's your email address?</h2>
-                        <p id="page-subtitle" class="text-sm text-gray-600 mt-2">Enter your email address to log in to a Ordnary account or create a new one.</p>
+                        <p id="page-subtitle" class="text-sm text-gray-600 mt-2">Enter your email address to log in to your Ordnary account.</p>
                     </div>
                 </div>
 
@@ -39,26 +39,6 @@
                                     Sign in to proceed and gain access to {{ $client_name }}. This sign-in is managed via
                                     Single Sign-On (SSO), allowing you to quickly and securely sign in with your existing
                                     account.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-                <!-- Error Message -->
-                @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800">Something went wrong while signing in.</h3>
-                                <div class="mt-1 text-sm text-red-700">
-                                    <ul class="list-disc pl-4">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{!! $error !!}</li>
-                                        @endforeach
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -85,6 +65,7 @@
                                     value="{{ old('email', session('login_email')) }}" required autofocus
                                     class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('email') ? 'border-red-500' : '' }}">
                             </div>
+                            <div id="email-error" class="mt-1 text-sm text-red-600 hidden"></div>
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
                                     {{ $message }}
@@ -110,6 +91,7 @@
                                 <input placeholder="Password" type="password" name="password" id="password"
                                     class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent {{ $errors->has('password') ? 'border-red-500' : '' }}">
                             </div>
+                            <div id="password-error" class="mt-1 text-sm text-red-600 hidden"></div>
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600 flex items-center">
                                     {{ $message }}
@@ -197,6 +179,7 @@
                                 <input placeholder="Enter 6-digit code" type="text" name="email_code" id="email_code" maxlength="6"
                                     class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent text-center text-2xl tracking-widest font-mono">
                             </div>
+                            <div id="code-error" class="mt-1 text-sm text-red-600 text-center hidden"></div>
                             <p class="mt-2 text-xs text-gray-500 text-center">
                                 We sent a code to <span id="code-email" class="font-medium"></span>. Check your inbox and spam folder.
                             </p>
@@ -254,12 +237,45 @@
         let currentStep = 1;
         let userEmail = '';
 
-        function nextStep() {
-            const email = document.getElementById('email').value;
+        // Helper functions for error display
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            const inputElement = document.getElementById(fieldId);
             
-            // Simple email validation
-            if (!email || !email.includes('@')) {
-                alert('Please enter a valid email address');
+            if (errorElement && inputElement) {
+                errorElement.textContent = message;
+                errorElement.classList.remove('hidden');
+                inputElement.classList.add('border-red-500');
+                inputElement.classList.remove('border-gray-300');
+            }
+        }
+
+        function clearError(fieldId) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            const inputElement = document.getElementById(fieldId);
+            
+            if (errorElement && inputElement) {
+                errorElement.classList.add('hidden');
+                inputElement.classList.remove('border-red-500');
+                inputElement.classList.add('border-gray-300');
+            }
+        }
+
+        function nextStep() {
+            const email = document.getElementById('email').value.trim();
+            
+            // Clear previous errors
+            clearError('email');
+            
+            // Validate email
+            if (!email) {
+                showError('email', 'Please enter your email address');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('email', 'Please enter a valid email address');
                 return;
             }
 
@@ -340,6 +356,9 @@
         }
 
         function selectCodeLogin() {
+            // Clear any previous errors
+            clearError('code');
+            
             // Send code to email
             sendLoginCode(userEmail);
             
@@ -396,25 +415,39 @@
                 if (data.success) {
                     console.log('Code sent successfully');
                 } else {
-                    alert('Failed to send code. Please try again.');
+                    showError('code', data.message || 'Failed to send code. Please try again.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                showError('code', 'An error occurred. Please try again.');
             });
         }
 
         function resendCode() {
+            clearError('code');
             sendLoginCode(userEmail);
-            alert('A new code has been sent to your email.');
         }
 
         function verifyCode() {
-            const code = document.getElementById('email_code').value;
+            const code = document.getElementById('email_code').value.trim();
             
-            if (!code || code.length !== 6) {
-                alert('Please enter a valid 6-digit code');
+            // Clear previous errors
+            clearError('code');
+            
+            // Validate code
+            if (!code) {
+                showError('code', 'Please enter the code');
+                return;
+            }
+            
+            if (code.length !== 6) {
+                showError('code', 'Code must be 6 digits');
+                return;
+            }
+            
+            if (!/^\d+$/.test(code)) {
+                showError('code', 'Code must contain only numbers');
                 return;
             }
 
@@ -435,18 +468,35 @@
                     // Redirect to the appropriate page
                     window.location.href = data.redirect_url;
                 } else {
-                    alert('Invalid code. Please try again.');
+                    showError('code', data.message || 'Invalid code. Please try again.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                showError('code', 'An error occurred. Please try again.');
             });
         }
 
         // Handle Enter key press on email input
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const codeInput = document.getElementById('email_code');
+            
+            // Clear error on input
+            emailInput.addEventListener('input', function() {
+                clearError('email');
+            });
+            
+            passwordInput.addEventListener('input', function() {
+                clearError('password');
+            });
+            
+            codeInput.addEventListener('input', function() {
+                clearError('code');
+            });
+            
+            // Enter key handlers
             emailInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -455,7 +505,6 @@
             });
 
             // Handle Enter key press on code input
-            const codeInput = document.getElementById('email_code');
             codeInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
