@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-[#f9fafb] min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col">
     <div class="flex items-center justify-center flex-grow">
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="w-full max-w-md">
@@ -22,18 +22,27 @@
                     </p>
                 </div>
 
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                <div class="bg-[#E7F3FF] border-l-4 border-[#0866FF] p-4 mb-6 rounded-r-lg">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-info-circle text-blue-500"></i>
+                            <i class="fas fa-info-circle text-[#0866FF]"></i>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm text-blue-700">
+                            <p class="text-sm text-gray-700">
                                 The reset link will expire in 60 minutes. If you don't receive an email, check your spam
                                 folder or try again.
                             </p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Back to Login -->
+                <div class="text-center">
+                    <a href="{{ route('login') }}"
+                        class="inline-flex items-center text-sm text-[#0866FF] hover:underline font-medium">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to login
+                    </a>
                 </div>
 
                 <!-- Footer -->
