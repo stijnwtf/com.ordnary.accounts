@@ -352,7 +352,7 @@
             </div>
             <div class="space-y-6">
                 <!-- GDPR Data Export -->
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <div class="border border-gray-200 rounded-lg p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                         <i class="fas fa-download text-blue-500 mr-2"></i>
                         {{ lang('privacy.export.title', [], 'security') }}
@@ -383,7 +383,7 @@
                 </div>
 
                 <!-- Account Deletion -->
-                <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+                <div class="border border-gray-200 rounded-lg p-6">
                     <h4 class="text-base font-medium text-gray-900 flex items-center mb-4">
                         <i class="fas fa-user-slash text-red-500 mr-2"></i>
                         {{ lang('privacy.delete.title', [], 'security') }}
