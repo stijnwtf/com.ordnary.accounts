@@ -55,6 +55,19 @@
             background: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        /* Hide scrollbar for all browsers */
+        body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
+        }
+
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
 
         /* Responsive container */

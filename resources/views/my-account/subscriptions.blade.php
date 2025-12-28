@@ -242,11 +242,12 @@
 
     @else
         <!-- No Subscriptions State -->
-        <div class="text-center py-12">
-            <h4 class="text-xl font-medium text-gray-900 mb-2">No Active Subscriptions</h4>
-            <p class="text-gray-600 max-w-md mx-auto mb-6">
-                You don't have any active subscriptions yet. Explore our range of products to find tools that can help you grow your business.
-            </p>
+        <div class="text-center py-8 border border-gray-200 rounded-lg">
+            <div class="flex flex-col items-center justify-center">
+                <i class="fas fa-credit-card text-gray-400 text-4xl mb-3"></i>
+                <h5 class="text-md font-medium text-gray-900 mb-1">No Active Subscriptions</h5>
+                <p class="text-sm text-gray-500">You don't have any active subscriptions with Ordnary products.</p>
+            </div>
         </div>
     @endif
 
