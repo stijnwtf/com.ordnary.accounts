@@ -187,9 +187,9 @@
             document.getElementById('signup-link').classList.add('hidden');
             
             // Update title and subtitle
-            document.getElementById('page-title').textContent = 'Enter password';
+            document.getElementById('page-title').textContent = 'Enter your password';
             const subtitle = document.getElementById('page-subtitle');
-            subtitle.innerHTML = '<button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + email + '</button>';
+            subtitle.innerHTML = 'Enter the password for <button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + email + '</button> to continue.';
             
             // Focus on password field
             document.getElementById('password').focus();
