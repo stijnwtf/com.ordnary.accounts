@@ -69,17 +69,26 @@
             box-sizing: border-box;
         }
 
+        /* Better responsive form handling */
         input,
         select,
         textarea {
             max-width: 100%;
-            width: 100%;
+            min-width: 0;
         }
         
         /* Ensure labels and text don't overflow */
-        label, p, span, div {
+        label {
             word-wrap: break-word;
             overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        /* Prevent text overflow in containers */
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .glass-effect {
