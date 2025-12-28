@@ -500,10 +500,6 @@
                         class="mobile-nav {{ $active_page == 'profile' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
                         {{ lang('mobile.profile', [], 'layout') }}
                     </a>
-                    <a href="{{ route('account.password') }}"
-                        class="mobile-nav {{ $active_page == 'password' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
-                        {{ lang('mobile.password', [], 'layout') }}
-                    </a>
                     <a href="{{ route('account.security') }}"
                         class="mobile-nav {{ $active_page == 'security' ? 'active' : '' }} text-gray-700 hover:text-gray-900 group flex items-center px-3 py-2.5 text-[15px] font-medium">
                         {{ lang('mobile.security', [], 'layout') }}
