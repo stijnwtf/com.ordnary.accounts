@@ -455,16 +455,14 @@
                     <div class="flex items-center flex-shrink-0">
                         <img class="h-6 w-auto" src="https://cdn.ordnary.com/site_assets/ordnary-black.png"
                             alt="ordnary">
-                        <span
-                            class="ml-2 text-sm font-semibold text-gray-800">{{ lang('mobile.account_center', [], 'layout') }}</span>
                     </div>
                 </div>
                 <div class="py-4 px-4 mb-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3 min-w-0 flex-1">
                             <img class="h-12 w-12 rounded-full object-cover flex-shrink-0"
-                                src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=200&d=mp&r=pg"
-                                alt="{{ $user->first_name }} {{ $user->last_name }}">
+                                src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name . ' ' . $user->last_name) }}&size=200&background=E5E7EB&color=4B5563&font-size=0.5&bold=true"
+                                        alt="{{ $user->first_name }} {{ $user->last_name }}">
                             <div class="min-w-0 flex-1">
                                 <h2 class="text-base font-semibold text-gray-900 truncate">{{ $user->first_name }} {{ $user->last_name }}</h2>
                                 <form method="POST" action="{{ route('logout') }}" class="inline">
