@@ -143,8 +143,8 @@
 
                 </form>
                 
-                <!-- Sign Up Link -->
-                <div class="text-center text-sm mt-6">
+                <!-- Sign Up Link - Only show on step 1 -->
+                <div id="signup-link" class="text-center text-sm mt-6">
                     <a href="{{ route('register', ['client_id' => request()->query('client_id'), 'redirect_uri' => request()->query('redirect_uri')]) }}"
                         class="text-[#0866FF] hover:underline font-medium">{{ __('New here? Create an account') }}</a>
                 </div>
@@ -167,14 +167,68 @@
     </div>
 
     <script>
-        // Render Turnstile widget on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof turnstile !== 'undefined') {
-                turnstile.render('#turnstile-container', {
-                    sitekey: '{{ config("services.turnstile.site_key") }}',
-                    theme: 'light',
-                });
+        let currentStep = 1;
+
+        function nextStep() {
+            const email = document.getElementById('email').value;
+            
+            // Simple email validation
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
             }
+
+            // Hide step 1, show step 2
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('signup-link').classList.add('hidden');
+            
+            // Update title and subtitle
+            document.getElementById('page-title').textContent = 'Enter password';
+            const subtitle = document.getElementById('page-subtitle');
+            subtitle.innerHTML = '<button type="button" onclick="prevStep()" class="text-[#0866FF] hover:underline font-medium">' + email + '</button>';
+            
+            // Focus on password field
+            document.getElementById('password').focus();
+            
+            // Render Turnstile widget when moving to step 2
+            if (typeof turnstile !== 'undefined') {
+                setTimeout(() => {
+                    turnstile.render('#turnstile-container', {
+                        sitekey: '{{ config("services.turnstile.site_key") }}',
+                        theme: 'light',
+                    });
+                }, 100);
+            }
+            
+            currentStep = 2;
+        }
+
+        function prevStep() {
+            // Show step 1, hide step 2
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('signup-link').classList.remove('hidden');
+            
+            // Update title and subtitle
+            document.getElementById('page-title').textContent = "What's your email address?";
+            document.getElementById('page-subtitle').textContent = 'Enter your email address to log in to a Ordnary account or create a new one.';
+            
+            // Focus on email field
+            document.getElementById('email').focus();
+            
+            currentStep = 1;
+        }
+
+        // Handle Enter key press on email input
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('email');
+            emailInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    nextStep();
+                }
+            });
         });
     </script>
 </body>
