@@ -298,48 +298,47 @@
 
             <div class="border border-gray-200 rounded-lg p-6">
                 <div class="flex items-center justify-between">
-                        <div>
-                            <h5 class="text-sm font-medium text-gray-900 flex items-center">
-                                <i class="fas fa-envelope text-gray-500 mr-1.5"></i>
-                                {{ lang('recovery.email.title', [], 'security') }}
-                            </h5>
-                            <p class="text-xs text-gray-500 mt-1">{{ lang('recovery.email.description', [], 'security') }}
-                            </p>
-                        </div>
-                        @if($user->recovery_email)
-                            <div class="flex items-center space-x-3">
-                                <span class="text-sm text-gray-600">{{ $user->recovery_email }}</span>
-                                @if($user->recovery_email_verified)
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        {{ lang('recovery.email.status.verified', [], 'security') }}
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        <i class="fas fa-clock mr-1"></i>
-                                        {{ lang('recovery.email.status.pending', [], 'security') }}
-                                    </span>
-                                @endif
-                                <form action="{{ route('account.security.remove-recovery-email') }}" method="POST"
-                                    class="inline">
-                                    @csrf
-                                    <button type="submit"
-                                        class="inline-flex items-center text-xs text-red-600 hover:text-red-800">
-                                        <i class="fas fa-times mr-1"></i>
-                                        {{ lang('recovery.email.actions.remove', [], 'security') }}
-                                    </button>
-                                </form>
-                            </div>
-                        @else
-                            <button type="button"
-                                onclick="document.getElementById('add-recovery-email-modal').classList.remove('hidden')"
-                                class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">
-                                <i class="fas fa-plus mr-1"></i> {{ lang('recovery.email.actions.add', [], 'security') }}
-                            </button>
-                        @endif
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-900 flex items-center">
+                            <i class="fas fa-envelope text-gray-500 mr-1.5"></i>
+                            {{ lang('recovery.email.title', [], 'security') }}
+                        </h5>
+                        <p class="text-xs text-gray-500 mt-1">{{ lang('recovery.email.description', [], 'security') }}
+                        </p>
                     </div>
+                    @if($user->recovery_email)
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm text-gray-600">{{ $user->recovery_email }}</span>
+                            @if($user->recovery_email_verified)
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    {{ lang('recovery.email.status.verified', [], 'security') }}
+                                </span>
+                            @else
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    {{ lang('recovery.email.status.pending', [], 'security') }}
+                                </span>
+                            @endif
+                            <form action="{{ route('account.security.remove-recovery-email') }}" method="POST"
+                                class="inline">
+                                @csrf
+                                <button type="submit"
+                                    class="inline-flex items-center text-xs text-red-600 hover:text-red-800">
+                                    <i class="fas fa-times mr-1"></i>
+                                    {{ lang('recovery.email.actions.remove', [], 'security') }}
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <button type="button"
+                            onclick="document.getElementById('add-recovery-email-modal').classList.remove('hidden')"
+                            class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-none">
+                            <i class="fas fa-plus mr-1"></i> {{ lang('recovery.email.actions.add', [], 'security') }}
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
