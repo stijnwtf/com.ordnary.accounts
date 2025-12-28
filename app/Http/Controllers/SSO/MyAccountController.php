@@ -298,7 +298,7 @@ class MyAccountController extends Controller
 
         Log::info('User password updated', ['user_id' => $user->id]);
 
-        return redirect()->route('account.password')->with('status', 'Wachtwoord succesvol bijgewerkt!');
+        return redirect()->route('account.security')->with('status', 'Wachtwoord succesvol bijgewerkt!');
     }
 
     public function addRecoveryEmail(Request $request)
