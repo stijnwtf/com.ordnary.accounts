@@ -257,18 +257,22 @@ class AuthController extends Controller
 
             // Check if this is a direct login
             if (session("direct_login")) {
-                return redirect()->route("login")->withErrors([
-                    "turnstile" => "Security verification failed. Please try again."
-                ]);
+                return redirect()->route("login")
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "turnstile" => "Security verification failed. Please try again."
+                    ]);
             }
 
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
-            return redirect($redirectUrl)->withErrors([
-                "turnstile" => "Security verification failed. Please try again."
-            ]);
+            return redirect($redirectUrl)
+                ->withInput($request->only('email'))
+                ->withErrors([
+                    "turnstile" => "Security verification failed. Please try again."
+                ]);
         }
 
         // Verify Turnstile
@@ -282,18 +286,22 @@ class AuthController extends Controller
 
             // Check if this is a direct login
             if (session("direct_login")) {
-                return redirect()->route("login")->withErrors([
-                    "turnstile" => "Security verification failed. Please try again."
-                ]);
+                return redirect()->route("login")
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "turnstile" => "Security verification failed. Please try again."
+                    ]);
             }
 
             $clientId = session("client_id");
             $redirectUri = session("redirect_uri");
             $redirectUrl = route("login", ["client_id" => $clientId, "redirect_uri" => $redirectUri]);
 
-            return redirect($redirectUrl)->withErrors([
-                "turnstile" => "Security verification failed. Please try again."
-            ]);
+            return redirect($redirectUrl)
+                ->withInput($request->only('email'))
+                ->withErrors([
+                    "turnstile" => "Security verification failed. Please try again."
+                ]);
         }
 
         // Get session variables or input values as fallback
@@ -413,9 +421,11 @@ class AuthController extends Controller
                     ]);
                 } else {
                     Log::warning("login: Incorrect password for email (direct login)", ["email" => $request->email]);
-                    return redirect()->route("login")->withErrors([
-                        "password" => "Password is incorrect. Please try again.",
-                    ]);
+                    return redirect()->route("login")
+                        ->withInput($request->only('email'))
+                        ->withErrors([
+                            "password" => "Password is incorrect. Please try again.",
+                        ]);
                 }
             }
 
@@ -438,9 +448,11 @@ class AuthController extends Controller
                 ]);
             } else {
                 Log::warning("login: Incorrect password for email", ["email" => $request->email]);
-                return redirect($redirectUrl)->withErrors([
-                    "password" => "Password is incorrect. Please try again.",
-                ]);
+                return redirect($redirectUrl)
+                    ->withInput($request->only('email'))
+                    ->withErrors([
+                        "password" => "Password is incorrect. Please try again.",
+                    ]);
             }
         } catch (\Exception $e) {
             Log::error("login: Exception occurred during login", [
