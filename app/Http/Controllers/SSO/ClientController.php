@@ -57,8 +57,13 @@ class ClientController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
 
+            $user = Auth::user();
+            
+            // Reset failed login attempts on successful login
+            $user->resetFailedLoginAttempts();
+
             // Check if user is admin
-            if (Auth::user()->is_admin) {
+            if ($user->is_admin) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 
@@ -69,8 +74,27 @@ class ClientController extends Controller
             ]);
         }
 
+        // Track failed login attempt
+        $user = User::where('email', $request->email)->first();
+        $errorMessage = 'De opgegeven inloggegevens zijn onjuist.';
+        
+        if ($user) {
+            $user->recordFailedLoginAttempt();
+            
+            // Check if user was just suspended
+            if ($user->isSuspended()) {
+                $errorMessage = 'Uw account is opgeschort vanwege meerdere mislukte inlogpogingen. Neem contact op met support.';
+            } else {
+                $remainingAttempts = $user->getRemainingLoginAttempts();
+                
+                if ($remainingAttempts <= 2 && $remainingAttempts > 0) {
+                    $errorMessage .= " Waarschuwing: nog {$remainingAttempts} pogingen over voordat uw account wordt opgeschort.";
+                }
+            }
+        }
+
         return back()->withErrors([
-            'email' => 'De opgegeven inloggegevens zijn onjuist.',
+            'email' => $errorMessage,
         ]);
     }
 

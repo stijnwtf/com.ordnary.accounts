@@ -34,6 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_suspended',
         'suspended_at',
         'suspension_reason',
+        'failed_login_attempts',
+        'last_failed_login_at',
         'lang',
         'recovery_email',
         'recovery_email_verified',
@@ -68,6 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'is_admin' => 'boolean',
             'is_suspended' => 'boolean',
             'suspended_at' => 'datetime',
+            'last_failed_login_at' => 'datetime',
             'recovery_email_verified_at' => 'datetime',
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
@@ -274,6 +277,50 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->is_suspended = false;
         $this->suspended_at = null;
         $this->suspension_reason = null;
+        $this->failed_login_attempts = 0;
+        $this->last_failed_login_at = null;
         $this->save();
+    }
+
+    /**
+     * Record a failed login attempt and suspend if threshold is reached.
+     */
+    public function recordFailedLoginAttempt(): void
+    {
+        $this->failed_login_attempts = ($this->failed_login_attempts ?? 0) + 1;
+        $this->last_failed_login_at = now();
+        
+        // Auto-suspend after 5 failed attempts
+        if ($this->failed_login_attempts >= 5) {
+            $this->suspend('Account suspended due to multiple failed login attempts. Please contact support.');
+            
+            \Log::warning('User account suspended due to failed login attempts', [
+                'user_id' => $this->id,
+                'email' => $this->email,
+                'attempts' => $this->failed_login_attempts,
+            ]);
+        } else {
+            $this->save();
+        }
+    }
+
+    /**
+     * Reset failed login attempts after successful login.
+     */
+    public function resetFailedLoginAttempts(): void
+    {
+        if ($this->failed_login_attempts > 0) {
+            $this->failed_login_attempts = 0;
+            $this->last_failed_login_at = null;
+            $this->save();
+        }
+    }
+
+    /**
+     * Get remaining login attempts before suspension.
+     */
+    public function getRemainingLoginAttempts(): int
+    {
+        return max(0, 5 - ($this->failed_login_attempts ?? 0));
     }
 }

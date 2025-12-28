@@ -363,6 +363,9 @@ class AuthController extends Controller
                             ]);
                 }
 
+                // Reset failed login attempts on successful login
+                $user->resetFailedLoginAttempts();
+
                 Log::info("login: Authentication successful", ["email" => $request->email]);
 
                 // Check if 2FA is enabled for this user
@@ -419,13 +422,42 @@ class AuthController extends Controller
 
             // Use generic error message to prevent email enumeration
             Log::warning("login: Authentication failed", ["email" => $request->email]);
+            
+            // Track failed login attempt
+            $user = User::where('email', $request->email)->first();
+            $errorMessage = "Invalid email or password.";
+            
+            if ($user) {
+                $user->recordFailedLoginAttempt();
+                
+                // Check if user was just suspended
+                if ($user->isSuspended()) {
+                    Log::warning("login: User account suspended after failed attempts", [
+                        "user_id" => $user->id,
+                        "email" => $user->email,
+                        "attempts" => $user->failed_login_attempts
+                    ]);
+                    
+                    $errorMessage = "Your account has been suspended due to multiple failed login attempts. Please contact support.";
+                } else {
+                    $remainingAttempts = $user->getRemainingLoginAttempts();
+                    
+                    if ($remainingAttempts <= 2 && $remainingAttempts > 0) {
+                        $errorMessage .= " Warning: {$remainingAttempts} attempts remaining before account suspension.";
+                    } else {
+                        $errorMessage .= " Please try again.";
+                    }
+                }
+            } else {
+                $errorMessage .= " Please try again.";
+            }
 
             // Check if this is a direct login
             if ($directLogin) {
                 return redirect()->route("login")
                     ->withInput($request->only('email'))
                     ->withErrors([
-                        "email" => "Invalid email or password. Please try again.",
+                        "email" => $errorMessage,
                     ]);
             }
 
@@ -444,7 +476,7 @@ class AuthController extends Controller
             return redirect($redirectUrl)
                 ->withInput($request->only('email'))
                 ->withErrors([
-                    "email" => "Invalid email or password. Please try again.",
+                    "email" => $errorMessage,
                 ]);
         } catch (\Exception $e) {
             Log::error("login: Exception occurred during login", [

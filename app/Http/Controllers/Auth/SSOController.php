@@ -79,6 +79,9 @@ class SSOController extends Controller
 
         Auth::login($user);
 
+        // Reset failed login attempts on successful login
+        $user->resetFailedLoginAttempts();
+
         Log::info('Local development login successful', ['user_id' => $user->id, 'email' => $user->email]);
 
         return redirect()->intended('/dashboard');
@@ -114,6 +117,9 @@ class SSOController extends Controller
                 );
 
                 Auth::login($user);
+
+                // Reset failed login attempts on successful login
+                $user->resetFailedLoginAttempts();
 
                 Log::info('Local development SSO simulation', ['user_id' => $user->id]);
 
@@ -173,6 +179,9 @@ class SSOController extends Controller
             Session::put('sso_token_expiry', $data['exp'] ?? null);
 
             Auth::login($user);
+
+            // Reset failed login attempts on successful login
+            $user->resetFailedLoginAttempts();
 
             Log::info('User logged in successfully', ['user_id' => $user->id]);
 
@@ -263,6 +272,9 @@ class SSOController extends Controller
             Session::put('sso_token_expiry', $data['exp'] ?? null);
 
             Auth::login($user);
+
+            // Reset failed login attempts on successful login
+            $user->resetFailedLoginAttempts();
 
             Log::info('User logged in successfully with new token', ['user_id' => $user->id]);
 
