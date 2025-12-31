@@ -39,7 +39,7 @@
 
                 <!-- Title -->
                 <div class="text-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Authorize {{ $client->name }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">{{ $client->name }} wants to access your Ordnary account</h2>
                     <p class="text-sm text-gray-600 mt-2">
                         <span class="font-medium">{{ $client->name }}</span> by 
                         <a href="#" class="text-[#0866FF] hover:underline">{{ $client->owner_name ?? 'Ordnary' }}</a>
