@@ -126,15 +126,18 @@ class AuthController extends Controller
                     return redirect()->route("account.profile");
                 }
 
-                $token = $this->generateToken(Auth::user(), $clientId);
-
-                Log::info("showLoginForm: Generated token for already logged in user", [
+                Log::info("showLoginForm: User already logged in, redirecting to authorize page", [
                     "user_id" => Auth::id(),
-                    "token" => $token,
+                    "client_id" => $clientId
                 ]);
 
-                $targetUrl = $redirectUri . "?token=" . $token;
-                return redirect()->away($targetUrl);
+                // Store parameters in session for authorize page
+                session([
+                    "auth.client_id" => $clientId,
+                    "auth.redirect_uri" => $redirectUri
+                ]);
+
+                return redirect()->route("authorize");
             }
 
             // Fallback redirect to profile page
@@ -1285,25 +1288,20 @@ class AuthController extends Controller
             session()->forget("direct_login");
             return redirect()->route("account.profile");
         } else if ($clientId && $redirectUri) {
-            // SSO login with client parameters
-            Log::info("handleLoginRedirect: SSO login successful, generating token", [
+            // SSO login with client parameters - redirect to authorization page
+            Log::info("handleLoginRedirect: SSO login successful, redirecting to authorize page", [
                 "user_id" => $user->id,
                 "client_id" => $clientId,
                 "redirect_uri" => $redirectUri
             ]);
 
-            $token = $this->generateToken($user, $clientId);
-            Log::info("handleLoginRedirect: Generated token for SSO", [
-                "user_id" => $user->id,
-                "token" => $token,
+            // Store parameters in session for authorize page
+            session([
+                "auth.client_id" => $clientId,
+                "auth.redirect_uri" => $redirectUri
             ]);
 
-            session()->forget(["client_id", "redirect_uri"]);
-            Log::debug("handleLoginRedirect: Cleared session parameters");
-
-            $targetUrl = $redirectUri . "?token=" . $token;
-            Log::info("handleLoginRedirect: Redirecting to client URL", ["target_url" => $targetUrl]);
-            return redirect()->away($targetUrl);
+            return redirect()->route("authorize");
         } else {
             // Fallback if no valid session parameters (shouldn't happen normally)
             Log::warning("handleLoginRedirect: No valid session parameters for redirect", [
@@ -1892,4 +1890,134 @@ class AuthController extends Controller
 
         return back()->with('resent', true);
     }
+
+    /**
+     * Show the authorization page for SSO.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function showAuthorize(Request $request)
+    {
+        if (!Auth::check()) {
+            Log::warning("showAuthorize: User not authenticated");
+            return redirect()->route('login');
+        }
+
+        $clientId = session("auth.client_id");
+        $redirectUri = session("auth.redirect_uri");
+
+        if (!$clientId || !$redirectUri) {
+            Log::warning("showAuthorize: Missing client_id or redirect_uri in session");
+            return redirect()->route('account.profile');
+        }
+
+        $client = Client::where("client_id", $clientId)->first();
+
+        if (!$client) {
+            Log::error("showAuthorize: Invalid client_id", ["client_id" => $clientId]);
+            return redirect()->route('account.profile');
+        }
+
+        // Verify the redirect URI is allowed
+        $allowedRedirectUris = $this->parseRedirectUris($client->redirect_uris);
+        $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "showAuthorize");
+
+        if (!in_array($redirectUri, $normalizedAllowedUris)) {
+            Log::error("showAuthorize: Redirect URI not allowed", [
+                "redirect_uri" => $redirectUri,
+                "allowed_redirect_uris" => $allowedRedirectUris
+            ]);
+            return redirect()->route('account.profile');
+        }
+
+        Log::info("showAuthorize: Showing authorization page", [
+            "user_id" => Auth::id(),
+            "client_id" => $clientId,
+            "client_name" => $client->name
+        ]);
+
+        return view('auth.authorize', [
+            'client' => $client,
+            'redirect_uri' => $redirectUri
+        ]);
+    }
+
+    /**
+     * Approve the authorization and redirect to client app.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function approveAuthorization(Request $request)
+    {
+        if (!Auth::check()) {
+            Log::warning("approveAuthorization: User not authenticated");
+            return redirect()->route('login');
+        }
+
+        $clientId = $request->input('client_id');
+        $redirectUri = $request->input('redirect_uri');
+
+        if (!$clientId || !$redirectUri) {
+            Log::warning("approveAuthorization: Missing client_id or redirect_uri");
+            return redirect()->route('account.profile');
+        }
+
+        $client = Client::where("client_id", $clientId)->first();
+
+        if (!$client) {
+            Log::error("approveAuthorization: Invalid client_id", ["client_id" => $clientId]);
+            return redirect()->route('account.profile');
+        }
+
+        // Verify the redirect URI is allowed
+        $allowedRedirectUris = $this->parseRedirectUris($client->redirect_uris);
+        $normalizedAllowedUris = $this->normalizeRedirectUris($allowedRedirectUris, "approveAuthorization");
+
+        if (!in_array($redirectUri, $normalizedAllowedUris)) {
+            Log::error("approveAuthorization: Redirect URI not allowed", [
+                "redirect_uri" => $redirectUri,
+                "allowed_redirect_uris" => $allowedRedirectUris
+            ]);
+            return redirect()->route('account.profile');
+        }
+
+        // Generate token
+        $token = $this->generateToken(Auth::user(), $clientId);
+        
+        Log::info("approveAuthorization: Authorization approved, generated token", [
+            "user_id" => Auth::id(),
+            "client_id" => $clientId,
+            "token" => $token
+        ]);
+
+        // Clear session parameters
+        session()->forget(["auth.client_id", "auth.redirect_uri"]);
+
+        // Redirect to client with token
+        $targetUrl = $redirectUri . "?token=" . $token;
+        Log::info("approveAuthorization: Redirecting to client URL", ["target_url" => $targetUrl]);
+        
+        return redirect()->away($targetUrl);
+    }
+
+    /**
+     * Cancel the authorization and redirect to profile.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function cancelAuthorization(Request $request)
+    {
+        Log::info("cancelAuthorization: User cancelled authorization", [
+            "user_id" => Auth::id()
+        ]);
+
+        // Clear session parameters
+        session()->forget(["auth.client_id", "auth.redirect_uri"]);
+
+        return redirect()->route('account.profile')->with('status', 'Authorization cancelled.');
+    }
 }
+

@@ -25,6 +25,7 @@ class Client extends Model
         'owner_name',
         'owner_user_id',
         'description',
+        'logo_url',
     ];
 
     /**

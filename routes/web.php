@@ -166,5 +166,12 @@ Route::post('/2fa/verify', [AuthController::class, 'verify2FA'])->name('2fa.veri
 Route::get('/2fa/recovery', [AuthController::class, 'showRecoveryForm'])->name('2fa.recovery');
 Route::post('/2fa/recovery', [AuthController::class, 'verifyRecoveryCode'])->name('2fa.recovery.verify');
 
+// Authorization Routes (SSO)
+Route::middleware(['auth', 'verified', 'checkSuspended'])->group(function () {
+    Route::get('/authorize', [AuthController::class, 'showAuthorize'])->name('authorize');
+    Route::post('/authorize/approve', [AuthController::class, 'approveAuthorization'])->name('authorize.approve');
+    Route::post('/authorize/cancel', [AuthController::class, 'cancelAuthorization'])->name('authorize.cancel');
+});
+
 // Language switch route
 Route::get('/language/{language}', [LanguageController::class, 'switchLanguage'])->name('language.switch');
