@@ -125,12 +125,6 @@
 
             <!-- Footer Info -->
             <div class="mt-6 text-center">
-                <div class="flex items-center justify-center text-xs text-gray-500 space-x-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-shield-alt mr-1"></i>
-                        Not owned or operated by Ordnary
-                    </div>
-                </div>
                 <p class="text-xs text-gray-500 mt-3">
                     Created <span class="font-medium">{{ $client->created_at->diffForHumans() }}</span>
                 </p>
