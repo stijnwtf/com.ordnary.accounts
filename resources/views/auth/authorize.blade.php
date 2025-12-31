@@ -40,11 +40,8 @@
                 <!-- Title -->
                 <div class="text-center">
                     <h2 class="text-2xl font-bold text-gray-900">Authorize {{ $client->name }}</h2>
-                    <p class="text-sm text-gray-600 mt-2">
-                        <span class="font-medium">{{ $client->name }}</span> by 
-                        <a href="#" class="text-[#0866FF] hover:underline">{{ $client->owner_name ?? 'Ordnary' }}</a>
-                    </p>
-                    <p class="text-sm text-gray-500 mt-1">wants to access your Ordnary account</p>
+                    <p class="text-sm text-gray-500 mt-1"><span class="font-medium">{{ $client->name }}</span> by 
+                        <a href="#" class="text-[#0866FF] hover:underline">{{ $client->owner_name ?? 'Ordnary' }}</a>wants to access your Ordnary account</p>
                 </div>
             </div>
 
