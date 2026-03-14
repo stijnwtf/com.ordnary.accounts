@@ -1,110 +1,348 @@
-## Overzicht
+<div align="center">
 
-Ordnary Single Sign-On (SSO) is een gecentreerd authenticatiesysteem dat gebruikers in staat stelt zich aan te melden bij meerdere applicaties met één set inloggegevens. Dit document beschrijft hoe je de Ordnary SSO kunt integreren in je applicatie.
+# Ordnary Accounts
 
-## Hoe SSO Werkt
+**Self-hosted Single Sign-On server for the Ordnary ecosystem**
 
-### 1. Authenticatie Flow
+[![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)](LICENSE)
+
+One identity. Every Ordnary service.
+
+[accounts.ordnary.com](https://accounts.ordnary.com) · [docs.ordnary.com/sso](https://docs.ordnary.com/sso) · [status.ordnary.com](https://status.ordnary.com)
+
+</div>
+
+---
+
+## Overview
+
+`com.ordnary.accounts` is the centralised authentication server for the Ordnary platform. It implements a custom token-based SSO flow, allowing users to authenticate once and access any connected Ordnary service without re-entering credentials.
+
+**Key capabilities:**
+
+- Token-based SSO across all registered client applications
+- Two-Factor Authentication (TOTP via Google Authenticator / Authy)
+- Email verification and account recovery
+- Centralised single logout — one action terminates all sessions across all clients
+- Client registration with per-client redirect URI whitelisting
+- Activity logging: all login events, IPs, and timestamps are persisted
+- Token validation REST API consumed by downstream services (`com.ordnary.developers`, etc.)
+
+---
+
+## How SSO Works
 
 ```
-Gebruiker → Jouw App → Ordnary SSO → Authenticatie → Token → Jouw App → Ingelogd
+┌──────────┐      1. redirect to SSO       ┌─────────────────────┐
+│  User    │ ─────────────────────────────► │  accounts.ordnary   │
+│          │      (client_id, redirect_uri) │  .com               │
+│          │                                │                     │
+│          │      2. authenticates (+ 2FA)  │  ┌───────────────┐  │
+│          │ ◄───────────────────────────── │  │  Auth Engine  │  │
+│          │      token in callback URL     │  └───────────────┘  │
+└────┬─────┘                                └─────────────────────┘
+     │
+     │  3. arrives at client callback with ?token=...
+     ▼
+┌──────────────┐    POST /api/v1/validate-token     ┌──────────────────────┐
+│  Your App    │ ──────────────────────────────────► │  accounts.ordnary   │
+│  (callback)  │    { token, client_id, secret }    │  .com                │
+│              │ ◄────────────────────────────────── │                     │
+│              │    { success: true, user: {...} }   └──────────────────────┘
+│  ✓ Logged in │
+└──────────────┘
 ```
 
-### 2. Gedetailleerde Stappen
+**HTTP status codes from the validation endpoint:**
 
-1. **Initiële Redirect**: Gebruiker wordt doorgestuurd naar Ordnary SSO met `client_id` en `redirect_uri`
-2. **Authenticatie**: Gebruiker logt in bij Ordnary (inclusief 2FA indien ingeschakeld)
-3. **Token Generatie**: Ordnary genereert een veilige token
-4. **Callback**: Gebruiker wordt teruggestuurd naar jouw app met de token
-5. **Token Validatie**: Jouw app valideert de token bij Ordnary
-6. **Gebruiker Data**: Bij succesvolle validatie ontvang je gebruikersgegevens
+| Code | Meaning |
+|------|---------|
+| `200` | Token is valid — user object returned |
+| `401` | Invalid client credentials or token |
+| `404` | User not found |
+| `419` | Token expired |
 
-## Client Registratie
+---
 
-### 1. Een Client Aanmaken
+## Tech Stack
 
-In de Ordnary SSO admin panel moet je een client registreren met:
+| Layer | Technology |
+|-------|-----------|
+| Framework | Laravel 11 (PHP 8.x) |
+| Templating | Blade — server-side rendered UI with component architecture |
+| Frontend build | Vite — HMR in development, optimised bundles for production |
+| Styling | TailwindCSS 3 + PostCSS |
+| Database | MySQL / PostgreSQL — users, tokens, clients, activity logs |
+| Cache / Sessions | Redis |
+| 2FA | TOTP (Google Authenticator / Authy) + recovery codes |
+| Testing | PHPUnit |
+| Dependencies | Composer (PHP) + NPM (JS assets) |
 
-- **Naam**: Naam van je applicatie
-- **Client ID**: Unieke identifier (wordt automatisch gegenereerd)
-- **Client Secret**: Geheime sleutel voor API calls
-- **Redirect URIs**: Toegestane callback URLs
-- **Webhook URL**: (Optioneel) Voor notificaties
-- **Logout URL**: URL voor centraal uitloggen
+---
 
-### 2. Voorbeeld Client Configuration
+## Project Structure
+
+```
+com.ordnary.accounts/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/        # Auth, SSO flow, token validation, account management
+│   │   └── Middleware/         # Auth guards, session validation
+│   ├── Models/                 # User, Token, Client, ActivityLog
+│   └── Services/               # SSO token lifecycle, 2FA, email verification
+│
+├── bootstrap/                  # Laravel application bootstrap
+├── config/                     # Environment configuration
+├── database/
+│   ├── migrations/             # Schema: users, tokens, clients, logs
+│   └── seeders/                # Development seed data
+│
+├── docs/                       # Integration documentation for client developers
+├── resources/
+│   ├── views/                  # Blade templates (login, 2FA, account pages)
+│   └── css/ & js/              # Frontend source compiled by Vite
+│
+├── routes/
+│   ├── web.php                 # Login, callback, logout, account UI
+│   └── api.php                 # Token validation endpoint
+│
+├── storage/                    # Logs, compiled views
+├── tests/                      # PHPUnit unit and feature tests
+├── public/                     # Webroot — compiled assets
+├── reset_password_tinker.php   # Artisan Tinker utility for password resets
+├── update_password.php         # CLI utility for direct password updates
+├── vite.config.js
+├── tailwind.config.js
+└── composer.json
+```
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- PHP **8.x** with extensions: `pdo_mysql` or `pdo_pgsql`, `redis`, `mbstring`, `openssl`, `tokenizer`, `xml`
+- Composer
+- Node.js **18+** + NPM
+- MySQL or PostgreSQL
+- Redis
+
+### Setup
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/7txr/com.ordnary.accounts.git
+cd com.ordnary.accounts
+```
+
+**2. Install dependencies**
+
+```bash
+composer install
+npm install
+```
+
+**3. Configure environment**
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Key `.env` values to configure:
+
+```env
+APP_NAME="Ordnary Accounts"
+APP_ENV=local
+APP_URL=http://localhost:8000
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ordnary_accounts
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+
+# Redis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+
+SESSION_DRIVER=redis
+CACHE_STORE=redis
+
+# Mail (for email verification & recovery)
+MAIL_MAILER=smtp
+MAIL_HOST=your_smtp_host
+MAIL_PORT=587
+MAIL_USERNAME=your_username
+MAIL_PASSWORD=your_password
+MAIL_FROM_ADDRESS=no-reply@ordnary.com
+```
+
+**4. Run migrations**
+
+```bash
+php artisan migrate
+```
+
+**5. Start development servers**
+
+```bash
+# Terminal 1 — Laravel
+php artisan serve
+
+# Terminal 2 — Vite (HMR)
+npm run dev
+```
+
+The SSO server is now running at `http://localhost:8000`.
+
+---
+
+## Registering a Client Application
+
+To connect a service to Ordnary SSO, register a client via the admin panel with the following details:
+
+| Field | Description |
+|-------|-------------|
+| `name` | Human-readable application name |
+| `client_id` | Auto-generated unique identifier |
+| `client_secret` | Secret used to validate token requests — store securely |
+| `redirect_uris` | Whitelisted callback URLs (exact match, HTTPS required in production) |
+| `logout_url` | URL called on centralised logout to terminate the client session |
+
+**Example client configuration:**
 
 ```json
 {
-  "name": "Mijn Applicatie",
+  "name": "Ordnary Developers",
   "client_id": "abc123xyz789",
-  "client_secret": "super_geheime_sleutel_hier",
+  "client_secret": "keep_this_secret",
   "redirect_uris": [
-    "https://mijnapplicatie.nl/auth/callback",
-    "https://staging.mijnapplicatie.nl/auth/callback"
+    "https://developers.ordnary.com/auth/callback",
+    "http://localhost:8001/auth/callback"
   ],
-  "logout_url": "https://mijnapplicatie.nl/auth/logout"
+  "logout_url": "https://developers.ordnary.com/auth/logout"
 }
 ```
 
-## Implementatie
+---
 
-### 1. Login URL Genereren
+## Integrating SSO into a Laravel Application
 
-Stuur gebruikers naar deze URL om het SSO proces te starten:
+### 1. Environment
 
-```
-https://accounts.ordnary.com/login?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
-```
-
-**Parameters:**
-- `client_id`: Je geregistreerde client ID
-- `redirect_uri`: URL waar gebruiker naartoe wordt gestuurd na authenticatie (moet geregistreerd zijn)
-
-### 2. Callback Afhandelen
-
-Nadat de gebruiker is geauthenticeerd, wordt deze teruggestuurd naar je `redirect_uri` met een token:
-
-```
-https://mijnapplicatie.nl/auth/callback?token=abc123xyz789token
+```env
+ORDNARY_SSO_URL=https://accounts.ordnary.com
+ORDNARY_CLIENT_ID=your_client_id
+ORDNARY_CLIENT_SECRET=your_client_secret
+ORDNARY_REDIRECT_URI=https://yourapp.com/auth/callback
 ```
 
-### 3. Token Validatie
+### 2. Routes
 
-Valideer de ontvangen token door een POST request te maken naar:
-
-```
-POST https://accounts.ordnary.com/api/v1/validate-token
-```
-
-**Headers:**
-```
-Content-Type: application/json
+```php
+// routes/web.php
+Route::get('/auth/login',    [SSOController::class, 'redirect'])->name('sso.login');
+Route::get('/auth/callback', [SSOController::class, 'callback'])->name('sso.callback');
+Route::post('/auth/logout',  [SSOController::class, 'logout'])->name('sso.logout');
 ```
 
-**Body:**
+### 3. Redirect to SSO
+
+```php
+public function redirect(): RedirectResponse
+{
+    $url = config('ordnary.sso_url') . '/login?' . http_build_query([
+        'client_id'    => config('ordnary.client_id'),
+        'redirect_uri' => config('ordnary.redirect_uri'),
+    ]);
+
+    return redirect($url);
+}
+```
+
+### 4. Handle the callback and validate the token
+
+```php
+public function callback(Request $request): RedirectResponse
+{
+    $response = Http::post(config('ordnary.sso_url') . '/api/v1/validate-token', [
+        'token'         => $request->query('token'),
+        'client_id'     => config('ordnary.client_id'),
+        'client_secret' => config('ordnary.client_secret'),
+    ]);
+
+    $data = $response->json();
+
+    if (! $data['success']) {
+        return redirect()->route('sso.login')->withErrors('Authentication failed.');
+    }
+
+    session([
+        'user_authenticated' => true,
+        'user'               => $data['user'],
+    ]);
+
+    return redirect()->intended('/dashboard');
+}
+```
+
+### 5. Protect routes with middleware
+
+```php
+// app/Http/Middleware/SSOAuth.php
+public function handle(Request $request, Closure $next): Response
+{
+    if (! session('user_authenticated')) {
+        return redirect()->route('sso.login');
+    }
+
+    return $next($request);
+}
+```
+
+---
+
+## Token Validation API
+
+### `POST /api/v1/validate-token`
+
+Validates a token issued during the SSO flow. Called server-to-server — never expose your `client_secret` in frontend code.
+
+**Request body:**
+
 ```json
 {
-  "token": "ontvangen_token_hier",
-  "client_id": "jouw_client_id",
-  "client_secret": "jouw_client_secret"
+  "token":         "token_received_in_callback",
+  "client_id":     "your_client_id",
+  "client_secret": "your_client_secret"
 }
 ```
 
-**Succesvolle Response:**
+**Success response `200`:**
+
 ```json
 {
   "success": true,
   "user": {
-    "id": 123,
-    "name": "Jan Jansen",
-    "email": "jan@example.com",
+    "id":       123,
+    "name":     "Stijn",
+    "email":    "stijn@ordnary.com",
     "is_admin": false
   }
 }
 ```
 
-**Foutieve Response:**
+**Error response `401` / `419`:**
+
 ```json
 {
   "success": false,
@@ -112,211 +350,67 @@ Content-Type: application/json
 }
 ```
 
-### 4. HTTP Status Codes
+**Security properties of issued tokens:**
+- SHA-256 hashed at rest — raw token is never stored
+- Scoped to a single `client_id` — tokens cannot be reused across clients
+- Short-lived — expire automatically; `419` is returned on timeout
+- Single-use — invalidated after successful validation
 
-- `200`: Token is geldig
-- `401`: Ongeldige client credentials of token
-- `404`: Gebruiker niet gevonden
-- `419`: Token is verlopen
+---
 
-## Security Overwegingen
+## Security
 
-### 1. Token Beveiliging
+| Concern | Implementation |
+|---------|---------------|
+| Token storage | SHA-256 hashed in database — raw value never persisted |
+| Client secrets | Must be stored in environment variables, never in source code |
+| Redirect URI validation | Exact string match against registered whitelist — no wildcards |
+| Transport | HTTPS enforced in production; HTTP only permitted on `localhost` |
+| 2FA | TOTP (RFC 6238) with backup recovery codes |
+| Activity logging | All login events logged with IP, timestamp, user agent |
+| Centralised logout | Single logout terminates all active sessions across all clients |
 
-- Tokens zijn SHA256 gehashed in de database
-- Tokens hebben een beperkte levensduur
-- Tokens zijn uniek per client/gebruiker combinatie
+---
 
-### 2. Client Secret
+## Building for Production
 
-- Bewaar je client secret veilig (environment variabelen)
-- Deel de client secret nooit in frontend code
-- Roteer de secret regelmatig
+```bash
+# Compile and optimise frontend assets
+npm run build
 
-### 3. Redirect URI Validatie
-
-- Alleen geregistreerde redirect URIs worden geaccepteerd
-- Gebruik HTTPS voor alle redirect URIs
-- Valideer altijd de `state` parameter indien gebruikt
-
-### 4. HTTPS Vereist
-
-- Alle communicatie moet via HTTPS verlopen
-- Ordnary accepteert geen HTTP callbacks (behalve localhost voor development)
-
-## Features
-
-### 1. Two-Factor Authentication (2FA)
-
-Ordnary ondersteunt 2FA met:
-- Google Authenticator / Authy
-- SMS (indien geconfigureerd)
-- Recovery codes
-
-### 2. Email Verificatie
-
-- Gebruikers moeten hun email verifiëren
-- Recovery email optie beschikbaar
-
-### 3. Centraal Uitloggen
-
-- Single logout functionaliteit
-- Alle sessies worden beëindigd
-
-### 4. Activity Logging
-
-- Alle login activiteiten worden gelogd
-- IP adressen en timestamps worden bijgehouden
-
-## Laravel Implementatie Voorbeeld
-
-### 1. Environment Configuratie
-
-```env
-ORDNARY_SSO_URL=https://accounts.ordnary.com
-ORDNARY_CLIENT_ID=jouw_client_id_hier
-ORDNARY_CLIENT_SECRET=jouw_client_secret_hier
-ORDNARY_REDIRECT_URI=https://mijnapplicatie.nl/auth/callback
+# Optimise Laravel for production
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
-### 2. Routes
-
-```php
-// routes/web.php
-Route::get('/auth/login', [SSOController::class, 'redirectToSSO'])->name('sso.login');
-Route::get('/auth/callback', [SSOController::class, 'handleCallback'])->name('sso.callback');
-Route::post('/auth/logout', [SSOController::class, 'logout'])->name('sso.logout');
-```
-
-### 3. Controller Implementatie
-
-Zie de meegeleverde `SSOController.php` voor een complete implementatie.
-
-### 4. Middleware voor Authenticatie
-
-```php
-// app/Http/Middleware/SSOAuth.php
-public function handle($request, Closure $next)
-{
-    if (!session('user_authenticated')) {
-        return redirect()->route('sso.login');
-    }
-    
-    return $next($request);
-}
-```
+---
 
 ## Testing
 
-### 1. Local Development
+```bash
+# Run the full test suite
+php artisan test
 
-Voor lokale ontwikkeling kun je localhost gebruiken:
-
-```
-redirect_uri=http://localhost:8000/auth/callback
-```
-
-### 2. Staging Environment
-
-Registreer je staging URLs in de client configuratie:
-
-```
-redirect_uri=https://staging.mijnapplicatie.nl/auth/callback
+# Or directly via PHPUnit
+./vendor/bin/phpunit
 ```
 
-## Error Handling
-
-### 1. Veel Voorkomende Fouten
-
-**Invalid redirect_uri:**
-- Controleer of de URI exact overeenkomt met geregistreerde URIs
-- Let op trailing slashes
-
-**Token validation failed:**
-- Controleer client_id en client_secret
-- Controleer of token niet verlopen is
-- Controleer netwerk connectiviteit
-
-**Client not found:**
-- Verifieer client_id spelling
-- Controleer of client actief is
-
-### 2. Logging
-
-Log alle SSO interacties voor debugging:
-
-```php
-Log::info('SSO token validation', [
-    'token' => $token,
-    'client_id' => $clientId,
-    'success' => $success
-]);
-```
-
-## Productie Checklist
-
-- [ ] Client geregistreerd in productie environment
-- [ ] HTTPS geconfigureerd voor alle endpoints
-- [ ] Client secret veilig opgeslagen
-- [ ] Error handling geïmplementeerd
-- [ ] Logging geconfigureerd
-- [ ] Fallback mechanisme voor SSO downtime
-- [ ] Session management geïmplementeerd
-- [ ] Logout functionaliteit getest
-
-## API Reference
-
-### Validate Token Endpoint
-
-**URL:** `POST /api/v1/validate-token`
-
-**Parameters:**
-- `token` (string, required): Token ontvangen van callback
-- `client_id` (string, required): Jouw client ID
-- `client_secret` (string, required): Jouw client secret
-
-**Response Format:**
-```json
-{
-  "success": boolean,
-  "user": {
-    "id": integer,
-    "name": "string",
-    "email": "string",
-    "is_admin": boolean
-  },
-  "message": "string" // alleen bij errors
-}
-```
-
-## Support en Contact
-
-Voor vragen over de SSO integratie:
-
-- **Support:** support@ordnary.com
-- **Documentatie:** https://docs.ordnary.com/sso
-- **Status:** https://status.ordnary.com
-
-## Changelog
-
-### v1.0.0
-- Initiele release
-- Token validatie API
-- 2FA ondersteuning
-- Centraal uitloggen
-
-### v1.1.0
-- Recovery codes toegevoegd
-- Enhanced logging
-- Performance verbeteringen
+Tests are split into:
+- `tests/Unit/` — token lifecycle, hashing, 2FA logic
+- `tests/Feature/` — full HTTP flows: login, callback, logout, token validation
 
 ---
 
 ## License
 
-Copyright (c) 2026 7txr
+Copyright © 2026 Stijn / 7txr. All rights reserved.
 
-All rights reserved.
+This repository is provided for viewing and educational purposes only. Unauthorised copying, modification, or distribution is prohibited. See [LICENSE](LICENSE) for details.
 
-This repository is provided for viewing and educational purposes only.
-You may NOT copy, modify, distribute, or use any part of this code without explicit permission.
+---
+
+<div align="center">
+  <sub>Part of the <a href="https://github.com/ordnary-com">Ordnary</a> platform · Built by <a href="https://github.com/7txr">7txr</a></sub>
+</div>
