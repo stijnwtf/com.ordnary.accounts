@@ -312,4 +312,11 @@ Voor vragen over de SSO integratie:
 
 ---
 
-*Laatste update: Juli 2025*
+## License
+
+Copyright (c) 2026 7txr
+
+All rights reserved.
+
+This repository is provided for viewing and educational purposes only.
+You may NOT copy, modify, distribute, or use any part of this code without explicit permission.
